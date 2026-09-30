@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>사랑교육 앱 준비 중</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700;900&display=swap">
+<style>
+/* 레이아웃: 한 줄 상단바 + 학습지 한 장이 놓인 첫 화면 + 좁은 본문 단 + 사업자 정보 바닥글. 색·글꼴은 사랑교육 홍보 시안을 그대로 씀 */
+:root{
+  --bg:#f5f4ef; --card:#fffefa; --ink:#25392f; --soft:#5b6b60; --line:#e1e5dc;
+  --hero:#e8ecdf; --hero-line:#d1dac5; --accent:#ae765c; --hl:#fff4c2; --hl-line:#ecd98a;
+  --paper:#ffffff; --paper-ink:#2a2a2a; --paper-soft:#666; --paper-line:#d9d6cc;
+  --btn-ink:#fffefa; --bar:rgba(245,244,239,.92); --chip-ink:#ffffff;
+  --k-kor:#A5432F; --k-eng:#2F5BD3; --k-math:#B8651C; --k-soc:#2F8A5B; --k-sci:#1F7F80; --k-his:#7A6A4F; --k-han:#8A4FB0;
+  --serif:"Noto Serif KR","Apple SD Gothic Neo","Malgun Gothic",serif;
+  --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#17241e; --card:#1e2d25; --ink:#e7ecdf; --soft:#a9b7aa; --line:#354539;
+    --hero:#263928; --hero-line:#4f6248; --accent:#d3a58b; --hl:#3e432b; --hl-line:#656947;
+    --paper:#f4f2ea; --paper-ink:#2a2a2a; --paper-soft:#666; --paper-line:#d9d6cc;
+    --btn-ink:#17241e; --bar:rgba(23,36,30,.92);
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#17241e; --card:#1e2d25; --ink:#e7ecdf; --soft:#a9b7aa; --line:#354539;
+  --hero:#263928; --hero-line:#4f6248; --accent:#d3a58b; --hl:#3e432b; --hl-line:#656947;
+  --paper:#f4f2ea; --paper-ink:#2a2a2a; --paper-soft:#666; --paper-line:#d9d6cc;
+  --btn-ink:#17241e; --bar:rgba(23,36,30,.92);
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;padding-inline:16px;padding-block:0;overflow-x:hidden;word-break:keep-all;overflow-wrap:anywhere}
+.wrap{max-width:980px;margin:0 auto}
+h1,h2,h3{font-family:var(--serif);text-wrap:balance;margin:0;line-height:1.3}
+p{margin:0}
+a{color:inherit}
+.eyebrow{font-size:13px;letter-spacing:.08em;color:var(--accent);font-weight:700}
+.soft{color:var(--soft)}
+.meta{font-size:13px;color:var(--soft)}
+mark{background:var(--hl);color:inherit;padding:0 .2em;border-bottom:2px solid var(--hl-line)}
+.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--ink);color:var(--btn-ink);font-weight:700;border:0;border-radius:999px;padding:12px 24px;font-size:16px;font-family:var(--sans);line-height:1.4;cursor:pointer;text-decoration:none;white-space:nowrap}
+.btn.sm{padding:8px 16px;font-size:14px}
+.btn:focus-visible,.nav a:focus-visible,summary:focus-visible,footer a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+
+/* 상단바 */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;margin-inline:-16px;padding:10px 16px;background:var(--bar);backdrop-filter:saturate(1.2) blur(8px);-webkit-backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--line)}
+.top .in{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:20px}
+.logo{font-family:var(--serif);font-weight:900;font-size:20px;text-decoration:none;letter-spacing:-.01em;white-space:nowrap}
+.nav{display:flex;gap:18px;margin-left:auto;font-size:15px}
+.nav a{text-decoration:none;color:var(--soft)}
+.nav a:hover{color:var(--ink)}
+
+/* 첫 화면 */
+.hero{margin-top:20px;background:var(--hero);border:1px solid var(--hero-line);border-radius:20px;padding:40px 32px;display:grid;grid-template-columns:1.15fr 1fr;gap:32px;align-items:center}
+.hero > div{min-width:0}
+.hero h1{font-size:clamp(34px,6vw,54px);font-weight:900;letter-spacing:-.02em}
+.hero h1 .strike{position:relative;color:var(--soft);font-weight:600}
+.hero h1 .strike::after{content:"";position:absolute;left:-2px;right:-2px;top:54%;height:4px;background:var(--accent);border-radius:2px;transform:rotate(-4deg)}
+.hero .lead{font-size:18px;margin-top:16px;max-width:30em}
+.cta{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:24px;align-items:center}
+.cta .note{font-size:15px;color:var(--soft)}
+
+/* 학습지 예시 */
+.sheet{background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:6px;padding:20px 20px 16px;box-shadow:0 14px 30px -18px rgba(0,0,0,.45);transform:rotate(1.5deg);font-size:13px;line-height:1.6;min-width:0}
+.sheet-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--paper-ink);padding-bottom:6px;gap:8px;flex-wrap:wrap}
+.sheet-head b{font-family:var(--serif);font-size:16px}
+.sheet .tag{display:inline-block;background:var(--k-soc);color:var(--chip-ink);border-radius:4px;padding:0 6px;font-size:11px;font-weight:700;margin-right:6px}
+.sheet ol{margin:10px 0 0;padding-left:20px;display:grid;gap:8px}
+.sheet .blank{display:inline-block;width:70px;border-bottom:1px solid var(--paper-ink)}
+.sheet .opts{display:flex;flex-wrap:wrap;gap:4px 14px;color:var(--paper-soft)}
+.sheet-foot{margin-top:12px;display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--paper-soft);border-top:1px dashed var(--paper-line);padding-top:6px}
+
+/* 본문 단 */
+section{margin-top:72px}
+.sec-head{display:grid;gap:8px;margin-bottom:24px;max-width:40em}
+.sec-head h2{font-size:clamp(24px,4vw,32px);font-weight:700}
+
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0;padding:0;list-style:none;counter-reset:s}
+.steps li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:8px;align-content:start;counter-increment:s}
+.steps li::before{content:counter(s);width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--btn-ink);font-weight:700;font-size:14px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
+.steps h3{font-size:19px}
+
+.points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 32px;margin:24px 0 0;padding:0;list-style:none}
+.points li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start}
+.points li::before{content:"✓";width:20px;height:20px;margin-top:3px;border-radius:50%;background:var(--hl);border:1px solid var(--hl-line);color:var(--ink);font-size:12px;font-weight:700;display:grid;place-items:center;line-height:1}
+
+/* 과목 표 */
+.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+table{border-collapse:collapse;width:100%;font-size:15px}
+th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+th:first-child,td:first-child{width:96px;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+th{font-size:13px;color:var(--soft);font-weight:700;letter-spacing:.04em}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-block;color:var(--chip-ink);border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;white-space:nowrap}
+td .meta{display:block;margin-top:6px}
+.c-kor{background:var(--k-kor)}.c-eng{background:var(--k-eng)}.c-math{background:var(--k-math)}.c-soc{background:var(--k-soc)}.c-sci{background:var(--k-sci)}.c-his{background:var(--k-his)}.c-han{background:var(--k-han)}
+
+/* 요금 */
+.price{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;display:grid;gap:10px;align-content:start}
+.plan.best{border:2px solid var(--accent);padding:27px}
+.plan .name{font-weight:700;display:flex;align-items:center;gap:8px}
+.plan .amt{font-family:var(--serif);font-size:40px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1}
+.plan .amt small{font-size:16px;font-family:var(--sans);font-weight:500;color:var(--soft)}
+.badge{background:var(--accent);color:var(--btn-ink);font-size:12px;font-weight:700;border-radius:999px;padding:1px 10px}
+.promise{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px 20px;font-size:15px}
+.promise span::before{content:"✓ ";color:var(--accent);font-weight:700}
+.extra{margin-top:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.extra div{border:1px dashed var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:4px;font-size:15px}
+
+/* 자주 묻는 질문 */
+.faq{display:grid;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{cursor:pointer;list-style:none;padding:16px 36px 16px 0;font-weight:700;position:relative}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:22px;font-weight:400;color:var(--accent);line-height:1}
+.faq details[open] summary::after{content:"−"}
+.faq .ans{padding:0 0 18px;color:var(--soft);max-width:42em}
+
+/* 마지막 버튼 */
+.last{margin-top:72px;background:var(--hero);border:1px solid var(--hero-line);border-radius:20px;padding:36px 32px;display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;justify-content:space-between}
+.last h2{font-size:clamp(22px,3.4vw,28px)}
+
+/* 바닥글 */
+footer{margin-top:72px;padding-block:28px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--soft);display:grid;gap:16px}
+footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(--ink)}
+.links{display:flex;flex-wrap:wrap;gap:6px 18px}
+.links a{text-decoration:none;color:var(--ink);font-weight:500}
+.links a.strong{font-weight:700}
+.biz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 24px;margin:0}
+.biz div{display:grid;grid-template-columns:136px 1fr;gap:8px;min-width:0}
+.biz dt{color:var(--soft)}
+.biz dd{margin:0;color:var(--ink);min-width:0}
+.biz dd.empty{color:var(--soft)}
+
+/* 시안 안내 */
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:20;width:min(460px,calc(100% - 32px));background:var(--ink);color:var(--btn-ink);border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
+
+@media (max-width:760px){
+  .nav{display:none}
+  .top .in{justify-content:space-between}
+  .hero{grid-template-columns:1fr;padding:28px 20px;gap:28px}
+  .sheet{transform:none}
+  .steps,.price,.extra,.points{grid-template-columns:1fr}
+  .biz{grid-template-columns:1fr}
+  section{margin-top:56px}
+  .last{margin-top:56px;padding:28px 20px}
+}
+@media (max-width:460px){
+  .hero .lead{font-size:17px}
+  .cta .btn{width:100%}
+  th,td{padding:10px}
+  th:first-child,td:first-child{width:64px}
+  .plan{padding:22px}
+  .plan.best{padding:21px}
+  .plan .amt{font-size:34px}
+  .last .btn{width:100%}
+}
+@media (prefers-reduced-motion:no-preference){
+  .sheet{transition:transform .3s ease}
+  .sheet:hover{transform:rotate(0deg)}
+}
+</style>
+</head>
+<body>
+<header class="top"><div class="in"><a class="logo" href="/">사랑교육</a></div></header>
+<div class="wrap">
+<div class="last" style="margin-top:40px;display:grid;gap:16px;justify-content:start">
+  <p class="eyebrow">앱 준비 중</p>
+  <h2>사랑교육 앱은 출시 준비 중이에요</h2>
+  <p class="soft">학습지를 마지막으로 검수하고 있어요. 문을 열면 이 주소에서 바로 시작할 수 있어요.</p>
+  <a class="btn" href="/" style="justify-self:start">소개 화면으로 돌아가기</a>
+</div>
+</div>
+</body>
+</html>
