@@ -4426,6 +4426,24 @@ select.dn-in{padding:8px 10px;font-size:15px}
 .lg-join-go{border:1px solid var(--pri);background:var(--pri);color:var(--pri-ink,#fff)}
 .lg-join-go:disabled{opacity:.45;cursor:default}
 @media print{.lg-join{display:none!important}}
+/* ===== 첫 화면: 가입·로그인 먼저 (2026-10-01, login.js gateSync) — 로그인 전에는 머리줄과 이 칸만 ===== */
+html.lg-gated #app>:not(.hub-top):not(#lgGate):not(.sarang-footer){display:none!important}
+html.lg-gated #setBtnHub{display:none!important}
+html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+.lg-gate{box-sizing:border-box;max-width:520px;margin:8px auto 24px;padding:28px 22px 22px;text-align:center}
+.lg-gate[hidden]{display:none}
+.lg-gate h2{margin:0 0 8px;font-size:22px;font-weight:700;line-height:1.35;color:var(--ink);text-wrap:balance}
+.lg-gate-d{margin:0 auto 18px;max-width:400px;font-size:14.5px;line-height:1.6;color:var(--sub);word-break:keep-all;overflow-wrap:anywhere}
+.lg-gate-steps{display:flex;justify-content:center;gap:6px 14px;flex-wrap:wrap;margin:0 0 20px;padding:0;list-style:none}
+.lg-gate-steps li{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:600;color:var(--ink)}
+.lg-gate-steps b{display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--soft);color:var(--pri);font-size:12.5px}
+.lg-gate-btn{display:flex;align-items:center;justify-content:center;gap:10px;width:100%;max-width:340px;min-height:52px;margin:0 auto;padding:0 18px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:inherit;font-size:16px;font-weight:700;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.lg-gate-btn svg{width:22px;height:22px;flex:none}
+.lg-gate-btn:disabled{opacity:.6;cursor:progress}
+.lg-gate-btn:focus-visible{outline:2px solid var(--pri);outline-offset:3px}
+.lg-gate-err{min-height:1.4em;margin:10px 0 0;font-size:13.5px;color:var(--warn-ink);overflow-wrap:anywhere}
+.lg-gate-note{margin:6px auto 0;max-width:400px;font-size:12.5px;line-height:1.55;color:var(--sub);word-break:keep-all;overflow-wrap:anywhere}
+@media (max-width:360px){.lg-gate{padding:22px 16px 18px}.lg-gate h2{font-size:20px}}
 </style>
 <style id="sarang-settings">/* ===== 설정 화면 (2026-10-01 대표: 오늘의 학습 위에 겹쳐 뜨지 않고 따로 된 화면, 글씨 크기·경계를 한 체계로)
    한 칸 = 작은 제목(.label) 아래 줄(.set-child): 왼쪽 굵은 제목(b 15px) + 설명(small 13px), 오른쪽 단추(테 두른 알약 모양) 또는 켜고 끄기.
@@ -17364,6 +17382,7 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     if (!tour && !ob && view === 'home' && tab === 'today' && cardsLive && !load('hub_tour')) tourStart(); }, 350); };
   function tourStart(){
     if (tour) return;
+    if (window.SARANG_LOGIN && SARANG_LOGIN.gated && SARANG_LOGIN.gated()) return;   // 로그인 첫 화면이 가리고 있는 동안은 안내를 띄우지 않음 (걷히면 sarang:gate 에서 다시)
     const steps = TOUR.map(s => Object.assign({}, s, { els: s.el().filter(vis) })).filter(s => s.els.length);
     if (!steps.length) return;
     const box = document.createElement('div'); box.className = 'tour';
@@ -17477,6 +17496,8 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
   });
 
   show('home');   // 켤 때는 늘 메인 화면
+  /* 로그인 첫 화면(login.js)이 걷히면: 가입 칸이면 그대로 보이고, 메인이면 맨 위에서 사용 안내 */
+  document.addEventListener('sarang:gate', e => { if (e.detail && e.detail.on) return; window.scrollTo(0, 0); if (!ob) { show('home'); } });
   const liveCards = () => { cardsLive = true; if (view === 'home' && !ob) { renderHome(); tourMaybe(); } paceSnap(); setTimeout(notify, 400); };   // 오늘 목록을 그리고 안내가 뜰지 정한 뒤
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', liveCards); else setTimeout(liveCards, 0);
   document.addEventListener('hub:refresh', () => setTimeout(notify, 0));   // 화면 공부를 끝내거나 종이로 뽑으면 알림도 바로
@@ -21687,8 +21708,41 @@ window.DONATE_CORE = (function(){
     let el = $('lgToast'); if (!el) { el = document.createElement('div'); el.id = 'lgToast'; el.className = 'lg-toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
     el.textContent = t; el.hidden = false; clearTimeout(el._t); el._t = setTimeout(() => { el.hidden = true; }, 6000);
   }
+  /* ---------- 첫 화면: 가입·로그인 먼저 (2026-10-01 대표: "앱 설치 후 최초에 바로 진도 설정하는 것이 아니라 회원가입/로그인부터", 로그인정책서 v2 3절) ----------
+     로그인할 수 있는 주소(HOST_OK)에서 이 기기에 로그인 기록(sarang_sync.uid)이 없으면 다른 칸을 모두 가리고 이 화면만 보임(html.lg-gated, login.css).
+     구글로 시작 → 가입 마무리(동의 3개) → 계정에 아이 정보가 있으면 받아 와 바로 오늘의 학습(settle → apply), 없으면 학년·과목·진도·시간표(가입 칸).
+     uid 는 settle 이 적음(동의를 마친 뒤) → 그때 이 화면이 걷힘. 로그아웃·다른 기기 로그인으로 밀려나면 다시 이 화면.
+     시험판(claude.ai)·파일로 연 앱은 구글 로그인이 안 되므로 예전처럼 바로 가입 칸. '가입 후 7일 체험'은 대표 확인 전이라 아직 없음 */
+  const gated = () => HOST_OK && !((meta() || {}).uid);
+  let gateOn = null;
+  const GOOGLE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.6 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2.1-1.9 3.3-4.8 3.3-8z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.6-2.7c-1 .7-2.2 1.1-3.7 1.1-2.9 0-5.3-1.9-6.2-4.5H2.1v2.8A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.8 14.2a6.6 6.6 0 0 1 0-4.3V7H2.1a11 11 0 0 0 0 9.9l3.7-2.7z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.2-3.2A11 11 0 0 0 2.1 7l3.7 2.9C6.7 7.3 9.1 5.4 12 5.4z"/></svg>';
+  function gateSync(){
+    const on = gated();
+    let g = $('lgGate');
+    if (on && !g) {
+      const top = document.querySelector('#app > .hub-top'); if (!top) return;
+      top.insertAdjacentHTML('afterend', `<section class="card lg-gate" id="lgGate" aria-labelledby="lgGateT">
+        <h2 id="lgGateT">사랑교육 시작하기</h2>
+        <p class="lg-gate-d">로그인하고 가입을 마치면 아이 학년과 진도를 정해요. 폰·태블릿·PC 어디서나 같은 기록으로 이어서 공부해요.</p>
+        <ol class="lg-gate-steps"><li><b>1</b><span>로그인</span></li><li><b>2</b><span>약관 동의</span></li><li><b>3</b><span>학년·진도 정하기</span></li></ol>
+        <button type="button" class="lg-gate-btn" id="lgIn3">${GOOGLE}<span>구글로 시작하기</span></button>
+        <p class="lg-gate-err" id="lgGateErr" role="alert"></p>
+        <p class="lg-gate-note">이미 가입했다면 같은 계정으로 로그인하면 아이 정보와 진도를 그대로 이어서 써요. 카카오 로그인은 준비 중이에요.</p>
+      </section>`);
+      g = $('lgGate');
+    }
+    if (g) {
+      g.hidden = !on;
+      const err = $('lgGateErr'), t = on ? (ui.err || '') : ''; if (err && err.textContent !== t) err.textContent = t;
+      const b = $('lgIn3'); if (b) { const w = !!(loading && !A) || !!((meta() || {}).pending && user); b.disabled = w; b.setAttribute('aria-busy', String(w)); }
+    }
+    document.documentElement.classList.toggle('lg-gated', on);
+    if (gateOn !== null && gateOn !== on) document.dispatchEvent(new CustomEvent('sarang:gate', { detail: { on } }));   // hub-ui: 걷히면 메인·가입 칸을 다시 그림
+    gateOn = on;
+  }
   function paint(msg){
     if (msg != null) ui.msg = msg;
+    gateSync();
     const box = $('lgBox'); if (!box) return;
     let h;
     if (!HOST_OK) h = '<div class="set-child lg-row"><span><b>이 기기에만 저장 중</b><small>로그인은 lovedu.kr 앱에서 할 수 있어요. 로그인하면 폰과 PC가 같은 기록을 써요.</small></span></div>';
@@ -21704,15 +21758,15 @@ window.DONATE_CORE = (function(){
     obSync();
   }
   /* 새 기기 가입 화면 아래: 이미 계정이 있으면 가입 대신 로그인해 계정 기록을 받음 */
-  const obSync = () => { const ob = $('onboard'), el = $('lgOb'); if (ob && el) el.hidden = ob.hidden || !!user; };
+  const obSync = () => { const ob = $('onboard'), el = $('lgOb'); if (ob && el) el.hidden = ob.hidden || !!user || !!(meta() || {}).uid; };   // 로그인 먼저(2026-10-01) 뒤로는 가입 칸에 올 때 이미 로그인한 상태라 거의 안 보임
   function mountOb(){
     const ob = $('onboard'); if (!ob || !HOST_OK || $('lgOb')) return;
     ob.insertAdjacentHTML('afterend', '<div class="lg-ob" id="lgOb" hidden><span>이미 계정이 있나요?</span><button type="button" class="linkbtn" id="lgIn2">구글로 로그인</button></div>');
     new MutationObserver(obSync).observe(ob, { attributes: true, attributeFilter: ['hidden'] }); obSync();
   }
   document.addEventListener('click', async e => {
-    const t = e.target.closest('#lgIn, #lgIn2, #lgOut, #lgJoin2, #lgUseCloud, #lgUseLocal'); if (!t) return;
-    if (t.id === 'lgIn' || t.id === 'lgIn2') {
+    const t = e.target.closest('#lgIn, #lgIn2, #lgIn3, #lgOut, #lgJoin2, #lgUseCloud, #lgUseLocal'); if (!t) return;
+    if (t.id === 'lgIn' || t.id === 'lgIn2' || t.id === 'lgIn3') {
       ui.err = ''; const m = meta() || {}; setMeta(Object.assign(m, { pending: true })); paint();
       try {
         await load();
@@ -21741,7 +21795,7 @@ window.DONATE_CORE = (function(){
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
 
   window.SARANG_LOGIN = {
-    hostOk: HOST_OK, load, upload, snapshot, groupOf,
+    hostOk: HOST_OK, load, upload, snapshot, groupOf, gated,
     get user(){ return user; }, get auth(){ return A; }, get agreed(){ return agreed; },
     /* 검사용 (에뮬레이터): 가짜 구글 토큰으로 로그인 */
     async _emuSignIn(sub, email){
