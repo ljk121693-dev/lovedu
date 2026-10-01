@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>사랑교육 lovedu.kr</title>
-<meta name="description" content="사교육 대신 사랑교육. 유아부터 중3까지 PC·휴대폰·태블릿으로 바로 푸는 스마트 학습과 뽑아서 푸는 프린트 학습, 둘 다 되는 매일 공부. 약정 없이 월 7,700원, 로그인 없이 7일 무료 체험.">
+<meta name="description" content="사교육 대신 사랑교육. 유아부터 중3까지 PC·휴대폰·태블릿으로 바로 푸는 스마트 학습과 뽑아서 푸는 프린트 학습, 둘 다 되는 매일 공부. 약정 없이 월 7,700원, 0~4세는 무료, 로그인 없이 7일 무료 체험.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700;900&display=swap">
@@ -84,6 +84,7 @@ mark{background:var(--hl);color:inherit;padding:0 .2em;border-bottom:2px solid v
 .phone{background:var(--bezel);border-radius:24px;padding:10px 8px;box-shadow:0 14px 30px -18px rgba(0,0,0,.45);display:grid;min-width:0}
 .screen{background:var(--paper);color:var(--paper-ink);border-radius:16px;padding:12px 10px;display:grid;gap:6px;align-content:start;font-size:12px;line-height:1.5}
 .screen .q{font-weight:700;font-size:13px}
+.screen .ttl{font-weight:700;color:var(--paper-soft);border-bottom:1px solid var(--paper-line);padding-bottom:4px}
 .screen .opt{border:1px solid var(--paper-line);border-radius:8px;padding:4px 8px;color:var(--paper-soft)}
 .screen .opt.ok{border-color:var(--k-soc);background:var(--ok-bg);color:var(--paper-ink);font-weight:700;display:flex;justify-content:space-between;gap:6px}
 .screen .opt.ok span:last-child{color:var(--k-soc)}
@@ -204,7 +205,7 @@ footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(
   <div>
     <p class="eyebrow">스마트 학습 · 프린트 학습</p>
     <h1><span class="strike">사교육</span> 대신<br>사랑교육</h1>
-    <p class="lead">오늘 무엇을 공부할지 앱이 정해 드려요. <mark>스마트 학습과 프린트 학습, 둘 다 돼요.</mark> 같은 문제를 PC·휴대폰·태블릿에서 바로 풀어도, 뽑아서 종이에 풀어도 진도는 하나로 이어져요. 약정 없이 월 7,700원이에요.</p>
+    <p class="lead">오늘 무엇을 공부할지 앱이 정해 드려요. <mark>스마트 학습과 프린트 학습, 둘 다 돼요.</mark> 같은 문제를 PC·휴대폰·태블릿에서 바로 풀어도, 뽑아서 종이에 풀어도 진도는 하나로 이어져요. 약정 없이 월 7,700원이고, 0~4세 아이는 무료예요.</p>
     <div class="cta">
       <a class="btn js-start" href="/app/">7일 무료로 시작하기</a>
       <span class="note">로그인 없이 7일 체험 · 약정 없음</span>
@@ -214,7 +215,7 @@ footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(
     <div class="way">
       <span class="way-label">프린트 학습</span>
       <div class="sheet" role="img" aria-label="프린트 학습: 뽑은 학습지에 연필로 2번에 동그라미를 친 모습">
-        <div class="sheet-head"><b><span class="tag">사회</span>초4 · Day 45</b><span>이름 ______</span></div>
+        <div class="sheet-head"><b><span class="tag">사회</span>초4 · 3단원</b><span>이름 ______</span></div>
         <p style="font-weight:700">도시 문제와 해결 노력</p>
         <p>2. 교통 혼잡을 줄이는 방법으로 알맞은 것은?</p>
         <span class="opts"><span>① 자가용 늘리기</span><span class="circled">② 대중교통 이용</span><span>③ 도로 없애기</span><span>④ 가로등 끄기</span></span>
@@ -225,7 +226,8 @@ footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(
       <span class="way-label">스마트 학습</span>
       <div class="phone" role="img" aria-label="스마트 학습: 휴대폰에서 2번을 누르자 바로 정답이 표시된 모습">
         <div class="screen">
-          <span><span class="tag">사회</span>초4 · Day 45</span>
+          <span><span class="tag">사회</span>초4 · 3단원</span>
+          <span class="ttl">도시 문제와 해결 노력</span>
           <p class="q">교통 혼잡을 줄이는 방법으로 알맞은 것은?</p>
           <span class="opt">① 자가용 늘리기</span>
           <span class="opt ok"><span>② 대중교통 이용</span><span>정답</span></span>
@@ -245,9 +247,10 @@ footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(
   <ol class="steps">
     <li><h3>학년 고르기</h3><p class="soft">아이 학년을 고르면 배울 과목과 시작할 진도가 정해져요. 아이는 3명까지 따로 관리해요.</p></li>
     <li><h3>시간표 정하기</h3><p class="soft">요일마다 할 과목을 정해요. 가정 사정에 맞게 언제든 바꿀 수 있어요.</p></li>
-    <li><h3>오늘의 학습 풀기</h3><p class="soft">그날 과목을 '바로 풀기'로 스마트 학습하거나, '뽑아서 풀기'로 프린트 학습해요. 어느 쪽으로 끝내도 내일은 다음 Day로 넘어가요.</p></li>
+    <li><h3>오늘의 학습 풀기</h3><p class="soft">그날 과목을 '바로 풀기'로 스마트 학습하거나, '뽑아서 풀기'로 프린트 학습해요. 어느 쪽으로 끝내도 내일은 다음 내용으로 넘어가요.</p></li>
   </ol>
   <ul class="points">
+    <li><span>부모님은 "오늘은 수학 나눗셈"처럼 아이가 그날 배울 <b>단원과 내용</b>을 이름으로 확인할 수 있어요.</span></li>
     <li><span>배운 내용은 <b>다음 날</b>과 <b>일주일 뒤</b>에 복습 문제로 다시 나와요. (영어 듣기 제외)</span></li>
     <li><span>문항마다 아이에게 설명하는 방법을 담은 <b>부모 가이드</b>를 함께 뽑을 수 있어요.</span></li>
     <li><span><b>스마트 학습</b>과 <b>프린트 학습</b>을 그날그날 골라요. PC·휴대폰·태블릿 어디서나 같은 진도로 이어지고, 스마트 학습으로 푼 문제는 바로 채점돼요.</span></li>
@@ -264,7 +267,8 @@ footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(
     <table>
       <thead><tr><th scope="col">학년</th><th scope="col">과목</th></tr></thead>
       <tbody>
-        <tr><td><b>유아</b></td><td><div class="chips"><span class="chip c-kor">한글</span><span class="chip c-math">수학</span><span class="chip c-eng">영단어</span><span class="chip c-han">한자</span></div></td></tr>
+        <tr><td><b>0~4세</b></td><td><div class="chips"><span class="chip c-kor">놀이 모음</span></div><span class="meta">선긋기·색칠·미로 같은 놀이를 골라 풀어요. 무료예요.</span></td></tr>
+        <tr><td><b>유아 5~7세</b></td><td><div class="chips"><span class="chip c-kor">한글</span><span class="chip c-math">수학</span><span class="chip c-eng">영단어</span><span class="chip c-han">한자</span></div></td></tr>
         <tr><td><b>초1~2</b></td><td><div class="chips"><span class="chip c-kor">국어</span><span class="chip c-math">수학</span><span class="chip c-eng">영단어·듣기</span><span class="chip c-han">한자</span></div></td></tr>
         <tr><td><b>초3~6</b></td><td><div class="chips"><span class="chip c-kor">국어</span><span class="chip c-math">수학</span><span class="chip c-eng">영어</span><span class="chip c-soc">사회</span><span class="chip c-sci">과학</span><span class="chip c-his">한국사</span><span class="chip c-han">한자</span></div></td></tr>
         <tr><td><b>중1~3</b></td><td><div class="chips"><span class="chip c-kor">국어</span><span class="chip c-math">수학</span><span class="chip c-eng">영어</span><span class="chip c-soc">사회</span><span class="chip c-sci">과학</span><span class="chip c-his">한국사</span><span class="chip c-han">한자</span></div><span class="meta">중2는 세계사도 함께 배워요.</span></td></tr>
@@ -277,7 +281,7 @@ footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(
   <div class="sec-head">
     <p class="eyebrow">요금</p>
     <h2>약정 없이 월 7,700원, 전 과목에 아이 3명까지</h2>
-    <p class="soft">로그인 없이 7일 동안 먼저 써 보고 정하세요. 표시 가격은 부가세 포함이에요.</p>
+    <p class="soft">0~4세 아이는 무료이고, 5세부터 요금을 받아요. 로그인 없이 7일 동안 먼저 써 보고 정하세요. 표시 가격은 부가세 포함이에요.</p>
   </div>
   <div class="price">
     <div class="plan">
@@ -291,7 +295,7 @@ footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(
       <p class="soft">한 달에 5,500원꼴이에요.</p>
     </div>
   </div>
-  <div class="promise"><span>약정·위약금 없음</span><span>아이 3명까지 추가 요금 없음</span><span>로그인 없이 7일 무료 체험</span></div>
+  <div class="promise"><span>0~4세 무료</span><span>약정·위약금 없음</span><span>아이 3명까지 추가 요금 없음</span><span>로그인 없이 7일 무료 체험</span></div>
   <div class="extra">
     <div><b>초대 코드</b><span class="soft">초대 코드로 가입하면 월간 첫 달 10% 할인. 초대한 분은 인정된 초대 3명마다 1개월 무료예요.</span></div>
     <div><b>팀 구독</b><span class="soft">이웃·친척과 함께 월간으로 모이면 5인 25%, 10인 35% 할인돼요. 팀장도 인원에 포함돼요.</span></div>
