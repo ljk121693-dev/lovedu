@@ -11095,10 +11095,13 @@ const TTS = {
   emit() { if (this.onchange) this.onchange(this.busy); },
   stop() {
     this.token++;
+    if (window.SARANG_TTSF) SARANG_TTSF.stop();
     if (this.ok && (speechSynthesis.speaking || speechSynthesis.pending)) speechSynthesis.cancel();
     if (this.busy) { this.busy = false; this.emit(); }
   },
-  speakOne(text, who, rate, tok) {
+  async speakOne(text, who, rate, tok) {
+    const F = window.SARANG_TTSF;   // 서버 녹음 (사랑교육 screen/ttsf.js): 보통 빠르기 0.9 = 녹음 1.0, 없거나 못 틀면 기기 음성
+    if (F && F.on() && (await F.play('en', who === 'B' ? 'B' : 'A', text, rate / 0.9) || tok !== this.token)) return;
     return new Promise(res => {
       if (!this.ok) { setTimeout(res, 300); return; }
       const u = new SpeechSynthesisUtterance(text);
@@ -11148,6 +11151,8 @@ if (TTS.ok) {
   speechSynthesis.onvoiceschanged = () => { TTS.loadVoices(); if (view && view.type === 'settings') renderSettings(); else if (!view) renderNotice(); };
   let tries = 0; const iv = setInterval(() => { TTS.loadVoices(); if (TTS.voices.length || ++tries > 10) { clearInterval(iv); if (!view) renderNotice(); } }, 300);
 }
+
+document.addEventListener('sarang:ttsf', () => { if (!view) renderNotice(); });   // 녹음 목록이 오면 '음성 없음' 안내를 걷음
 
 // ===== 데이터 정리 =====
 const normLines = arr => arr.map(x => typeof x === 'string' ? { s: 'N', t: x } : { s: x[0], t: x[1], n: x[2] });
@@ -11234,7 +11239,8 @@ function listHTML() {
 function renderNotice() {
   const n = $('#notice'); if (!n) return;
   let msg = '';
-  if (!TTS.ok) msg = '이 브라우저는 음성 읽기를 지원하지 않아요. 크롬, 삼성 인터넷, 사파리로 열어 주세요.';
+  if (window.SARANG_TTSF && SARANG_TTSF.on()) msg = '';
+  else if (!TTS.ok) msg = '이 브라우저는 음성 읽기를 지원하지 않아요. 크롬, 삼성 인터넷, 사파리로 열어 주세요.';
   else if (!TTS.voices.length) msg = '영어 음성을 아직 찾지 못했어요. 소리가 안 나면 아래 ‘음성 설정’에서 도움말을 확인해 주세요.';
   n.hidden = !msg; n.textContent = msg;
 }
@@ -11620,7 +11626,7 @@ function renderSettings() {
   const opt = key => { const a = TTS.auto(key === 'voiceB' ? 'B' : 'A'); return `<option value="">자동 선택${a ? ` (${esc(a.name)})` : ''}</option>` +
     TTS.voices.map(v => `<option value="${esc(v.voiceURI)}" ${S[key] === v.voiceURI ? 'selected' : ''}>${esc(v.name)} (${esc(v.lang)})</option>`).join(''); };
   el.innerHTML = `<div class="stack">
-    ${!TTS.ok ? '<div class="notice" style="margin:0">이 브라우저는 음성 읽기를 지원하지 않아요.</div>' : !TTS.voices.length ? '<div class="notice" style="margin:0">영어 음성을 찾지 못했어요. 아래 도움말을 확인해 주세요.</div>' : ''}
+    ${window.SARANG_TTSF && SARANG_TTSF.on() ? '' : !TTS.ok ? '<div class="notice" style="margin:0">이 브라우저는 음성 읽기를 지원하지 않아요.</div>' : !TTS.voices.length ? '<div class="notice" style="margin:0">영어 음성을 찾지 못했어요. 아래 도움말을 확인해 주세요.</div>' : ''}
     <div class="panel stack">
       <label class="field"><span>목소리 1 · 여자 역할, 안내·강의</span><select class="full" id="vA">${opt('voiceA')}</select></label>
       <button class="btn" id="tA">${IC.spk} 들어 보기</button>
@@ -13555,12 +13561,16 @@ addEventListener('popstate', () => { if (PREV) previewShut(); });
 
 /* ---------- 영어: 소리 듣기 (기기 음성, 인터넷 없이) ---------- */
 const ETTS = {
-  ok: 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined',
+  syn: 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined',
+  get ok(){ return this.syn || !!(window.SARANG_TTSF && SARANG_TTSF.on()); },   // 서버 녹음(screen/ttsf.js)이 있으면 기기 음성이 없어도 됨
   tok: 0, keep: [], busy: '',
   voices(){ try { return (speechSynthesis.getVoices() || []).filter(v => /^en([-_]|$)/i.test(v.lang)); } catch (e) { return []; } },
   pick(k){ const vs = this.voices(), us = vs.filter(v => /^en[-_]us/i.test(v.lang)), l = us.length ? us : vs; return l.length ? l[k % l.length] : null; },
-  stop(){ this.tok++; this.busy = ''; try { if (this.ok && (speechSynthesis.speaking || speechSynthesis.pending)) speechSynthesis.cancel(); } catch (e) {} },
-  one(text, k, rate, tok){
+  stop(){ this.tok++; this.busy = ''; if (window.SARANG_TTSF) SARANG_TTSF.stop(); try { if (this.syn && (speechSynthesis.speaking || speechSynthesis.pending)) speechSynthesis.cancel(); } catch (e) {} },
+  async one(text, k, rate, tok){
+    const F = window.SARANG_TTSF;
+    if (F && F.on() && (await F.play('en', k % 2 ? 'B' : 'A', text, rate / 0.85) || tok !== this.tok)) return;   // 녹음: 대화 순서 k 의 홀짝 = A/B, 보통 0.85 = 녹음 1.0
+    if (!this.syn) return;
     return new Promise(res => {
       const u = new SpeechSynthesisUtterance(text), v = this.pick(k), t0 = Date.now(), est = (text.split(/\s+/).length * 420 + 600) / rate;
       if (v) { u.voice = v; u.lang = v.lang.replace('_', '-'); } else u.lang = 'en-US';
@@ -13573,13 +13583,14 @@ const ETTS = {
     });
   },
   async run(kind, lines, rate, onEnd){
-    const was = this.ok && (speechSynthesis.speaking || speechSynthesis.pending);
+    const was = this.syn && (speechSynthesis.speaking || speechSynthesis.pending);
     this.stop(); const tok = this.tok; this.busy = kind;
     if (was) await new Promise(r => setTimeout(r, 150));   // 멈춘 바로 뒤에 말하면 무시되는 기기
     for (const l of lines) { if (tok !== this.tok) return; await this.one(l.t, l.k || 0, rate, tok); if (tok !== this.tok) return; await new Promise(r => setTimeout(r, l.pause || 450)); }
     if (tok === this.tok) { this.busy = ''; onEnd(); }
   }
 };
+document.addEventListener('sarang:ttsf', () => { try { renderEngSay(); } catch (e) {} });   // 녹음 목록이 늦게 와도 버튼을 켬
 const SAY = { w: '단어', d: '대화', r: '본문' };
 function sayLines(c, kind){
   if (!c) return [];
@@ -18011,6 +18022,85 @@ window.SARANG_SCREEN = (function(){
   };
 })();
 
+/* ===== 녹음 소리 (구글 TTS 미리 녹음, 2026-10-01 대표 "구글 TTS 로 넣을려는데") =====
+   녹음: /mnt/project-files/studyapp/tts_audio (한국어 Leda, 영어 A Aoede·B Charon). 서버에는 <BASE>{ko,en}/<sha1(열쇠) 앞 16자리>.mp3
+   목록: <BASE>idx.txt — 줄마다 "ko:" 또는 "en:" 뒤에 16자리 해시를 이어 붙임 (있는 녹음만 받으러 감 → 없는 글은 바로 기기 음성)
+   열쇠: 한국어 = 글(voice.js norm 한 것), 영어 = 'A|글' / 'B|글' (글은 앞뒤 공백 빼고 공백 한 칸으로)
+   BASE: window.SARANG_TTS_BASE 가 있으면 그것, 아니면 lovedu.kr·로컬 시험 서버에서만 '/tts/'. 그 밖(claude.ai 시험판·파일)은 녹음 없음 → 기기 음성
+   SARANG_TTSF.on()                       : 목록을 받았는지 (버튼을 그릴지 정할 때)
+   SARANG_TTSF.ready()                    : 목록 받기 (한 번만, 실패하면 false)
+   SARANG_TTSF.play(lang, who, text, rate): 녹음을 끝까지 틀면 true, 녹음이 없거나 못 틀면 false → 부른 쪽이 기기 음성으로. stop() 으로 멈추면 true
+   SARANG_TTSF.stop()                     : 지금 녹음 멈춤
+   한 번 받은 파일은 기기(Cache Storage 'sarang-tts-1')에 둬서 다음엔 인터넷 없이 틂 */
+(function(){
+'use strict';
+const HOSTS = ['lovedu.kr', 'www.lovedu.kr', 'localhost', '127.0.0.1'];
+const BASE = typeof window.SARANG_TTS_BASE === 'string' ? window.SARANG_TTS_BASE : HOSTS.includes(location.hostname) ? '/tts/' : null;
+const CACHE = 'sarang-tts-1';
+const enNorm = s => String(s == null ? '' : s).trim().replace(/\s+/g, ' ');
+const koNorm = s => String(s == null ? '' : s).replace(/[\[\]]/g, '').replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();   // voice.js norm 과 같음
+let idx = null, idxP = null, audio = null, url = null, end = null, gen = 0;
+
+function fetchT(u, ms){
+  const ac = window.AbortController ? new AbortController() : null, t = setTimeout(() => ac && ac.abort(), ms);
+  return fetch(u, ac ? { signal: ac.signal } : {}).then(r => { clearTimeout(t); return r; }, () => { clearTimeout(t); return null; });
+}
+async function sha16(s){
+  const b = await crypto.subtle.digest('SHA-1', new TextEncoder().encode(s));
+  return Array.from(new Uint8Array(b).slice(0, 8), x => x.toString(16).padStart(2, '0')).join('');
+}
+function ready(){
+  if (idxP) return idxP;
+  if (!BASE || !window.fetch || !(window.crypto && crypto.subtle) || !window.TextEncoder) return (idxP = Promise.resolve(false));
+  return (idxP = (async () => {
+    let r = null;
+    try { const C = await caches.open(CACHE); r = await fetchT(BASE + 'idx.txt', 8000); if (r && r.ok) { try { await C.put(BASE + 'idx.txt', r.clone()); } catch (e) {} } else r = await C.match(BASE + 'idx.txt'); }   // 인터넷이 없으면 저장해 둔 목록
+    catch (e) { if (!r) r = await fetchT(BASE + 'idx.txt', 8000); }
+    if (!r || !r.ok) return false;
+    const o = {};
+    try { (await r.text()).split('\n').forEach(l => { const m = /^(ko|en):([0-9a-f]*)/.exec(l.trim()); if (m) { const S = new Set(); for (let i = 0; i + 16 <= m[2].length; i += 16) S.add(m[2].slice(i, i + 16)); o[m[1]] = S; } }); }
+    catch (e) { return false; }
+    if (!o.ko && !o.en) return false;
+    idx = o; try { document.dispatchEvent(new CustomEvent('sarang:ttsf')); } catch (e) {}
+    return true;
+  })());
+}
+async function fileUrl(u){
+  let r = null, C = null;
+  try { C = await caches.open(CACHE); r = await C.match(u); } catch (e) {}
+  if (!r) { r = await fetchT(u, 8000); if (!r || !r.ok) return null; if (C) try { await C.put(u, r.clone()); } catch (e) {} }
+  try { return URL.createObjectURL(await r.blob()); } catch (e) { return null; }
+}
+function stop(){
+  gen++; const f = end; end = null;
+  if (audio) { try { audio.onended = audio.onerror = audio.onpause = null; audio.pause(); } catch (e) {} audio = null; }
+  if (url) { try { URL.revokeObjectURL(url); } catch (e) {} url = null; }
+  if (f) f(true);
+}
+async function play(lang, who, text, rate){
+  stop(); const my = gen;
+  if (!(await ready()) || !idx) return false;
+  const key = lang === 'ko' ? koNorm(text) : (who === 'B' ? 'B|' : 'A|') + enNorm(text), S = idx[lang];
+  if (!S || !key) return false;
+  let h; try { h = await sha16(key); } catch (e) { return false; }
+  if (my !== gen) return true;   // 고르는 동안 멈춤·다른 소리
+  if (!S.has(h)) return false;
+  const u = await fileUrl(BASE + lang + '/' + h + '.mp3');
+  if (my !== gen) { if (u) URL.revokeObjectURL(u); return true; }   // 받는 동안 멈춤·다른 소리가 시작됨
+  if (!u) return false;
+  return new Promise(res => {
+    let fin = false; const a = new Audio(u);
+    const done = ok => { if (fin) return; fin = true; if (end === done) end = null; if (url === u) { try { URL.revokeObjectURL(u); } catch (e) {} url = null; } if (audio === a) audio = null; res(ok); };
+    audio = a; url = u; end = done;
+    a.playbackRate = Math.max(0.5, Math.min(2, +rate || 1));
+    a.onended = () => done(true); a.onerror = () => done(false);
+    try { const p = a.play(); if (p && p.catch) p.catch(() => done(false)); } catch (e) { done(false); }
+  });
+}
+window.SARANG_TTSF = { base: BASE, on: () => !!idx, ready, play, stop };
+if (BASE) { const go = () => setTimeout(ready, 1200); if (document.readyState === 'complete') go(); else addEventListener('load', go); }
+})();
+
 /* ===== 공용 펜: 화면 공부의 쓰기 칸 (손가락·마우스·펜) =====
    쓰는 법 (자세히: docs/화면공부/pen.md)
      const pad = SARANG_PEN.create(box, {
@@ -18234,7 +18324,7 @@ const T = window.SARANG_TTS = {
   has: 'speechSynthesis' in window && typeof SpeechSynthesisUtterance !== 'undefined',
   tok: 0, keep: [], busy: null, subs: [],
   voices(){ try { return this.has ? speechSynthesis.getVoices().filter(v => /^en([-_]|$)/i.test(v.lang)) : []; } catch (e) { return []; } },
-  ok(){ return this.voices().length > 0; },
+  ok(){ return this.voices().length > 0 || !!(window.SARANG_TTSF && SARANG_TTSF.on()); },   // 서버 녹음(screen/ttsf.js)이 있으면 기기 음성이 없어도 됨
   get rate(){ const r = +load('scr_rate', 0); return r >= 0.5 && r <= 1.3 ? r : (load('el-settings', {}).rate || 0.9); },
   set rate(r){ try { localStorage.setItem('scr_rate', String(r)); } catch (e) {} },
   pick(who){
@@ -18246,8 +18336,11 @@ const T = window.SARANG_TTS = {
   },
   on(f){ this.subs.push(f); },
   emit(){ this.subs = this.subs.filter(f => f(this.busy) !== false); },
-  stop(){ this.tok++; try { if (this.has && (speechSynthesis.speaking || speechSynthesis.pending)) speechSynthesis.cancel(); } catch (e) {} if (this.busy) { this.busy = null; this.emit(); } },
-  one(t, who, tok){
+  stop(){ this.tok++; if (window.SARANG_TTSF) SARANG_TTSF.stop(); try { if (this.has && (speechSynthesis.speaking || speechSynthesis.pending)) speechSynthesis.cancel(); } catch (e) {} if (this.busy) { this.busy = null; this.emit(); } },
+  async one(t, who, tok){
+    const F = window.SARANG_TTSF;
+    if (F && F.on() && (await F.play('en', who, t, this.rate / 0.9) || tok !== this.tok)) return;   // 녹음은 보통 빠르기 1.0 = 기기 0.9
+    if (!this.has) return;
     return new Promise(res => {
       const u = new SpeechSynthesisUtterance(t), v = this.pick(who), t0 = Date.now(), rate = this.rate, est = (t.split(/\s+/).length * 420 + 600) / rate;
       if (v) { u.voice = v; u.lang = v.lang.replace('_', '-'); } else u.lang = 'en-US';
@@ -18263,7 +18356,7 @@ const T = window.SARANG_TTS = {
   /* lines: [{t, who:'A'|'B', pause}], key: 지금 소리 내는 것의 이름(버튼 표시용), onLine(i) */
   async run(key, lines, onLine){
     if (!this.ok()) return false;
-    const was = speechSynthesis.speaking || speechSynthesis.pending;
+    const was = this.has && (speechSynthesis.speaking || speechSynthesis.pending);
     this.stop(); const tok = this.tok; this.busy = key; this.emit();
     if (was) await new Promise(r => setTimeout(r, 150));   // 멈춘 바로 뒤에 말하면 무시되는 기기
     for (let i = 0; i < lines.length; i++) {
@@ -18279,6 +18372,7 @@ const T = window.SARANG_TTS = {
   toggle(key, lines, onLine){ if (this.busy === key) { this.stop(); if (onLine) onLine(-1); return; } this.run(key, lines, onLine); }
 };
 if (T.has) try { speechSynthesis.addEventListener('voiceschanged', () => T.emit()); } catch (e) {}
+document.addEventListener('sarang:ttsf', () => T.emit());   // 녹음 목록이 늦게 와도 버튼을 켬
 
 const SPK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -19005,6 +19099,8 @@ const wait = ms => new Promise(r => setTimeout(r, ms));
 
 /* 한 번 읽기: 녹음 파일 → 안 되면 기기 음성 */
 function one(t, slow, my){
+  const F = window.SARANG_TTSF;
+  if (F && F.on()) return F.play('ko', '', t, slow ? .85 : 1).then(ok => ok || my !== tok ? null : syn(t, slow, my));   // 서버 녹음 (screen/ttsf.js)
   const url = fileOf(t);
   if (url) return new Promise(res => {
     let fin = false; const done = ok => { if (fin) return; fin = true; res(ok); };
@@ -19030,20 +19126,22 @@ function syn(t, slow, my){
 
 const V = window.SARANG_VOICE_KO = {
   norm,
-  ok(){ return !!(window.SARANG_TTS_KO && window.SARANG_TTS_KO.files) || koVoices().length > 0; },
+  ok(){ return !!(window.SARANG_TTS_KO && window.SARANG_TTS_KO.files) || !!(window.SARANG_TTSF && SARANG_TTSF.on()) || koVoices().length > 0; },
   ready(){
     if (readyP) return readyP;
-    if (V.ok() || !hasSyn()) return (readyP = Promise.resolve(V.ok()));
-    return (readyP = new Promise(res => {
+    const F = window.SARANG_TTSF, fP = F ? Promise.race([F.ready(), wait(1500)]) : Promise.resolve();   // 녹음 목록도 잠깐(최대 1.5초) 기다림
+    if (V.ok() || !hasSyn()) return (readyP = fP.then(() => V.ok()));
+    return (readyP = fP.then(() => V.ok() ? true : new Promise(res => {
       let fin = false; const done = () => { if (fin) return; fin = true; clearInterval(iv); res(V.ok()); };
       try { speechSynthesis.addEventListener('voiceschanged', () => { if (koVoices().length) done(); }); } catch (e) {}
       try { speechSynthesis.getVoices(); } catch (e) {}
       let n = 0; const iv = setInterval(() => { if (koVoices().length || ++n >= 8) done(); }, 100);   // 시계 대신 횟수(멈춘 시계에서도 0.8초 뒤 끝남)
-    }));
+    })));
   },
   stop(){
     tok++;
     if (audio) { try { audio.pause(); } catch (e) {} audio = null; }
+    if (window.SARANG_TTSF) SARANG_TTSF.stop();
     try { if (hasSyn() && (speechSynthesis.speaking || speechSynthesis.pending)) speechSynthesis.cancel(); } catch (e) {}
     mark(null);
   },
@@ -20128,7 +20226,7 @@ const center = it => ({ x: it.x + it.w / 2, y: it.y + it.h / 2 });
 const num = v => typeof v === 'number' && isFinite(v);
 
 /* ---------- 소리 (없으면 조용히) ---------- */
-let voices = null;
+let voices = null, sayN = 0;
 function pickVoice(lang){
   try {
     if (!voices || !voices.length) voices = speechSynthesis.getVoices() || [];
@@ -20139,6 +20237,12 @@ function pickVoice(lang){
 function say(text, lang){
   if (!S || !text) return;
   S.said.push(text); S.langs.push(lang || 'ko-KR'); S.root.dataset.said = text;
+  const F = window.SARANG_TTSF, my = ++sayN;
+  try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {}
+  if (F && F.on()) { F.play(/^en/i.test(lang || '') ? 'en' : 'ko', 'A', text, 1).then(ok => { if (!ok && my === sayN && S) synSay(text, lang); }); return; }   // 서버 녹음(screen/ttsf.js), 없으면 기기 음성
+  synSay(text, lang);
+}
+function synSay(text, lang){
   try {
     const sy = window.speechSynthesis;
     if (!sy || !window.SpeechSynthesisUtterance) return;
@@ -20150,7 +20254,7 @@ function say(text, lang){
     sy.speak(u);
   } catch (e) {}
 }
-function hush(){ try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} }
+function hush(){ sayN++; if (window.SARANG_TTSF) SARANG_TTSF.stop(); try { if (window.speechSynthesis) speechSynthesis.cancel(); } catch (e) {} }
 try { if (window.speechSynthesis && speechSynthesis.addEventListener) speechSynthesis.addEventListener('voiceschanged', () => { voices = null; }); } catch (e) {}
 
 /* ---------- 열기 ---------- */
