@@ -4458,6 +4458,18 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
 .lg-gate-err{min-height:1.4em;margin:10px 0 0;font-size:13.5px;color:var(--warn-ink);overflow-wrap:anywhere}
 .lg-gate-note{margin:6px auto 0;max-width:400px;font-size:12.5px;line-height:1.55;color:var(--sub);word-break:keep-all;overflow-wrap:anywhere}
 @media (max-width:360px){.lg-gate{padding:22px 16px 18px}.lg-gate h2{font-size:20px}}
+/* 카카오 로그인 (2026-10-02): 카카오 디자인 가이드 — 노란 바탕 #FEE500, 검은 기호, 글자 85% 검정. 어두운 화면에서도 같은 색 */
+.lg-gate-btns{display:flex;flex-direction:column;align-items:center;gap:10px}
+.lg-gate-btn.lg-kakao{border-color:#FEE500;background:#FEE500;color:rgba(0,0,0,.85)}
+.lg-gate-btn.lg-kakao svg{width:20px;height:20px}
+.lg-same{margin:0 0 12px;padding:10px 12px;border-radius:10px;background:var(--soft);color:var(--ink);font-size:13.5px;line-height:1.55;word-break:keep-all;overflow-wrap:anywhere}
+.lg-same[hidden]{display:none}
+/* 설정 '계정' 칸 (로그인 전): 설명 아래에 구글·카카오 단추 두 개를 같은 폭으로 */
+#settings .set-child.lg-two{flex-wrap:wrap;row-gap:8px}
+#settings .set-child.lg-two>span{flex:1 1 100%}
+.lg-ins{display:flex;gap:8px;flex:1 1 100%}
+#settings .set-child .lg-ins .linkbtn{flex:1 1 0;min-width:0;padding:0 10px}
+@media (max-width:339px){.lg-ins{flex-direction:column}}
 </style>
 <style id="sarang-settings">/* 아래로 끌어도 페이지가 새로고침되지 않게 (2026-10-02 대표: 설치한 안드로이드 앱에서 드래그하면 새로고침됨 — 크롬 '당겨서 새로고침'). 맨 위·맨 아래 튕김만 막고 스크롤은 그대로 */
 html,body{overscroll-behavior-y:contain}
@@ -21634,12 +21646,15 @@ window.DONATE_CORE = (function(){
      이용약관·개인정보 수집·이용·만 14세 미만 아이 정보 부모 동의(모두 필수, 로그인정책서 v2 1-2절·서버설계서 2절)를 받는 창을 띄움.
      동의 전에는 아무것도 올리지 않음 (개인정보처리방침 초안 v2 3절 4: 동의 전에는 아이 프로필·학습 기록을 서버에 두지 않음).
      동의는 consent { parentAgreedAt(서버 시각), termsVersion, privacyVersion } 로 계정 문서에 적음. 취소하면 로그아웃.
-   아이 여러 명(c2·c3)과 카카오 로그인은 다음 단계. */
+   - 카카오 로그인 (2026-10-02, 서버 부품 v1.1): SDK 없이 페이지 이동. 단추 → 카카오 로그인 화면 → 같은 주소(lovedu.kr/app/)로 돌아옴 →
+     mount 때 주소에 code·state 가 있으면 completeKakao() 한 번. 카카오 계정은 이메일·이름이 없을 수 있음(uid 가 kakao_…) → '카카오 계정'으로 보임.
+     같은 이메일의 구글 계정이 이미 있으면(sameEmailAccount, 새 계정일 때만) 가입 마무리 창에 '구글로 가입한 계정이 있어요' 안내 — 합치지 않음, 고르는 건 부모.
+   아이 여러 명(c2·c3)은 다음 단계. */
 (function(){
   const HOSTS = ['lovedu.kr', 'www.lovedu.kr', 'localhost', '127.0.0.1', 'lovedu-dev.web.app', 'lovedu-dev.firebaseapp.com'];
   const HOST_OK = HOSTS.includes(location.hostname);
   const EMU = HOST_OK && /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && /[?&]emu=1(&|$)/.test(location.search);   // 검사: Firebase 에뮬레이터
-  const FILES = {"auth": "./packs/sarang-auth.js?v=b5ff581e81", "sdk": "./packs/sarang-auth-sdk.js?v=fd3fd8c5c6"};
+  const FILES = {"auth": "./packs/sarang-auth.js?v=f9337617c5", "sdk": "./packs/sarang-auth-sdk.js?v=ffb2ce5bd4"};
   const META = 'sarang_sync', CHILD = 'c1';
   /* 동의받는 약관·방침의 판 (두 문서는 아직 게시 전 초안: 게시할 때 판 이름을 바꿈) */
   const TERMS_V = 'terms-draft-v1', PRIVACY_V = 'privacy-draft-v2', TERMS_URL = 'https://lovedu.kr/terms', PRIVACY_URL = 'https://lovedu.kr/privacy';
@@ -21657,6 +21672,9 @@ window.DONATE_CORE = (function(){
   let A = null, loading = null, user = null, busy = false, applying = false, stopped = false, timer = null;
   let agreed = null;   // 이 계정의 가입 동의: null 모름(읽는 중) / false 아직 / true 함
   let ui = { msg: '', ask: false, err: '' };
+  let kakaoBusy = false, sameMail = null;   // 카카오에서 돌아와 로그인 마무리 중 / 같은 이메일로 가입한 다른 방식(['google.com'])
+  const isKakao = u => !!(u && /^kakao_/.test(u.uid));
+  const acctName = u => (u && (u.name || u.email)) || (isKakao(u) ? '카카오 계정' : '구글 계정');
 
   /* ---------- 이 기기 기록 모으기·넣기 ---------- */
   function snapshot(){
@@ -21742,12 +21760,13 @@ window.DONATE_CORE = (function(){
     box.className = 'lg-join'; box.id = 'lgJoin';
     box.innerHTML = `<div class="lg-join-card" role="dialog" aria-modal="true" aria-labelledby="lgJoinT" aria-describedby="lgJoinD">
       <h2 id="lgJoinT">가입 마무리</h2>
-      <p id="lgJoinD"><b>${esc(user.email || user.name || '구글 계정')}</b> 계정으로 사랑교육에 가입해요. 아래 내용을 읽고 동의해 주세요.</p>
+      <p id="lgJoinD"><b>${esc(user.email || user.name || (isKakao(user) ? '카카오' : '구글'))}</b> 계정으로 사랑교육에 가입해요. 아래 내용을 읽고 동의해 주세요.</p>
+      <p class="lg-same" id="lgSame" hidden></p>
       <label class="lg-chk lg-all"><input type="checkbox" id="lgAll"><span>모두 동의해요</span></label>
       <div class="lg-items">
         <div class="lg-item"><label class="lg-chk"><input type="checkbox" class="lg-req" data-k="terms"><span><em>필수</em> 이용약관에 동의해요</span></label><a class="lg-see" href="${TERMS_URL}" target="_blank" rel="noopener">전문 보기</a></div>
         <div class="lg-item"><label class="lg-chk"><input type="checkbox" class="lg-req" data-k="privacy"><span><em>필수</em> 개인정보 수집·이용에 동의해요</span></label><a class="lg-see" href="${PRIVACY_URL}" target="_blank" rel="noopener">전문 보기</a>
-          <p class="lg-sum">받는 것: 구글 계정 식별값·이메일, 아이 별명·학년·과목·시간표, 학습 기록(진도·출력 기록·답과 점수), 로그인한 기기 종류. 쓰는 곳: 로그인, 아이에게 맞춘 학습지와 진도·복습, 폰·PC 기록 함께 쓰기. 탈퇴하면 지우고, 법으로 보관해야 하는 결제 기록 등은 정해진 기간 뒤에 지워요.</p></div>
+          <p class="lg-sum">받는 것: 로그인한 계정(구글·카카오)의 식별값·이메일, 아이 별명·학년·과목·시간표, 학습 기록(진도·출력 기록·답과 점수), 로그인한 기기 종류. 쓰는 곳: 로그인, 아이에게 맞춘 학습지와 진도·복습, 폰·PC 기록 함께 쓰기. 탈퇴하면 지우고, 법으로 보관해야 하는 결제 기록 등은 정해진 기간 뒤에 지워요.</p></div>
         <div class="lg-item"><label class="lg-chk"><input type="checkbox" class="lg-req" data-k="child"><span><em>필수</em> 만 14세 미만 아이의 보호자로서 아이 정보 처리에 동의해요</span></label>
           <p class="lg-sum">아이는 가입하지 않고 보호자 계정 아래 프로필로 둬요. 아이 이름 대신 별명을 써 주세요.</p></div>
       </div>
@@ -21769,8 +21788,15 @@ window.DONATE_CORE = (function(){
       try { await joinAgree(); }
       catch (e) { console.warn('가입 동의 저장 실패', e && (e.code || e.message)); go.disabled = false; go.textContent = '가입 완료'; box.querySelector('.lg-join-err').textContent = '저장하지 못했어요. 인터넷을 확인하고 다시 눌러 주세요.'; }
     });
-    box.querySelector('#lgJoinNo').addEventListener('click', () => { joinShut(); setMeta(null); ui = { msg: '', ask: false, err: '' }; agreed = null; A.signOut(); });
+    box.querySelector('#lgJoinNo').addEventListener('click', () => { joinShut(); setMeta(null); ui = { msg: '', ask: false, err: '' }; agreed = null; sameMail = null; A.signOut(); });
+    sameNote();
     all.focus({ preventScroll: true });
+  }
+  /* 같은 이메일로 구글 가입한 계정이 있으면 가입 마무리 창에 알림 (카카오는 돌아온 뒤에 알게 되므로 창이 먼저 열려 있을 수 있음) */
+  function sameNote(){
+    const el = $('lgSame'); if (!el) return;
+    const g = sameMail && user && isKakao(user) && sameMail.includes('google.com');
+    el.hidden = !g; el.textContent = g ? '이 이메일로 구글로 가입한 계정이 이미 있어요. 그 계정의 아이 정보와 진도를 쓰려면 \'취소하고 로그아웃\'을 누른 뒤 구글로 시작해 주세요.' : '';
   }
   function joinShut(){
     if (!JOIN) return;
@@ -21850,6 +21876,8 @@ window.DONATE_CORE = (function(){
   const gated = () => HOST_OK && !((meta() || {}).uid);
   let gateOn = null;
   const GOOGLE = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M22.6 12.3c0-.8-.1-1.5-.2-2.2H12v4.2h5.9a5 5 0 0 1-2.2 3.3v2.7h3.6c2.1-1.9 3.3-4.8 3.3-8z"/><path fill="#34A853" d="M12 23c3 0 5.5-1 7.3-2.7l-3.6-2.7c-1 .7-2.2 1.1-3.7 1.1-2.9 0-5.3-1.9-6.2-4.5H2.1v2.8A11 11 0 0 0 12 23z"/><path fill="#FBBC05" d="M5.8 14.2a6.6 6.6 0 0 1 0-4.3V7H2.1a11 11 0 0 0 0 9.9l3.7-2.7z"/><path fill="#EA4335" d="M12 5.4c1.6 0 3.1.6 4.2 1.7l3.2-3.2A11 11 0 0 0 2.1 7l3.7 2.9C6.7 7.3 9.1 5.4 12 5.4z"/></svg>';
+  /* 카카오 말풍선 기호 (카카오 로그인 디자인 가이드: 노란 바탕 #FEE500, 검은 기호, 글자 85% 검정) */
+  const KAKAO = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#000" d="M12 3.2C6.6 3.2 2.2 6.6 2.2 10.8c0 2.7 1.8 5.1 4.5 6.4l-1 3.6c-.1.3.3.6.6.4l4.3-2.8c.5.1 1 .1 1.5.1 5.4 0 9.8-3.4 9.8-7.6S17.4 3.2 12 3.2z"/></svg>';
   function gateSync(){
     const on = gated();
     let g = $('lgGate');
@@ -21859,16 +21887,18 @@ window.DONATE_CORE = (function(){
         <h2 id="lgGateT">사랑교육 시작하기</h2>
         <p class="lg-gate-d">로그인하고 가입을 마치면 아이 학년과 진도를 정해요. 폰·태블릿·PC 어디서나 같은 기록으로 이어서 공부해요.</p>
         <ol class="lg-gate-steps"><li><b>1</b><span>로그인</span></li><li><b>2</b><span>약관 동의</span></li><li><b>3</b><span>학년·진도 정하기</span></li></ol>
-        <button type="button" class="lg-gate-btn" id="lgIn3">${GOOGLE}<span>구글로 시작하기</span></button>
+        <div class="lg-gate-btns"><button type="button" class="lg-gate-btn" id="lgIn3">${GOOGLE}<span>구글로 시작하기</span></button>
+        <button type="button" class="lg-gate-btn lg-kakao" id="lgK3">${KAKAO}<span>카카오로 시작하기</span></button></div>
         <p class="lg-gate-err" id="lgGateErr" role="alert"></p>
-        <p class="lg-gate-note">이미 가입했다면 같은 계정으로 로그인하면 아이 정보와 진도를 그대로 이어서 써요. 카카오 로그인은 준비 중이에요.</p>
+        <p class="lg-gate-note">이미 가입했다면 가입한 방식(구글 또는 카카오)으로 로그인하면 아이 정보와 진도를 그대로 이어서 써요.</p>
       </section>`);
       g = $('lgGate');
     }
     if (g) {
       g.hidden = !on;
       const err = $('lgGateErr'), t = on ? (ui.err || '') : ''; if (err && err.textContent !== t) err.textContent = t;
-      const b = $('lgIn3'); if (b) { const w = !!(loading && !A) || !!((meta() || {}).pending && user); b.disabled = w; b.setAttribute('aria-busy', String(w)); }
+      const w = !!(loading && !A) || kakaoBusy || !!((meta() || {}).pending && user);
+      ['lgIn3', 'lgK3'].forEach(id => { const b = $(id); if (b) { b.disabled = w; b.setAttribute('aria-busy', String(w)); } });
     }
     document.documentElement.classList.toggle('lg-gated', on);
     if (gateOn !== null && gateOn !== on) document.dispatchEvent(new CustomEvent('sarang:gate', { detail: { on } }));   // hub-ui: 걷히면 메인·가입 칸을 다시 그림
@@ -21880,9 +21910,9 @@ window.DONATE_CORE = (function(){
     const box = $('lgBox'); if (!box) return;
     let h;
     if (!HOST_OK) h = '<div class="set-child lg-row"><span><b>이 기기에만 저장 중</b><small>로그인은 lovedu.kr 앱에서 할 수 있어요. 로그인하면 폰과 PC가 같은 기록을 써요.</small></span></div>';
-    else if (!user) h = `<div class="set-child lg-row"><span><b>이 기기에만 저장 중</b><small>구글 계정으로 로그인하면 이 기기 기록을 계정에 보관하고 폰·PC에서 같이 써요.</small>${ui.err ? `<small class="lg-err">${esc(ui.err)}</small>` : ''}</span><button type="button" class="linkbtn" id="lgIn"${loading && !A ? ' disabled' : ''}>구글로 로그인</button></div>`;
+    else if (!user) h = `<div class="set-child lg-row lg-two"><span><b>이 기기에만 저장 중</b><small>구글이나 카카오로 로그인하면 이 기기 기록을 계정에 보관하고 폰·PC에서 같이 써요.</small>${ui.err ? `<small class="lg-err">${esc(ui.err)}</small>` : ''}</span><div class="lg-ins"><button type="button" class="linkbtn" id="lgIn"${(loading && !A) || kakaoBusy ? ' disabled' : ''}>구글로 로그인</button><button type="button" class="linkbtn" id="lgK"${(loading && !A) || kakaoBusy ? ' disabled' : ''}>카카오로 로그인</button></div></div>`;
     else {
-      h = `<div class="set-child lg-row"><span><b class="lg-who">${esc(user.name || '구글 계정')}</b><small class="lg-mail">${esc(user.email || '')}</small>${ui.ask ? '' : `<small class="lg-stat">${esc(ui.err || (agreed === false ? '가입을 아직 마치지 않았어요. 마치기 전에는 기록을 계정에 저장하지 않아요.' : ui.msg))}</small>`}</span><button type="button" class="linkbtn" id="lgOut">로그아웃</button></div>`;
+      h = `<div class="set-child lg-row"><span><b class="lg-who">${esc(acctName(user))}</b><small class="lg-mail">${esc(user.email || (isKakao(user) ? '카카오로 로그인' : ''))}</small>${ui.ask ? '' : `<small class="lg-stat">${esc(ui.err || (agreed === false ? '가입을 아직 마치지 않았어요. 마치기 전에는 기록을 계정에 저장하지 않아요.' : ui.msg))}</small>`}</span><button type="button" class="linkbtn" id="lgOut">로그아웃</button></div>`;
       if (agreed === false) h += '<button type="button" class="linkbtn lg-pick" id="lgJoin2"><b>가입 마무리하기</b><small>약관·개인정보 동의를 마치면 기록을 계정에 저장해요.</small></button>';
       if (ui.ask) h += '<div class="lg-ask" id="lgAsk"><p>이 계정에 저장된 기록이 있어요. 어느 쪽을 쓸까요?</p>'
         + '<button type="button" class="linkbtn lg-pick" id="lgUseCloud"><b>계정 기록 쓰기</b><small>다른 기기에서 하던 학년·진도로 바뀌어요.</small></button>'
@@ -21895,11 +21925,20 @@ window.DONATE_CORE = (function(){
   const obSync = () => { const ob = $('onboard'), el = $('lgOb'); if (ob && el) el.hidden = ob.hidden || !!user || !!(meta() || {}).uid; };   // 로그인 먼저(2026-10-01) 뒤로는 가입 칸에 올 때 이미 로그인한 상태라 거의 안 보임
   function mountOb(){
     const ob = $('onboard'); if (!ob || !HOST_OK || $('lgOb')) return;
-    ob.insertAdjacentHTML('afterend', '<div class="lg-ob" id="lgOb" hidden><span>이미 계정이 있나요?</span><button type="button" class="linkbtn" id="lgIn2">구글로 로그인</button></div>');
+    ob.insertAdjacentHTML('afterend', '<div class="lg-ob" id="lgOb" hidden><span>이미 계정이 있나요?</span><button type="button" class="linkbtn" id="lgIn2">구글로 로그인</button><button type="button" class="linkbtn" id="lgK2">카카오로 로그인</button></div>');
     new MutationObserver(obSync).observe(ob, { attributes: true, attributeFilter: ['hidden'] }); obSync();
   }
   document.addEventListener('click', async e => {
-    const t = e.target.closest('#lgIn, #lgIn2, #lgIn3, #lgOut, #lgJoin2, #lgUseCloud, #lgUseLocal'); if (!t) return;
+    const t = e.target.closest('#lgIn, #lgIn2, #lgIn3, #lgK, #lgK2, #lgK3, #lgOut, #lgJoin2, #lgUseCloud, #lgUseLocal'); if (!t) return;
+    if (/^lgK/.test(t.id)) {
+      ui.err = ''; sameMail = null; const m = meta() || {}; setMeta(Object.assign(m, { pending: true })); paint();
+      try {
+        await load();
+        if (user) { if (agreed === false) joinOpen(); else afterLogin(); return; }
+        A.signInKakao();   // 카카오 로그인 화면으로 이동 → 돌아오면 mount 의 kakaoReturn
+      } catch (er) { if (!user) { const mm = meta(); if (mm && !mm.uid) setMeta(null); } ui.err = er && /준비 중/.test(er.message || '') ? er.message : '로그인하지 못했어요. 다시 해 주세요.'; paint(); }
+      return;
+    }
     if (t.id === 'lgIn' || t.id === 'lgIn2' || t.id === 'lgIn3') {
       ui.err = ''; const m = meta() || {}; setMeta(Object.assign(m, { pending: true })); paint();
       try {
@@ -21909,7 +21948,7 @@ window.DONATE_CORE = (function(){
         await A.signInGoogle();
       } catch (er) { if (!user) { const mm = meta(); if (mm && !mm.uid) setMeta(null); } ui.err = '로그인하지 못했어요. 다시 해 주세요.'; paint(); }
     }
-    if (t.id === 'lgOut') { await upload(); setMeta(null); ui = { msg: '', ask: false, err: '' }; agreed = null; A.signOut(); }
+    if (t.id === 'lgOut') { await upload(); setMeta(null); ui = { msg: '', ask: false, err: '' }; agreed = null; sameMail = null; A.signOut(); }
     if (t.id === 'lgJoin2') joinOpen();
     if (t.id === 'lgUseCloud' || t.id === 'lgUseLocal') {
       t.disabled = true;
@@ -21924,7 +21963,20 @@ window.DONATE_CORE = (function(){
     mountOb(); paint(); hookPaper();
     const m = meta();
     if (m && m.note) { delete m.note; setMeta(m); setTimeout(() => toast('계정에 저장된 기록을 받아 왔어요.'), 600); }
-    if (HOST_OK && m && (m.uid || m.pending)) load().catch(() => {});   // 전에 로그인한 기기만 부품을 받음
+    if (kakaoBack()) kakaoReturn();
+    else if (HOST_OK && m && (m.uid || m.pending)) load().catch(() => {});   // 전에 로그인한 기기만 부품을 받음
+  }
+  /* 카카오 로그인 화면에서 돌아옴: 주소에 state 와 code(또는 error)가 있음 */
+  const kakaoBack = () => HOST_OK && /[?&]state=/.test(location.search) && /[?&](code|error)=/.test(location.search);
+  async function kakaoReturn(){
+    kakaoBusy = true; paint();
+    let r = null;
+    try { await load(); r = await A.completeKakao(); }
+    catch (e) { console.warn('카카오 로그인 실패', e && (e.code || e.message)); ui.err = (e && /다시 시도/.test(e.message || '')) ? e.message : '카카오 로그인을 하지 못했어요. 다시 해 주세요.'; }
+    kakaoBusy = false;
+    if (!r || r.status !== 'ok') { if (!user) { const mm = meta(); if (mm && !mm.uid) setMeta(null); } }   // 취소·실패: 첫 화면 그대로
+    else { sameMail = r.sameEmailAccount || null; sameNote(); }
+    paint();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
 

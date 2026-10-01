@@ -1,6 +1,6 @@
-// 사랑교육 로그인 부품 v1 (2026-10-01) — 서버 설계 S3 1차: 구글 로그인, 계정 문서, 기기 제한, 아이 프로필·진도 저장
+// 사랑교육 로그인 부품 v1.1 (2026-10-02) — 서버 설계 S3: 구글·카카오 로그인, 계정 문서, 기기 제한, 아이 프로필·진도 저장
 // 근거: roadmap/사랑교육_서버설계_v1.md 2절(데이터), 4-1(로그인·이관), 4-2(폰 1 + PC 1).
-// 화면은 없음. 앱 화면(앱 스레드)이 이 함수들을 부른다. 카카오 로그인은 카카오 앱 등록 뒤 추가.
+// 화면은 없음. 앱 화면(앱 스레드)이 이 함수들을 부른다.
 //
 // 쓰는 법 (브라우저):
 //   import { createSarangAuth } from './sarang-auth.js';
@@ -15,6 +15,7 @@ export const LOVEDU_DEV = {
   storageBucket: 'lovedu-dev.firebasestorage.app',
   messagingSenderId: '843439736761',
   appId: '1:843439736761:web:f525362c6da8c4d5a8d868',
+  kakaoRestKey: 'f73cdb968d1937ab3979ab40bb972929',                                          // 카카오 REST API 키 (주소창에 드러나는 공개값). 대표님 등록 뒤 채움
 };
 const REGION = 'asia-northeast3';
 const CHILD_IDS = ['c1', 'c2', 'c3'];                           // 아이 프로필 최대 3명 (규칙과 같음)
@@ -30,7 +31,7 @@ export function deviceKind(nav = globalThis.navigator) {
   return 'pc';
 }
 
-export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', emulator = null, storage = globalThis.localStorage, nav = globalThis.navigator } = {}) {
+export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', emulator = null, storage = globalThis.localStorage, session = globalThis.sessionStorage, nav = globalThis.navigator, go = u => globalThis.location.assign(u), kakaoAuthBase = 'https://kauth.kakao.com' } = {}) {
   const app = sdk.initializeApp(config, name);
   const auth = sdk.getAuth(app);
   const db = sdk.getFirestore(app);
@@ -51,6 +52,7 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
   let stopWatch = null;
   let kicking = false;
 
+  const call = async (name, data = {}) => (await sdk.httpsCallable(fns, name)(data)).data;
   const uid = () => {
     if (!auth.currentUser) throw new Error('로그인이 필요해요.');
     return auth.currentUser.uid;
@@ -119,6 +121,32 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
         throw e;
       }
     },
+    // 카카오 로그인 1단계: 카카오 로그인 화면으로 이동. 돌아오면 같은 페이지에서 completeKakao()를 부른다.
+    // redirectUri는 카카오 디벨로퍼스에 등록한 주소와 글자까지 같아야 한다.
+    signInKakao({ redirectUri = globalThis.location.origin + globalThis.location.pathname } = {}) {
+      if (!config.kakaoRestKey) throw new Error('카카오 로그인 준비 중이에요.');
+      const state = Array.from(globalThis.crypto.getRandomValues(new Uint8Array(16)), b => b.toString(16).padStart(2, '0')).join('');
+      try { session.setItem('sarang_kakao', JSON.stringify({ state, redirectUri })); } catch (e) {}
+      const q = new URLSearchParams({ client_id: config.kakaoRestKey, redirect_uri: redirectUri, response_type: 'code', state });
+      go(`${kakaoAuthBase}/oauth/authorize?${q}`);
+    },
+    // 카카오 로그인 2단계: 주소에 code가 있으면 서버에서 토큰으로 바꿔 로그인. code가 없으면 null.
+    // 결과 sameEmailAccount가 있으면 같은 이메일의 다른 로그인 방식 계정이 있다는 뜻 (앱이 안내).
+    async completeKakao(url = globalThis.location.href) {
+      const u = new URL(url);
+      const code = u.searchParams.get('code'), state = u.searchParams.get('state'), err = u.searchParams.get('error');
+      if (!code && !err) return null;
+      let saved = null;
+      try { saved = JSON.parse(session.getItem('sarang_kakao')); session.removeItem('sarang_kakao'); } catch (e) {}
+      ['code', 'state', 'error', 'error_description'].forEach(k => u.searchParams.delete(k));
+      try { globalThis.history.replaceState(null, '', u.pathname + u.search + u.hash); } catch (e) {}
+      if (err) return { status: 'cancelled' };
+      if (!saved || saved.state !== state) throw new Error('카카오 로그인을 다시 시도해 주세요.');
+      const r = await sdk.httpsCallable(fns, 'kakaoSignIn')({ code, redirectUri: saved.redirectUri });
+      await sdk.signInWithCustomToken(auth, r.data.token);
+      return { status: 'ok', isNew: r.data.isNew, sameEmailAccount: r.data.sameEmailAccount };
+    },
+
     async signOut() {
       if (auth.currentUser) put(sKey(auth.currentUser.uid), null);
       return sdk.signOut(auth);
@@ -177,6 +205,25 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
     recordPrint(childId, subject, day) {
       if (!SUBJECTS.includes(subject)) throw new Error('과목 키가 잘못됐어요: ' + subject);
       return sdk.addDoc(sdk.collection(childRef(childId), 'prints'), { subject, day, at: sdk.serverTimestamp() });
+    },
+
+    // 바로 풀기 기록 (환불 '이용' 기준 D2, 서버 시각, 고칠 수 없음)
+    recordSolve(childId, subject, day) {
+      if (!SUBJECTS.includes(subject)) throw new Error('과목 키가 잘못됐어요: ' + subject);
+      return sdk.addDoc(sdk.collection(childRef(childId), 'solves'), { subject, day, at: sdk.serverTimestamp() });
+    },
+
+    // 구독 결제 (서버 함수). 금액은 서버가 정한다. 자세한 흐름은 앱연결_안내.md '구독 결제'.
+    subscription: {
+      get: () => call('getSubscription'),                                   // { state: trial|active|grace|none, quotes, ... }
+      applyCode: code => call('applySignupCode', { code }),                 // 초대·경로·기관 코드 (가입 때 한 번)
+      claimBetaFree: () => call('claimBetaFree'),                           // 사전등록자 2개월 무료
+      startCheckout: (plan, method) => call('startCheckout', { plan, method }), // plan: monthly|yearly, method: card|phone|vbank
+      confirmBilling: (orderId, billingKey) => call('confirmBilling', { orderId, billingKey }),
+      cancel: () => call('cancelSubscription'),                             // 5분 안에 다시 로그인 필요
+      refundQuote: () => call('refundQuote'),
+      refund: () => call('requestRefund'),                                  // 5분 안에 다시 로그인 필요
+      verifyPlay: (productId, purchaseToken) => call('verifyPlayPurchase', { productId, purchaseToken }),
     },
 
     settings: {
