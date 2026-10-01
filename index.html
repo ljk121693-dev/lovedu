@@ -46,6 +46,7 @@ a{color:inherit}
 .eyebrow{font-size:13px;letter-spacing:.08em;color:var(--accent);font-weight:700}
 .soft{color:var(--soft)}
 .meta{font-size:13px;color:var(--soft)}
+.nw{white-space:nowrap}
 mark{background:var(--hl);color:inherit;padding:0 .2em;border-bottom:2px solid var(--hl-line)}
 .btn{display:inline-flex;align-items:center;justify-content:center;background:var(--ink);color:var(--btn-ink);font-weight:700;border:0;border-radius:999px;padding:12px 24px;font-size:16px;font-family:var(--sans);line-height:1.4;cursor:pointer;text-decoration:none;white-space:nowrap}
 .btn.sm{padding:8px 16px;font-size:14px}
@@ -125,7 +126,7 @@ td .meta{display:block;margin-top:6px}
 .badge{background:var(--accent);color:var(--btn-ink);font-size:12px;font-weight:700;border-radius:999px;padding:1px 10px}
 .promise{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px 20px;font-size:15px}
 .promise span::before{content:"✓ ";color:var(--accent);font-weight:700}
-.extra{margin-top:20px;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.extra{margin-top:20px;display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
 .extra div{border:1px dashed var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:4px;font-size:15px}
 
 /* 자주 묻는 질문 */
@@ -203,9 +204,8 @@ footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(
 
 <div class="hero">
   <div>
-    <p class="eyebrow">스마트 학습 · 프린트 학습</p>
     <h1><span class="strike">사교육</span> 대신<br>사랑교육</h1>
-    <p class="lead">오늘 무엇을 공부할지 앱이 정해 드려요. <mark>스마트 학습과 프린트 학습, 둘 다 돼요.</mark> 같은 문제를 PC·휴대폰·태블릿에서 바로 풀어도, 뽑아서 종이에 풀어도 진도는 하나로 이어져요. 월 9,900원, 연간이면 월 7,700원꼴이에요. 약정이 없고, 0~4세 아이는 무료예요.</p>
+    <p class="lead"><mark>스마트 학습과 프린트 학습, <span class="nw">둘 다 돼요.</span></mark><br>PC·휴대폰·태블릿 어디서나 <span class="nw">월 9,900원.</span></p>
     <div class="cta">
       <a class="btn js-start" href="/app/">7일 무료로 시작하기</a>
       <span class="note">로그인 없이 7일 체험 · 약정 없음</span>
@@ -298,7 +298,6 @@ footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(
   <div class="promise"><span>0~4세 무료</span><span>약정·위약금 없음</span><span>아이 3명까지 추가 요금 없음</span><span>로그인 없이 7일 무료 체험</span></div>
   <div class="extra">
     <div><b>초대 코드</b><span class="soft">초대 코드로 가입하면 월간 첫 달 10% 할인. 초대한 분은 인정된 초대 3명마다 1개월 무료예요.</span></div>
-    <div><b>팀 구독</b><span class="soft">이웃·친척과 함께 월간으로 모이면 5인 25%, 10인 35% 할인돼요. 팀장도 인원에 포함돼요.</span></div>
   </div>
 </section>
 
