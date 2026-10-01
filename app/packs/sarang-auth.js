@@ -78,6 +78,7 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
       put(sKey(u.uid), mine);
     }
     stopWatch = sdk.onSnapshot(sdk.doc(db, 'users', u.uid, 'devices', kind), snap => {
+      if (snap.metadata.fromCache) return;   // 다시 로그인할 때 캐시의 옛 sessionId로 자기를 밀어내지 않게 (앱 스레드 제보)
       const now = snap.exists() ? snap.data().sessionId : null;
       if (now && now !== mine && !kicking) {
         kicking = true;
@@ -121,6 +122,16 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
     async signOut() {
       if (auth.currentUser) put(sKey(auth.currentUser.uid), null);
       return sdk.signOut(auth);
+    },
+
+    // 가입 동의 (약관·개인정보처리방침 버전). 동의 전이면 앱이 '가입 마무리' 화면을 보여 준다.
+    async hasConsent() {
+      const s = await sdk.getDoc(userRef());
+      return !!(s.exists() && s.data().consent && s.data().consent.parentAgreedAt);
+    },
+    saveConsent({ termsVersion, privacyVersion }) {
+      if (!termsVersion || !privacyVersion) throw new Error('약관·개인정보처리방침 버전이 필요해요.');
+      return sdk.setDoc(userRef(), { consent: { parentAgreedAt: sdk.serverTimestamp(), termsVersion, privacyVersion } }, { merge: true });
     },
 
     // 체험 기록 이관 판단용: 계정에 이미 아이 프로필이 있는지 (있으면 앱이 "어느 쪽을 쓸까요?"를 묻는다)
