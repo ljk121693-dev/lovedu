@@ -67,6 +67,11 @@ mark{background:var(--hl);color:inherit;padding:0 .2em;border-bottom:2px solid v
 .hero h1 .strike{position:relative;color:var(--soft);font-weight:600}
 .hero h1 .strike::after{content:"";position:absolute;left:-2px;right:-2px;top:54%;height:4px;background:var(--accent);border-radius:2px;transform:rotate(-4deg)}
 .hero .lead{font-size:18px;margin-top:16px;max-width:30em}
+.perks{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:10px;max-width:32em}
+.perks li{display:grid;grid-template-columns:22px 1fr;column-gap:10px;font-size:15px;line-height:1.55}
+.perks li::before{content:"✓";grid-row:span 2;width:20px;height:20px;margin-top:2px;border-radius:50%;background:var(--card);border:1px solid var(--hero-line);color:var(--accent);font-size:12px;font-weight:700;display:grid;place-items:center;line-height:1}
+.perks b{font-weight:700}
+.perks span{color:var(--soft)}
 .cta{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:24px;align-items:center}
 .cta .note{font-size:15px;color:var(--soft)}
 
@@ -206,6 +211,10 @@ footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(
   <div>
     <h1><span class="strike">사교육</span> 대신<br>사랑교육</h1>
     <p class="lead"><mark>스마트 학습과 프린트 학습, <span class="nw">둘 다 돼요.</span></mark><br>PC·휴대폰·태블릿 어디서나 <span class="nw">월 9,900원.</span></p>
+    <ul class="perks">
+      <li><b>어디서 풀어도 이어지는 진도</b><span>PC·태블릿·휴대폰·프린트, 무엇으로 풀든 다음 날은 그다음부터 이어져요.</span></li>
+      <li><b>공부 범위는 자유롭게</b><span>학교 진도대로 따라가도, 부모님이 정한 범위로 공부해도 돼요.</span></li>
+    </ul>
     <div class="cta">
       <a class="btn js-start" href="/app/">7일 무료로 시작하기</a>
       <span class="note">로그인 없이 7일 체험 · 약정 없음</span>
