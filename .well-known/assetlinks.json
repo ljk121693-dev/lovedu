@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "kr.lovedu.app",
+    "sha256_cert_fingerprints": [
+      "15:D1:9D:0F:1B:F3:34:89:A0:68:E5:33:65:61:0B:01:63:FA:FB:E5:40:A9:BE:64:7A:1B:04:63:78:2E:D7:7A"
+    ]
+  }
+}]
