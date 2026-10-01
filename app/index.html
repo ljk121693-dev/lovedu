@@ -1352,12 +1352,6 @@ input{accent-color:var(--pri)}
 .hs-name::before{display:none}
 .hs-info{font-size:11px;font-weight:400;line-height:1.7;-webkit-line-clamp:2;color:var(--sub);padding-right:6px}
 .sarang-tile-arrow{position:absolute;right:16px;top:21px;color:#a3ad9f;font-size:20px;font-weight:400;line-height:1}
-.sarang-flow{display:flex;align-items:center;justify-content:space-between;gap:14px;margin:25px 0 0;padding:19px 24px;border:1px solid var(--line);border-radius:12px}
-.sarang-flow-item{display:flex;align-items:center;gap:11px;min-width:0}
-.sarang-flow-num{color:var(--mark);font-family:var(--serif);font-size:20px;font-style:italic}
-.sarang-flow-item b{display:block;font-size:12px;font-weight:600}
-.sarang-flow-item small{display:block;font-size:10px;color:var(--sub);margin-top:2px}
-.sarang-flow-sep{color:#a9b4a4;font-size:16px}
 .sarang-footer{display:flex;justify-content:space-between;align-items:center;gap:15px;border-top:1px solid var(--line);margin-top:32px;padding-top:18px;color:var(--sub);font-size:10px;letter-spacing:.01em}
 .sarang-footer b{font-family:var(--serif);font-weight:500;font-size:12px;color:var(--pri)}
 .sarang-footer span:last-child{letter-spacing:.06em;font-size:10px}
@@ -1448,11 +1442,6 @@ input{accent-color:var(--pri)}
  #subj.home-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
  #subj.home-grid button{min-height:134px}
  #onboard{padding:27px;margin-top:20px}
- .sarang-flow{padding:18px;gap:10px}
- .sarang-flow-item{gap:7px}
- .sarang-flow-item small{display:none}
- .sarang-flow-num{font-size:18px}
- .sarang-flow-item b{font-size:11px}
 }
 @media(max-width:480px){
  .wrap{padding:calc(18px + env(safe-area-inset-top,0px)) calc(17px + env(safe-area-inset-right,0px)) 27px calc(17px + env(safe-area-inset-left,0px))}
@@ -1487,11 +1476,6 @@ input{accent-color:var(--pri)}
  .hs-name{font-size:15px}
  .hs-info{font-size:10px;line-height:1.7}
  .sarang-tile-arrow{right:14px;top:18px;font-size:18px}
- .sarang-flow{margin-top:21px;padding:16px 13px;gap:6px}
- .sarang-flow-item{gap:5px}
- .sarang-flow-num{font-size:16px}
- .sarang-flow-item b{font-size:10px}
- .sarang-flow-sep{font-size:11px}
  .sarang-footer{margin-top:27px;padding-top:17px;font-size:9px;gap:6px}
  .sarang-footer span:last-child{display:none}
  #onboard{padding:25px 21px;margin-top:17px}
@@ -1532,18 +1516,12 @@ input{accent-color:var(--pri)}
  .sarang-mark{width:38px;height:38px}
  .hub-top h1{font-size:20px}
  .sarang-hero h2,#app[data-sarang-view="onboard"] .sarang-hero h2{font-size:22px}
- .sarang-flow{gap:5px;padding:14px 10px}
- .sarang-flow-num{font-size:14px}
- .sarang-flow-item b{font-size:9px}
  .ob-grades{grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,minmax(44px,auto))}
  .seg.ob-levels button{font-size:13px;padding:8px 2px}
  .subbar .seg button{font-size:10px;padding:5px 6px}
 }
 /* 휴대폰(600px 이하): 이용 순서는 세로로 한 줄씩, 글은 12px 이상 (검수 v29 R11) */
 @media(max-width:600px){
- .sarang-flow{flex-direction:column;align-items:stretch;gap:8px}
- .sarang-flow-sep{display:none}
- .sarang-flow-item b{font-size:12px;line-height:1.5}
 }
 /* 앱을 열 때 한 번: 로고가 가운데 떠올랐다가 홈으로 사라짐 (누르면 바로 넘어감) */
 .sarang-splash{position:fixed;inset:0;z-index:2000;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:var(--bg);color:var(--pri);transition:opacity .3s ease}
@@ -1950,6 +1928,7 @@ textarea.scr-in{resize:vertical}
 .st-card{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center;border:1px solid var(--line);border-radius:10px;padding:12px 8px}
 .st-card p{margin:0;font-size:14px;line-height:1.45;color:var(--sub)}
 .st-syl{display:flex;gap:4px}
+.st-wordrow{display:flex;align-items:center;justify-content:center;gap:8px}
 .st-syl span{width:30px;height:30px;display:grid;place-items:center;border:1.5px solid var(--tb);border-radius:6px;color:var(--tb);font-family:"TB Jua",var(--sans,sans-serif);font-size:17px}
 /* ② 쓰기 */
 .st-wr{display:flex;flex-direction:column;gap:6px;padding-top:6px;border-top:1px dashed var(--line)}
@@ -2021,6 +2000,9 @@ textarea.scr-in{resize:vertical}
 .st-scard{display:flex;align-items:center;gap:10px;border:1px solid var(--line);border-radius:10px;padding:10px;flex-wrap:wrap}
 .st-scard .st-sent{flex:1 1 200px}
 .st-scard .st-dots{margin-left:auto}
+/* 소리 버튼 + 세 번 읽기 동그라미를 한 덩어리로 (좁은 폰에서 함께 다음 줄로) */
+.st-act{margin-left:auto;display:flex;align-items:center;gap:8px}
+.st-act .st-dots{margin-left:0}
 .st-num{font-family:"TB Jua",var(--sans,sans-serif);color:var(--tb);font-size:16px;min-width:1.2em}
 .st-task{display:flex;flex-direction:column;gap:8px;padding-top:6px;border-top:1px dashed var(--line)}
 .st-task:first-of-type{border-top:0}
@@ -2053,8 +2035,10 @@ textarea.scr-in{resize:vertical}
 .st-lets>span{font-family:"TB Jua",var(--sans,sans-serif);font-size:24px;width:1.4em;text-align:center}
 .st-slot{width:28px;min-height:44px;border:1px dashed var(--line);background:transparent;border-radius:6px;padding:0;cursor:pointer;color:var(--ok-ink);font-size:20px}
 .st-slot.ok{border-style:solid;border-color:var(--ok);background:var(--ok-bg)}
-.st-dict{display:flex;align-items:center;gap:8px}
-.st-dict .st-wbox{flex:1 1 auto;min-width:0}
+/* 받아쓰기: 번호·듣기 한 줄, 쓰는 칸은 그 아래 전체 폭 */
+.st-dict{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.st-dict .st-wbox{flex:1 1 100%;min-width:0}
+.st-dictday{border-top:0;padding-top:0}
 .st-par{font-size:14px;color:var(--sub)}
 .st-par summary{cursor:pointer;min-height:44px;display:flex;align-items:center}
 .st-frame{margin:0;color:var(--sub);font-size:15px}
@@ -2066,6 +2050,7 @@ textarea.scr-in{resize:vertical}
 .st-ol{padding-left:2em}
 .st-mini h4{margin:0;text-align:center;font-family:"TB Jua",var(--sans,sans-serif);font-weight:400;font-size:20px;color:var(--tb)}
 .st-mini .st-dots{margin-left:auto}
+.st-mini .st-act{align-self:flex-end}
 .st-qrow .st-sx{flex-basis:100%}
 .st-seq{gap:8px}
 .st-seqb{display:flex;align-items:center;gap:10px;text-align:left;font-size:19px;line-height:1.35}
@@ -2074,6 +2059,12 @@ textarea.scr-in{resize:vertical}
 .st-seqb:disabled{opacity:1;cursor:default}
 .st-mine .sp-pen{width:100%}
 .st-rc1{flex:1 1 auto;min-width:0}
+/* ===== 화면 공부: 한국어 소리 버튼 (src/screen/voice.js) — 손가락으로 누르기 쉬운 44px, 읽는 동안 칠해짐 ===== */
+button.vo-btn{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:44px;min-height:44px;padding:0 10px;border:1.5px solid var(--tb,var(--pri));border-radius:999px;background:var(--card);color:var(--tb,var(--pri));cursor:pointer;font:inherit;font-size:15px;font-weight:700;line-height:1;-webkit-tap-highlight-color:transparent}
+button.vo-btn svg{width:22px;height:22px;flex:0 0 auto}
+button.vo-btn.vo-txt{padding:0 14px 0 10px}
+button.vo-btn.on{background:var(--tb,var(--pri));border-color:var(--tb,var(--pri));color:#fff}
+button.vo-btn:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
 /* ===== 화면 공부: 초1~3 수학 (math13.js) · 유아 수학 (ymath.js) 공용 일부 ===== */
 .m13{color:var(--ink,#222);min-width:0;word-break:keep-all;overflow-wrap:break-word}
 .m13 *{box-sizing:border-box}
@@ -4436,6 +4427,52 @@ select.dn-in{padding:8px 10px;font-size:15px}
 .lg-join-go:disabled{opacity:.45;cursor:default}
 @media print{.lg-join{display:none!important}}
 </style>
+<style id="sarang-settings">/* ===== 설정 화면 (2026-10-01 대표: 오늘의 학습 위에 겹쳐 뜨지 않고 따로 된 화면, 글씨 크기·경계를 한 체계로)
+   한 칸 = 작은 제목(.label) 아래 줄(.set-child): 왼쪽 굵은 제목(b 15px) + 설명(small 13px), 오른쪽 단추(테 두른 알약 모양) 또는 켜고 끄기.
+   칸 사이는 가는 선으로 나눔. 이 파일은 마지막에 들어가 앞의 설정 모양(ssh.css·login.css·donate.css)을 덮음 ===== */
+#app.set-open :is(#notifyBar,#sarangHero,#sarangDashboard,#subbar,.pane,#dnFoot,#tabBar,#lgOb){display:none!important}
+#app.set-open.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+.set-head{display:flex;align-items:center;gap:6px;max-width:700px;margin:4px auto 12px;min-height:48px}
+.set-head[hidden]{display:none}
+.set-head h2{margin:0;font-size:20px;font-weight:700;color:var(--ink);line-height:1.3}
+.set-back{display:inline-flex;align-items:center;gap:2px;min-height:44px;min-width:44px;padding:0 12px 0 6px;margin-right:6px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:inherit;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.set-back svg{width:20px;height:20px;flex:none}
+.set-back:focus-visible,#settings .linkbtn:focus-visible,#settings .set-switch:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+
+#settings{padding-top:6px;padding-bottom:6px}
+#settings>.label{display:block;margin:0;padding:16px 0 6px;font-size:13px;font-weight:700;letter-spacing:.02em;color:var(--pri);line-height:1.4}
+#settings>.label~.label{border-top:1px solid var(--line);margin-top:10px}
+#settings .set-gap{margin-top:10px}
+#settings .set-child{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px;margin:0;padding:4px 0;font-size:15px;font-weight:400;color:var(--ink)}
+#settings .set-child>span{display:block;min-width:0;flex:1 1 auto;font-size:15px;font-weight:400;line-height:1.45;color:var(--ink);overflow-wrap:anywhere;word-break:keep-all}
+#settings .set-child>span>b{display:block;font-size:15px;font-weight:700;color:var(--ink);line-height:1.45}
+#settings .set-child>span>small{display:block;margin-top:2px;font-size:13px;font-weight:400;color:var(--sub);line-height:1.5}
+#settings .set-child>span>small[hidden]{display:none}
+#settings .set-child>span>small.lg-stat,#settings .set-child>span>small.dn-stat{color:var(--pri);font-weight:600}
+#settings .set-child>span>small.lg-err{color:var(--warn-ink)}
+#settings .set-child .linkbtn{flex:none;display:inline-flex;align-items:center;justify-content:center;min-height:44px;min-width:72px;padding:0 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--pri);font-size:14px;font-weight:700;white-space:nowrap;text-decoration:none}
+#settings .set-child .linkbtn:disabled{opacity:.55}
+#settings .set-reset .linkbtn{color:var(--warn-ink)}
+/* 알림 켜고 끄기: 줄 오른쪽 스위치 */
+#settings .set-notify{cursor:pointer}
+#settings .set-switch{appearance:none;-webkit-appearance:none;flex:none;position:relative;width:48px;height:28px;margin:0 8px 0 0;border-radius:999px;background:var(--line);box-shadow:inset 0 0 0 1px rgba(0,0,0,.14);cursor:pointer;transition:background .15s}
+#settings .set-switch::before{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s}
+#settings .set-switch:checked{background:var(--pri)}
+#settings .set-switch:checked::before{transform:translateX(20px)}
+/* 모두 지우기 확인: 지우기 줄 자리에 같은 모양의 줄로 */
+#settings .set-reset-ask>span>b{color:var(--warn-ink)}
+#settings .set-reset-btns{display:flex;gap:8px;flex:none}
+#settings .set-reset-btns .linkbtn{min-width:64px;padding:0 14px;color:var(--ink)}
+#settings .set-reset-btns .set-reset-go{border-color:var(--warn-ink);color:var(--warn-ink)}
+/* 계정 칸: 가입 마무리·기록 고르기 단추 */
+#settings .lg-box{margin:0}
+#settings .lg-ask p{font-size:15px;font-weight:700}
+#settings .lg-pick b{font-size:15px}
+#settings .lg-pick small{font-size:13px}
+@media (max-width:360px){
+  #settings .set-child .linkbtn{min-width:0;padding:0 12px}
+}
+</style>
 </head>
 <body>
 <div class="sarang-splash" id="sarangSplash" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="19" fill="#2c5945"/><path d="M13 28c7-1 14 1 19 5v20c-5-4-12-6-19-5V28Z" fill="#f3f0df"/><path d="M51 28c-7-1-14 1-19 5v20c5-4 12-6 19-5V28Z" fill="#d7e0c8"/><path d="M32 27c-4-3-10-7-10-12 0-5 7-7 10-2 3-5 10-3 10 2 0 5-6 9-10 12Z" fill="#d2a185"/><path d="M19 34c3 0 6 1 8 2.5M19 40c3 0 6 1 8 2.5M37 36.5c2-1.5 5-2.5 8-2.5M37 42.5c2-1.5 5-2.5 8-2.5" stroke="#2c5945" stroke-width="1.5" stroke-linecap="round" opacity=".45"/></svg><b>사랑교육</b></div>
@@ -4494,7 +4531,6 @@ select.dn-in{padding:8px 10px;font-size:15px}
     <button type="button" data-s="his" style="--c:#A5432F"><span class="hs-name">한국사</span><span class="hs-info"></span></button>
     <button type="button" data-s="hanja" style="--c:#7A6A4F"><span class="hs-name">한자</span><span class="hs-info"></span></button>
   </nav></section></div>
-  <section class="sarang-flow" id="sarangFlow" aria-label="사랑교육 이용 순서"><div class="sarang-flow-item"><span class="sarang-flow-num">01</span><div><b>오늘 과목 확인</b><small>시간표와 진도에 맞게</small></div></div><span class="sarang-flow-sep" aria-hidden="true">›</span><div class="sarang-flow-item"><span class="sarang-flow-num">02</span><div><b>스마트 학습 · 프린트 학습</b><small>바로 풀거나 뽑아서 풀기</small></div></div><span class="sarang-flow-sep" aria-hidden="true">›</span><div class="sarang-flow-item"><span class="sarang-flow-num">03</span><div><b>부모님 확인</b><small>채점하고 함께 돌아보기</small></div></div></section>
   <div class="subbar" id="subbar" hidden><button type="button" class="back" id="homeBtn" aria-label="돌아가기">‹</button><b id="subTitle"></b><div class="seg" id="engSw" hidden><button type="button" data-s="eng">학년 과정</button><button type="button" data-s="vocab">영단어</button><button type="button" data-s="listen">영어 듣기</button></div></div>
   <section class="pane" id="pane-kor" hidden></section>
   <section class="pane" id="pane-yhan" hidden></section>
@@ -9973,6 +10009,9 @@ HUB_TODAY.math = {
   left: () => EM() ? EM().left() : mathSoon() ? null : mathLeft(),
   get minK(){ return EM() ? 1 : 2; },
   hasGuide: () => !!EM(),
+  /* 학교 진도대로(hub-ui): 초2·3 원래 앱 수학도 학교 달력 자리로. school() 이 true 인 학년만 */
+  school: () => !EM() && !mathSoon() && semUnits({ e2: 2, e3: 3 }[(() => { try { return (JSON.parse(localStorage.getItem('hub_child')) || {}).grade; } catch (e) { return ''; } })()] || 0, 1).length > 0,
+  toSchool: () => { try { localStorage.removeItem('math_cur'); localStorage.removeItem('math_start'); } catch (e) {} state.unit = 0; state.day = 0; gradeStart(); renderUnits(); renderDays(); },
   prepare: () => EM() && EM().prepare(),
   pages: t => EM() ? EM().pages(t) : paced(t, allPages),
   guidePages: t => EM() ? EM().guidePages(t) : [],
@@ -9995,12 +10034,40 @@ HUB_TODAY.mathAudit = {
     if (rv) seenDays = new Proxy({}, { get: () => [[0, 99]] });
     try { return rv ? (reviewPlan() ? drawReviewSheet(!!A) : null) : drawProblemSheet(!!A); } finally { [state.unit, state.day, seenDays] = s; if (o === undefined) delete sets[k]; else sets[k] = o; } }
 };
-/* 아이 학년(초1~3)의 첫 단원 */
+/* 아이 학년(초1~3)의 첫 단원. 오늘의 학습(학교 진도)이면 초2·3은 학교 달력의 오늘 자리 (2026-10-01 대표: 수학이 학교 진도를 안 따라감) */
 function gradeStart(){
   let g = 0; try { g = { e1: 1, e2: 2, e3: 3 }[(JSON.parse(localStorage.getItem('hub_child')) || {}).grade] || 0; } catch (e) {}
+  if (schoolStart(g)) return;
   const k = UNITS.findIndex(u => u.g === g);
   if (k >= 0) { state.unit = k; state.day = 0; }
 }
+/* 학교 진도 자리: 그 학기 단원들(g2a·g2b…, 단원마다 11 Day)을 이어 놓고 학기가 지난 만큼 (ssh termFrac). 자유 학습이거나 초1(한 단원뿐)은 false */
+const semUnits = (g, sem) => UNITS.map((u, i) => i).filter(i => UNITS[i].id.startsWith('g' + g + (sem === 1 ? 'a' : 'b')));
+function schoolStart(g){
+  let pace = null; try { pace = localStorage.getItem('hub_pace'); } catch (e) {}
+  const S = pace !== 'free' && window.HUB_TODAY && HUB_TODAY.ssh && HUB_TODAY.ssh.termFrac ? HUB_TODAY.ssh.termFrac() : null;
+  const us = S ? semUnits(g, S.sem) : [];
+  if (!us.length) return false;
+  let k = Math.floor(S.f * us.reduce((n, i) => n + UNITS[i].days.length, 0));
+  for (const i of us) { const n = UNITS[i].days.length; if (k < n) { state.unit = i; state.day = k; return true; } k -= n; }
+  state.unit = us[us.length - 1]; state.day = UNITS[state.unit].days.length - 1; return true;
+}
+/* 처음 그릴 때는 학교 달력(ssh)이 아직 없어 첫 단원으로 시작함 → 다 읽은 뒤 한 번 더.
+   이미 쓰던 기기(오늘의 학습, 초2·3): 수학이 이번 학기가 아닌 단원에 머물러 있으면 한 번만 학교 진도 자리로 옮김 (math_school1) */
+document.addEventListener('DOMContentLoaded', () => {
+  let cur = null, g = 0, pace = null, once = null;
+  try { cur = localStorage.getItem('math_cur'); pace = localStorage.getItem('hub_pace'); once = localStorage.getItem('math_school1'); g = { e2: 2, e3: 3 }[(JSON.parse(localStorage.getItem('hub_child')) || {}).grade] || 0; } catch (e) {}
+  let moved = false;
+  if (!UNITS.some(u => u.id === cur)) moved = true;
+  else if (g && pace !== 'free' && !once && window.HUB_TODAY && HUB_TODAY.ssh && HUB_TODAY.ssh.termFrac) {
+    try { localStorage.setItem('math_school1', '1'); } catch (e) {}
+    const us = semUnits(g, HUB_TODAY.ssh.termFrac().sem);
+    if (us.length && !us.some(i => UNITS[i].id === cur)) { try { localStorage.removeItem('math_cur'); localStorage.removeItem('math_start'); } catch (e) {} moved = true; }
+  }
+  if (!moved) return;
+  state.unit = 0; state.day = 0; gradeStart(); renderUnits(); renderDays();
+  document.dispatchEvent(new CustomEvent('hub:refresh'));
+});
 /* 가입·학년 바꾸기: 수학을 아직 시작하지 않았으면 새 학년 첫 단원으로 (출력했거나 레벨테스트로 정한 진도는 그대로) */
 document.addEventListener('hub:child', () => {
   let cur = null; try { cur = localStorage.getItem('math_cur'); } catch (e) {}
@@ -11847,6 +11914,12 @@ function schoolDay(subj){
   return i < 0 ? L.length : i + 1;
 }
 const pkey = subj => subj + '/' + G(subj);
+/* 오늘이 이번 학기의 어디쯤인지 { sem: 1|2, f: 0~1 } — 학기 Day 계획이 따로 없는 초2·3 수학(원래 앱)이 학교 진도 자리를 셈 (build.py schoolStart, 2026-10-01).
+   방학(1학기 끝~2학기 시작)은 2학기 처음, 2학기가 끝난 뒤는 2학기 끝 */
+function termFrac(){
+  const t = todayYmd(), T = SCH.TERMS.filter(x => x.id === 'sem1' || x.id === 'sem2'), term = T.find(x => t <= x.end) || T[T.length - 1], d = SCH.termDays(term);
+  return { sem: term.id === 'sem1' ? 1 : 2, f: d.length ? Math.min(1, d.filter(x => x < t).length / d.length) : 0 };
+}
 function curDay(subj){
   const L = dayList(subj); if (!L.length) return 0;
   let d = st.pos[pkey(subj)];
@@ -14202,7 +14275,7 @@ function toSchool(list){ (list || []).forEach(subj => { if (IDS.includes(subj) &
 /* 다른 화면으로 가면 영어 소리를 멈춤 */
 function stopSound(){ if (ETTS.busy) { ETTS.stop(); renderEngSay(); } }
 /* upos·dayCount·dayTitle: 점검용 — 화면에 Day 번호가 없어(2026-10-01) 검사가 속 Day 와 단원 안 진도를 여기서 봄 */
-HUB_TODAY.ssh = { upos, dayCount: subj => dayList(subj).length, dayTitle: (subj, n) => { const r = resolve(subj, n); return r && r.lesson ? r.lesson.title : ''; }, toSchool, screen: screenOpen, screenOk: scrOk, scrCheck, scrNorm, ids: IDS, guideOn: () => st.guide, setGuide, setGrade, setKorGrade, setEngGrade, setMathGrade, stopSound, mountPane, renderPane, hasKor, hasEng, hasMath, hisMode, toPdf, examInfo, renderExam, fontsReady };
+HUB_TODAY.ssh = { termFrac, upos, dayCount: subj => dayList(subj).length, dayTitle: (subj, n) => { const r = resolve(subj, n); return r && r.lesson ? r.lesson.title : ''; }, toSchool, screen: screenOpen, screenOk: scrOk, scrCheck, scrNorm, ids: IDS, guideOn: () => st.guide, setGuide, setGrade, setKorGrade, setEngGrade, setMathGrade, stopSound, mountPane, renderPane, hasKor, hasEng, hasMath, hisMode, toPdf, examInfo, renderExam, examOk: () => examSubjects().length > 0, fontsReady };   // examOk: 아이 학년·과목에 모의고사를 만들 교과가 있는지 (없으면 아래 메뉴에서 모의고사를 숨김, 2026-10-01 대표)
 document.addEventListener('hub:child', renderExam);
 })();
 
@@ -16247,8 +16320,21 @@ function sentModel(course, day, d){
     return t;
   };
   const tasks = (d.tasks || []).map(prep);
-  return { kind: 'sent', course, day, d, dl, S, copy, tasks, isStory, svgs: [] };
+  return { kind: 'sent', course, day, d, dl, S, copy, tasks, isStory, dict: dictOf(d, S), svgs: [] };
 }
+/* 받아쓰기 (2026-10-01 대표: 7세 한글에 받아쓰기): 그날 문제에 받아쓰기(dict)가 없으면 '나도 써요' 쪽에 두 문장.
+   그날 읽고 따라 쓴 문장 가운데 혼자 뜻이 서고 따옴표 없는 20자(띄어쓰기·부호 포함) 이하 문장에서 짧은 둘, 나온 차례대로.
+   (뒤쪽 단원의 '그리고·그래서'로 이은 두 문장처럼 다 긴 날은 받아쓰기 없이 나도 써요만)
+   학교 받아쓰기처럼 미리 읽고 써 본 문장을 불러 줌. 화면(src/screen/ttobak.js)도 이 값을 그대로 씀 */
+const DICT_MAX = 20;
+function dictOf(d, S){
+  if ((d.tasks || []).some(t => t.k === 'dict')) return null;
+  const seen = new Set(), P = [];
+  S.forEach((x, i) => { const s = plain(x.s).trim(); if (seen.has(s)) return; seen.add(s); if ([...s].length <= DICT_MAX && !/[“”"]/.test(s) && selfOK(s)) P.push({ s, i }); });
+  const two = P.sort((a, b) => [...a.s].length - [...b.s].length || a.i - b.i).slice(0, 2).sort((a, b) => a.i - b.i).map(x => x.s);
+  return two.length ? two : null;
+}
+const DICT_Q = '부모님이 불러 주는 말을 받아써요', DICT_HINT = '부모님께: 번호를 말하고 천천히 두 번 불러 주세요.';
 /* 복습 쪽(D+1·D+7)에 쓸 그 Day의 문제: 고르기 2 + 차례 1. 없으면 빈칸·문장에서 만듦 */
 function sentRecapItems(c, day, r){
   const d = c.data[day - 1], S = (d.t === 'story' ? d.story : d.sents) || [], T = d.tasks || [];
@@ -16317,9 +16403,11 @@ function sentDraws(m){
     while (lineH < 30 && tot(build(lineH + 1, rows)) <= BH - 12) lineH++;
     layout(build(lineH, rows), true);
   };
+  /* 나도 써요 (+ 받아쓰기가 있는 날은 위에 받아쓰기 두 줄) */
   const minePage = ctx => {
-    frame(ctx, course, dl, 6, '나도 써요', 3);
-    layout([...B.writeBlocks(ctx, d.mine, 1, true), stampBlock(ctx, c)]);
+    frame(ctx, course, dl, 6, m.dict ? '받아쓰고 나도 써요' : '나도 써요', 3);
+    const dk = m.dict ? [B.grp(B.BL.dict(ctx, { q: DICT_Q, items: m.dict, hint: DICT_HINT }, 1, 1))] : [];
+    layout([...dk, ...B.writeBlocks(ctx, d.mine, m.dict ? 2 : 1, true), stampBlock(ctx, c)]);
   };
   if (m.isStory) {
     P.push(ctx => taskPage(ctx, '물어봐요', [{ k: 'qs', q: '이야기를 읽고 알맞은 답에 ○ 해요', items: d.qs }, Object.assign({ k: 'seq' }, d.seq)], 1));
@@ -16493,9 +16581,14 @@ function sentBlocks(c){
         const lb = '바르게 고쳐 쓰기'; text(ctx, lb, X0 + 5, by + rh * .7, { size: 4.2, color: '#777' });
         const len = [...it.a].length + 1, cs = Math.min(11 * Math.min(k, 1.3), (BW - 12 - measure(ctx, lb, FB, 4.2)) / len); gridRow(ctx, X0 + 8 + measure(ctx, lb, FB, 4.2), by + rh * .7 - cs / 2, cs, [], len);
       }) }]; },
-    dict: (ctx, t, n, k) => { const rh = 18 * k, cs = Math.min(14, 13 * k);
-      return [qh(ctx, n, t.q), { h: t.items.length * rh + 7, draw: y => { t.items.forEach((s, i) => { const by = y + i * rh; text(ctx, `${i + 1}.`, X0 + 3, by + cs / 2, { f: FT, size: 5.5, color: c }); gridRow(ctx, X0 + 10, by, cs, [], Math.min(Math.floor((BW - 10) / cs), [...s].length + 3)); });
-        text(ctx, `${t.hint || ''} (불러 줄 말: ${t.items.map((s, i) => `${i + 1}. ${s}`).join('  ')})`, X0 + BW, y + t.items.length * rh + 3, { size: 3, color: '#999', align: 'right' }); } }]; },
+    /* 받아쓰기: 한 줄에 들어가면 글자 수 + 3칸, 길면 어절이 줄을 넘지 않게 꽉 찬 줄 여러 개. 불러 줄 말은 아래 작은 회색 글씨 */
+    dict: (ctx, t, n, k) => { const cs = Math.min(14, 13 * k), per = Math.floor((BW - 10) / cs), gap = Math.max(4, 18 * k - cs);
+      const R = t.items.map(s => [...s].length + 3 <= per ? 1 : lineSplit(s, per).length), h = R.reduce((a, r) => a + r * cs + gap, 0);
+      const note = `${t.hint || ''} (불러 줄 말: ${t.items.map((s, i) => `${i + 1}. ${s}`).join('  ')})`; let ns = 3; while (ns > 2.4 && measure(ctx, note, FB, ns) > BW) ns -= .1;
+      return [qh(ctx, n, t.q), { h: h + 7 - gap + 4, draw: y => { let by = y; t.items.forEach((s, i) => { text(ctx, `${i + 1}.`, X0 + 3, by + cs / 2, { f: FT, size: 5.5, color: c });
+          for (let r = 0; r < R[i]; r++) gridRow(ctx, X0 + 10, by + r * cs, cs, [], R[i] > 1 ? per : Math.min(per, [...s].length + 3));
+          by += R[i] * cs + gap; });
+        text(ctx, note, X0 + BW, by - gap + 4 + 3, { size: ns, color: '#999', align: 'right' }); } }]; },
     free: (ctx, t, n, k) => writeBlocks(ctx, { q: t.q, frame: t.frame, rows: k > 1.25 ? 3 : 2 }, n, false),
     qs: (ctx, t, n, k) => { const rh = 25 * k, txt = t.text || [], th = txt.length ? txt.length * 11 * Math.min(k, 1.2) + 6 : 0;
       const bs = [qh(ctx, n, t.q || '이야기를 읽고 알맞은 답에 ○ 해요')];
@@ -16832,11 +16925,13 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
   const TABS_T = [['play', '놀이 모음', '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><circle cx="10.5" cy="12" r="1.6"/><path d="M9 17c1.8-1.6 4.2-1.6 6 0"/>'], ['pscreen', '화면 놀이', '<rect x="3" y="5" width="18" height="13" rx="2.5"/><path d="M9 21h6M12 18v3"/><path d="M8 12.5c1.5-3 3-3 4 0s2.5 3 4 0"/>']];
   let tab = 'today', tabKind = '', backTo = 'subj', backY = 0;
   const tabBar = document.createElement('nav'); tabBar.className = 'tabbar'; tabBar.id = 'tabBar'; tabBar.hidden = true; tabBar.setAttribute('aria-label', '메뉴');
-  const tabsNow = () => tod() ? TABS_T : TABS;
+  /* 모의고사를 만들 교과가 없는 학년·과목(유아 5~7세, 국어 없는 초1·2 등)은 모의고사 메뉴를 숨김 → 메뉴가 '오늘' 하나면 아래 메뉴 줄 자체를 숨김 (2026-10-01 대표) */
+  const examOk = () => !!(window.HUB_TODAY && HUB_TODAY.ssh && HUB_TODAY.ssh.examOk && HUB_TODAY.ssh.examOk());
+  const tabsNow = () => tod() ? TABS_T : examOk() ? TABS : TABS.slice(0, 1);
   function drawTabs(){
-    const L = tabsNow(), k = L === TABS_T ? 't' : 'n'; if (k === tabKind) return; tabKind = k;
+    const L = tabsNow(), k = L === TABS_T ? 't' : L.length < 2 ? 'o' : 'n'; if (k === tabKind) return; tabKind = k;
     tabBar.innerHTML = L.map(([k, t, d]) => `<button type="button" data-tab="${k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg><span>${t}</span></button>`).join('');
-    tabBar.classList.add('tb2');   // 두 칸 (유아 놀이도 두 칸)
+    tabBar.classList.toggle('tb2', L.length === 2);   // 두 칸 (유아 놀이도 두 칸)
   }
   drawTabs();
   $('app').append(tabBar);
@@ -16857,7 +16952,8 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
       const [a, z] = window.HUB_TODAY && HUB_TODAY.daySplit ? HUB_TODAY.daySplit(t) : ['', t], h = (a ? `<b>${esc(a)}</b> ` : '') + (HUB_TODAY.nameHtml ? HUB_TODAY.nameHtml(z, true) : esc(z));   // 카드에는 진도 칸 + 그날 내용 이름만
       if (d.innerHTML !== h) d.innerHTML = h; });
     const c = child();
-    $('setChild').textContent = c ? `${LONG[c.grade]} · ${isTod(c.grade) ? '놀이 모음' : c.subs.map(x => NAME[x]).join(', ')}` : '';
+    const sc = c ? `<b>${esc(LONG[c.grade])}</b><small>${esc(isTod(c.grade) ? '놀이 모음' : c.subs.map(x => NAME[x]).join(', '))}</small>` : '';   // 설정 칸: 굵은 제목(학년) + 작은 설명(과목)
+    if ($('setChild').innerHTML !== sc) $('setChild').innerHTML = sc;
   }
 
   /* ---------- 처음 켤 때(가입): 학년 → 과목 → 시간표 (다시 고르기도 같음) ---------- */
@@ -17008,6 +17104,7 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     if (!ob && (!m || !child())) startOnboardSilently();
     if (window.TOD_THEME && !ob) TOD_THEME.set(TOD_THEME.stage((child() || {}).grade));   // 아이 단계 테마: 영아기·유아기 파스텔+캐릭터, 초등·중학 색 (src/tod-theme.js)
     if (ob) {
+      if (!$('settings').hidden) setOpen(false);   // 설정 화면에서 '다시 고르기' 등으로 가입 칸이 열리면 설정 화면도 닫음
       $('onboard').hidden = false; renderOnboard();
       ['today', 'subj', 'subbar', 'settings', 'tabBar'].forEach(id => { $(id).hidden = true; });
       $('setBtnHub').hidden = true; $('app').classList.remove('has-tabs');
@@ -17018,6 +17115,7 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     const T = tod();   // 유아 놀이: 과목 화면 없이 놀이 모음·화면 놀이만. 형제 프로필로 학년이 바뀌면 메뉴도 바뀜
     if (T) { s = 'home'; if (tab !== 'play' && tab !== 'pscreen') tab = 'play'; } else if (tab === 'play' || tab === 'pscreen') tab = 'today';
     drawTabs();
+    if (tab === 'exam' && !examOk()) tab = 'today';   // 학년·과목을 바꿔 모의고사가 없어지면 오늘로
     if (s === 'hanja' && has('yhan')) s = 'yhan';
     if (s === 'math' && has('ymath')) s = 'ymath';
     if (s === 'eng' && !has('eng')) s = 'vocab';
@@ -17027,7 +17125,8 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     view = s;
     const home = s === 'home';
     if (home) backTo = 'subj'; else { if (tab === 'today') backTo = 'today'; tab = 'subj'; }   // 과목 화면: 돌아가기는 연 곳(오늘 줄 또는 진도 설정)으로
-    $('app').dataset.tab = tab; $('app').classList.add('has-tabs'); tabBar.hidden = false;
+    const oneTab = tabsNow().length < 2;   // 메뉴가 하나뿐이면 아래 메뉴 줄을 숨기고 그만큼의 아래 여백도 없앰
+    $('app').dataset.tab = tab; $('app').classList.toggle('has-tabs', !oneTab); tabBar.hidden = oneTab;
     tabBar.querySelectorAll('[data-tab]').forEach(b => { if (b.dataset.tab === tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     document.querySelectorAll('.pane').forEach(p => { p.hidden = home || p.id !== 'pane-' + s; });
     $('subj').hidden = !home; $('subbar').hidden = home;
@@ -17047,7 +17146,27 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     if (window.SARANG_NOTIFY) SARANG_NOTIFY.check();
   }
   function startOnboardSilently(){ const c = child(); ob = { step: c ? 3 : 1, grade: c ? c.grade : null, lv: levelOf(c && c.grade), subs: c ? c.subs.slice() : [], pre: false, again: false, first: !c }; }
-  function setOpen(on){ $('settings').hidden = !on; $('setBtnHub').setAttribute('aria-expanded', on ? 'true' : 'false'); }
+  /* 설정: 오늘의 학습 위에 겹쳐 펼치지 않고 따로 된 화면으로 엶 (2026-10-01 대표). 연 동안 #app.set-open 이 다른 칸을 숨김(src/settings.css).
+     열 때 맨 위로, 닫으면 보던 자리로. 뒤로 가기(폰 뒤로 단추)도 설정만 닫음 */
+  let setY = 0, setPushed = false, setPop = false;
+  const setBackTo = () => { const y = setY; window.scrollTo(0, y); requestAnimationFrame(() => { if (Math.abs(window.scrollY - y) > 1 && $('settings').hidden) window.scrollTo(0, y); }); };   // 다시 보이는 칸이 한 박자 늦게 자라도 보던 자리로
+  function setOpen(on){
+    const was = !$('settings').hidden;
+    if (on && !was) setY = Math.round(window.scrollY);   // 다른 칸을 숨기기 전에 읽음 (숨기면 쪽이 짧아져 값이 줄어듦)
+    $('settings').hidden = !on; if ($('setHead')) $('setHead').hidden = !on; $('setBtnHub').setAttribute('aria-expanded', on ? 'true' : 'false');
+    $('app').classList.toggle('set-open', on);
+    if (on && !was) {
+      try { history.pushState(Object.assign({}, history.state || {}, { sarangSettings: 1 }), ''); setPushed = true; } catch (e) {}   // 맨 위로 올리기 전에 넣음: 뒤로 가기 때 브라우저가 보던 자리를 되살림
+      window.scrollTo(0, 0);
+    } else if (!on && was) {
+      if (setPushed && history.state && history.state.sarangSettings) { setPop = true; try { history.back(); } catch (e) { setPop = false; } }
+      setPushed = false; setBackTo();
+    }
+  }
+  addEventListener('popstate', () => {
+    if (setPop) { setPop = false; setBackTo(); return; }   // 닫기 단추로 넣어 둔 기록을 되돌린 것 (보던 자리 그대로)
+    if (!$('settings').hidden && !(history.state && history.state.sarangSettings)) { setPushed = false; renderHome(); setOpen(false); }
+  });
   function open(s){
     if (s === 'eng') { const e = load('hub_eng'); s = e === 'listen' || e === 'vocab' ? e : has('eng') ? 'eng' : 'vocab'; if (s === 'eng' && !has('eng')) s = 'vocab'; }
     if (s === 'hanja' && has('yhan')) s = 'yhan';
@@ -17070,7 +17189,9 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
   $('today').addEventListener('click', e => { const li = e.target.closest('#todayList li[data-s], #todayOther li[data-s]'); if (li && !e.target.closest('button, a, input')) openRow(li); });
   $('today').addEventListener('keydown', e => { const li = e.target.closest && e.target.closest('li[data-s]'); if (li && e.target === li && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openRow(li); } });
   $('engSw').addEventListener('click', e => { const b = e.target.closest('button[data-s]'); if (b) { show(b.dataset.s); } });
-  $('setBtnHub').addEventListener('click', () => { setOpen($('settings').hidden); renderHome(); });
+  $('setBtnHub').addEventListener('click', () => { renderHome(); setOpen($('settings').hidden); });
+  $('settings').insertAdjacentHTML('beforebegin', '<div class="set-head" id="setHead" hidden><button type="button" class="set-back" id="setBack"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>돌아가기</button><h2>설정</h2></div>');
+  $('setBack').addEventListener('click', () => { renderHome(); setOpen(false); });
   $('settings').addEventListener('click', e => {
     if (e.target.closest('#setChildBtn')) { setOpen(false); startOnboard(true); return; }
     if (e.target.closest('#tourAgain')) { setOpen(false); show('home'); window.scrollTo(0, 0); tourStart(); return; }
@@ -17089,7 +17210,7 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     const H = window.HUB_TODAY || {}, out = [], keep = [];
     const g = f => { try { return !!f(); } catch (e) { return false; } };
     if (has('kor')) (g(() => H.kor.hasGuide()) ? out.push('ekor') : keep.push('국어'));
-    if (has('math')) (g(() => H.math.hasGuide()) ? out.push('emath') : keep.push('수학'));
+    if (has('math')) (g(() => H.math.hasGuide()) ? out.push('emath') : g(() => H.math.school()) ? out.push('math') : keep.push('수학'));   // 초2·3 원래 앱 수학도 학교 진도 자리로 (2026-10-01)
     if (has('ymath')) keep.push('수학');
     ['eng', 'soc', 'sci', 'his', 'wh'].forEach(x => { if (has(x)) out.push(x); });
     if (has('hanja') || has('yhan')) keep.push('한자');
@@ -17123,7 +17244,9 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
   $('paceGo').addEventListener('click', () => {
     const { out } = schoolSubs();
     if (out.length && HUB_TODAY.ssh && HUB_TODAY.ssh.toSchool) HUB_TODAY.ssh.toSchool(out);
-    setPace('school'); paceAsk(false); paceSnap();
+    setPace('school');
+    if (out.includes('math') && HUB_TODAY.math && HUB_TODAY.math.toSchool) HUB_TODAY.math.toSchool();   // 학교 진도로 바꾼 뒤(초2·3 수학은 hub_pace 를 보고 자리를 셈)
+    paceAsk(false); paceSnap();
     document.dispatchEvent(new CustomEvent('hub:refresh'));
     say(out.length ? '학교 진도에 맞췄어요. 이제 오늘의 학습이에요.' : '오늘의 학습으로 바꿨어요.');
     $('paceBtn').focus({ preventScroll: true });
@@ -17287,7 +17410,7 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
   addEventListener('resize', () => tourPlace(true));   // 폴드 펴기·돌리기·창 줄이기: 말풍선·비춤 칸이 화면 밖에 남지 않게 다시 보이는 곳으로
   addEventListener('scroll', () => { if (tour && tour.steps[tour.i].fixed) tourPlace(false); }, { passive: true });   // 붙은 메뉴를 비출 때 쪽을 움직여도 따라감
   if (window.ResizeObserver) new ResizeObserver(() => tourPlace(false)).observe(document.body);   // 학습지 묶음을 읽고 카드 글이 바뀌어도 비춤 칸이 따라감
-  $('settings').insertAdjacentHTML('beforeend', '<div class="label set-gap">사용법</div><div class="set-child"><span>화면 안내를 처음부터 다시 봐요.</span><button type="button" class="linkbtn" id="tourAgain">사용법 다시 보기</button></div>');
+  $('settings').insertAdjacentHTML('beforeend', '<div class="label set-gap">사용법</div><div class="set-child"><span><b>화면 안내</b><small>처음 켰을 때 나온 사용법 안내를 처음부터 다시 봐요.</small></span><button type="button" class="linkbtn" id="tourAgain">다시 보기</button></div>');
 
   /* ---------- 오늘 공부 알림: 평일 오전 9시·오후 1시가 지났는데 오늘 공부를 아직 시작하지 않았으면(바로 풀기·뽑아서 풀기 둘 다 안 함) 홈 맨 위에 알림 한 줄 ----------
      한 날은 hub_printed(날짜: 종이로 뽑거나 화면 공부를 끝내면 적음, 이름은 예전 그대로), 닫은 차례는 hub_notify_x(날짜/차례), 설정에서 끄면 hub_notify='0'.
@@ -17330,13 +17453,18 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
   window.SARANG_NOTIFY = { times: ['09:00', '13:00'], due, onDue: null, check: notify, printed: () => { store('hub_printed', ymd()); notify(); } };
   setInterval(notify, 60000);   // 켜 둔 채 9시·1시가 되면 그때 뜸
   document.addEventListener('visibilitychange', () => { if (!document.hidden) notify(); });
-  $('settings').insertAdjacentHTML('beforeend', '<div class="label set-gap">알림</div><label class="ss-check set-notify"><input type="checkbox" id="notifyOn"><span>오늘 공부 알림 (오전 9시·오후 1시)<small>평일에 오늘 공부(스마트 학습·프린트 학습)를 아직 시작하지 않았으면 메인 화면 위에 알려 드려요.</small></span></label>');
+  $('settings').insertAdjacentHTML('beforeend', '<div class="label set-gap">알림</div><label class="set-child set-notify"><span><b>오늘 공부 알림</b><small>평일 오전 9시·오후 1시에 오늘 공부(스마트 학습·프린트 학습)를 아직 시작하지 않았으면 메인 화면 위에 알려 드려요.</small></span><input type="checkbox" class="set-switch" id="notifyOn" role="switch"></label>');
   $('notifyOn').checked = load('hub_notify') !== '0';
   $('notifyOn').addEventListener('change', e => { store('hub_notify', e.target.checked ? '1' : '0'); notify(); });
   /* ---------- 처음부터 다시: 이 기기에 저장한 아이 정보·시간표·진도·출력 기록을 모두 지우고 가입부터 (2026-09-28 주인 요청) ---------- */
-  $('settings').insertAdjacentHTML('beforeend', '<div class="label set-gap">처음부터 다시</div><div class="set-child set-reset" id="resetRow"><span>아이 정보·시간표·진도·출력 기록을 모두 지우고 가입부터 다시 시작해요.</span><button type="button" class="linkbtn" id="resetAsk">모든 기록 지우기</button></div>'
-    + '<div class="set-reset-ask" id="resetConfirm" hidden><span>정말 모두 지울까요? 되돌릴 수 없어요.</span><div class="set-reset-btns"><button type="button" class="linkbtn" id="resetNo">취소</button><button type="button" class="linkbtn set-reset-go" id="resetGo">지우기</button></div></div>');
-  const resetAsk = on => { $('resetConfirm').hidden = !on; $('resetAsk').hidden = on; (on ? $('resetNo') : $('resetAsk')).focus({ preventScroll: true }); };
+  $('settings').insertAdjacentHTML('beforeend', '<div class="label set-gap">처음부터 다시</div><div class="set-child set-reset" id="resetRow"><span><b>모든 기록 지우기</b><small>아이 정보·시간표·진도·출력 기록을 모두 지우고 가입부터 다시 시작해요.</small></span><button type="button" class="linkbtn" id="resetAsk">지우기</button></div>'
+    + '<div class="set-child set-reset-ask" id="resetConfirm" hidden><span><b>정말 모두 지울까요?</b><small>되돌릴 수 없어요.</small></span><div class="set-reset-btns"><button type="button" class="linkbtn" id="resetNo">취소</button><button type="button" class="linkbtn set-reset-go" id="resetGo">지우기</button></div></div>');
+  /* 묻는 줄이 지우기 줄 자리에 들어섬. 높이가 달라 맨 아래에서 화면이 튀지 않게, 새로 보이는 줄은 앞 줄 높이보다 작아지지 않음 */
+  const resetAsk = on => {
+    const from = on ? $('resetRow') : $('resetConfirm'), to = on ? $('resetConfirm') : $('resetRow'), h = from.offsetHeight;
+    from.hidden = true; to.hidden = false; to.style.minHeight = h ? h + 'px' : '';
+    (on ? $('resetNo') : $('resetAsk')).focus({ preventScroll: true });
+  };
   $('resetAsk').addEventListener('click', () => resetAsk(true));
   $('resetNo').addEventListener('click', () => resetAsk(false));
   $('resetGo').addEventListener('click', () => {
@@ -17628,7 +17756,6 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     $('app').dataset.sarangView=onboarding?'onboard':home?'home':'subject';
     $('sarangHero').hidden=!(onboarding||front);
     $('sarangDashboard').hidden=!home;
-    $('sarangFlow').hidden=!front;
     const intro=$('sarangHeroTitle');
     const html=onboarding?'배움의 시작에,<br><em>부모님의 사랑을.</em>':'오늘도 함께,<br><em>오늘의 공부.</em>';
     if(intro.innerHTML!==html)intro.innerHTML=html;
@@ -18496,6 +18623,11 @@ const emo = (e, cls) => {
   return `<span class="st-emo${cls ? ' ' + cls : ''}" style="font-family:${esc(FE)}" aria-hidden="true">${esc(e)}</span>`;
 };
 const isRv = d => !!(d && (d.review || d.t === 'review'));
+/* 소리 버튼 (src/screen/voice.js, 2026-10-01 대표: 한글에 소리): 한국어 소리가 없는 기기면 빈 글 → 버튼 없음 */
+const VO = () => window.SARANG_VOICE_KO || null;
+const voiceReady = () => VO() ? VO().ready().catch(() => false) : Promise.resolve(false);
+const vb = (t, o) => VO() && VO().ok() ? VO().btn(t, o) : '';
+const voStop = () => { if (VO()) VO().stop(); };
 
 /* 지금 과정·Day: ttobak-module 이 열어 주는 TTOBAK.cur('kor') 를 쓰고, 없으면 같은 규칙으로 저장값을 읽음 */
 const HDEF = { k5: 'hg5', k6: 'hg6', k7: 'hg7', e1: 'hg7', e2: 'hg7' };
@@ -18568,9 +18700,12 @@ function openSent(ctx, T, c, day, m){
   const lines = (s, n) => { const out = []; let cur = []; for (const w of T.plain(s).split(' ')) { const t = cur.length ? [...cur, ' ', ...w] : [...w]; if (t.length > n && cur.length) { out.push(cur); cur = [...w]; } else cur = t; } out.push(cur); return out; };
   const writeRows = (box, rows, n, label) => pen(box, { kind: 'hangul', cells: n * rows, cols: n, size: 60, label });
 
-  T.ready(m).then(() => { if (alive) build(); });
+  Promise.all([T.ready(m), voiceReady()]).then(() => { if (alive) build(); });   // 글꼴·그림과 음성 목록을 함께 기다림
   function build(){
     const plan = T.sentRecap ? T.sentRecap(c, day) : null;
+    const VON = !!(VO() && VO().ok());
+    /* 받아쓰기 줄: 번호 + 듣기(천천히 두 번) + 쓰는 칸(줄 아래 전체 폭). 정답은 접어 둠 */
+    const dictHTML = (items, hint) => `<div class="st-rows">${items.map((s, j) => `<div class="st-dict" data-j="${j}"><span class="st-num">${j + 1}.</span>${vb(s, { slow: 1, times: 2, txt: '듣기', label: `${j + 1}번 받아쓰기 듣기` })}<div class="st-wbox"></div></div>`).join('')}</div><details class="st-par"><summary>${VON ? '다 쓰면 정답 보기' : '부모님: 불러 줄 말 보기'}</summary>${VON ? '' : `<p>${escJ(hint || '')}</p>`}<ol>${items.map(s => `<li>${escJ(s)}</li>`).join('')}</ol></details>`;
     const sec = (n, title, tip, body, cls) => `<section class="st-sec${cls ? ' ' + cls : ''}"><h3><i>${n}</i>${escS(title)}</h3>${tip ? `<p class="st-tip">${escS(tip)}</p>` : ''}${body}</section>`;
     const qh = (i, t, small) => `<h4>${i}. ${escS(t.q || '')}${small ? ` <small>${escS(small)}</small>` : ''}</h4>`;
     const TASK = {
@@ -18584,13 +18719,13 @@ function openSent(ctx, T, c, day, m){
       sound: t => `<div class="st-rows">${t.items.map((it, j) => `<div class="st-row" data-j="${j}">${emo(it.e, 'lg')}<span class="st-sx st-sound">소리 [${esc(it.say)}]</span>${opts(it.o)}</div>`).join('')}</div>`,
       space: t => `<div class="st-rows">${t.items.map((it, j) => { const ch = [...it.s]; return `<div class="st-space" data-j="${j}"><div class="st-lets">${ch.map((x, k) => `<span>${escJ(x)}</span>${k < ch.length - 1 ? `<button type="button" class="st-slot" data-k="${k}" aria-label="${k + 1}번째 글자 뒤"></button>` : ''}`).join('')}</div>${/써요/.test(t.q) ? '<div class="st-wbox"></div>' : ''}</div>`; }).join('')}</div>`,
       fix: t => `<div class="st-rows">${t.items.map((it, j) => `<div class="st-fix" data-j="${j}"><div class="st-cardsbar st-words2">${it.s.split(' ').map((w, k) => `<button type="button" data-k="${k}">${escJ(w)}</button>`).join('')}</div><p class="st-fixa" hidden>바르게 고쳐 써요: <b>${escJ(it.a)}</b></p><div class="st-wbox" hidden></div></div>`).join('')}</div>`,
-      dict: t => `<div class="st-rows">${t.items.map((s, j) => `<div class="st-dict" data-j="${j}"><span class="st-num">${j + 1}.</span><div class="st-wbox"></div></div>`).join('')}</div><details class="st-par"><summary>부모님: 불러 줄 말 보기</summary><p>${escJ(t.hint || '')}</p><ol>${t.items.map(s => `<li>${escJ(s)}</li>`).join('')}</ol></details>`,
+      dict: t => dictHTML(t.items, t.hint),
       free: t => `${t.frame ? `<p class="st-frame">이렇게 써 봐요: ${escS(t.frame)}</p>` : ''}<div class="st-wbox" data-rows="2"></div>`,
       qs: t => `${(t.text || []).length ? `<div class="st-story">${t.text.map((s, j) => `<p>${t.e && t.e[j] ? emo(t.e[j]) : ''}${escJ(s)}</p>`).join('')}</div>` : ''}<div class="st-rows">${t.items.map((q, j) => `<div class="st-row st-qrow" data-j="${j}"><span class="st-sx">${j + 1}) ${escJ(q.q)}</span>${opts(q.o)}</div>`).join('')}</div>`,
       seq: t => `<div class="st-rows st-seq">${t.items.map((s, j) => `<button type="button" class="st-seqb" data-j="${j}"><i></i>${escJ(s)}</button>`).join('')}</div>`,
     };
-    const SMALL = { order: '카드를 문장 차례대로 눌러요', seq: '먼저 일어난 일부터 차례로 눌러요', space: '띄어 쓸 글자 사이를 눌러요', fix: '틀린 낱말을 눌러요', link: '왼쪽을 누르고 이어질 오른쪽을 눌러요' };
-    const taskHTML = (list, n0) => list.map((t, i) => `<div class="st-task" data-t="${n0 + i}">${qh(i + 1, t, SMALL[t.k] || (t.k === 'sort' && t.hint) || '')}${TASK[t.k](t)}</div>`).join('');
+    const SMALL = { dict: VON ? '듣기를 누르면 천천히 두 번 읽어 줘요' : '', order: '카드를 문장 차례대로 눌러요', seq: '먼저 일어난 일부터 차례로 눌러요', space: '띄어 쓸 글자 사이를 눌러요', fix: '틀린 낱말을 눌러요', link: '왼쪽을 누르고 이어질 오른쪽을 눌러요' };
+    const taskHTML = (list, n0) => list.map((t, i) => `<div class="st-task" data-t="${n0 + i}">${qh(i + 1, t.k === 'dict' && VON ? Object.assign({}, t, { q: '불러 주는 말을 듣고 받아써요' }) : t, SMALL[t.k] || (t.k === 'sort' && t.hint) || '')}${TASK[t.k](t)}</div>`).join('');
     const S = m.S, tasks = m.tasks;
     const extra = story ? [{ k: 'qs', q: '이야기를 읽고 알맞은 답을 골라요', items: d.qs }, Object.assign({ k: 'seq' }, d.seq)] : [];
     const ALL = extra.concat(tasks);   // data-t 번호 = ALL 의 자리
@@ -18598,7 +18733,7 @@ function openSent(ctx, T, c, day, m){
     root.innerHTML = `
       <header class="st-head"><span class="st-badge">${esc(c.group)} ${esc(c.label)} · ${esc(posTxt(c, m))}${story ? ' · 이야기' : ''}</span><h2>${escJ(head)}</h2><p>${escS(d.goal)}</p></header>
       ${sec('①', story ? '이야기를 읽어요' : rv ? '다시 읽어요' : '문장을 읽어요', '부모님께: ' + d.tip,
-        `<div class="st-scards">${S.map((st, i) => `<div class="st-scard">${story ? `<span class="st-num">${i + 1}</span>` : ''}${emo(st.e, 'lg')}<p class="st-sent">${sentHTML(st, !!d.roles)}</p>${dots(T.plain(st.s))}</div>`).join('')}</div>`)}
+        `<div class="st-scards">${S.map((st, i) => `<div class="st-scard">${story ? `<span class="st-num">${i + 1}</span>` : ''}${emo(st.e, 'lg')}<p class="st-sent">${sentHTML(st, !!d.roles)}</p><span class="st-act">${vb(T.plain(st.s))}${dots(T.plain(st.s))}</span></div>`).join('')}</div>`)}
       ${story ? sec('②', '물어봐요', '', taskHTML(extra, 0)) : ''}
       ${sec(story ? '③' : '②', '따라 써요', '회색 글자를 따라 쓰고, 아래 빈칸에 혼자 써요. 띄어 쓰는 곳(∨)은 한 칸을 비워요. 문장 부호(. ? !)도 한 칸에 써요.',
         m.copy.map((st, i) => `<div class="st-wr"><div class="st-wr-h">${emo(st.e)}<span class="st-sent sm">${sentHTML(st, false)}</span></div><div class="st-copy" data-i="${i}"></div></div>`).join(''))}
@@ -18606,10 +18741,10 @@ function openSent(ctx, T, c, day, m){
       ${story ? sec('⑤', '뒷이야기를 지어요', '이야기를 한 번 더 읽고, 다음에 무슨 일이 일어날지 말해 보세요.',
         `<ol class="st-story st-ol">${S.map(st => `<li>${escJ(T.plain(st.s))}</li>`).join('')}</ol><h4>${escS(d.next.q)}</h4>${d.next.frame ? `<p class="st-frame">이렇게 써 봐요: ${escS(d.next.frame)}</p>` : ''}<div class="st-wbox" data-rows="3"></div>`)
       : sec('④', '짧은 이야기를 읽어요', '소리 내어 세 번 읽어요.',
-        `<div class="st-story st-mini"><h4>${escJ(d.mini.title)}</h4>${d.mini.lines.map((s, j) => `<p>${emo(d.mini.e[j])}${escJ(s)}</p>`).join('')}${dots(d.mini.title)}</div>
+        `<div class="st-story st-mini"><h4>${escJ(d.mini.title)}</h4>${d.mini.lines.map((s, j) => `<p>${emo(d.mini.e[j])}${escJ(s)}</p>`).join('')}<span class="st-act">${vb(d.mini.lines.join(' '), { label: '이야기 소리 듣기' })}${dots(d.mini.title)}</span></div>
         <div class="st-task" data-mini="1"><h4>1. 이야기를 읽고 알맞은 답을 골라요</h4><div class="st-rows"><div class="st-row st-qrow"><span class="st-sx">${escJ(d.mini.q.q)}</span>${opts(d.mini.q.o)}</div></div></div>
         <h4>2. 이야기에 이어질 문장을 하나 더 써요.</h4><div class="st-wbox" data-rows="2"></div>`)}
-      ${sec(story ? '⑥' : '⑤', '나도 써요', '', `<h4>${escS(d.mine.q)}</h4><div class="st-mine"></div>${d.mine.frame ? `<p class="st-frame">이렇게 써 봐요: ${escS(d.mine.frame)}</p>` : ''}<div class="st-wbox" data-rows="2"></div>`)}
+      ${sec(story ? '⑥' : '⑤', m.dict ? '받아쓰고 나도 써요' : '나도 써요', '', `${m.dict ? `<div class="st-task st-dictday"><h4>1. ${VON ? '불러 주는 말을 듣고 받아써요' : '부모님이 불러 주는 말을 받아써요'}${VON ? ' <small>듣기를 누르면 천천히 두 번 읽어 줘요</small>' : ''}</h4>${dictHTML(m.dict, '부모님께: 번호를 말하고 천천히 두 번 불러 주세요.')}</div>` : ''}<h4>${m.dict ? '2. ' : ''}${escS(d.mine.q)}</h4><div class="st-mine"></div>${d.mine.frame ? `<p class="st-frame">이렇게 써 봐요: ${escS(d.mine.frame)}</p>` : ''}<div class="st-wbox" data-rows="2"></div>`)}
       ${plan ? sec(story ? '⑦' : '⑥', '다시 풀어요', '반복하면 오래 기억해요. ' + [plan.one].concat(plan.two !== plan.one ? [plan.two] : []).map(s => `${when(s.k)} 배운 것(${nameTxt(c, s.day)})`).join('과 ') + '을 다시 풀어요. 먼저 소리 내어 말해 보고, 막히면 그날 학습지를 함께 펼쳐 봐요.',
         `<h4>1. 어제 읽은 문장을 떠올려 빈칸에 써요 <small>(${when(plan.one.k)} 배운 ‘${escS(nameTxt(c, plan.one.day))}’)</small></h4><div class="st-wr st-wr2">${emo(plan.st.e, 'lg')}<div class="st-rc1"></div></div>
         ${plan.R.picks.length ? `<h4>2. 알맞은 말을 골라요 <small>(${when(plan.two.k)} 배운 ‘${escS(nameTxt(c, plan.two.day))}’)</small></h4>${TASK.pick({ items: plan.R.picks.map(p => Object.assign({}, p, { a: p.o.indexOf(p.ans) })) }).replace('class="st-rows"', 'class="st-rows st-rcp"')}` : ''}
@@ -18646,6 +18781,11 @@ function openSent(ctx, T, c, day, m){
         pos++; b.disabled = true; b.classList.add('ok'); const a = row.querySelector('.st-ans'); if (a) { a.insertAdjacentHTML('beforeend', `<span>${escJ(right[pos - 1])}</span>`); } else b.querySelector('i').textContent = pos;
         if (pos === right.length) { if (first) q(true); row.classList.add('done'); }
       }); };
+    /* 받아쓰기 칸: 짧으면 글자 수 + 2칸 한 줄, 길면 n칸 줄로 (어절이 줄을 넘지 않게) */
+    const dictPen = (r, s) => { const len = [...s].length, L2 = lines(s, n);
+      const k = +r.dataset.j + 1, box = r.querySelector('.st-wbox');
+      pen(box, len + 2 <= n ? { kind: 'hangul', cells: len + 2, size: 60, min: 34, label: `받아쓰기 ${k}번 칸` } : { kind: 'hangul', cols: n, cells: n * L2.length, size: 60, label: `받아쓰기 ${k}번 칸` });
+      box.querySelectorAll('.sp-tools [data-a]').forEach(b => b.setAttribute('aria-label', `받아쓰기 ${k}번 ${b.textContent}`)); };   // 아래 나도 써요 글씨 칸의 되돌리기·지우기와 이름이 겹치지 않게
     const wire = (box, t) => {
       const rows = [...box.querySelectorAll('[data-j]')];
       if (t.k === 'pick') rows.forEach(r => { const it = t.items[+r.dataset.j]; choose(r, it.o[it.a]); });
@@ -18677,9 +18817,10 @@ function openSent(ctx, T, c, day, m){
           if (!hit.has(+b.dataset.k)) { shake(b); if (first) { first = false; q(false); } return; }
           if (first) q(true); r.querySelectorAll('.st-cardsbar button').forEach(x => { x.disabled = true; }); b.classList.add('ng-fixed'); r.classList.add('done');
           r.querySelector('.st-fixa').hidden = false; const wb = r.querySelector('.st-wbox'); wb.hidden = false; pen(wb, { kind: 'hangul', cells: [...it.a].length + 1, size: 60, min: 34, label: '고쳐 쓰는 칸' }); }); });
-      else if (t.k === 'dict') rows.forEach(r => pen(r.querySelector('.st-wbox'), { kind: 'hangul', cells: Math.min(n, [...t.items[+r.dataset.j]].length + 2), size: 60, min: 34, label: '받아쓰기 칸' }));
+      else if (t.k === 'dict') rows.forEach(r => dictPen(r, t.items[+r.dataset.j]));
     };
     $$('.st-task[data-t]').forEach(box => wire(box, ALL[+box.dataset.t]));
+    $$('.st-dictday .st-dict').forEach(r => dictPen(r, m.dict[+r.dataset.j]));
     const mq = root.querySelector('[data-mini] .st-row'); if (mq) choose(mq, d.mini.q.o[d.mini.q.a]);
 
     /* 다시 풀어요: 첫 어절만 보이고 나머지는 빈칸(띄어 쓰는 칸은 흐린 ∨) */
@@ -18697,7 +18838,7 @@ function openSent(ctx, T, c, day, m){
       ctx.done({ course: c.id, day, ok, total });
     });
   }
-  return { close(){ alive = false; pads.forEach(p => p.destroy()); pads = []; root.remove(); } };
+  return { close(){ alive = false; voStop(); pads.forEach(p => p.destroy()); pads = []; root.remove(); } };
 }
 
 
@@ -18714,16 +18855,16 @@ function open(ctx){
   const quiz = () => { total++; let first = true; return good => { if (good && first) ok++; if (!good) first = false; }; };
   const shake = b => { b.classList.remove('ng'); void b.offsetWidth; b.classList.add('ng'); setTimeout(() => b.classList.remove('ng'), 700); };
 
-  T.ready(m).then(() => { if (alive) build(); });
+  Promise.all([T.ready(m), voiceReady()]).then(() => { if (alive) build(); });   // 글꼴·그림과 음성 목록을 함께 기다림
   function build(){
     const src = recap(c, day), rv = isRv(m.d);
     const sec = (n, title, tip, body) => `<section class="st-sec"><h3><i>${n}</i>${esc(title)}</h3>${tip ? `<p class="st-tip">${esc(tip)}</p>` : ''}${body}</section>`;
     root.innerHTML = `
       <header class="st-head"><span class="st-badge">${esc(c.group)} ${esc(c.label)} · ${esc(posTxt(c, m))}</span><h2>${rv ? '다시 만나요' : '오늘의 낱말'}</h2><p>${W.map(x => esc(x.w)).join(' · ')}</p></header>
       ${sec('①', rv ? '다시 만나요' : '그림 보며 배워요', rv ? '지난 며칠 동안 배운 낱말이에요. 기억나는지 그림을 가리고 먼저 읽어 보세요.' : '그림을 보고 낱말을 소리 내어 읽어요. 네모 칸의 글자를 하나씩 손가락으로 짚어 보세요.',
-        `<div class="st-cards">${W.map(x => `<div class="st-card">${emo(x, 'xl')}<b class="st-word">${esc(x.w)}</b><span class="st-syl">${[...x.w].map(s => `<span>${esc(s)}</span>`).join('')}</span><p>${esc(x.s)}</p></div>`).join('')}</div>`)}
+        `<div class="st-cards">${W.map(x => `<div class="st-card">${emo(x, 'xl')}<span class="st-wordrow"><b class="st-word">${esc(x.w)}</b>${vb(x.w)}</span><span class="st-syl">${[...x.w].map(s => `<span>${esc(s)}</span>`).join('')}</span><p>${esc(x.s)}</p></div>`).join('')}</div>`)}
       ${sec('②', '따라 써요', '회색 글자를 천천히 따라 써요. 점선 십자를 보면 글자 자리를 맞추기 쉬워요. 세 번 읽으면 동그라미를 눌러요.',
-        W.map((x, i) => `<div class="st-wr"><div class="st-wr-h">${emo(x)}<b class="st-word">${esc(x.w)}</b><span class="st-dots" aria-label="세 번 읽고 누르기">${[1, 2, 3].map(k => `<button type="button" class="st-dot" aria-pressed="false" aria-label="${esc(x.w)} ${k}번 읽었어요"></button>`).join('')}</span></div><div class="st-pad" data-w="${i}"></div></div>`).join(''))}
+        W.map((x, i) => `<div class="st-wr"><div class="st-wr-h">${emo(x)}<b class="st-word">${esc(x.w)}</b>${vb(x.w)}<span class="st-dots" aria-label="세 번 읽고 누르기">${[1, 2, 3].map(k => `<button type="button" class="st-dot" aria-pressed="false" aria-label="${esc(x.w)} ${k}번 읽었어요"></button>`).join('')}</span></div><div class="st-pad" data-w="${i}"></div></div>`).join(''))}
       ${sec('③', '문제를 풀어요', '',
         `<h4>1. 그림과 낱말을 이어요 <small>그림을 누르고 알맞은 낱말을 눌러요</small></h4>
         <div class="st-match"><div>${m.L.map(x => `<button type="button" class="st-mL" data-w="${esc(x.w)}" aria-label="${esc(x.w)} 그림">${emo(x, 'lg')}</button>`).join('')}</div>
@@ -18808,7 +18949,7 @@ function open(ctx){
       ctx.done({ course: c.id, day, ok, total });
     });
   }
-  return { close(){ alive = false; pads.forEach(p => p.destroy()); pads = []; root.remove(); } };
+  return { close(){ alive = false; voStop(); pads.forEach(p => p.destroy()); pads = []; root.remove(); } };
 }
 
 window.SARANG_TTOBAK_SCREEN = { open };
@@ -18816,6 +18957,95 @@ window.SARANG_TTOBAK_SCREEN = { open };
 const reg = () => { if (!window.SARANG_SCREEN || reg.done) return; reg.done = true;
   SARANG_SCREEN.register('kor', { label: '화면으로 공부하기', available: () => !!(window.TTOBAK && window.HUB_TODAY && HUB_TODAY.kor && HUB_TODAY.kor.available() && !HUB_TODAY.kor.hasGuide()), open }); };
 reg(); if (!reg.done) document.addEventListener('DOMContentLoaded', reg);
+})();
+
+/* ===== 화면 공부: 한국어 소리 (유아 한글 낱말·문장 읽어 주기, 7세 받아쓰기) =====
+   2026-10-01 대표: 한글 공부에 소리 버튼 + 7세 받아쓰기. 소리는 구글 TTS로 미리 녹음해 넣기로 함.
+   녹음 파일 표(window.SARANG_TTS_KO)가 있으면 그 파일을, 없으면 기기 한국어 음성(speechSynthesis ko-KR)을 씀.
+   둘 다 없으면(한국어 음성이 없는 기기·안드로이드 WebView) ok() 가 false → 화면은 버튼을 그리지 않음.
+   SARANG_VOICE_KO.ready()  : 기기 음성 목록이 올 때까지(최대 0.8초) 기다림. 화면을 그리기 전에 기다려서 버튼이 나중에 생기며 화면이 튀지 않게
+   SARANG_VOICE_KO.btn(text, { label, txt, slow, times }) : 버튼 HTML. 누르면 읽고(다시 누르면 멈춤), 읽는 동안 .on
+   SARANG_VOICE_KO.say(text, { slow, times }) / stop()
+   녹음 파일 표 모양: window.SARANG_TTS_KO = { base: 'packs/tts-ko/', files: { '나무': 'a1b2c3.mp3', '아기가 자요.': '…' } }  (열쇠는 norm() 한 글) */
+(function(){
+'use strict';
+const esc = s => String(s).replace(/[&<>"]/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[ch]));
+const norm = s => String(s == null ? '' : s).replace(/[\[\]]/g, '').replace(/[“”]/g, '"').replace(/\s+/g, ' ').trim();
+const hasSyn = () => { try { return !!(window.speechSynthesis && window.SpeechSynthesisUtterance); } catch (e) { return false; } };
+const koVoices = () => { try { return hasSyn() ? (speechSynthesis.getVoices() || []).filter(v => /^ko([-_]|$)/i.test(v.lang || '')) : []; } catch (e) { return []; } };
+const fileOf = t => { const M = window.SARANG_TTS_KO, f = M && M.files && M.files[norm(t)]; return f ? (M.base || '') + f : null; };
+const pickVoice = () => { const vs = koVoices(); return vs.find(v => /google/i.test(v.name)) || vs.find(v => /^ko[-_]kr$/i.test(v.lang)) || vs[0] || null; };
+const ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.2 6.5a7.8 7.8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>';
+
+let tok = 0, audio = null, onBtn = null, readyP = null;
+const keep = [];   // 크롬에서 onend 가 안 오는 문제 막기(말 참조 유지)
+const mark = b => { if (onBtn && onBtn !== b) { onBtn.classList.remove('on'); onBtn.setAttribute('aria-pressed', 'false'); } onBtn = b; if (b) { b.classList.add('on'); b.setAttribute('aria-pressed', 'true'); } };
+const wait = ms => new Promise(r => setTimeout(r, ms));
+
+/* 한 번 읽기: 녹음 파일 → 안 되면 기기 음성 */
+function one(t, slow, my){
+  const url = fileOf(t);
+  if (url) return new Promise(res => {
+    let fin = false; const done = ok => { if (fin) return; fin = true; res(ok); };
+    try { audio = new Audio(url); audio.playbackRate = slow ? .85 : 1; audio.onended = audio.onpause = () => done(true); audio.onerror = () => done(false);
+      const p = audio.play(); if (p && p.catch) p.catch(() => done(false)); } catch (e) { done(false); }
+  }).then(ok => ok || my !== tok ? null : syn(t, slow, my));
+  return syn(t, slow, my);
+}
+function syn(t, slow, my){
+  if (!hasSyn()) return Promise.resolve();
+  return new Promise(res => {
+    let fin = false, u;
+    const done = () => { if (fin) return; fin = true; clearInterval(iv); const i = keep.indexOf(u); if (i >= 0) keep.splice(i, 1); res(); };
+    const rate = slow ? .72 : .9, t0 = Date.now(), est = ([...t].length * 230 + 800) / rate;
+    const iv = setInterval(() => { const el = Date.now() - t0; let busy = true; try { busy = speechSynthesis.speaking || speechSynthesis.pending; } catch (e) {} if (my !== tok || (el > est + 1500 && !busy) || el > est * 3 + 8000) done(); }, 300);
+    try {
+      u = new SpeechSynthesisUtterance(t); const v = pickVoice();
+      u.lang = v ? v.lang.replace('_', '-') : 'ko-KR'; if (v) u.voice = v; u.rate = rate; u.pitch = 1.05;
+      u.onend = u.onerror = done; keep.push(u); speechSynthesis.speak(u);
+    } catch (e) { done(); }
+  });
+}
+
+const V = window.SARANG_VOICE_KO = {
+  norm,
+  ok(){ return !!(window.SARANG_TTS_KO && window.SARANG_TTS_KO.files) || koVoices().length > 0; },
+  ready(){
+    if (readyP) return readyP;
+    if (V.ok() || !hasSyn()) return (readyP = Promise.resolve(V.ok()));
+    return (readyP = new Promise(res => {
+      let fin = false; const done = () => { if (fin) return; fin = true; clearInterval(iv); res(V.ok()); };
+      try { speechSynthesis.addEventListener('voiceschanged', () => { if (koVoices().length) done(); }); } catch (e) {}
+      try { speechSynthesis.getVoices(); } catch (e) {}
+      let n = 0; const iv = setInterval(() => { if (koVoices().length || ++n >= 8) done(); }, 100);   // 시계 대신 횟수(멈춘 시계에서도 0.8초 뒤 끝남)
+    }));
+  },
+  stop(){
+    tok++;
+    if (audio) { try { audio.pause(); } catch (e) {} audio = null; }
+    try { if (hasSyn() && (speechSynthesis.speaking || speechSynthesis.pending)) speechSynthesis.cancel(); } catch (e) {}
+    mark(null);
+  },
+  /* times 번 읽기 (받아쓰기는 천천히 두 번, 사이 1.2초) */
+  async say(text, o){
+    o = o || {}; V.stop(); const my = tok, t = norm(text), n = Math.max(1, Math.min(3, +o.times || 1));
+    if (o.btn) mark(o.btn);
+    for (let k = 0; k < n && my === tok; k++) { if (k) await wait(1200); if (my !== tok) break; await one(t, !!o.slow, my); }
+    if (my === tok) mark(null);
+  },
+  btn(text, o){
+    o = o || {}; const t = norm(text);
+    return `<button type="button" class="vo-btn${o.txt ? ' vo-txt' : ''}" data-say="${esc(t)}"${o.slow ? ' data-slow="1"' : ''}${o.times ? ` data-times="${+o.times}"` : ''} aria-pressed="false" aria-label="${esc(o.label || t + ' 소리 듣기')}">${ICON}${o.txt ? `<span>${esc(o.txt)}</span>` : ''}</button>`;
+  },
+};
+/* 버튼 누르기: 읽는 중인 버튼을 다시 누르면 멈춤 */
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('.vo-btn'); if (!b) return;
+  if (b === onBtn) { V.stop(); return; }
+  V.say(b.dataset.say, { slow: !!b.dataset.slow, times: +b.dataset.times || 1, btn: b });
+});
+/* 화면을 떠나면 멈춤 */
+document.addEventListener('visibilitychange', () => { if (document.hidden) V.stop(); });
 })();
 
 /* ===== 수학 답 비교 (화면 공부 · 개발 4): 아이가 쓴 답이 정답과 같은지 =====
@@ -21215,7 +21445,7 @@ window.DONATE_CORE = (function(){
   function entries(){
     const set = $('settings');
     if (set && !$('dnSetBtn')) {
-      const html = '<div class="label set-gap">문제 기부</div><div class="set-child dn-set"><span>직접 만든 문제를 보내 주세요. 검수 후 학습지에 들어가요.<small id="dnSetStat" hidden></small></span><button type="button" class="linkbtn" id="dnSetBtn">문제 기부하기</button></div>';
+      const html = '<div class="label set-gap">문제 기부</div><div class="set-child dn-set"><span><b>내가 만든 문제 보내기</b><small>직접 만든 문제를 보내 주세요. 검수 후 학습지에 들어가요.</small><small class="dn-stat" id="dnSetStat" hidden></small></span><button type="button" class="linkbtn" id="dnSetBtn">보내기</button></div>';
       const reset = $('resetRow'), lab = reset && reset.previousElementSibling;
       if (lab && lab.classList.contains('label') && lab.parentNode === set) lab.insertAdjacentHTML('beforebegin', html); else set.insertAdjacentHTML('beforeend', html);
       $('dnSetBtn').addEventListener('click', () => open({ from: 'settings' }));
@@ -21461,8 +21691,8 @@ window.DONATE_CORE = (function(){
     if (msg != null) ui.msg = msg;
     const box = $('lgBox'); if (!box) return;
     let h;
-    if (!HOST_OK) h = '<div class="set-child lg-row"><span>로그인은 lovedu.kr 앱에서 할 수 있어요. 로그인하면 폰과 PC가 같은 기록을 써요.</span></div>';
-    else if (!user) h = `<div class="set-child lg-row"><span>구글 계정으로 로그인하면 이 기기 기록을 계정에 보관하고 폰·PC에서 같이 써요.${ui.err ? `<small class="lg-err">${esc(ui.err)}</small>` : ''}</span><button type="button" class="linkbtn" id="lgIn"${loading && !A ? ' disabled' : ''}>구글로 로그인</button></div>`;
+    if (!HOST_OK) h = '<div class="set-child lg-row"><span><b>이 기기에만 저장 중</b><small>로그인은 lovedu.kr 앱에서 할 수 있어요. 로그인하면 폰과 PC가 같은 기록을 써요.</small></span></div>';
+    else if (!user) h = `<div class="set-child lg-row"><span><b>이 기기에만 저장 중</b><small>구글 계정으로 로그인하면 이 기기 기록을 계정에 보관하고 폰·PC에서 같이 써요.</small>${ui.err ? `<small class="lg-err">${esc(ui.err)}</small>` : ''}</span><button type="button" class="linkbtn" id="lgIn"${loading && !A ? ' disabled' : ''}>구글로 로그인</button></div>`;
     else {
       h = `<div class="set-child lg-row"><span><b class="lg-who">${esc(user.name || '구글 계정')}</b><small class="lg-mail">${esc(user.email || '')}</small>${ui.ask ? '' : `<small class="lg-stat">${esc(ui.err || (agreed === false ? '가입을 아직 마치지 않았어요. 마치기 전에는 기록을 계정에 저장하지 않아요.' : ui.msg))}</small>`}</span><button type="button" class="linkbtn" id="lgOut">로그아웃</button></div>`;
       if (agreed === false) h += '<button type="button" class="linkbtn lg-pick" id="lgJoin2"><b>가입 마무리하기</b><small>약관·개인정보 동의를 마치면 기록을 계정에 저장해요.</small></button>';
