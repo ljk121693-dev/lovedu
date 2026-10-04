@@ -1,4 +1,4 @@
-// 사랑교육 로그인 부품 v1.1 (2026-10-02) — 서버 설계 S3: 구글·카카오 로그인, 계정 문서, 기기 제한, 아이 프로필·진도 저장
+// 사랑교육 로그인 부품 v1.2 (2026-10-04: 아이 폰 연결·숙제 추가, 앱 스레드) — v1.1 (2026-10-02) — 서버 설계 S3: 구글·카카오 로그인, 계정 문서, 기기 제한, 아이 프로필·진도 저장
 // 근거: roadmap/사랑교육_서버설계_v1.md 2절(데이터), 4-1(로그인·이관), 4-2(폰 1 + PC 1).
 // 화면은 없음. 앱 화면(앱 스레드)이 이 함수들을 부른다.
 //
@@ -53,9 +53,10 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
   let kicking = false;
 
   const call = async (name, data = {}) => (await sdk.httpsCallable(fns, name)(data)).data;
+  let kidClaims = null;   // 아이 폰(자녀 모드)으로 들어온 경우 { owner, childId, deviceId }
   const uid = () => {
     if (!auth.currentUser) throw new Error('로그인이 필요해요.');
-    return auth.currentUser.uid;
+    return kidClaims ? kidClaims.owner : auth.currentUser.uid;   // 아이 폰은 부모 계정 아래 그 아이 문서만 씀 (규칙 isChild)
   };
   const userRef = () => sdk.doc(db, 'users', uid());
   const childRef = id => {
@@ -92,8 +93,15 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
 
   sdk.onAuthStateChanged(auth, async u => {
     if (stopWatch) { stopWatch(); stopWatch = null; }
-    if (!u) return emit({ user: null, ready: true });
+    if (!u) { kidClaims = null; return emit({ user: null, ready: true }); }
     try {
+      // 아이 폰: 부모 기기 자리(폰 1 + PC 1)를 쓰지 않고, 계정 문서도 만들지 않음 (설계 4-8)
+      const t = await u.getIdTokenResult().catch(() => null), c = t && t.claims;
+      if (c && c.role === 'child') {
+        kidClaims = { owner: c.owner, childId: c.childId, deviceId: c.deviceId };
+        return emit({ user: { uid: u.uid, child: kidClaims }, kicked: false, ready: true });
+      }
+      kidClaims = null;
       await ensureUserDoc(u);
       await claimSeat(u);
       emit({ user: { uid: u.uid, email: u.email, name: u.displayName }, kicked: false, ready: true });
@@ -173,6 +181,8 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
         const s = await sdk.getDocs(sdk.collection(db, 'users', uid(), 'children'));
         return s.docs.map(d => ({ id: d.id, ...d.data() })).sort((a, b) => a.id.localeCompare(b.id));
       },
+      // 한 아이 문서 (아이 폰은 목록을 못 읽고 자기 아이 문서만 읽음)
+      async get(id) { const s = await sdk.getDoc(childRef(id)); return s.exists() ? { id: s.id, ...s.data() } : null; },
       // 빈 자리 id (c1~c3), 없으면 null
       async freeId() {
         const used = new Set((await this.list()).map(c => c.id));
@@ -208,9 +218,9 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
     },
 
     // 바로 풀기 기록 (환불 '이용' 기준 D2, 서버 시각, 고칠 수 없음)
-    recordSolve(childId, subject, day) {
+    recordSolve(childId, subject, day, more = {}) {   // more: 아이 폰 결과 { score, total, via:'kid' } (부모 현황판·숙제 화면용)
       if (!SUBJECTS.includes(subject)) throw new Error('과목 키가 잘못됐어요: ' + subject);
-      return sdk.addDoc(sdk.collection(childRef(childId), 'solves'), { subject, day, at: sdk.serverTimestamp() });
+      return sdk.addDoc(sdk.collection(childRef(childId), 'solves'), { ...more, subject, day, at: sdk.serverTimestamp() });
     },
 
     // 구독 결제 (서버 함수). 금액은 서버가 정한다. 자세한 흐름은 앱연결_안내.md '구독 결제'.
@@ -224,6 +234,56 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
       refundQuote: () => call('refundQuote'),
       refund: () => call('requestRefund'),                                  // 5분 안에 다시 로그인 필요
       verifyPlay: (productId, purchaseToken) => call('verifyPlayPurchase', { productId, purchaseToken }),
+    },
+
+    // 아이 폰 연결 (설계 4-8, 함수 createInvite·previewInvite·redeemInvite·unlinkDevice)
+    kidDevice: {
+      invite: childId => call('createInvite', { childId }),                 // 부모: { inviteId, code, expiresAt }
+      unlink: deviceId => call('unlinkDevice', { deviceId }),               // 부모
+      // 부모: 살아 있는 아이 폰 목록을 지켜봄 → f([{ id, childId, label, platform, linkedAt }]). 끝낼 때 돌려준 함수를 부름
+      watch(f, onErr) {
+        const q = sdk.query(sdk.collection(db, 'users', uid(), 'childDevices'), sdk.where('revoked', '==', false));
+        return sdk.onSnapshot(q, s => f(s.docs.map(d => ({ id: d.id, ...d.data() }))), e => onErr && onErr(e));
+      },
+      // 아이 폰: 로그인 없이 번호(code)나 링크 id(inviteId)로 별명·학년 미리 보기 → 연결 (커스텀 토큰으로 로그인)
+      preview: ref => call('previewInvite', ref),
+      async redeem(ref, { label = '', platform = '' } = {}) {
+        const r = await call('redeemInvite', { ...ref, label, platform });
+        if (r.status !== 'ok') return r;
+        await sdk.signInWithCustomToken(auth, r.token);
+        return { status: 'ok', childId: r.childId };
+      },
+      get claims() { return kidClaims; },
+      // 아이 폰: 연결이 끊겼는지 지켜봄 (부모가 '연결 끊기' → revoked). f(true) = 끊김
+      watchSelf(f) {
+        if (!kidClaims) return () => {};
+        return sdk.onSnapshot(sdk.doc(db, 'users', kidClaims.owner, 'childDevices', kidClaims.deviceId),
+          s => f(!s.exists() || s.data().revoked !== false), e => { if (e && e.code === 'permission-denied') f(true); });
+      },
+      markSeen: (subject, day) => call('markSeen', { subject, day }),
+    },
+
+    // 숙제 (users/{uid}/homework, 설계 2절·숙제 메모 2절). 부모가 만들고, 아이 폰은 과목 상태만 앞으로 (규칙 childItemUpdate)
+    homework: {
+      send(childId, { from, message = '', dateKey, items }) {
+        return sdk.addDoc(sdk.collection(db, 'users', uid(), 'homework'), {
+          childId, from, message: String(message).slice(0, 30), dateKey, items,
+          total: Object.keys(items).length, doneCount: 0, createdAt: sdk.serverTimestamp(),
+        });
+      },
+      // 그 아이의 그날 숙제를 지켜봄 → f([{ id, ...문서 }]) 새것 먼저
+      watch(childId, dateKey, f, onErr) {
+        const q = sdk.query(sdk.collection(db, 'users', uid(), 'homework'), sdk.where('childId', '==', childId), sdk.where('dateKey', '==', dateKey));
+        return sdk.onSnapshot(q, s => f(s.docs.map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => ((b.createdAt && b.createdAt.toMillis ? b.createdAt.toMillis() : Date.now()) - (a.createdAt && a.createdAt.toMillis ? a.createdAt.toMillis() : Date.now())))), e => onErr && onErr(e));
+      },
+      // 과목 상태 바꾸기 (아이 폰: sent → seen → done, 부모: 무엇이든)
+      setItem(hwId, subject, patch) {
+        const body = {};
+        Object.entries(patch).forEach(([k, v]) => { body[`items.${subject}.${k}`] = v; });
+        return sdk.updateDoc(sdk.doc(db, 'users', uid(), 'homework', hwId), body);
+      },
+      remove: hwId => sdk.deleteDoc(sdk.doc(db, 'users', uid(), 'homework', hwId)),   // 부모: 거두기
     },
 
     settings: {

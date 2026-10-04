@@ -4608,8 +4608,10 @@ html.ps-lock .tod-layer,html:has(.ps-root) .tod-layer,html:has(.ss-pv:not([hidde
    <head> 에서 돎: 화면은 hub-ui.js 가 그림 (위 카드·설정 '자녀' 칸·가입 '별명' 단계). */
 (function(){
   const LS = window.localStorage, KEY = 'hub_kids', IDS = ['c1', 'c2', 'c3'];
+  /* 아이 폰(자녀 모드, src/login.js·kidmode.js): 그리기 전에 표시해 부모용 칸이 한 번도 보이지 않게 */
+  try { if (LS.getItem('sarang_kiddev') && /^(lovedu\.kr|www\.lovedu\.kr|localhost|127\.0\.0\.1|lovedu-dev\.web\.app|lovedu-dev\.firebaseapp\.com)$/.test(location.hostname)) document.documentElement.classList.add('kid-dev'); } catch (e) {}
   /* 기기마다 다른 것 (login.js DENY 와 같음): 아이를 바꿔도 그대로, 서버에도 안 올림 */
-  const DEVICE = [/^sarang_(theme|splash|sync)/, /^sarang_session_/, /^firebase/, /^donate_/, /^hub_printer$/, /^scr_rate$/, /^el-settings$/];
+  const DEVICE = [/^sarang_(theme|splash|sync|kiddev|kidcut)/, /^sarang_session_/, /^firebase/, /^donate_/, /^hub_printer$/, /^scr_rate$/, /^el-settings$/];
   /* 부모·계정 것: 아이 기록에 넣지 않음 (hub_kids 목록, 다른 아이 기록 묶음, 리포트 알림 설정 hub_report — src/dash.js) */
   const SHARED = [/^hub_kids$/, /^hub_kid_/, /^hub_report$/];
   /* 부모가 정한 것: 아이 기록과 함께 올라가지만, 바꿀 아이 기록에 없으면 지금 값을 이어 씀 (화면 안내를 본 기록, 공부 알림 켜고 끄기) */
@@ -4939,6 +4941,111 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
 #settings .set-child .lg-ins .linkbtn{flex:1 1 0;min-width:0;padding:0 10px}
 @media (max-width:339px){.lg-ins{flex-direction:column}}
 </style>
+<style id="sarang-kidmode">/* 아이 폰 연결·자녀 모드·숙제 (src/kidmode.js, 2026-10-04) */
+/* ---------- 자녀 모드: 부모용 칸은 그리기 전부터 숨김 (html.kid-dev 는 src/kids.js 가 <head> 에서 붙임) ---------- */
+html.kid-dev #setBtnHub,html.kid-dev #dnTopBtn,html.kid-dev .dn-hero-row,html.kid-dev #dnFoot,html.kid-dev .dn-foot,html.kid-dev #kidBar,html.kid-dev #paceBtn,
+html.kid-dev #todayWays,html.kid-dev #todayPaper,html.kid-dev #todayMore,html.kid-dev #tabBar,html.kid-dev .pace-lock-note,
+html.kid-dev .td-go[data-paper],html.kid-dev .td-na-p,html.kid-dev #pwaAsk{display:none!important}
+html.kid-dev #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
+html.kid-dev .td-act{grid-template-columns:minmax(0,1fr)}
+html.kid-dev #todayList li,html.kid-dev #todayOther li{cursor:default}
+html.kid-dev .sarang-brand{cursor:default}
+.kd-banner{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 14px;padding:10px 14px;border-radius:12px;background:color-mix(in srgb,var(--pri) 10%,var(--card));color:var(--ink);font-size:14px;line-height:1.45;word-break:keep-all}
+.kd-banner b{font-size:15px;font-weight:800;color:var(--pri)}
+.kd-banner span{color:var(--sub)}
+.kd-empty{margin:0 0 14px;padding:10px 14px;border:1px dashed var(--line);border-radius:12px;color:var(--sub);font-size:14px;line-height:1.5;word-break:keep-all}
+/* 아이 폰 숙제 칸 (오늘 카드 맨 위) */
+.kd-khw[hidden]{display:none}
+.kd-khw{display:grid;gap:12px;margin:0 0 16px}
+.kd-khw-c{padding:14px 14px 10px;border:2px solid color-mix(in srgb,var(--pri) 45%,var(--line));border-radius:14px;background:var(--card)}
+.kd-khw-c.all{border-color:color-mix(in srgb,#e2b33c 70%,var(--line))}
+.kd-khw-c h3{margin:0 0 4px;font-size:16px;font-weight:800;color:var(--ink);word-break:keep-all}
+.kd-cheer{margin:6px 0 4px;font-size:14.5px;font-weight:700;color:var(--pri);word-break:keep-all}
+.kd-stk{flex:none;display:inline-flex;align-items:center;min-height:36px;padding:0 12px;border-radius:999px;background:#ffe9a8;color:#5a4300;font-size:13.5px;font-weight:800}
+:root[data-theme="dark"] .kd-stk{background:#5a4a14;color:#ffe7a0}
+.kd-na{flex:none;color:var(--sub);font-size:13px}
+
+/* ---------- 공통: 한마디·진행·과목 줄·단추 ---------- */
+.kd-say{margin:2px 0 8px;padding:8px 12px;border-radius:12px;background:color-mix(in srgb,var(--pri) 8%,var(--card));color:var(--ink);font-size:14.5px;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
+.kd-ps{margin:4px 0 6px;color:var(--sub);font-size:13.5px}
+.kd-p{margin:4px 0 10px;color:var(--sub);font-size:14px;line-height:1.55;word-break:keep-all}
+.kd-items{list-style:none;margin:0;padding:0}
+.kd-items li{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:52px;padding:6px 0;border-top:1px solid var(--line)}
+.kd-items li:first-child{border-top:0}
+.kd-items li>span:first-child{display:flex;flex-direction:column;min-width:0;line-height:1.35}
+.kd-items b{font-size:15px;color:var(--ink)}
+.kd-items small{color:var(--sub);font-size:12.5px;word-break:keep-all;overflow-wrap:anywhere}
+.kd-sts{flex:none;display:flex;flex-direction:column;align-items:flex-end;gap:2px;text-align:right}
+.kd-st{font-style:normal;font-size:13px;font-weight:700;color:var(--sub);white-space:nowrap}
+.kd-st.seen{color:var(--ink)}
+.kd-st.done{color:var(--ss-ok,#1f7a45)}
+.kd-sc{color:var(--sub);font-size:12px}
+.kd-prog{height:8px;margin:6px 0 2px;border-radius:999px;background:var(--line);overflow:hidden}
+.kd-prog i{display:block;height:100%;border-radius:inherit;background:var(--pri)}
+.kd-btns{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-top:14px}
+.kd-btns.l{justify-content:flex-start}
+.kd-b{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;font-size:14.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.kd-b.pri{border-color:var(--pri);background:var(--pri);color:var(--pri-ink,#fff)}
+.kd-b.warn{border-color:#c0392b;color:#c0392b}
+:root[data-theme="dark"] .kd-b.warn{border-color:#ff8f80;color:#ff8f80}
+.kd-b:disabled{opacity:.5;cursor:default}
+.kd-items .kd-b{flex:none;min-height:40px;padding:0 14px}
+.kd-err{min-height:0;margin:6px 0 0;color:#b3261e;font-size:13.5px;line-height:1.45;word-break:keep-all}
+.kd-err:empty{display:none}
+:root[data-theme="dark"] .kd-err{color:#ffb4ab}
+
+/* ---------- 설정 '아이 폰' 칸 ---------- */
+#settings .kd-set-note{margin:6px 2px 0;color:var(--sub);font-size:13px;line-height:1.5;word-break:keep-all}
+#settings .kd-row>span:first-child{min-width:0}
+#settings .kd-row small{word-break:keep-all;overflow-wrap:anywhere}
+.kd-on{display:inline-block;margin-left:4px;padding:1px 8px;border-radius:999px;background:color-mix(in srgb,var(--pri) 14%,var(--card));color:var(--pri);font-size:11.5px;font-style:normal;font-weight:800;vertical-align:1px}
+#settings .kd-ask{flex-wrap:wrap}
+#settings .set-child.kd-ask .kd-ask-btns{display:flex;flex:none;gap:8px;flex-wrap:wrap;margin-left:auto}
+#settings .set-child .linkbtn.kd-cut{border-color:#c0392b;color:#c0392b}
+:root[data-theme="dark"] #settings .set-child .linkbtn.kd-cut{border-color:#ff8f80;color:#ff8f80}
+
+/* ---------- 창 (연결 번호·아이 폰 번호 넣기) ---------- */
+html.kd-lock{overflow:hidden}
+.kd-dlg{position:fixed;inset:0;z-index:95;display:flex;align-items:center;justify-content:center;padding:16px;background:rgba(10,20,15,.45);overscroll-behavior:contain}
+.kd-dlg[hidden]{display:none}
+:root[data-theme="dark"] .kd-dlg{background:rgba(0,0,0,.66)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .kd-dlg{background:rgba(0,0,0,.66)}}
+.kd-card{box-sizing:border-box;width:100%;max-width:420px;max-height:calc(100dvh - 32px);overflow:auto;padding:22px 20px 18px;border-radius:16px;background:var(--card);color:var(--ink);box-shadow:0 18px 50px rgba(0,0,0,.25)}
+.kd-card h3{margin:0 0 10px;font-size:18px;line-height:1.35;word-break:keep-all}
+.kd-steps{margin:0 0 12px;padding-left:20px;color:var(--ink);font-size:14px;line-height:1.6;word-break:keep-all}
+.kd-code{margin:6px 0 8px;padding:14px 0;border-radius:12px;background:color-mix(in srgb,var(--pri) 9%,var(--card));color:var(--pri);font-size:34px;font-weight:800;letter-spacing:.12em;text-align:center;font-variant-numeric:tabular-nums}
+.kd-exp,.kd-live,.kd-wait{margin:6px 0 0;color:var(--sub);font-size:13.5px;line-height:1.5;word-break:keep-all}
+.kd-ok{margin:4px 0 0;font-size:14.5px;line-height:1.6;word-break:keep-all}
+.kd-in{box-sizing:border-box;width:100%;min-height:52px;margin:4px 0 0;padding:0 14px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font-size:26px;font-weight:700;letter-spacing:.16em;text-align:center;font-variant-numeric:tabular-nums}
+.kd-in:focus{outline:none;border-color:var(--pri)}
+@media (max-width:360px){.kd-card{padding:18px 14px 14px}.kd-code{font-size:28px}.kd-btns .kd-b{flex:1 1 auto;padding:0 10px}}
+
+/* ---------- 첫 화면 '아이 폰인가요?' (src/login.js 가 그림) ---------- */
+.lg-gate-kid{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:2px 8px;margin:14px 0 0;padding-top:12px;border-top:1px solid var(--line);color:var(--sub);font-size:14px}
+.lg-gate-kid .linkbtn{min-height:44px;padding:0 6px;border:0;background:none;color:var(--pri);font:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+
+/* ---------- 현황판 '숙제' (부모) ---------- */
+.db-hw{display:grid;gap:14px}
+.kd-hw-box{margin:0}
+.kd-f{margin:12px 0 0}
+.kd-fl{display:block;margin:0 0 6px;font-size:14px;font-weight:800;color:var(--ink)}
+.kd-fl small{font-weight:500;color:var(--sub);font-size:12.5px}
+.kd-fs{display:block;margin-top:6px;color:var(--sub);font-size:12.5px}
+.kd-chips{display:flex;flex-wrap:wrap;gap:6px}
+.kd-chip{min-height:40px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.kd-chip.on{border-color:var(--pri);background:var(--pri);color:var(--pri-ink,#fff)}
+.kd-chip.q{min-height:40px;font-size:13px;font-weight:600;color:var(--sub)}
+.kd-subs{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.kd-sub{display:flex;align-items:center;gap:10px;min-height:52px;padding:6px 12px;border:1px solid var(--line);border-radius:12px;cursor:pointer}
+.kd-sub:has(input:checked){border-color:var(--pri);background:color-mix(in srgb,var(--pri) 7%,var(--card))}
+.kd-sub input{flex:none;width:20px;height:20px;margin:0;accent-color:var(--pri)}
+.kd-sub span{display:flex;flex-direction:column;min-width:0;line-height:1.35}
+.kd-sub b{font-size:14.5px}
+.kd-sub small{color:var(--sub);font-size:12.5px;word-break:keep-all;overflow-wrap:anywhere}
+#hwMsg{box-sizing:border-box;width:100%;min-height:46px;margin:0 0 8px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;font-size:15px}
+#hwMsg:focus{outline:none;border-color:var(--pri)}
+@media (max-width:480px){.kd-subs{grid-template-columns:minmax(0,1fr)}}
+</style>
 <style id="sarang-dash">/* ===== 현황판 (src/dash.js, 2026-10-03 대표). 색·글꼴은 앱 값 그대로(--pri·--soft·--card·--line·--sub·--ok-*·--warn-*, 나이 단계 테마·어두운 화면을 따라감),
    칸은 앱 .card (둥글기 15·안쪽 23·그림자). 아래 메뉴 세 칸(오늘 · 모의시험 · 현황판) ===== */
 .tabbar.tb3{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -5214,7 +5321,7 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
 .ex-go{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-style:normal;font-size:22px;line-height:1;color:var(--sub)}
 #pane-engx .actions{margin-top:14px}
 /* 가로 폰(높이 520px 이하) 왼쪽 세로 메뉴: 칸을 줄여 '학습 관리'·'숙제'까지 첫 화면에 (판 53 1차 검수 2번) */
-@media (max-height:520px){.db.w-rail .db-nav{gap:2px;padding:6px}.db.w-rail .db-nav-i{min-height:44px;padding:4px;gap:1px}.db.w-rail .db-nav-i svg{width:18px;height:18px}.db.w-rail .db-nav-slot{display:none}}
+@media (max-height:520px){.db:not(.w-phone) .db-nav{position:static}.db.w-rail .db-nav{gap:2px;padding:6px}.db.w-rail .db-nav-i{min-height:44px;padding:4px;gap:1px}.db.w-rail .db-nav-i svg{width:18px;height:18px}.db.w-rail .db-nav-slot{display:none}}
 /* 머리줄 로고 = 현황판으로 가는 단추 (2026-10-04 대표). 누를 자리를 로고·이름만큼으로 줄이고(빈 칸을 눌러 넘어가지 않게) 오른쪽 단추 자리는 그대로 */
 #app>.hub-top .sarang-brand{flex:0 1 auto;margin-right:auto;min-height:44px;cursor:pointer;border-radius:14px;-webkit-tap-highlight-color:transparent}
 #app>.hub-top .sarang-brand:focus-visible{outline:2px solid var(--accent,#2c5945);outline-offset:3px}
@@ -20622,9 +20729,11 @@ window.SARANG_SCREEN = (function(){
   async function finish(c, r){
     if (c.fin || c !== cur) return; c.fin = true;
     const m = T()[c.hub];
-    try { if (m && m.prepare) await m.prepare(); if (m && m.done) m.done(c.from === 'today'); } catch (e) {}
+    let dn = null, dt = '';   // 끝낸 Day (진도를 넘기기 전): 아이 폰이 부모 쪽에 알릴 때 (src/kidmode.js)
+    try { if (m && m.prepare) await m.prepare(); try { dn = m && m.days ? m.days(c.from === 'today')[0] : null; dt = task(c.hub); } catch (e) {} if (m && m.done) m.done(c.from === 'today'); } catch (e) {}
     run(c, true);
     complete(DONE, [c.s], Object.assign({ from: c.from }, r && typeof r === 'object' ? r : {}));   // 진도를 넘긴 뒤 적음: 적는 할 일 = 오늘 줄에 남는 그 Day
+    document.dispatchEvent(new CustomEvent('sarang:screen-done', { detail: { s: c.hub, from: c.from, day: dn, task: dt, r: r && typeof r === 'object' ? r : {} } }));
     if (c !== cur) return;
     const box = document.createElement('div');
     box.className = 'scr-fin'; box.setAttribute('role', 'status');
@@ -20703,7 +20812,10 @@ window.SARANG_SCREEN = (function(){
     const k = marks.find(([e]) => e.isConnected && e.getClientRects().length && e.getBoundingClientRect().height);
     if (k) window.scrollBy(0, k[0].getBoundingClientRect().top - k[1]);
   }
+  /* 아이 폰을 연결한 아이(2026-10-04 대표 결정): 부모 폰에서는 스마트 학습을 열지 않음 (프린트·진도 설정·현황판만, src/kidmode.js) */
+  const onKidPhone = () => !!(window.SARANG_KIDLINK && SARANG_KIDLINK.linkedNow());
   function open(s, from){
+    if (onKidPhone()) { SARANG_KIDLINK.note(); return false; }
     mount();
     const t = target(s, from === 'pane');   // 'pane': 중2 한국사 화면이 세계사면 세계사, 'list': 그 과목 그대로
     if (!t) return false;
@@ -20791,9 +20903,9 @@ window.SARANG_SCREEN = (function(){
   function act(s, from, busy){
     const w = ways(s), n = NAME[s] || s;
     if (w.length) return `<div class="td-act"><span class="td-done" role="img" aria-label="${n} 다 했어요 (${w.join('·')})" data-w="${w.join('·')}"></span></div>`;
-    const scr = target(s, false), pap = paperOk(s);
+    const scr = target(s, false), pap = paperOk(s), kp = scr && onKidPhone();
     return '<div class="td-act">'
-      + (scr ? `<button type="button" class="td-go" data-scr="${s}" data-from="${from}" data-l="스마트" aria-label="${n} 스마트 학습 (바로 풀기)">${ICON.scr}</button>` : `<span class="td-na" data-l="스마트\n준비 중" title="${n}: 스마트 학습은 준비 중이에요"></span>`)
+      + (kp ? `<span class="td-na td-kid" data-l="아이 폰\n스마트" title="${n}: 스마트 학습은 아이 폰에서 해요"></span>` : scr ? `<button type="button" class="td-go" data-scr="${s}" data-from="${from}" data-l="스마트" aria-label="${n} 스마트 학습 (바로 풀기)">${ICON.scr}</button>` : `<span class="td-na" data-l="스마트\n준비 중" title="${n}: 스마트 학습은 준비 중이에요"></span>`)
       + (pap ? `<button type="button" class="td-go" data-paper="${s}" data-from="${from}" data-l="프린트" aria-label="${n} 프린트 학습 (뽑아서 풀기)"${busy ? ' disabled' : ''}>${ICON.paper}</button>` : `<span class="td-na td-na-p" data-l="프린트\n준비 중"></span>`)
       + '</div>';
   }
@@ -25198,12 +25310,17 @@ window.DONATE_CORE = (function(){
   const HOSTS = ['lovedu.kr', 'www.lovedu.kr', 'localhost', '127.0.0.1', 'lovedu-dev.web.app', 'lovedu-dev.firebaseapp.com'];
   const HOST_OK = HOSTS.includes(location.hostname);
   const EMU = HOST_OK && /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && /[?&]emu=1(&|$)/.test(location.search);   // 검사: Firebase 에뮬레이터
-  const FILES = {"auth": "./packs/sarang-auth.js?v=f9337617c5", "sdk": "./packs/sarang-auth-sdk.js?v=ffb2ce5bd4"};
+  const FILES = {"auth": "./packs/sarang-auth.js?v=5471a026e7", "sdk": "./packs/sarang-auth-sdk.js?v=7373fd5a94"};
   const META = 'sarang_sync';
-  const kid = () => window.SARANG_KIDS ? SARANG_KIDS.cur() : 'c1';   // 지금 보고 있는 아이 (src/kids.js, 2026-10-02 자녀 여럿)
+  /* 아이 폰 (자녀 모드, 2026-10-04 대표 결정): 부모가 준 6자리 번호·링크로 연결한 폰. 로그인 없이 함수가 준 아이 전용 토큰으로 들어옴.
+     sarang_kiddev = { owner, childId, deviceId, nick } (기기 것, 서버에 안 올림). 이 폰은 그 아이의 '기기 하나'로 학습 기록(app·과목 묶음)을 주고받고,
+     별명·학년·과목·시간표·진도 설정은 부모 폰에서만 (규칙: 아이 토큰은 app·rev·at 과 과목 data 만). 화면 막기는 src/kidmode.js */
+  const KD = 'sarang_kiddev';
+  const kidDev = () => { try { const o = JSON.parse(LS.getItem(KD)); return o && o.owner && o.childId ? o : null; } catch (e) { return null; } };
+  const kid = () => { const d = kidDev(); return d ? d.childId : (window.SARANG_KIDS ? SARANG_KIDS.cur() : 'c1'); };   // 지금 보고 있는 아이 (src/kids.js, 2026-10-02 자녀 여럿)
   /* 동의받는 약관·방침의 판 (두 문서는 아직 게시 전 초안: 게시할 때 판 이름을 바꿈) */
   const TERMS_V = 'terms-draft-v1', PRIVACY_V = 'privacy-draft-v2', TERMS_URL = 'https://lovedu.kr/terms', PRIVACY_URL = 'https://lovedu.kr/privacy';
-  const DENY = [/^sarang_(theme|splash|sync)/, /^sarang_session_/, /^firebase/, /^donate_/, /^hub_printer$/, /^scr_rate$/, /^el-settings$/];   // 기기마다 다른 것(화면 밝기·프린터·목소리)과 로그인 자체
+  const DENY = [/^sarang_(theme|splash|sync|kiddev|kidcut)/, /^sarang_session_/, /^firebase/, /^donate_/, /^hub_printer$/, /^scr_rate$/, /^el-settings$/];   // 기기마다 다른 것(화면 밝기·프린터·목소리)과 로그인 자체
   const GROUP = [['kor', /^hub_ttobak$|^kor_|^hangul/], ['math', /^math_|^ymath/], ['eng', /^vocab_|^hub_eng$|^el-mine$|^listen/], ['hanja', /^hanja/]];
   const SERVER_SUBJ = { kor: 'kor', eng: 'eng', math: 'math', soc: 'soc', sci: 'sci', his: 'his', wh: 'wh', hanja: 'hanja', ttobak: 'kor', ymath: 'math', vocab: 'eng', listen: 'eng' };
   const LS = window.localStorage, SP = Storage.prototype, rawSet = SP.setItem, rawRemove = SP.removeItem, rawClear = SP.clear;
@@ -25230,20 +25347,87 @@ window.DONATE_CORE = (function(){
   const hasLocal = () => { try { return !!LS.getItem('hub_child'); } catch (e) { return false; } };
   function childInfo(){ try { const c = JSON.parse(LS.getItem('hub_child')) || {}; return { grade: c.grade || null, subs: Array.isArray(c.subs) ? c.subs : [] }; } catch (e) { return { grade: null, subs: [] }; } }
 
+  /* ---------- 두 기기 기록 합치기 (3갈래: 마지막으로 맞춘 기록 base, 이 기기 L, 계정 R) ----------
+     키마다: 한쪽만 바꿨으면 바꾼 쪽, 둘 다 바꿨는데 둘 다 JSON 객체면 안쪽 칸마다 같은 규칙(과목별 진도 'ssh.state' 처럼 한 키에 여러 과목), 아니면 이 기기(지금 올리는 쪽).
+     base 는 sarang_syncbase (기기 것, 서버에 안 올림): 받거나 올린 직후의 기록 */
+  const BASE = 'sarang_syncbase';
+  const base = () => { try { const o = JSON.parse(LS.getItem(BASE)); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } };
+  const setBase = d => { try { rawSet.call(LS, BASE, JSON.stringify(d)); } catch (e) { try { rawRemove.call(LS, BASE); } catch (er) {} } };
+  const flat = snap => Object.assign({}, ...Object.values(snap || {}));
+  const group = d => { const out = { app: {} }; Object.entries(d).forEach(([k, v]) => { const g = groupOf(k); if (g) (out[g] = out[g] || {})[k] = v; }); return out; };
+  const obj = v => { if (typeof v !== 'string' || v[0] !== '{') return null; try { const o = JSON.parse(v); return o && typeof o === 'object' && !Array.isArray(o) ? o : null; } catch (e) { return null; } };
+  const same = (a, b) => a === b || JSON.stringify(a) === JSON.stringify(b);
+  function mergeObj(b, l, r){
+    const out = {};
+    new Set([...Object.keys(l), ...Object.keys(r)]).forEach(k => {
+      const x = l[k], y = r[k], z = b ? b[k] : undefined;
+      let v;
+      if (same(x, y) || same(y, z)) v = x;
+      else if (same(x, z)) v = y;
+      else if (x && y && typeof x === 'object' && typeof y === 'object' && !Array.isArray(x) && !Array.isArray(y)) v = mergeObj(z && typeof z === 'object' ? z : {}, x, y);
+      else v = x === undefined ? y : x;
+      if (v !== undefined) out[k] = v;
+    });
+    return out;
+  }
+  function merge3(B, Lc, R){
+    const out = {};
+    new Set([...Object.keys(Lc), ...Object.keys(R)]).forEach(k => {
+      const l = Lc[k], r = R[k], b = B[k];
+      let v;
+      if (l === r || r === b) v = l;
+      else if (l === b) v = r;
+      else { const lo = obj(l), ro = obj(r); v = lo && ro ? JSON.stringify(mergeObj(obj(b) || {}, lo, ro)) : (l === undefined ? r : l); }
+      if (v !== undefined) out[k] = v;
+    });
+    return out;
+  }
+  /* 합친 기록을 이 기기에 넣음 (바뀐 키만). 바뀐 게 있으면 true */
+  function putLocal(L0, M){
+    let n = 0; applying = true;
+    try {
+      Object.keys(L0).forEach(k => { if (!(k in M)) { rawRemove.call(LS, k); n++; } });
+      Object.entries(M).forEach(([k, v]) => { if (L0[k] !== v) { rawSet.call(LS, k, v); n++; } });
+    } finally { applying = false; }
+    return n > 0;
+  }
+  let reloadWait = false;
+  function reloadSoon(){
+    const go = () => { const S = window.SARANG_SCREEN; if ((S && S.current) || document.querySelector('.kd-dlg:not([hidden]), #lgJoin, #scrAsk:not([hidden])')) return false; location.reload(); return true; };
+    if (go() || reloadWait) return;
+    reloadWait = true;
+    document.addEventListener('hub:refresh', function f(){ setTimeout(() => { if (go()) document.removeEventListener('hub:refresh', f); }, 300); });
+  }
+
   /* ---------- 서버로 올리기 / 받기 ---------- */
   async function upload(){
     if (!A || !user || !agreed || applying || stopped) return false;   // 가입 동의 전에는 올리지 않음
     if (busy) { schedule(1500); return false; }
     busy = true; paint('저장하는 중이에요…');
     try {
-      const snap = snapshot(), m = meta() || {};
+      let snap = snapshot(), reload = false;
+      const m = meta() || {};
       const rev = Date.now().toString(36) + Math.random().toString(36).slice(2, 6), at = Date.now();
       const id = kid();
+      /* 올리기 전에 계정 기록을 봄: 다른 기기(부모 폰 ↔ 아이 폰, 폰 ↔ PC)가 그사이 바꿨으면 덮어쓰지 않고 합침 (2026-10-04 아이 폰 연결과 함께) */
+      if (m.rev || user.child) {
+        const cl = await cloud(id).catch(() => null);
+        if (cl && cl.rev && cl.rev !== m.rev) {
+          const L0 = flat(snap), M = merge3(base(), L0, cl.data);
+          reload = putLocal(L0, M);
+          snap = group(M);
+        }
+      }
       await Promise.all(GROUP.map(([g]) => A.progress.save(id, g, { data: JSON.stringify(snap[g] || {}) })));
-      const prev = await A.children.list().then(l => l.find(c => c.id === id)).catch(() => null);
-      await A.children.save(id, Object.assign(kidMeta(id, prev), childInfo(), { app: JSON.stringify(snap.app), rev, at }));
-      setMeta(Object.assign(m, { uid: user.uid, rev, dirty: false, pending: false }));
+      if (user.child) await A.children.save(id, { app: JSON.stringify(snap.app), rev, at });   // 아이 폰: 학습 기록만 (별명·학년은 부모 것)
+      else {
+        const prev = await A.children.list().then(l => l.find(c => c.id === id)).catch(() => null);
+        await A.children.save(id, Object.assign(kidMeta(id, prev), childInfo(), { app: JSON.stringify(snap.app), rev, at }));
+      }
+      setMeta(Object.assign(meta() || m, { uid: ownerUid(), rev, dirty: false, pending: false }));
+      setBase(flat(snap));
       ui.err = ''; paint('계정에 저장했어요.');
+      if (reload) reloadSoon();   // 다른 기기가 바꾼 것을 이 기기에도 넣었음 → 화면에 보이게 새로 엶 (공부 중이면 끝난 뒤)
       return true;
     } catch (e) {
       console.warn('기록 올리기 실패', e && (e.code || e.message));
@@ -25267,9 +25451,10 @@ window.DONATE_CORE = (function(){
   }
   async function cloud(id){
     id = id || kid();
-    const kids = await A.children.list(), c = kids.find(k => k.id === id);
+    let c;
+    if (user && user.child) c = await A.children.get(id);   // 아이 폰은 자기 아이 문서만 읽음
+    else { const kids = await A.children.list(); c = kids.find(k => k.id === id); if (!stopped && window.SARANG_KIDS) SARANG_KIDS.merge(kids); }   // 다른 기기에서 더한 아이·고친 별명
     if (stopped) return null;   // 읽는 사이 '모든 기록 지우기'
-    if (window.SARANG_KIDS) SARANG_KIDS.merge(kids);   // 다른 기기에서 더한 아이·고친 별명
     if (!c) return null;
     const p = await A.progress.load(id), parse = s => { try { const o = JSON.parse(s || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } };
     const data = Object.assign({}, parse(c.app));
@@ -25283,11 +25468,49 @@ window.DONATE_CORE = (function(){
       for (let i = 0; i < LS.length; i++) { const k = LS.key(i); if (k && groupOf(k) && !(k in cl.data)) drop.push(k); }
       drop.forEach(k => rawRemove.call(LS, k));
       Object.entries(cl.data).forEach(([k, v]) => { if (groupOf(k) && typeof v === 'string') rawSet.call(LS, k, v); });
-      setMeta({ uid: user.uid, rev: cl.rev, dirty: false, note: 1 });
+      setBase(cl.data);
+      setMeta(Object.assign({ uid: ownerUid(), rev: cl.rev, dirty: false }, user.child ? { kid: user.child.childId } : { note: 1 }));
     } finally { applying = false; }
     location.reload();
   }
   function schedule(ms){ clearTimeout(timer); timer = setTimeout(upload, ms); }
+  const ownerUid = () => user && user.child ? user.child.owner : (user && user.uid);
+
+  /* ---------- 아이 폰 (자녀 모드) ----------
+     연결 직후(sarang_kiddev 없음): 이 폰의 예전 기록을 지우고 그 아이 기록을 받아 엶. 다시 켤 때: 다른 기기(부모 폰)가 바꿨으면 받고, 이 폰에서 푼 것은 올림.
+     부모가 '연결 끊기'를 하면(childDevices.revoked) 이 폰 기록을 지우고 첫 화면으로 (다시 연결하려면 새 번호) */
+  let kidStop = null;
+  async function kidAfter(){
+    const c = user.child;
+    agreed = true;
+    if (!kidDev() || kidDev().deviceId !== c.deviceId) {
+      applying = true;
+      try {
+        wipeLocal();
+        const pend = (() => { try { return JSON.parse(sessionStorage.getItem('sarang_kidjoin')) || {}; } catch (e) { return {}; } })();
+        rawSet.call(LS, KD, JSON.stringify({ owner: c.owner, childId: c.childId, deviceId: c.deviceId, nick: pend.nick || '', at: Date.now() }));
+        rawSet.call(LS, 'hub_kids', JSON.stringify({ cur: c.childId, list: [{ id: c.childId, name: String(pend.nick || '').slice(0, 10), phone: '' }] }));
+        try { sessionStorage.removeItem('sarang_kidjoin'); } catch (e) {}
+        setMeta({ uid: c.owner, kid: c.childId, rev: null, dirty: false });
+      } finally { applying = false; }
+    }
+    if (kidStop) kidStop();
+    kidStop = A.kidDevice.watchSelf(cut => { if (cut) kidCut(); });
+    let cl = null;
+    try { cl = await cloud(c.childId); } catch (e) { console.warn('아이 기록 받기 실패', e && (e.code || e.message)); if (e && e.code === 'permission-denied') return kidCut(); ui.err = '기록을 받지 못했어요. 인터넷을 확인해 주세요.'; paint(); return; }
+    const m = meta() || {};
+    if (!cl) { if (!hasLocal()) document.dispatchEvent(new CustomEvent('sarang:kid-empty')); return; }   // 부모 폰에서 아직 학년·진도를 안 정함
+    if (cl.rev && cl.rev !== m.rev && !m.dirty) return apply(cl);   // 이 폰에서 안 바꿈 → 받기만
+    if (m.dirty) upload();   // 이 폰에서 푼 것 + 부모 폰이 바꾼 것 → 합쳐서 올림 (upload 가 합침)
+    document.dispatchEvent(new CustomEvent('sarang:kid-ready'));
+  }
+  async function kidCut(){
+    if (stopped) return;
+    stopped = true; clearTimeout(timer); if (kidStop) { kidStop(); kidStop = null; }
+    applying = true; try { wipeLocal(); rawRemove.call(LS, KD); rawRemove.call(LS, META); rawSet.call(LS, 'sarang_kidcut', '1'); } finally { applying = false; }
+    try { await A.signOut(); } catch (e) {}
+    location.reload();
+  }
   /* ---------- 자녀 바꾸기 (src/kids.js 가 부름) ----------
      로그인했으면: 지금 아이 기록을 먼저 올리고(바뀐 게 있으면) 바꿀 아이 기록을 서버에서 받음. 인터넷이 안 되면 바꾸지 않음(false) — 두 기기 기록이 갈라지지 않게 */
   const signedIn = () => !!(A && user && agreed);
@@ -25416,9 +25639,7 @@ window.DONATE_CORE = (function(){
     }
     if (m.choose) { ui.ask = true; paint(); return; }
     if (!cl) { if (hasLocal()) upload(); else paint('로그인했어요. 아이 정보를 고르면 계정에 저장해요.'); return; }   // 빈 기록은 올리지 않음
-    if (cl.rev && cl.rev !== m.rev) {   // 다른 기기가 바꿈
-      if (!m.dirty || (m.dirtyAt || 0) >= BOOT || (cl.at || 0) > (m.dirtyAt || 0)) return apply(cl);
-    }
+    if (cl.rev && cl.rev !== m.rev && !m.dirty) return apply(cl);   // 다른 기기가 바꿈, 이 기기는 안 바꿈 → 받기만 (둘 다 바꿨으면 아래 upload 가 합침)
     if (m.dirty) upload(); else paint('계정에 저장돼 있어요.');
   }
 
@@ -25432,11 +25653,14 @@ window.DONATE_CORE = (function(){
         const was = user; user = s.user;
         if (s.kicked) { const o = meta(); if (o && o.uid) { o.last = o.uid; delete o.uid; delete o.choose; setMeta(o); } else if (!(o && o.last)) setMeta(null); ui = { msg: '', ask: false, err: '' }; agreed = null; joinShut(); toast('다른 기기에서 같은 계정으로 로그인해서 이 기기는 로그아웃됐어요.'); }
         if (s.error) ui.err = '로그인하지 못했어요. 다시 해 주세요.';
-        if (user && !was) {
+        if (user && !was && user.child) kidAfter();   // 아이 폰
+        else if (user && !was) {
           const m = meta();
           if (!m) { A.signOut(); return; }   // 기록을 지운 기기에 남은 로그인
+          if (kidDev()) { A.signOut(); return; }   // 아이 폰에 부모 로그인이 남은 경우 (있을 수 없지만 섞이지 않게)
           afterLogin();
         }
+        if (!user && was && was.child && kidDev() && !stopped) kidCut();   // 아이 폰 로그인이 풀림 (끊긴 토큰)
         if (!user) { ui.ask = false; agreed = null; joinShut(); }
         paint();
       });
@@ -25491,6 +25715,7 @@ window.DONATE_CORE = (function(){
         <button type="button" class="lg-gate-btn lg-kakao" id="lgK3">${KAKAO}<span>카카오로 시작하기</span></button></div>
         <p class="lg-gate-err" id="lgGateErr" role="alert"></p>
         <p class="lg-gate-note">이미 가입했다면 가입한 방식(구글 또는 카카오)으로 로그인하면 아이 정보와 진도를 그대로 이어서 써요.</p>
+        <div class="lg-gate-kid"><span>아이 폰인가요?</span><button type="button" class="linkbtn" id="lgKidIn">부모님께 받은 번호로 시작</button></div>
       </section>`);
       g = $('lgGate');
     }
@@ -25507,6 +25732,7 @@ window.DONATE_CORE = (function(){
   function paint(msg){
     if (msg != null) ui.msg = msg;
     gateSync();
+    document.dispatchEvent(new CustomEvent('sarang:login'));   // src/kidmode.js: 로그인·가입 상태가 바뀜 (아이 폰 목록 지켜보기)
     const box = $('lgBox'); if (!box) return;
     let h;
     if (!HOST_OK) h = '<div class="set-child lg-row"><span><b>이 기기에만 저장 중</b><small>로그인은 lovedu.kr 앱에서 할 수 있어요. 로그인하면 폰과 PC가 같은 기록을 써요.</small></span></div>';
@@ -25589,7 +25815,7 @@ window.DONATE_CORE = (function(){
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
 
   window.SARANG_LOGIN = {
-    hostOk: HOST_OK, load, upload, snapshot, groupOf, gated, kidSwitch, kidDone, kidRemove, kidSaved,
+    hostOk: HOST_OK, load, upload, snapshot, groupOf, gated, kidSwitch, kidDone, kidRemove, kidSaved, kidDev, kidCut,
     get user(){ return user; }, get auth(){ return A; }, get agreed(){ return agreed; },
     /* 검사용 (에뮬레이터): 가짜 구글 토큰으로 로그인 */
     async _emuSignIn(sub, email){
@@ -25599,6 +25825,380 @@ window.DONATE_CORE = (function(){
       return S.signInWithCredential(A._auth, S.GoogleAuthProvider.credential(JSON.stringify({ sub, email, email_verified: true, name: '시험 ' + sub })));
     }
   };
+})();
+</script>
+<script>/* ==================== 아이 폰 연결·자녀 모드·숙제 (2026-10-04 대표 "숙제기능 이제 시작하자") ====================
+   정해진 것 (메모 child-device-study·homework-feature, 서버 설계 4-8, 숙제 설계 메모):
+   - 부모 폰 설정 '아이 폰' 칸 한 곳에서만 '아이 폰 연결'(6자리 번호·링크, 24시간 한 번) / '연결 끊기' (경로 일원화).
+   - 아이 폰: 첫 화면 '부모님께 받은 번호로 시작' → 번호 → '○○ 공부 폰으로 연결할까요?' → 자녀 모드. 로그인 없음 (함수가 준 아이 전용 토큰).
+     자녀 모드에서는 부모가 정한 오늘의 학습을 스마트 학습(바로 풀기)으로만, 숙제·모의시험은 부모가 보낸 것만. 설정·진도·프린트·다른 아이·현황판·부록 없음.
+   - 연결한 아이는 부모 폰에서 프린트·진도 설정·현황판만 (스마트 학습은 아이 폰에서, src/screen-frame.js 가 SARANG_KIDLINK 를 봄).
+     '연결 끊기'를 하면 다시 부모 폰에서 전부. 연결하지 않은 아이는 지금처럼 부모 폰에서 전부.
+   - 숙제: 현황판 '숙제'에서 과목(지금 Day)·보내는 사람·한마디(30자) → 보내기. 아이 폰 숙제 칸에서 바로 풀기 → 부모 화면에 과목마다 '아이가 봄'·'다 했어요'·점수.
+     아이에게는 점수를 보여 주지 않음. 저장은 users/{uid}/homework (규칙: 아이는 자기 숙제 과목 상태만 앞으로).
+   기록 주고받기(아이 폰도 그 아이의 기기 하나)는 src/login.js, 서버 부품은 src/vendor/sarang-auth (v1.2). */
+(function(){
+  const $ = id => document.getElementById(id);
+  const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const L = () => window.SARANG_LOGIN, K = () => window.SARANG_KIDS, A = () => L() && L().auth;
+  const NAME = { kor: '국어', eng: '영어', math: '수학', ymath: '수학', vocab: '영단어', hanja: '한자', yhan: '한자', soc: '사회', sci: '과학', his: '한국사', wh: '세계사', ttobak: '한글' };
+  const SERVER = { kor: 'kor', eng: 'eng', math: 'math', soc: 'soc', sci: 'sci', his: 'his', wh: 'wh', hanja: 'hanja', ttobak: 'kor', ymath: 'math', vocab: 'eng', yhan: 'hanja' };   // 서버 과목 키 (규칙 subjects)
+  const FROM = ['엄마', '아빠', '할머니', '할아버지'];
+  const QUICK = ['오늘도 화이팅!', '다 하면 알려 줘', '천천히 해도 괜찮아'];
+  const pad = n => String(n).padStart(2, '0');
+  const ymd = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const ms = v => v && v.toMillis ? v.toMillis() : (typeof v === 'number' ? v : 0);
+  const hm = t => { const d = new Date(t); const h = d.getHours(); return `${h < 12 ? '오전' : '오후'} ${h % 12 || 12}:${pad(d.getMinutes())}`; };
+  const md = t => { const d = new Date(t); return `${d.getMonth() + 1}월 ${d.getDate()}일`; };
+  const gname = g => { const m = /^([em])(\d)/.exec(g || ''); return m ? (m[1] === 'e' ? '초' : '중') + m[2] : (g ? '유아' : ''); };
+  const josa = (w, a, b) => { const c = String(w || '').charCodeAt(String(w || '').length - 1) - 0xAC00; return c >= 0 && c <= 11171 && c % 28 ? a : b; };   // 받침: 이/가
+  const kidDev = () => L() && L().kidDev ? L().kidDev() : null;
+  const isKid = () => document.documentElement.classList.contains('kid-dev') && !!kidDev();
+  function toast(t){
+    let el = $('lgToast'); if (!el) { el = document.createElement('div'); el.id = 'lgToast'; el.className = 'lg-toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
+    el.textContent = t; el.hidden = false; clearTimeout(el._t); el._t = setTimeout(() => { el.hidden = true; }, 5000);
+  }
+  /* 창 하나 (가운데 카드). Esc·바깥 누름 = 닫기 (닫을 수 있을 때만) */
+  function dialog(id, label){
+    let d = $(id);
+    if (!d) {
+      d = document.createElement('div'); d.id = id; d.className = 'kd-dlg'; d.hidden = true;
+      d.innerHTML = `<div class="kd-card" role="dialog" aria-modal="true" aria-label="${esc(label)}"></div>`;
+      document.body.append(d);
+      d.addEventListener('click', e => { if (e.target === d && d.canClose !== false) d.close(); });
+      d.addEventListener('keydown', e => {
+        if (e.key === 'Escape' && d.canClose !== false) { e.preventDefault(); d.close(); }
+        if (e.key === 'Tab') { const f = [...d.querySelectorAll('button:not([disabled]),input,a')].filter(x => x.getClientRects().length); if (!f.length) return; const i = f.indexOf(document.activeElement); if (e.shiftKey ? i <= 0 : i === f.length - 1) { e.preventDefault(); f[e.shiftKey ? f.length - 1 : 0].focus({ preventScroll: true }); } }
+      });
+      d.open = () => { if (!d.hidden) return; d.back = document.activeElement; d.hidden = false; document.documentElement.classList.add('kd-lock'); };
+      d.close = () => { if (d.hidden) return; d.hidden = true; document.documentElement.classList.remove('kd-lock'); if (d.onclose) d.onclose(); if (d.back && d.back.isConnected && d.back.focus) try { d.back.focus({ preventScroll: true }); } catch (e) {} };
+    }
+    return d;
+  }
+  const fill = (d, html, focus) => { const c = d.querySelector('.kd-card'); c.innerHTML = html; const f = focus && c.querySelector(focus); if (f) f.focus({ preventScroll: true }); };
+
+  /* ==================== 부모 폰 ==================== */
+  let devs = null, stopDev = null, cutAsk = null;
+  const parentReady = () => { const l = L(); return !!(l && l.user && !l.user.child && l.agreed && l.auth); };
+  const linkedOf = id => devs ? devs.find(d => d.childId === id) || null : null;
+  function syncLogin(){
+    if (isKid()) return;
+    if (parentReady() && !stopDev) {
+      try { stopDev = A().kidDevice.watch(list => { devs = list; changed(); }, e => console.warn('아이 폰 목록 실패', e && e.code)); } catch (e) { stopDev = null; }
+    } else if (!parentReady() && stopDev) { stopDev(); stopDev = null; devs = null; changed(); }
+    renderSet();
+  }
+  let lastKey = '';
+  function changed(){
+    renderSet(); inviteDone(); if (hwEl && !hwEl.hidden) paintHw(hwEl);
+    const k = JSON.stringify((devs || []).map(d => d.childId).sort());
+    if (k !== lastKey) { lastKey = k; document.dispatchEvent(new CustomEvent('hub:refresh')); }   // 오늘 줄의 '스마트' ↔ '아이 폰'
+  }
+  window.SARANG_KIDLINK = {
+    linkedNow: () => !isKid() && !!(K() && linkedOf(K().cur())),
+    note(){ const n = K() ? K().label(K().now()) : '아이'; toast(`${n}${josa(n, '은', '는')} 아이 폰에서 스마트 학습을 해요. 부모 폰에서는 프린트·진도 설정·현황판을 쓸 수 있어요.`); },
+    get devices(){ return devs; }
+  };
+
+  /* ---------- 설정 '아이 폰' 칸 (연결·끊기 입구는 여기 하나) ---------- */
+  function mountSet(){
+    if ($('kdSet') || !$('setKids') || isKid()) return;
+    $('setKids').insertAdjacentHTML('afterend', '<div class="label" id="kdSetL">아이 폰</div><div id="kdSet" class="kd-set"></div>');
+    $('kdSet').addEventListener('click', e => {
+      const a = e.target.closest('[data-kdlink]'), c = e.target.closest('[data-kdcut]');
+      if (a) return openInvite(a.dataset.kdlink);
+      if (c) {
+        if (cutAsk !== c.dataset.kdcut) { cutAsk = c.dataset.kdcut; renderSet(); const b = $('kdSet').querySelector(`[data-kdcut="${cutAsk}"]`); if (b) b.focus({ preventScroll: true }); return; }
+        c.disabled = true; cutAsk = null;
+        A().kidDevice.unlink(c.dataset.kdcut).then(() => toast('연결을 끊었어요. 이제 부모 폰에서 모두 쓸 수 있어요.')).catch(er => { console.warn('연결 끊기 실패', er && er.code); c.disabled = false; toast('연결을 끊지 못했어요. 인터넷을 확인해 주세요.'); });
+      }
+      if (e.target.closest('[data-kdkeep]')) { cutAsk = null; renderSet(); }
+    });
+    renderSet();
+  }
+  function renderSet(){
+    const box = $('kdSet'); if (!box) return;
+    let h;
+    const lead = '<p class="kd-set-note">아이마다 폰 1대를 연결할 수 있어요. 연결하면 그 아이는 아이 폰에서 스마트 학습과 숙제를 하고, 부모 폰에서는 프린트·진도 설정·현황판을 써요. 아이 폰은 부모님 기기 수(폰 1·PC 1)에 들어가지 않아요.</p>';
+    if (!L() || !L().hostOk) h = '<div class="set-child"><span><b>lovedu.kr 앱에서 연결해요</b><small>아이 폰 연결은 lovedu.kr 앱에서 로그인한 뒤 할 수 있어요.</small></span></div>';
+    else if (!parentReady()) h = '<div class="set-child"><span><b>로그인하면 연결할 수 있어요</b><small>위 계정 칸에서 로그인하고 가입을 마치면 아이 폰을 연결해 숙제를 보낼 수 있어요.</small></span></div>';
+    else if (devs === null) h = '<div class="set-child"><span><b>아이 폰 확인 중…</b><small>연결 상태를 불러오고 있어요.</small></span></div>';
+    else h = K().list().map(k => {
+      const d = linkedOf(k.id), n = esc(K().label(k));
+      if (!d) return `<div class="set-child kd-row"><span><b>${n}</b><small>연결 안 됨 · 부모 폰에서 모두 써요</small></span><button type="button" class="linkbtn" data-kdlink="${k.id}">아이 폰 연결</button></div>`;
+      const when = ms(d.linkedAt) ? ` · ${md(ms(d.linkedAt))} 연결` : '';
+      if (cutAsk === d.id) return `<div class="set-child kd-row kd-ask"><span><b>${n} 폰 연결을 끊을까요?</b><small>끊으면 그 폰은 첫 화면으로 돌아가고, 부모 폰에서 다시 모두 쓸 수 있어요.</small></span><div class="kd-ask-btns"><button type="button" class="linkbtn" data-kdkeep>그대로 두기</button><button type="button" class="linkbtn kd-cut" data-kdcut="${esc(d.id)}">연결 끊기</button></div></div>`;
+      return `<div class="set-child kd-row"><span><b>${n} <em class="kd-on">연결됨</em></b><small>${esc(d.label || '아이 폰')}${when}</small></span><button type="button" class="linkbtn" data-kdcut="${esc(d.id)}">연결 끊기</button></div>`;
+    }).join('') + lead;
+    if (box.dataset.h !== h) { box.dataset.h = h; box.innerHTML = h; }
+  }
+
+  /* ---------- 아이 폰 연결 창: 6자리 번호·링크 (24시간, 한 번) ---------- */
+  let inv = null;   // { cid, code, inviteId, expiresAt, at, done }
+  async function openInvite(cid){
+    const d = dialog('kdInv', '아이 폰 연결'), k = K().list().find(x => x.id === cid), n = K().label(k);
+    inv = { cid, at: Date.now() };
+    d.onclose = () => { inv = null; };
+    d.open();
+    fill(d, `<h3>${esc(n)} 폰 연결하기</h3><p class="kd-wait" role="status">번호를 만드는 중이에요…</p><div class="kd-btns"><button type="button" class="kd-b" data-kdx>닫기</button></div>`, '[data-kdx]');
+    d.querySelector('.kd-card').onclick = e => { if (e.target.closest('[data-kdx]')) d.close(); if (e.target.closest('[data-kdnew]')) openInvite(cid); if (e.target.closest('[data-kdshare]')) share(n); };
+    try {
+      const r = await A().kidDevice.invite(cid);
+      if (!inv || inv.cid !== cid) return;
+      Object.assign(inv, r);
+      const code = `${r.code.slice(0, 3)} ${r.code.slice(3)}`, end = new Date(r.expiresAt);
+      fill(d, `<h3>${esc(n)} 폰 연결하기</h3>
+        <ol class="kd-steps"><li>아이 폰에서 <b>lovedu.kr/app</b>을 열어요.</li><li>첫 화면 아래 <b>'부모님께 받은 번호로 시작'</b>을 눌러요.</li><li>아래 번호를 넣어요.</li></ol>
+        <div class="kd-code" aria-label="연결 번호 ${r.code.split('').join(' ')}">${code}</div>
+        <p class="kd-exp">${md(end)} ${hm(end)}까지, 한 번만 쓸 수 있어요. 링크를 보내면 아이 폰에서 누르기만 해도 돼요.</p>
+        <p class="kd-live" role="status">아이 폰에서 연결하면 여기에 알려 드려요.</p>
+        <div class="kd-btns"><button type="button" class="kd-b" data-kdnew>새 번호</button><button type="button" class="kd-b" data-kdshare>링크 보내기</button><button type="button" class="kd-b pri" data-kdx>닫기</button></div>`, '[data-kdshare]');
+    } catch (e) {
+      console.warn('아이 폰 번호 만들기 실패', e && (e.code || e.message));
+      if (!inv || inv.cid !== cid) return;
+      const nf = e && /not-found/.test(e.code || '');
+      if (nf && L().upload) L().upload();   // 아직 계정에 없는 아이: 지금 기록을 올림 → 다시 누르면 됨
+      fill(d, `<h3>${esc(n)} 폰 연결하기</h3><p class="kd-err" role="alert">${nf ? '이 아이 정보가 아직 계정에 저장되지 않았어요. 학습 첫 화면 위 카드에서 이 아이를 한 번 고른 뒤 다시 해 주세요.' : '번호를 만들지 못했어요. 인터넷을 확인하고 다시 해 주세요.'}</p>
+        <div class="kd-btns"><button type="button" class="kd-b" data-kdnew>다시 하기</button><button type="button" class="kd-b pri" data-kdx>닫기</button></div>`, '[data-kdx]');
+    }
+  }
+  const joinUrl = () => `https://lovedu.kr/app/?join=${encodeURIComponent(inv.inviteId)}`;
+  async function share(n){
+    if (!inv || !inv.inviteId) return;
+    const text = `${n} 사랑교육 공부 폰 연결 링크예요. 아이 폰에서 눌러 주세요. (번호 ${inv.code}, 한 번만 쓸 수 있어요)`;
+    try { if (navigator.share) { await navigator.share({ title: '사랑교육 아이 폰 연결', text, url: joinUrl() }); return; } } catch (e) { if (e && e.name === 'AbortError') return; }
+    try { await navigator.clipboard.writeText(`${text}\n${joinUrl()}`); toast('링크를 복사했어요. 카카오톡이나 문자에 붙여 넣어 보내 주세요.'); }
+    catch (e) { toast('복사하지 못했어요. 번호를 아이 폰에 직접 넣어 주세요.'); }
+  }
+  function inviteDone(){
+    const d = $('kdInv'); if (!inv || inv.done || !d || d.hidden || !inv.inviteId) return;
+    const x = linkedOf(inv.cid); if (!x || ms(x.linkedAt) < inv.at - 60000) return;
+    inv.done = true;
+    const n = K().label(K().list().find(k => k.id === inv.cid));
+    fill(d, `<h3>연결됐어요</h3><p class="kd-ok">${esc(n)} 폰(${esc(x.label || '아이 폰')})이 연결됐어요. 이제 ${esc(n)}${josa(n, '은', '는')} 아이 폰에서 스마트 학습과 숙제를 하고, 부모 폰에서는 프린트·진도 설정·현황판을 써요.</p>
+      <div class="kd-btns"><button type="button" class="kd-b pri" data-kdx>확인</button></div>`, '[data-kdx]');
+  }
+
+  /* ---------- 현황판 '숙제' (부모) ---------- */
+  let hwEl = null, hwStop = null, hwKid = null, hwList = null, hwFrom = '엄마', hwMsg = '', hwPick = null, hwBusy = false, hwErr = '', hwDrop = null;
+  try { hwFrom = sessionStorage.getItem('sarang_hwfrom') || '엄마'; } catch (e) {}
+  const H = () => window.HUB_TODAY || {};
+  function hwSubjects(){   // 오늘 시간표 과목(먼저, 골라 둠) + 이번 주 다른 과목 가운데 스마트 학습이 되는 것
+    const S = window.SARANG_SCREEN, T = window.SARANG_TODAY; if (!S) return [];
+    let td = []; try { td = H().todays ? H().todays() : []; } catch (e) {}
+    const oth = T && T.others ? T.others() : [];
+    const seen = new Set(), out = [];
+    [...td.map(s => [s, true]), ...oth.map(s => [s, false])].forEach(([s, on]) => {
+      if (!SERVER[s] || seen.has(SERVER[s]) || !S.can(s)) return; seen.add(SERVER[s]);
+      let info = ''; try { info = String(H()[s].info(true) || ''); } catch (e) {}
+      out.push({ s, on, info: info.replace(/⁣/g, '').replace(/ \((?:불러오는 중|불러오지 못함|내용 준비 중)\)$/, '') });
+    });
+    return out;
+  }
+  function paintHw(el){
+    hwEl = el; if (!el) return;
+    const k = K() && K().now(), n = K() ? K().label(k) : '아이', cid = K() ? K().cur() : 'c1';
+    let h;
+    if (!L() || !L().hostOk) h = `<section class="card db-box kd-hw-box"><h3 class="db-h">숙제</h3><p class="kd-p">숙제 보내기는 lovedu.kr 앱에서 로그인하고 아이 폰을 연결하면 쓸 수 있어요.</p></section>`;
+    else if (!parentReady()) h = `<section class="card db-box kd-hw-box"><h3 class="db-h">숙제</h3><p class="kd-p">로그인하고 가입을 마친 뒤 아이 폰을 연결하면 숙제를 보낼 수 있어요.</p></section>`;
+    else if (devs === null) h = `<section class="card db-box kd-hw-box"><p class="kd-p">아이 폰 연결 상태를 불러오는 중이에요…</p></section>`;
+    else if (!linkedOf(cid)) h = `<section class="card db-box kd-hw-box"><h3 class="db-h">${esc(n)}에게 숙제 보내기</h3><p class="kd-p">${esc(n)} 폰을 연결하면 숙제를 보낼 수 있어요. 아이가 아이 폰에서 풀면 여기에 과목마다 다 했는지와 점수가 떠요.</p>
+        <div class="kd-btns l"><button type="button" class="kd-b pri" data-hwset>설정에서 아이 폰 연결하기</button></div></section>`;
+    else {
+      if (hwKid !== cid) { hwKid = cid; hwList = null; hwPick = null; if (hwStop) hwStop(); hwStop = A().homework.watch(cid, ymd(), l => { hwList = l; if (hwEl && !hwEl.hidden) paintHw(hwEl); }, e => { console.warn('숙제 읽기 실패', e && e.code); hwErr = '숙제를 불러오지 못했어요.'; paintHw(hwEl); }); }
+      const subs = hwSubjects();
+      if (!hwPick) hwPick = new Set(subs.filter(x => x.on).map(x => x.s));
+      const rows = subs.map(x => `<label class="kd-sub"><input type="checkbox" data-hwsub="${x.s}"${hwPick.has(x.s) ? ' checked' : ''}><span><b>${NAME[x.s] || x.s}</b><small>${esc(x.info || '지금 배우는 곳')}</small></span></label>`).join('');
+      const form = `<section class="card db-box kd-hw-box"><h3 class="db-h">${esc(n)}에게 숙제 내기</h3>
+        <div class="kd-f"><span class="kd-fl">보내는 사람</span><div class="kd-chips" role="radiogroup" aria-label="보내는 사람">${FROM.map(f => `<button type="button" role="radio" class="kd-chip${f === hwFrom ? ' on' : ''}" aria-checked="${f === hwFrom}" data-hwfrom="${f}">${f}</button>`).join('')}</div>
+          <small class="kd-fs">아이 폰에 '${esc(hwFrom)}${josa(hwFrom, '이', '가')} 보낸 숙제'로 보여요.</small></div>
+        <div class="kd-f"><span class="kd-fl">과목 <small>지금 배우는 Day를 스마트 학습으로 풀어요</small></span>${rows ? `<div class="kd-subs">${rows}</div>` : '<p class="kd-p">스마트 학습으로 풀 수 있는 과목이 아직 없어요.</p>'}</div>
+        <div class="kd-f"><label class="kd-fl" for="hwMsg">한마디 <small>(30자까지, 비워도 돼요)</small></label><input type="text" id="hwMsg" maxlength="30" autocomplete="off" value="${esc(hwMsg)}" placeholder="예: 오늘도 화이팅!">
+          <div class="kd-chips">${QUICK.map(q => `<button type="button" class="kd-chip q" data-hwq="${esc(q)}">${esc(q)}</button>`).join('')}</div></div>
+        <p class="kd-err" role="alert">${esc(hwErr)}</p>
+        <div class="kd-btns l"><button type="button" class="kd-b pri" data-hwsend${hwBusy || !hwPick.size ? ' disabled' : ''}>${hwBusy ? '보내는 중…' : `숙제 보내기${hwPick.size ? ` (${hwPick.size}과목)` : ''}`}</button></div></section>`;
+      h = form + hwSent(n);
+    }
+    if (el.dataset.h !== h) {
+      const a = document.activeElement, keep = a && a.id === 'hwMsg' && el.contains(a) ? [a.selectionStart, a.selectionEnd] : null;
+      el.dataset.h = h; el.innerHTML = h;
+      if (keep && $('hwMsg')) { $('hwMsg').focus({ preventScroll: true }); try { $('hwMsg').setSelectionRange(keep[0], keep[1]); } catch (e) {} }
+    }
+    if (!el.onclick) { el.onclick = hwClick; el.oninput = e => { if (e.target.id === 'hwMsg') hwMsg = e.target.value.slice(0, 30); }; el.onchange = e => { const c = e.target.closest('[data-hwsub]'); if (c) { if (c.checked) hwPick.add(c.dataset.hwsub); else hwPick.delete(c.dataset.hwsub); paintHw(el); } }; }
+  }
+  function hwSent(n){
+    if (hwList === null) return '<section class="card db-box kd-hw-box"><p class="kd-p">오늘 보낸 숙제를 불러오는 중이에요…</p></section>';
+    if (!hwList.length) return `<section class="card db-box kd-hw-box"><h3 class="db-h">오늘 보낸 숙제</h3><p class="kd-p">오늘은 아직 보낸 숙제가 없어요.</p></section>`;
+    return hwList.map(w => {
+      const it = Object.entries(w.items || {}).sort((a, b) => (a[1].order || 0) - (b[1].order || 0));
+      const done = it.filter(([, x]) => x.state === 'done').length, all = done === it.length;
+      const li = it.map(([k, x]) => {
+        const nm = NAME[x.app] || NAME[k] || k;
+        const st = x.state === 'done' ? `<em class="kd-st done">다 했어요${x.doneAt ? ' ' + hm(x.doneAt) : ''}</em>${x.score && x.score.total ? `<small class="kd-sc">${x.score.total}문제 중 ${x.score.right}개 맞았어요</small>` : ''}`
+          : x.state === 'seen' ? `<em class="kd-st seen">아이가 봄${x.seenAt ? ' ' + hm(x.seenAt) : ''}</em>` : '<em class="kd-st">보냄</em>';
+        return `<li><span><b>${esc(nm)}</b><small>${esc(x.day || '')}</small></span><span class="kd-sts">${st}</span></li>`;
+      }).join('');
+      const head = `${esc(w.from || '')}${josa(w.from, '이', '가')} 보낸 숙제 · ${ms(w.createdAt) ? hm(ms(w.createdAt)) : '방금'}`;
+      const drop = all ? '' : hwDrop === w.id ? `<div class="kd-btns l"><button type="button" class="kd-b" data-hwkeep>그대로 두기</button><button type="button" class="kd-b warn" data-hwdel="${w.id}">숙제 거두기</button></div>`
+        : `<div class="kd-btns l"><button type="button" class="linkbtn" data-hwask="${w.id}">숙제 거두기</button></div>`;
+      return `<section class="card db-box kd-hw-box kd-sent"><h3 class="db-h">${head}</h3>${w.message ? `<p class="kd-say">“${esc(w.message)}”</p>` : ''}
+        <div class="kd-prog" role="img" aria-label="${it.length}과목 중 ${done}과목 다 했어요"><i style="width:${it.length ? Math.round(done / it.length * 100) : 0}%"></i></div>
+        <p class="kd-ps">${all ? `${esc(n)}${josa(n, '이', '가')} 숙제를 다 했어요.` : `${it.length}과목 중 ${done}과목 다 했어요.`}</p><ul class="kd-items">${li}</ul>${drop}</section>`;
+    }).join('');
+  }
+  async function hwClick(e){
+    const b = e.target.closest('button'); if (!b) return;
+    if (b.dataset.hwset !== undefined) { const s = $('settings'), g = $('setBtnHub'); if (s && s.hidden && g) g.click(); setTimeout(() => { const x = $('kdSetL'); if (x) x.scrollIntoView({ block: 'start' }); }, 60); return; }
+    if (b.dataset.hwfrom) { hwFrom = b.dataset.hwfrom; try { sessionStorage.setItem('sarang_hwfrom', hwFrom); } catch (er) {} return paintHw(hwEl); }
+    if (b.dataset.hwq) { hwMsg = b.dataset.hwq; return paintHw(hwEl); }
+    if (b.dataset.hwask) { hwDrop = b.dataset.hwask; return paintHw(hwEl); }
+    if (b.dataset.hwkeep !== undefined) { hwDrop = null; return paintHw(hwEl); }
+    if (b.dataset.hwdel) { b.disabled = true; hwDrop = null; A().homework.remove(b.dataset.hwdel).catch(() => toast('숙제를 거두지 못했어요. 인터넷을 확인해 주세요.')); return; }
+    if (b.dataset.hwsend !== undefined) {
+      if (hwBusy || !hwPick || !hwPick.size) return;
+      const subs = hwSubjects().filter(x => hwPick.has(x.s)), items = {};
+      subs.forEach((x, i) => { items[SERVER[x.s]] = { app: x.s, day: x.info.slice(0, 80), order: i, state: 'sent' }; });
+      hwBusy = true; hwErr = ''; paintHw(hwEl);
+      try {
+        await A().homework.send(K().cur(), { from: hwFrom, message: hwMsg.trim(), dateKey: ymd(), items });
+        hwMsg = ''; hwPick = null; toast('숙제를 보냈어요. 아이 폰에서 열면 여기에 바로 떠요.');
+      } catch (er) { console.warn('숙제 보내기 실패', er && er.code); hwErr = '숙제를 보내지 못했어요. 인터넷을 확인하고 다시 눌러 주세요.'; }
+      hwBusy = false; paintHw(hwEl);
+    }
+  }
+  document.addEventListener('hub:child', () => { hwKid = null; hwList = null; hwPick = null; if (hwStop) { hwStop(); hwStop = null; } });
+  window.SARANG_HW = { paint: paintHw };
+
+  /* ==================== 아이 폰 ==================== */
+  /* ---------- 연결: 첫 화면 '부모님께 받은 번호로 시작' (또는 링크 ?join=) ---------- */
+  function openJoin(ref){
+    const d = dialog('kdJoin', '아이 폰 연결');
+    d.open();
+    const codeStep = (err, val) => {
+      fill(d, `<h3>아이 폰 연결</h3><p class="kd-p">부모님 폰의 <b>설정 › 아이 폰</b>에서 받은 6자리 번호를 넣어요.</p>
+        <input type="text" id="kdCode" class="kd-in" inputmode="numeric" autocomplete="one-time-code" maxlength="7" placeholder="000 000" value="${esc(val || '')}" aria-label="6자리 번호">
+        <p class="kd-err" role="alert">${esc(err || '')}</p>
+        <div class="kd-btns"><button type="button" class="kd-b" data-kjx>닫기</button><button type="button" class="kd-b pri" data-kjnext>다음</button></div>`, '#kdCode');
+      $('kdCode').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); next(); } });
+    };
+    const next = async () => {
+      const v = ($('kdCode') ? $('kdCode').value : '').replace(/\D/g, '');
+      if (v.length !== 6) return codeStep('6자리 숫자를 넣어 주세요.', v);
+      await look({ code: v });
+    };
+    const look = async r => {
+      fill(d, '<h3>아이 폰 연결</h3><p class="kd-wait" role="status">번호를 확인하는 중이에요…</p>');
+      d.canClose = false;
+      try {
+        await L().load();
+        const p = await A().kidDevice.preview(r);
+        d.canClose = true;
+        if (!p || p.status !== 'ok') return r.code ? codeStep('번호가 맞지 않거나 시간이 지났어요. 부모님께 새 번호를 받아 주세요.', r.code) : codeStep('이 링크는 더 쓸 수 없어요. 이미 쓴 링크이거나 24시간이 지났어요. 부모님께 새 번호를 받아 주세요.');
+        const nick = p.nickname || '우리 아이', g = gname(p.grade);
+        fill(d, `<h3>${esc(nick)} 공부 폰으로 연결할까요?</h3><p class="kd-p">${g ? `${esc(g)} · ` : ''}연결하면 이 폰은 ${esc(nick)} 전용이 돼요. 부모님이 정한 스마트 학습과 보낸 숙제를 여기서 풀어요.</p>
+          <p class="kd-err" role="alert"></p>
+          <div class="kd-btns"><button type="button" class="kd-b" data-kjback>다른 번호</button><button type="button" class="kd-b pri" data-kjgo>연결하기</button></div>`, '[data-kjgo]');
+        d.querySelector('[data-kjgo]').onclick = () => go(r, nick);
+      } catch (e) {
+        d.canClose = true;
+        console.warn('번호 확인 실패', e && (e.code || e.message));
+        codeStep(e && /resource-exhausted/.test(e.code || '') ? '여러 번 틀렸어요. 잠시 뒤에 다시 해 주세요.' : '확인하지 못했어요. 인터넷을 확인하고 다시 해 주세요.', r.code);
+      }
+    };
+    const go = async (r, nick) => {
+      fill(d, `<h3>${esc(nick)} 공부 폰으로 연결하는 중</h3><p class="kd-wait" role="status">연결하고 공부 기록을 받는 중이에요…</p>`);
+      d.canClose = false;
+      try { sessionStorage.setItem('sarang_kidjoin', JSON.stringify({ nick })); } catch (e) {}
+      const ua = navigator.userAgent || '', plat = /iPhone/.test(ua) ? 'ios' : /iPad|Macintosh/.test(ua) && navigator.maxTouchPoints > 1 ? 'ios' : /Android/.test(ua) ? 'android' : 'other';
+      const label = /iPhone/.test(ua) ? '아이폰' : plat === 'ios' ? '아이패드' : /Android/.test(ua) ? (/Mobile/.test(ua) ? '안드로이드 폰' : '안드로이드 태블릿') : '이 기기';
+      try {
+        const x = await A().kidDevice.redeem(r, { label, platform: plat });
+        if (!x || x.status !== 'ok') { d.canClose = true; return codeStep('번호가 맞지 않거나 시간이 지났어요. 부모님께 새 번호를 받아 주세요.'); }
+        /* 그다음은 src/login.js kidAfter: 이 폰 기록을 지우고 그 아이 기록을 받아 새로 켬 */
+        setTimeout(() => { if (!d.hidden) fill(d, `<h3>${esc(nick)} 공부 폰으로 연결했어요</h3><p class="kd-p">부모님 폰에서 아직 학년·진도를 정하지 않았다면, 정한 뒤 이 화면을 새로 열어 주세요.</p><div class="kd-btns"><button type="button" class="kd-b pri" onclick="location.reload()">새로 열기</button></div>`); }, 15000);
+      } catch (e) { d.canClose = true; console.warn('연결 실패', e && (e.code || e.message)); codeStep('연결하지 못했어요. 인터넷을 확인하고 다시 해 주세요.'); }
+    };
+    d.querySelector('.kd-card').onclick = e => { if (e.target.closest('[data-kjx]')) d.close(); if (e.target.closest('[data-kjnext]')) next(); if (e.target.closest('[data-kjback]')) codeStep(); };
+    if (ref && ref.inviteId) look(ref); else codeStep();
+  }
+  document.addEventListener('click', e => { if (e.target.closest('#lgKidIn')) openJoin(); });
+
+  /* ---------- 자녀 모드 화면 ---------- */
+  let kidHw = null, kidHwStop = null, kidNick = '';
+  function kidMount(){
+    const k = kidDev(); if (!k) return;
+    kidNick = k.nick || (K() && K().name()) || '우리 아이';
+    if (!$('kdBanner') && $('today')) {
+      $('today').insertAdjacentHTML('afterbegin', `<div class="kd-banner" id="kdBanner"><b>${esc(kidNick)} 공부 폰</b><span>부모님이 정한 공부를 바로 풀기로 해요.</span></div><div class="kd-khw" id="kdKidHw" hidden></div>`);
+      $('kdKidHw').addEventListener('click', e => { const b = e.target.closest('[data-khw]'); if (b && window.SARANG_SCREEN) SARANG_SCREEN.open(b.dataset.khw, 'today'); });
+    }
+    /* 과목 줄을 눌러 과목 화면(진도·PDF)으로 가지 않게: '스마트' 단추만 */
+    const stop = e => { const t = e.target; if (!t.closest || !t.closest('#todayList li, #todayOther li') || t.closest('[data-scr]')) return; if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return; e.stopPropagation(); e.preventDefault(); };
+    document.addEventListener('click', stop, true); document.addEventListener('keydown', stop, true);
+    const brand = document.querySelector('#app>.hub-top .sarang-brand'); if (brand) { brand.addEventListener('click', e => { e.stopImmediatePropagation(); e.preventDefault(); }, true); brand.removeAttribute('role'); brand.removeAttribute('tabindex'); brand.removeAttribute('aria-label'); }
+    const nb = $('notifyT') && $('notifyT').nextElementSibling; if (nb && /프린트/.test(nb.textContent)) nb.textContent = '바로 풀기로 오늘 공부를 시작해요.';   // 공부 알림 줄: 아이 폰에는 프린트가 없음
+    const N = window.HUB_NAV; if (N && N.tabNow && N.tabNow !== 'today' && N.tab) N.tab('today');
+  }
+  function kidWatch(){
+    const a = A(), k = kidDev(); if (!a || !k || kidHwStop || !(L().user && L().user.child)) return;
+    kidHwStop = a.homework.watch(k.childId, ymd(), l => { kidHw = l; kidPaint(); }, e => console.warn('숙제 읽기 실패', e && e.code));
+  }
+  function kidPaint(){
+    const box = $('kdKidHw'); if (!box) return;
+    const list = (kidHw || []).filter(w => Object.keys(w.items || {}).length);
+    if (!list.length) { box.hidden = true; box.innerHTML = ''; return; }
+    const S = window.SARANG_SCREEN;
+    const h = list.map(w => {
+      const it = Object.entries(w.items).sort((a, b) => (a[1].order || 0) - (b[1].order || 0));
+      const done = it.filter(([, x]) => x.state === 'done').length, all = done === it.length;
+      it.forEach(([key, x]) => { if (x.state === 'sent') A().homework.setItem(w.id, key, { state: 'seen', seenAt: Date.now() }).catch(() => {}); });   // 아이가 봄
+      const li = it.map(([key, x]) => {
+        const s = x.app || key, nm = NAME[s] || NAME[key] || key, can = S && S.can(s);
+        const r = x.state === 'done' ? '<span class="kd-stk" role="img" aria-label="다 했어요">다 했어요</span>' : can ? `<button type="button" class="kd-b pri" data-khw="${esc(s)}">바로 풀기</button>` : '<span class="kd-na">준비 중</span>';
+        return `<li><span><b>${esc(nm)}</b><small>${esc(x.day || '')}</small></span>${r}</li>`;
+      }).join('');
+      return `<section class="kd-khw-c${all ? ' all' : ''}"><h3>${esc(w.from || '')}${josa(w.from, '이', '가')} 보낸 숙제</h3>${w.message ? `<p class="kd-say">“${esc(w.message)}”</p>` : ''}
+        ${all ? `<p class="kd-cheer">숙제를 다 했어요! ${esc(w.from || '')}에게 알렸어요.</p>` : `<p class="kd-ps">${it.length}과목 중 ${done}과목 했어요.</p>`}<ul class="kd-items">${li}</ul></section>`;
+    }).join('');
+    if (box.dataset.h !== h) { box.dataset.h = h; box.innerHTML = h; }
+    box.hidden = false;
+  }
+  /* 아이 폰에서 스마트 학습을 마치면: 그 과목 숙제 '다 했어요'(점수는 부모 화면에만), 복습 근거(seen), 풀이 기록 */
+  document.addEventListener('sarang:screen-done', e => {
+    if (!isKid()) return;
+    const a = A(), k = kidDev(), x = e.detail || {}, subj = SERVER[x.s]; if (!a || !k || !subj) return;
+    const r = x.r || {}, right = [r.score, r.ok, r.right].find(v => typeof v === 'number'), total = typeof r.total === 'number' ? r.total : null;
+    if (Number.isInteger(x.day) && x.day > 0) a.kidDevice.markSeen(subj, x.day).catch(er => console.warn('복습 기록 실패', er && er.code));
+    a.recordSolve(k.childId, subj, Number.isInteger(x.day) ? x.day : (x.task || null), Object.assign({ via: 'kid' }, total != null && right != null ? { score: right, total } : {})).catch(er => console.warn('풀이 기록 실패', er && er.code));
+    (kidHw || []).forEach(w => {
+      const it = w.items && w.items[subj];
+      if (it && it.state !== 'done' && (!it.app || it.app === x.s)) {
+        a.homework.setItem(w.id, subj, Object.assign({ state: 'done', doneAt: Date.now(), via: 'screen' }, total != null && right != null ? { score: { right, total } } : {})).catch(er => console.warn('숙제 기록 실패', er && er.code));
+      }
+    });
+  });
+  document.addEventListener('sarang:kid-empty', () => {
+    const b = $('kdBanner'); if (b) b.insertAdjacentHTML('afterend', '<p class="kd-empty" role="status">부모님 폰에서 아직 학년과 진도를 정하지 않았어요. 정한 뒤 이 화면을 새로 열어 주세요.</p>');
+  });
+
+  /* ---------- 시작 ---------- */
+  document.addEventListener('sarang:login', () => { if (isKid()) kidWatch(); else syncLogin(); });
+  function start(){
+    if (isKid()) { kidMount(); kidWatch(); return; }
+    mountSet();
+    /* 끊긴 아이 폰: 첫 화면에 한 번 알림 */
+    let cut = null; try { cut = localStorage.getItem('sarang_kidcut'); } catch (e) {}
+    if (cut) { try { localStorage.removeItem('sarang_kidcut'); } catch (e) {} setTimeout(() => toast('부모님이 이 폰 연결을 끊었어요. 다시 쓰려면 부모님께 새 번호를 받아 주세요.'), 400); }
+    /* 링크로 열림: lovedu.kr/app/?join=… */
+    const m = /[?&]join=([A-Za-z0-9_-]{16,64})/.exec(location.search);
+    if (m && L() && L().hostOk) {
+      try { const u = new URL(location.href); u.searchParams.delete('join'); history.replaceState(history.state, '', u.pathname + u.search + u.hash); } catch (e) {}
+      if (!(L().user && !L().user.child) && !((JSON.parse(localStorage.getItem('sarang_sync') || 'null') || {}).uid)) setTimeout(() => openJoin({ inviteId: m[1] }), 300);
+      else setTimeout(() => toast('이 기기는 부모님 계정으로 쓰고 있어서 아이 폰으로 연결할 수 없어요. 아이 폰에서 링크를 열어 주세요.'), 400);
+    }
+    syncLogin();
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
 </script>
 <script>/* ===== 현황판 (2026-10-03 대표 확정, 시안 https://claude.ai/artifact/WfiJbCo3ygZHqaYWpwaPCa) =====
@@ -25799,7 +26399,7 @@ window.DONATE_CORE = (function(){
         <div class="db-sub" id="dbSub" role="group" aria-label="학습 현황 나누어 보기"><button type="button" class="db-sub-i" data-dbsub="time">시간</button><button type="button" class="db-sub-i" data-dbsub="perf">교육 성과</button></div>
         <button type="button" class="db-nav-i" data-dbnav="mgmt">${svg(ICON.mgmt)}<span>학습 관리</span></button>
         <button type="button" class="db-nav-i" data-dbnav="rep">${svg(ICON.rep)}<span>리포트</span></button>
-        <button type="button" class="db-nav-i soon" aria-disabled="true" data-dbnav="hw">${svg(ICON.hw)}<span>숙제</span><em>준비 중</em></button>
+        <button type="button" class="db-nav-i" data-dbnav="hw">${svg(ICON.hw)}<span>숙제</span></button>
         <div class="db-nav-slot">새 기능은 이 아래로 추가돼요</div>
       </nav>
       <div class="db-main" id="dbMain">
@@ -25834,6 +26434,7 @@ window.DONATE_CORE = (function(){
         </div>
         </div>
         <div class="db-view" id="dbRep" hidden></div>
+        <div class="db-view db-hw" id="dbHw" hidden></div>
         <div class="db-view db-mg" id="dbMgmt" hidden>
           <div class="db-mg-steps" role="tablist" aria-label="학습 관리 순서">
             <button type="button" role="tab" class="db-mg-st" id="dbMgT1" data-mgst="week" aria-controls="dbMgS1"><i>1</i><span>시간표 설정</span></button>
@@ -25858,7 +26459,7 @@ window.DONATE_CORE = (function(){
       if (b.dataset.dbnav === 'stat' && !isTod()) { if (view === 'stat') { subOpen = !subOpen; paintSub(); return; } subOpen = true; if (guard(() => setView('stat'))) return; setView('stat'); return; }
       if (b.dataset.dbsub) { const x = b.dataset.dbsub; setDrawer(false); const go = () => { sub = x; subOpen = true; if (view === 'stat') { render(); window.scrollTo(0, Math.min(window.scrollY, Math.max(0, root.getBoundingClientRect().top + window.scrollY - 12))); } else setView('stat'); };
         if (view !== 'stat' && guard(go)) return; go(); return; }
-      if (b.dataset.dbnav === 'stat' || b.dataset.dbnav === 'rep' || b.dataset.dbnav === 'mgmt') { const v = b.dataset.dbnav; setDrawer(false); if (v !== 'mgmt' && guard(() => setView(v))) return; if (v === 'mgmt') { if (view === 'mgmt') return; step = 'week'; } setView(v); return; }
+      if (b.dataset.dbnav === 'stat' || b.dataset.dbnav === 'rep' || b.dataset.dbnav === 'mgmt' || b.dataset.dbnav === 'hw') { const v = b.dataset.dbnav; setDrawer(false); if (v !== 'mgmt' && guard(() => setView(v))) return; if (v === 'mgmt') { if (view === 'mgmt') return; step = 'week'; } setView(v); return; }
       if (b.dataset.mg) { if (!mgRead()) mgStart(); const N = NAV(); if (N && N.openFrom) N.openFrom(b.dataset.mg, 'dash'); return; }
       if (b.dataset.mgst) return mgStep(b.dataset.mgst, true);
       if (b.id === 'dbMgNext') return mgStep('subj', true);
@@ -25905,16 +26506,16 @@ window.DONATE_CORE = (function(){
   }
   /* 왼쪽 메뉴: 학습 현황 / 리포트 */
   function setView(v){
-    if (v !== 'stat' && v !== 'rep' && v !== 'mgmt') return;
+    if (v !== 'stat' && v !== 'rep' && v !== 'mgmt' && v !== 'hw') return;
     if (v === 'mgmt' && isTod()) v = 'stat';
     if (v !== 'rep' && rep) closeRep(true);
     if (v !== 'mgmt') { weekOff(); padOff(); }
     view = v;
     root.querySelectorAll('[data-dbnav]').forEach(b => { const o = b.dataset.dbnav === v; b.classList.toggle('on', o); if (o) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
-    $('dbStat').hidden = v !== 'stat'; $('dbRep').hidden = v !== 'rep'; $('dbMgmt').hidden = v !== 'mgmt';
-    $('dbTitle').textContent = v === 'rep' ? '리포트' : v === 'mgmt' ? '학습 관리' : statTitle();
+    $('dbStat').hidden = v !== 'stat'; $('dbRep').hidden = v !== 'rep'; $('dbMgmt').hidden = v !== 'mgmt'; $('dbHw').hidden = v !== 'hw';
+    $('dbTitle').textContent = v === 'rep' ? '리포트' : v === 'mgmt' ? '학습 관리' : v === 'hw' ? '숙제' : statTitle();
     paintSub();
-    if (v === 'stat') render(); else if (v === 'mgmt') paintMgmt(); else paintRep();
+    if (v === 'stat') render(); else if (v === 'mgmt') paintMgmt(); else if (v === 'hw') { if (window.SARANG_HW) SARANG_HW.paint($('dbHw')); } else paintRep();   // 숙제 화면은 src/kidmode.js
     window.scrollTo(0, Math.min(window.scrollY, Math.max(0, root.getBoundingClientRect().top + window.scrollY - 12)));   // 긴 학습 현황 아래에서 짧은 리포트로 바꾸면 빈 곳에 남지 않게
   }
   /* 학습 현황 소메뉴: 시간(공부한 날·연속·공부 시간·주별 공부·공부한 날 달력·오늘 복습) / 교육 성과(완료율·과목별 진도·많이 틀린 단원). 0~4세 놀이 현황은 나누지 않음 */
@@ -25923,8 +26524,9 @@ window.DONATE_CORE = (function(){
     if (!root) return;
     const T0 = isTod(), box = $('dbSub'), sb = root.querySelector('[data-dbnav="stat"]');
     root.classList.toggle('sub-time', !T0 && sub === 'time'); root.classList.toggle('sub-perf', !T0 && sub === 'perf');
-    box.hidden = T0 || !subOpen;
-    if (T0) sb.removeAttribute('aria-expanded'); else sb.setAttribute('aria-expanded', String(subOpen));
+    const shown = !T0 && subOpen && view === 'stat';   // 학습 현황을 볼 때만 펼침 (판 57 1차 검수: 학습 관리·리포트에서도 펼쳐져 가로 폰에서 메뉴 위가 잘림)
+    box.hidden = !shown;
+    if (T0) sb.removeAttribute('aria-expanded'); else sb.setAttribute('aria-expanded', String(shown));
     box.querySelectorAll('[data-dbsub]').forEach(b => { const o = view === 'stat' && b.dataset.dbsub === sub; b.classList.toggle('on', o); if (o) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
   }
   const narrow = () => !!root && root.querySelector('.db-ph') && getComputedStyle(root.querySelector('.db-ph')).display !== 'none';   // 줄인 판인지 (dash.css 가 정함)
@@ -26327,7 +26929,7 @@ window.DONATE_CORE = (function(){
     try { if (on) sessionStorage.setItem(KEEP, '1'); else sessionStorage.removeItem(KEEP); } catch (e) {}
     if (!on) { if (drawer) setDrawer(false); if (rep) closeRep(true); weekOff(); padOff(); return; }
     if (view === 'mgmt' && isTod()) setView('stat');
-    fitW(); if (view === 'rep') paintRep(); else if (view === 'mgmt') { render(); paintMgmt(); } else render(); paintOpen();
+    fitW(); if (view === 'rep') paintRep(); else if (view === 'mgmt') { render(); paintMgmt(); } else render(); if (view === 'hw' && window.SARANG_HW) SARANG_HW.paint($('dbHw')); paintOpen();
   }
   document.addEventListener('hub:refresh', () => { if (!on) return; if (view === 'rep') paintRep(); else render(); if (view === 'mgmt') paintMgmt(); });
   /* 아이를 바꾸면 앱이 새로 켜짐: 현황판에서 바꿨으면 다시 현황판으로 */
