@@ -5146,6 +5146,32 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
   .db:not(.open) .a-chart,.db:not(.open) .a-cal{display:none}
   .db:not(.open) .db-weak-i:nth-child(n+3){display:none}
 }
+/* ===== 학습 현황 소메뉴 '시간' · '교육 성과' (2026-10-04 대표): 학습 현황을 누르면 아래로 펼쳐짐 ===== */
+.db-sub{display:grid;gap:2px;margin:-2px 0 4px;padding-left:30px}
+.db-sub[hidden]{display:none}
+.db-sub-i{min-height:44px;padding:8px 10px;border:0;border-radius:10px;background:none;color:var(--sub);font:inherit;font-size:14px;font-weight:600;text-align:left;cursor:pointer}
+.db-sub-i:hover{background:var(--soft)}
+.db-sub-i.on{background:var(--soft);color:var(--pri);font-weight:800}
+.db-sub-i:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.db.w-rail .db-sub{padding-left:0;margin:0 0 4px}
+.db.w-rail .db-sub-i{padding:6px 2px;font-size:11px;text-align:center;line-height:1.25}
+.db.w-phone .db-sub{padding-left:30px}
+.db.w-phone .db-sub-i{font-size:14px;text-align:left}
+.db.sub-time .a-subj,.db.sub-time .a-weak{display:none}
+.db.sub-perf .a-time,.db.sub-perf .a-chart,.db.sub-perf .a-cal,.db.sub-perf .a-rv,.db.sub-perf .a-more{display:none!important}
+.db-tiles.n2{grid-template-columns:repeat(2,minmax(0,1fr))}
+.db-tiles.n1{grid-template-columns:minmax(0,1fr)}
+.db.sub-time .db-grid{grid-template-areas:"time time" "chart cal" "rv rv"}
+.db.sub-perf .db-grid{grid-template-areas:"subj subj" "weak weak"}
+@container dbm (max-width:819px){
+  .db-tiles.n2{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .db.sub-time .db-grid{grid-template-areas:"time time" "chart chart" "cal rv"}
+}
+@container dbm (max-width:560px){ .db.sub-time .db-grid{grid-template-areas:"time" "chart" "cal" "rv"} .db.sub-perf .db-grid{grid-template-areas:"subj" "weak"} }
+@container dbm (max-width:480px){
+  .db.sub-time .db-grid{grid-template-areas:"time" "rv" "more" "chart" "cal"}
+  .db.sub-perf:not(.open) .db-weak-i:nth-child(n+3){display:grid}   /* 교육 성과에는 '자세히 보기'가 없으니 틀린 단원 3개 다 */
+}
 @media (prefers-reduced-motion:reduce){.db-nav{transition:none}}
 @media print{#dashPane{display:none!important}}
 /* ===== 학습 관리 (2026-10-04 대표): 과목 카드 → 과목 화면에서 시작 범위 → 저장 ===== */
@@ -5216,6 +5242,17 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
 @media (max-width:340px){.db-mg-st{font-size:13.5px;gap:5px;padding:6px}.db-mg-st i{width:20px;height:20px;font-size:12px}}
 .db-mg-school .db-more{margin-top:0}
 @media (max-height:520px){.db-mg-bar{position:static;box-shadow:none}}   /* 가로 폰·플립 겉화면처럼 낮은 화면: 붙어 있는 단추 칸이 시간표·과목 카드를 가리지 않게 목록 끝에 둠 */
+</style>
+<style id="sarang-pwa">/* PC 바탕화면 앱 바로가기 묻는 창 (src/pwa.js, 2026-10-04) */
+.pwa-ask{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:16px;background:rgba(10,14,22,.45)}
+.pwa-box{width:min(380px,100%);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:24px 22px 18px;text-align:center;word-break:keep-all}
+.pwa-box img{display:block;margin:0 auto 12px;border-radius:14px}
+.pwa-box h3{margin:0 0 8px;font-size:18px;line-height:1.4}
+.pwa-box p{margin:0 0 18px;font-size:14px;line-height:1.55;color:var(--sub)}
+.pwa-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pwa-btns button{min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.pwa-btns button.pri{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
+.pwa-btns button:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
 </style>
 <style id="sarang-settings">/* 아래로 끌어도 페이지가 새로고침되지 않게 (2026-10-02 대표: 설치한 안드로이드 앱에서 드래그하면 새로고침됨 — 크롬 '당겨서 새로고침'). 맨 위·맨 아래 튕김만 막고 스크롤은 그대로 */
 html,body{overscroll-behavior-y:contain}
@@ -25615,7 +25652,7 @@ window.DONATE_CORE = (function(){
     m = Math.round(m); const h = Math.floor(m / 60), r = m % 60, u = t => html ? `<small>${t}</small>` : t;
     return h ? `${h}${u('시간')}${r ? (html ? ' ' : ' ') + r + u('분') : ''}` : `${r}${u('분')}`;
   }
-  let on = false, open = false, allSubj = false, drawer = false, root = null, view = 'stat', tOpen = false, rep = null, repPushed = false, repPop = false;
+  let on = false, open = false, allSubj = false, drawer = false, root = null, view = 'stat', sub = 'time', subOpen = true, tOpen = false, rep = null, repPushed = false, repPop = false;
 
   /* ---------- 기록 읽기 ---------- */
   function sshId(s){
@@ -25752,15 +25789,16 @@ window.DONATE_CORE = (function(){
     x: '<path d="M6 6l12 12M18 6L6 18"/>'
   };
   const svg = (d, c) => `<svg class="${c || ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
-  function mount(){
+  function mount(){   // 왼쪽 메뉴: 학습 현황 → 학습 관리 → 리포트 → 숙제 (2026-10-04 대표)
     if (root || !$('sarangDashboard')) return;
     root = document.createElement('section'); root.id = 'dashPane'; root.className = 'db'; root.hidden = true; root.setAttribute('aria-label', '현황판');
     root.innerHTML = `<div class="db-scrim" id="dbScrim" hidden></div>
       <nav class="db-nav" id="dbNav" aria-label="현황판 기능">
         <div class="db-nav-t">현황판</div>
-        <button type="button" class="db-nav-i on" aria-current="page" data-dbnav="stat">${svg(ICON.stat)}<span>학습 현황</span></button>
-        <button type="button" class="db-nav-i" data-dbnav="rep">${svg(ICON.rep)}<span>리포트</span></button>
+        <button type="button" class="db-nav-i on" aria-current="page" data-dbnav="stat" aria-expanded="true" aria-controls="dbSub">${svg(ICON.stat)}<span>학습 현황</span></button>
+        <div class="db-sub" id="dbSub" role="group" aria-label="학습 현황 나누어 보기"><button type="button" class="db-sub-i" data-dbsub="time">시간</button><button type="button" class="db-sub-i" data-dbsub="perf">교육 성과</button></div>
         <button type="button" class="db-nav-i" data-dbnav="mgmt">${svg(ICON.mgmt)}<span>학습 관리</span></button>
+        <button type="button" class="db-nav-i" data-dbnav="rep">${svg(ICON.rep)}<span>리포트</span></button>
         <button type="button" class="db-nav-i soon" aria-disabled="true" data-dbnav="hw">${svg(ICON.hw)}<span>숙제</span><em>준비 중</em></button>
         <div class="db-nav-slot">새 기능은 이 아래로 추가돼요</div>
       </nav>
@@ -25816,6 +25854,10 @@ window.DONATE_CORE = (function(){
       if (b.id === 'dbMore') { open = !open; paintOpen(); if (open) chart(); return; }
       if (b.id === 'dbAllSubj') { allSubj = !allSubj; paintSubjMode(); return; }
       if (b.id === 'dbTMore') { tOpen = !tOpen; paintTOpen(); return; }
+      /* 학습 현황: 누르면 아래로 '시간'·'교육 성과' 소메뉴가 펼쳐짐 (2026-10-04 대표). 이미 학습 현황이면 접고 펴기만, 서랍은 닫지 않음 */
+      if (b.dataset.dbnav === 'stat' && !isTod()) { if (view === 'stat') { subOpen = !subOpen; paintSub(); return; } subOpen = true; if (guard(() => setView('stat'))) return; setView('stat'); return; }
+      if (b.dataset.dbsub) { const x = b.dataset.dbsub; setDrawer(false); const go = () => { sub = x; subOpen = true; if (view === 'stat') { render(); window.scrollTo(0, Math.min(window.scrollY, Math.max(0, root.getBoundingClientRect().top + window.scrollY - 12))); } else setView('stat'); };
+        if (view !== 'stat' && guard(go)) return; go(); return; }
       if (b.dataset.dbnav === 'stat' || b.dataset.dbnav === 'rep' || b.dataset.dbnav === 'mgmt') { const v = b.dataset.dbnav; setDrawer(false); if (v !== 'mgmt' && guard(() => setView(v))) return; if (v === 'mgmt') { if (view === 'mgmt') return; step = 'week'; } setView(v); return; }
       if (b.dataset.mg) { if (!mgRead()) mgStart(); const N = NAV(); if (N && N.openFrom) N.openFrom(b.dataset.mg, 'dash'); return; }
       if (b.dataset.mgst) return mgStep(b.dataset.mgst, true);
@@ -25870,9 +25912,20 @@ window.DONATE_CORE = (function(){
     view = v;
     root.querySelectorAll('[data-dbnav]').forEach(b => { const o = b.dataset.dbnav === v; b.classList.toggle('on', o); if (o) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     $('dbStat').hidden = v !== 'stat'; $('dbRep').hidden = v !== 'rep'; $('dbMgmt').hidden = v !== 'mgmt';
-    $('dbTitle').textContent = v === 'rep' ? '리포트' : v === 'mgmt' ? '학습 관리' : isTod() ? '놀이 현황' : '학습 현황';
+    $('dbTitle').textContent = v === 'rep' ? '리포트' : v === 'mgmt' ? '학습 관리' : statTitle();
+    paintSub();
     if (v === 'stat') render(); else if (v === 'mgmt') paintMgmt(); else paintRep();
     window.scrollTo(0, Math.min(window.scrollY, Math.max(0, root.getBoundingClientRect().top + window.scrollY - 12)));   // 긴 학습 현황 아래에서 짧은 리포트로 바꾸면 빈 곳에 남지 않게
+  }
+  /* 학습 현황 소메뉴: 시간(공부한 날·연속·공부 시간·주별 공부·공부한 날 달력·오늘 복습) / 교육 성과(완료율·과목별 진도·많이 틀린 단원). 0~4세 놀이 현황은 나누지 않음 */
+  const statTitle = () => isTod() ? '놀이 현황' : '학습 현황 · ' + (sub === 'perf' ? '교육 성과' : '시간');
+  function paintSub(){
+    if (!root) return;
+    const T0 = isTod(), box = $('dbSub'), sb = root.querySelector('[data-dbnav="stat"]');
+    root.classList.toggle('sub-time', !T0 && sub === 'time'); root.classList.toggle('sub-perf', !T0 && sub === 'perf');
+    box.hidden = T0 || !subOpen;
+    if (T0) sb.removeAttribute('aria-expanded'); else sb.setAttribute('aria-expanded', String(subOpen));
+    box.querySelectorAll('[data-dbsub]').forEach(b => { const o = view === 'stat' && b.dataset.dbsub === sub; b.classList.toggle('on', o); if (o) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
   }
   const narrow = () => !!root && root.querySelector('.db-ph') && getComputedStyle(root.querySelector('.db-ph')).display !== 'none';   // 줄인 판인지 (dash.css 가 정함)
   function paintSubjMode(){
@@ -25898,7 +25951,7 @@ window.DONATE_CORE = (function(){
     const T0 = isTod(), w0 = Wd(), WORDS = { p: w0.p, s: w0.s, weekH: T0 ? '주별 놀이' : '주별 공부', weekS: T0 ? '최근 5주 · 장 수' : '최근 5주 · 과목 수', calH: T0 ? '논 날' : '공부한 날', tH: T0 ? '놀이 시간' : '공부 시간', tS: T0 ? '화면 놀이 (분)' : '바로 풀기 (분)', tP: T0 ? '뽑은 장 수' : '뽑아서 푼 장 수' };
     root.querySelectorAll('[data-w]').forEach(e => { const t = WORDS[e.dataset.w]; if (t && e.textContent !== t) e.textContent = t; });
     root.classList.toggle('tod', T0);
-    if (view === 'stat') $('dbTitle').textContent = T0 ? '놀이 현황' : '학습 현황';
+    paintSub(); if (view === 'stat') $('dbTitle').textContent = statTitle();
     { const mb = root.querySelector('[data-dbnav="mgmt"]'); if (mb) mb.hidden = T0; }
     const navT = root.querySelector('[data-dbnav="stat"] span'); if (navT) navT.textContent = T0 ? '놀이 현황' : '학습 현황';
     if (T0) {   // 0~4세 놀이: 숫자 4개 = 논 날·연속·이번 주 뽑은 장·화면으로 한 장
@@ -25907,14 +25960,14 @@ window.DONATE_CORE = (function(){
         + tile('연속 놀이', streak(rec, today), '일', '오늘 아직 안 했으면 어제까지')
         + tile('뽑아서 한 놀이', ws.pN, '장', '이번 주')
         + tile('화면 놀이', ws.sN, '장', '이번 주 끝까지 한 장');
-      $('dbTiles').classList.remove('n3');
+      $('dbTiles').classList.remove('n1', 'n2');
       cal(rec, today); chart(); timeBox(today);
       return;
     }
-    $('dbTiles').classList.add('n3');
-    $('dbTiles').innerHTML = tile('이번 주 공부한 날', week, `/${past}일`, `${WD[1]}요일부터 오늘까지`)
+    $('dbTiles').classList.toggle('n2', sub !== 'perf'); $('dbTiles').classList.toggle('n1', sub === 'perf');   // 시간: 공부한 날·연속 / 교육 성과: 완료율
+    $('dbTiles').innerHTML = sub !== 'perf' ? tile('이번 주 공부한 날', week, `/${past}일`, `${WD[1]}요일부터 오늘까지`)
       + tile('연속 공부', streak(rec, today), '일', '쉬는 요일은 빼고 셈')
-      + tile('스마트 학습 완료율', fin[0] ? Math.round(fin[1] / fin[0] * 100) : '-', fin[0] ? '%' : '', fin[0] ? `최근 7일 ${fin[0]}번 중 ${fin[1]}번 끝까지` : '스마트 학습 기록이 아직 없어요');
+      : tile('스마트 학습 완료율', fin[0] ? Math.round(fin[1] / fin[0] * 100) : '-', fin[0] ? '%' : '', fin[0] ? `최근 7일 ${fin[0]}번 중 ${fin[1]}번 끝까지` : '스마트 학습 기록이 아직 없어요');
     /* 과목별 진도 */
     const rows = subs.map(row);
     $('dbSubj').innerHTML = rows.length ? rows.map(r => `<tr class="${r.st === 'late' ? 'late' : 'ok'}"><td class="db-s">${esc(r.name)}</td><td class="db-u"><b>${esc(r.title)}</b><small>${esc([r.tag, r.rest].filter(Boolean).join(' · '))}</small></td><td class="db-cp">${r.pct == null ? '<span class="db-na">-</span>' : `<div class="db-bar" role="img" aria-label="이번 학기 ${r.pct}%"><i style="width:${r.pct}%"></i></div>`}</td><td>${pill(r)}</td></tr>`).join('')
@@ -26284,6 +26337,54 @@ window.DONATE_CORE = (function(){
   }, 0));
   document.addEventListener('DOMContentLoaded', () => { setTimeout(() => { try { notePct(); } catch (e) {} }, 4000); repSettings(); });   // 현황판을 안 열어도 이 달 진도를 적어 둠 (과목 학습지를 읽은 뒤)
   window.SARANG_DASH = { show, render, manage, guard, view: v => setView(v), get viewNow(){ return view; }, mgActive: () => !!mgRead(), mgChanged };
+})();
+</script>
+<script>/* PC 바탕화면 앱 바로가기 (2026-10-04 대표): lovedu.kr 에서 PC 로 앱에 들어오면 "바탕화면에 앱 바로가기를 만들까요?" → 예 → 브라우저 설치 창(크롬·엣지).
+   - 앱 설치 정보(manifest)·서비스 워커는 lovedu.kr 에서만 붙임 (시험판 claude.ai 에서는 아무것도 안 함). 검사는 localhost·127.0.0.1 + ?pwa=1
+   - 묻는 때: PC(마우스, 폰·태블릿 아님) · 이미 앱 창으로 연 게 아님 · 브라우저가 설치할 수 있다고 알려 줌(beforeinstallprompt, 크롬·엣지만) ·
+     가입·둘러보기·다른 창이 떠 있지 않을 때. '아니요'면 30일 동안 안 물음, 설치하면 다시 안 물음
+   - 파일 manifest.webmanifest·sw.js·아이콘은 build.py 가 앱 옆에 복사 (src/pwa/) */
+(function(){
+  const host = location.hostname, LIVE = host === 'lovedu.kr' || host === 'www.lovedu.kr', TEST = /^(localhost|127\.0\.0\.1)$/.test(host) && /[?&]pwa=1(&|$)/.test(location.search);
+  if (!(LIVE || TEST) || !('serviceWorker' in navigator)) return;
+  const K = 'sarang_pwa', DAY = 864e5;
+  const ld = () => { try { return JSON.parse(localStorage.getItem(K) || '{}') || {}; } catch (e) { return {}; } };
+  const sv = o => { try { localStorage.setItem(K, JSON.stringify(o)); } catch (e) {} };
+  const l = document.createElement('link'); l.rel = 'manifest'; l.href = 'manifest.webmanifest'; document.head.appendChild(l);
+  addEventListener('load', () => { navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {}); });
+  const standalone = () => matchMedia('(display-mode: standalone)').matches || matchMedia('(display-mode: window-controls-overlay)').matches;
+  const pc = () => !/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent) && matchMedia('(pointer: fine)').matches && !(navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
+  let ev = null, box = null, tries = 0;
+  addEventListener('appinstalled', () => { sv({ done: Date.now() }); close(); });
+  addEventListener('beforeinstallprompt', e => {
+    e.preventDefault(); ev = e;
+    const o = ld(); if (o.done || (o.no && Date.now() - o.no < 30 * DAY) || standalone() || !pc()) return;
+    tries = 0; setTimeout(when, 1500);
+  });
+  /* 가입 화면·둘러보기·가입 마무리·설정·미리보기 창이 떠 있으면 사라질 때까지 기다림 (최대 10분) */
+  function busy(){
+    const vis = id => { const e = document.getElementById(id); return !!e && !e.hidden && !!e.getClientRects().length; };
+    return vis('lgGate') || vis('onboard') || vis('lgJoin') || vis('ssPreview') || vis('screenView') || vis('donateView') || !!document.querySelector('.tour, .db-mg-ask:not([hidden])') || document.getElementById('app').classList.contains('set-open') || document.hidden;
+  }
+  function when(){ if (!ev || box) return; if (busy()) { if (++tries < 300) setTimeout(when, 2000); return; } ask(); }
+  function ask(){
+    box = document.createElement('div'); box.className = 'pwa-ask'; box.id = 'pwaAsk'; box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-labelledby', 'pwaT');
+    box.innerHTML = '<div class="pwa-box"><img src="icon-192.png" alt="" width="56" height="56"><h3 id="pwaT">바탕화면에 앱 바로가기를 만들까요?</h3><p>다음부터 바탕화면의 사랑교육 아이콘을 누르면 앱이 바로 열려요.</p>'
+      + '<div class="pwa-btns"><button type="button" data-pwa="no">아니요</button><button type="button" class="pri" data-pwa="yes">예</button></div></div>';
+    document.body.appendChild(box);
+    box.querySelector('[data-pwa="yes"]').focus({ preventScroll: true });
+    box.addEventListener('click', e => { const b = e.target.closest('[data-pwa]'); if (b) answer(b.dataset.pwa === 'yes'); else if (e.target === box) answer(false); });
+    box.addEventListener('keydown', e => { if (e.key === 'Escape') answer(false); });
+  }
+  function close(){ if (box) { box.remove(); box = null; } }
+  function answer(yes){
+    close();
+    if (!yes || !ev) { sv({ no: Date.now() }); return; }
+    const e = ev; ev = null;
+    e.prompt();   // 브라우저가 한 번 더 확인함 (보안상 건너뛸 수 없음). 크롬·엣지(윈도)는 설치하면 바탕화면·시작 메뉴에 아이콘
+    e.userChoice.then(r => { sv(r && r.outcome === 'accepted' ? { done: Date.now() } : { no: Date.now() }); }).catch(() => {});
+  }
+  window.SARANG_PWA = { ask: () => { if (ev && !box) ask(); }, get ready(){ return !!ev; } };   // 검사용
 })();
 </script>
 <script>/* ===== 배경음악 (0~7세, 2026-10-02 대표: 아기자기한 배경음, 휴대폰 합성음 말고 외부 무료 곡) =====
