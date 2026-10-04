@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko" data-theme="light">
 <head>
-<meta charset="utf-8"><meta name="robots" content="noindex">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#2c5945">
 <meta name="description" content="사랑교육 - 부모가 매일 가르치는 사랑 학습지. 학교 교과 학습과 영어·한자 학습지를 PDF로 출력해 아이와 함께 공부하세요.">
@@ -1044,9 +1044,10 @@ button.ss-pill:disabled{cursor:default;opacity:1}
 .tb-sheet{aspect-ratio:210/297;background:#fff;border:1px solid var(--line);border-radius:4px;overflow:hidden}
 .tb-sheet canvas{display:block;width:100%;height:100%}
 
+.ss-school[hidden]{display:none}
 .ss-school{display:flex;align-items:center;justify-content:space-between;gap:8px 12px;flex-wrap:wrap;margin-top:10px;font-size:13.5px;color:var(--sub);line-height:1.45}
 .ss-school span{flex:1 1 180px;min-width:0;word-break:keep-all}
-.ss-sync{flex:none;height:34px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit;font-size:13px;cursor:pointer}
+.ss-sync{flex:none;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:8px;background:var(--card);color:var(--ink);font:inherit;font-size:13px;cursor:pointer}
 .ss-sync[hidden]{display:none}
 .ss-sch{display:inline-block;font-size:11px;font-weight:700;line-height:1;padding:3px 6px;border-radius:999px;border:1px solid var(--pri);color:var(--pri);margin-left:6px;vertical-align:middle}
 .ss-legend .ss-sch{margin-left:0}
@@ -1087,7 +1088,7 @@ button.ss-pill:disabled{cursor:default;opacity:1}
 .ss-rate .seg{flex:1;min-width:0}
 #eng-bookunit{display:block;width:100%;height:44px;margin-top:10px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;font-size:15px;text-align:left;text-align-last:left}
 .ss-bookbtns{margin-top:10px}
-/* 모의고사 (메인 화면, 과목 카드 아래) */
+/* 모의시험 (메인 화면, 과목 카드 아래) */
 .exam-card{margin:16px 0 0}
 #subj[hidden]~.exam-card{display:none}
 .exam-card>.label{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;color:var(--ink);margin-bottom:4px}
@@ -1186,7 +1187,7 @@ button.ss-pill:disabled{cursor:default;opacity:1}
 /* 오늘 카드 머리의 '시간표 설정'·'자유 진도설정' 단추 모양은 src/screen-frame.css (.td-pills) */
 .exam-pick .exam-npick{grid-column:1/-1}
 .exam-pick #examN{grid-template-columns:repeat(3,minmax(0,1fr))}
-/* 아래 메뉴 줄 (src/hub-ui.js, 2026-09-29): 오늘 / 모의고사 (유아 놀이는 놀이 모음 / 화면 놀이) — 폰은 화면 아래 가득, 넓으면 가운데 떠 있는 줄. 가입·화면 공부·인쇄에서는 숨김 */
+/* 아래 메뉴 줄 (src/hub-ui.js, 2026-09-29): 오늘 / 모의시험 (유아 놀이는 놀이 모음 / 화면 놀이) — 폰은 화면 아래 가득, 넓으면 가운데 떠 있는 줄. 가입·화면 공부·인쇄에서는 숨김 */
 .tabbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));padding:4px max(6px,env(safe-area-inset-right)) calc(4px + env(safe-area-inset-bottom)) max(6px,env(safe-area-inset-left));background:var(--card);border-top:1px solid var(--line);box-shadow:0 -4px 16px rgba(0,0,0,.06)}
 .tabbar[hidden]{display:none}
 .tabbar button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;min-height:52px;padding:4px 2px;border:0;border-radius:12px;background:none;color:var(--sub);font-size:11.5px;font-weight:600;cursor:pointer}
@@ -1262,6 +1263,17 @@ button.ss-pill:disabled{cursor:default;opacity:1}
 .card.ss-planfold[open]>summary.label::after{transform:translateY(2px) rotate(-135deg)}
 .ss-planfold .ss-src{margin:0 0 8px}
 .eng-extra .actions{margin-top:12px}
+
+/* 오늘 할 공부: 단원 → 단원 진행도 → 학습지 첫 장 (2026-10-04 대표). 칸은 A4 비율로 먼저 자리를 잡음 */
+.ss-lesson[hidden]{display:none}
+.ss-daycard .ss-ubar{margin:10px 0 0}
+.ss-sheet{position:relative;display:block;box-sizing:border-box;width:100%;max-width:440px;margin:12px auto 0;padding:0;aspect-ratio:210/297;background:#fff;border:1px solid var(--line);border-radius:6px;overflow:hidden;cursor:zoom-in;box-shadow:0 1px 6px rgba(0,0,0,.08);font:inherit}
+.ss-sheet[hidden]{display:none}
+.ss-sheet:disabled{cursor:default;opacity:1}
+.ss-sheet canvas{position:absolute;top:0;left:0;display:block;width:100%;height:100%}
+.ss-sheet canvas[hidden]{display:none}
+.ss-sheet-msg{position:absolute;top:0;right:0;bottom:0;left:0;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;color:#6b6f6b}
+.ss-sheet:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
 </style>
 <style id="sarang-design">
 /* 사랑교육 · 따뜻한 종이와 숲의 색 / 화면 전용 디자인 */
@@ -1754,6 +1766,17 @@ textarea.scr-in{resize:vertical}
 #app>.pace-lock-note{box-sizing:border-box;max-width:760px;margin:0 auto 12px}   /* 과목 화면(#app>.pane)과 같은 폭 */
 .pace-lock-note p{flex:1 1 220px;margin:0;font-weight:700}
 .pace-lock-note button{flex:0 0 auto;min-height:44px;padding:6px 16px;border:0;border-radius:10px;background:var(--pri);color:var(--pri-ink);font-size:13.5px;font-weight:700;cursor:pointer}
+
+/* 풀던 중 나가기 물음 (2026-10-04) */
+.scr-ask{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:16px;padding-top:max(16px,env(safe-area-inset-top,0px));padding-bottom:max(16px,env(safe-area-inset-bottom,0px));background:rgba(15,20,18,.5)}
+.scr-ask[hidden]{display:none}
+.scr-ask-card{display:flex;flex-direction:column;gap:6px;width:min(360px,100%);max-height:100%;overflow:auto;padding:20px 18px 16px;border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.2);word-break:keep-all;overflow-wrap:anywhere}
+.scr-ask-card b{font-size:17px}
+.scr-ask-card p{margin:0;color:var(--sub);font-size:14px;line-height:1.6}
+.scr-ask-btns{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px;margin-top:10px}
+.scr-ask-btns button{flex:1 1 120px;min-height:44px;padding:6px 16px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}
+.scr-ask-btns .linkbtn{border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.scr-ask-btns .pri{border:0;background:var(--pri);color:var(--pri-ink)}
 /* ===== 공용 펜 (src/screen/pen.js) ===== */
 .sp-pen{--pen-bg:var(--card,#fff);--pen-ink:var(--ink,#1d2330);--pen-grid:var(--sub,#8a8f99);--pen-model:var(--sub,#8a8f99);max-width:100%}
 .sp-pen.sp-paper{--pen-bg:#fff;--pen-ink:#2b2b2b;--pen-grid:#9a9a9a;--pen-model:#9a9a9a}
@@ -2360,6 +2383,120 @@ html.zm-lock,html.zm-lock body{overflow:hidden}   /* 크게 보는 동안 뒤 �
 .zm-cap{flex:none;display:flex;flex-direction:column;gap:2px;padding:10px 16px 14px;text-align:center;font-size:14px;line-height:1.45;word-break:keep-all}
 .zm-cap b:empty,.zm-cap small:empty{display:none}
 .zm-cap small{font-size:12px;color:rgba(244,246,243,.75)}
+/* ===== 영단어 플래시카드 (src/screen/flash.js, 2026-10-04) ===== */
+html.fc-lock,html.fc-lock body{overflow:hidden}   /* 카드를 보는 동안 뒤 화면이 같이 밀리지 않게 (보던 자리는 그대로) */
+.fc{position:fixed;top:0;right:0;bottom:0;left:0;z-index:2000;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto minmax(170px,1fr) auto auto;gap:12px;align-content:stretch;box-sizing:border-box;overflow-y:auto;overscroll-behavior:contain;background:var(--bg);color:var(--ink);
+  padding:calc(8px + env(safe-area-inset-top,0px)) calc(16px + env(safe-area-inset-right,0px)) calc(16px + env(safe-area-inset-bottom,0px)) calc(16px + env(safe-area-inset-left,0px))}
+.fc[hidden]{display:none}
+.fc>*{min-width:0;width:100%;max-width:560px;justify-self:center}
+.fc-head{display:flex;align-items:center;gap:10px;min-height:48px}
+.fc-x{flex:none;min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--ink);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
+.fc-t{flex:1;min-width:0;font-size:15px;line-height:1.35;word-break:keep-all;overflow-wrap:anywhere}
+.fc-n{flex:none;font-size:14px;font-weight:700;color:var(--sub);font-variant-numeric:tabular-nums;white-space:nowrap}
+.fc-opts{display:flex;gap:8px;justify-content:flex-end}
+.fc-opts button{min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--sub);font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
+.fc-opts button[aria-pressed="true"]{border-color:var(--pri);color:var(--pri);background:var(--soft)}
+.fc-opts button[aria-pressed="true"]::before{content:'✓ '}
+.fc-stage{position:relative;display:flex;align-items:center;min-height:170px;touch-action:pan-y}
+.fc-box{position:relative;flex:1;align-self:center;display:flex;height:100%;min-height:170px;max-height:560px}
+.fc-card{flex:1;display:block;min-height:170px;margin:0;padding:0;border:0;background:none;color:inherit;font:inherit;cursor:pointer;perspective:1200px;-webkit-tap-highlight-color:transparent}
+.fc-card:focus-visible{outline:3px solid var(--pri);outline-offset:4px;border-radius:18px}
+.fc-in{position:relative;display:block;width:100%;height:100%;min-height:170px;transform-style:preserve-3d}
+.fc-face{position:absolute;top:0;right:0;bottom:0;left:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;box-sizing:border-box;padding:24px 20px;border:1px solid var(--line);border-radius:18px;background:var(--card);box-shadow:0 4px 18px rgba(0,0,0,.08);backface-visibility:hidden;-webkit-backface-visibility:hidden;text-align:center;overflow:hidden}
+.fc-b{transform:rotateY(180deg);background:var(--soft)}
+.fc-flipped .fc-in{transform:rotateY(180deg)}
+@media (prefers-reduced-motion:no-preference){.fc-in{transition:transform .38s cubic-bezier(.2,.7,.3,1)}}
+.fc-big{display:block;max-width:100%;font-size:clamp(30px,10vw,56px);font-weight:800;line-height:1.2;word-break:keep-all;overflow-wrap:anywhere}
+.fc-face small{font-size:16px;color:var(--sub);line-height:1.4;word-break:keep-all;overflow-wrap:anywhere}
+.fc-face small:empty{display:none}
+.fc-spk{position:absolute;top:10px;right:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;border:1px solid var(--line);border-radius:50%;background:var(--card);color:var(--pri);cursor:pointer}
+.fc-spk svg{width:22px;height:22px}
+.fc-spk[hidden]{display:none}
+.fc-mark{display:grid;grid-template-columns:1fr 1fr;gap:10px;visibility:hidden}   /* 자리는 늘 잡아 둠: 뒤집어도 단추가 밀리지 않게 */
+.fc-mark.on{visibility:visible}
+.fc-mark button{min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.fc-mark button[data-fk="1"].sel,.fc-mark button[data-fk="1"]:hover{border-color:var(--pri);color:var(--pri)}
+.fc-mark button[data-fk="0"].sel{border-color:var(--sub);color:var(--ink);background:var(--soft)}
+.fc-nav{display:grid;grid-template-columns:1fr 1.2fr 1fr;gap:10px}
+.fc-nav button{min-height:48px;padding:0 8px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:15px;font-weight:700;cursor:pointer;white-space:nowrap}
+.fc-nav button:disabled{opacity:.4;cursor:default}
+.fc-nav .fc-flip{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
+.fc-end{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;padding:20px 0}
+.fc-end[hidden]{display:none}
+.fc-end b{font-size:20px}
+.fc-end span{color:var(--sub);font-size:14.5px}
+.fc-end span:empty{display:none}
+.fc-end-btns{display:flex;flex-direction:column;gap:10px;width:100%;max-width:320px;margin-top:10px}
+.fc-end-btns button{min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.fc-end-btns .fc-pri{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
+.fc-end-btns button[hidden]{display:none}
+.fc.fc-done .fc-stage,.fc.fc-done .fc-mark,.fc.fc-done .fc-nav,.fc.fc-done .fc-opts{display:none}
+.fc.fc-done{grid-template-rows:auto 1fr}
+.fc button:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+/* 가로로 눕힌 폰·낮은 창: 카드는 왼쪽, 단추는 오른쪽 */
+@media (max-height:520px) and (min-width:560px){
+  .fc{grid-template-columns:minmax(0,1fr) minmax(220px,300px);grid-template-rows:auto auto auto 1fr;column-gap:16px}
+  .fc>*{max-width:none}
+  .fc-head{grid-column:1/-1}
+  .fc-stage{grid-column:1;grid-row:2/5}
+  .fc-box{max-height:none}
+  .fc-opts{grid-column:2;grid-row:2;justify-content:stretch}
+  .fc-opts button{flex:1}
+  .fc-mark{grid-column:2;grid-row:3}
+  .fc-nav{grid-column:2;grid-row:4;align-self:start}
+  .fc.fc-done{grid-template-rows:auto 1fr}
+  .fc-end{grid-column:1/-1}
+}
+@media print{.fc{display:none!important}}
+/* ===== 영단어 '외웠는지 확인' (src/screen/vquiz.js, 2026-10-04) — 틀은 플래시카드(.fc, flash.css) ===== */
+.vq-sum{display:flex;flex-wrap:wrap;gap:6px 14px;margin:2px 0 10px;font-size:14px;color:var(--sub)}
+.vq-sum b{font-size:18px;color:var(--ink);margin-right:3px;font-variant-numeric:tabular-nums}
+.vq-entry .info{margin-top:8px}
+.vq-kind{min-height:24px;font-size:13.5px;font-weight:700;color:var(--sub);line-height:24px}
+.vq-kind.chk{color:var(--pri)}
+.vq-card{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;box-sizing:border-box;min-height:170px;padding:24px 20px 52px;border:1px solid var(--line);border-radius:18px;background:var(--card);box-shadow:0 4px 18px rgba(0,0,0,.08);text-align:center;overflow:hidden;outline:none}
+.vq-card small{font-size:15px;color:var(--sub);line-height:1.4;word-break:keep-all;overflow-wrap:anywhere}
+.vq-card small:empty{display:none}
+/* 맞음·틀림 글: 카드 아래쪽 고정 자리 (글이 생겨도 카드·단추가 밀리지 않게) */
+.vq-fb{position:absolute;left:12px;right:12px;bottom:12px;min-height:24px;font-size:15px;font-weight:700;line-height:1.35;word-break:keep-all;overflow-wrap:anywhere}
+.vq-fb.ok{color:var(--pri)}
+.vq-fb.ng{color:var(--ng-ink,#984335)}
+.vq-fb b{margin-left:2px}
+/* 답 칸: 보기 4개(2×2)든 철자 칸이든 같은 높이. 보기는 두 줄 뜻까지 같은 높이(66px)라 문제마다 답 칸이 안 움직임 (영단어 3,255개 뜻 재 봄: 390px 이상 두 줄 안) */
+.vq-ans{display:grid;gap:10px;min-height:142px;align-content:start}
+.vq-ans.c{grid-template-columns:1fr 1fr;grid-auto-rows:minmax(66px,auto)}
+.vq-ans.c button{display:flex;align-items:center;gap:8px;min-height:56px;line-height:1.35;padding:8px 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:15px;font-weight:700;text-align:left;cursor:pointer;word-break:keep-all;overflow-wrap:anywhere}
+.vq-ans.c button i{flex:none;width:22px;height:22px;border-radius:50%;background:var(--soft);color:var(--sub);font-style:normal;font-size:12px;line-height:22px;text-align:center}
+.vq-ans.c button span{min-width:0}
+.vq-ans.c button.ok{border-color:var(--pri);color:var(--pri);background:var(--soft)}
+.vq-ans.c button.ng{border-color:var(--ng,#b54f45);color:var(--ng-ink,#984335);background:var(--ng-bg,#fbefea)}
+.vq-ans.c button:disabled{cursor:default}
+.vq-ans.c button:disabled:not(.ok):not(.ng){opacity:.55}
+.vq-ans.s{grid-template-columns:minmax(0,1fr) auto}
+.vq-ans.s input{min-width:0;min-height:52px;box-sizing:border-box;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:20px}
+.vq-ans.s input.ok{border-color:var(--pri)}
+.vq-ans.s input.ng{border-color:var(--ng,#b54f45)}
+.vq-ans.s button{min-height:52px;padding:0 20px;border:1px solid var(--pri);border-radius:12px;background:var(--pri);color:var(--pri-ink);font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.vq-ans.s button:disabled{opacity:.45;cursor:default}
+.vq-nav{display:grid}
+.vq-nav button{min-height:48px;border:1px solid var(--pri);border-radius:12px;background:var(--pri);color:var(--pri-ink);font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.vq-nav button:disabled{opacity:.4;cursor:default}
+.fc.vq.fc-done .vq-kind,.fc.vq.fc-done .vq-ans,.fc.vq.fc-done .vq-nav,.fc.vq.fc-done .vq-stage{display:none}
+@media (max-width:380px){.vq-ans.c button{font-size:14px;padding:8px 10px}}
+@media (max-width:359px){.vq-ans.c{grid-template-columns:1fr;grid-auto-rows:minmax(56px,auto)}.vq-ans{min-height:254px}}
+/* 플래시카드 카드 위 외운 정도 표시 */
+.fc-tag{position:absolute;top:12px;left:12px;z-index:1;padding:3px 10px;border-radius:999px;background:var(--soft);color:var(--sub);font-size:12.5px;font-weight:700;pointer-events:none}
+.fc-tag.mem{color:var(--pri)}
+.fc-tag[hidden]{display:none}
+/* 가로로 눕힌 폰·낮은 창: 카드 왼쪽, 답 칸·다음 오른쪽 */
+@media (max-height:520px) and (min-width:560px){
+  .fc.vq{grid-template-rows:auto auto 1fr auto}
+  .fc.vq .vq-kind{grid-column:1/-1}
+  .fc.vq .vq-stage{grid-column:1;grid-row:3/5}
+  .fc.vq .vq-ans{grid-column:2;grid-row:3;grid-template-columns:1fr;grid-auto-rows:minmax(44px,auto);min-height:0}
+  .fc.vq .vq-ans.c button{min-height:44px}
+  .fc.vq .vq-nav{grid-column:2;grid-row:4;align-self:end}
+}
 </style>
 <style id="play-screen">/* ===== 유아 화면 놀이 (src/play/screen.js) — 담당: 화면 놀이 에이전트 =====
    전체 화면 덮개. 종이(그림)는 늘 흰색, 둘레는 앱 색(밝게·어둡게). 누를 것은 모두 56px 이상 */
@@ -3422,12 +3559,21 @@ async function makePdf(list, tick){
   }
   return HUB_TODAY.ssh.toPdf(jpgs);
 }
+/* 현황판 놀이 기록 (2026-10-04): play_log = { 'YYYY-M-D': { p: 뽑은 장 수, s: 화면으로 끝낸 장 수 } }, 날짜 70개. 놀이 화면 시간은 SARANG_SCREEN.clock('play') */
+function logPlay(k, n){
+  let m = {}; try { const v = JSON.parse(localStorage.getItem('play_log')); if (v && typeof v === 'object' && !Array.isArray(v)) m = v; } catch (e) {}
+  const d = new Date(), t = `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`, o = m[t] = m[t] && typeof m[t] === 'object' ? m[t] : {};
+  o[k] = (+o[k] || 0) + n;
+  Object.keys(m).sort((a, b) => new Date(a) - new Date(b)).slice(0, -70).forEach(x => delete m[x]);
+  try { localStorage.setItem('play_log', JSON.stringify(m)); } catch (e) {}
+}
+const clock = on => { const C = W.SARANG_SCREEN && W.SARANG_SCREEN.clock; if (C) try { on ? C.start('play') : C.stop(); } catch (e) {} };
 async function pdf(list, name, tick){
   list = list.map(x => typeof x === 'string' ? byId(x) : x).filter(Boolean);
   if (!list.length) return { ok: false, msg: '뽑을 장이 없어요.' };
   const blob = await makePdf(list, tick), d = new Date();
   const res = await HUB_TODAY.savePdf(blob, name || `놀이모음_${d.getMonth() + 1}월${d.getDate()}일_${list.length}장.pdf`);
-  if (res && res.ok) markPrinted(list.map(s => s.id));
+  if (res && res.ok) { markPrinted(list.map(s => s.id)); logPlay('p', list.length); }
   return res || { ok: false, msg: 'PDF를 저장하지 못했어요.' };
 }
 /* 섞어서 n장: 그 난이도에서 놀이마다 골고루, 안 뽑은 장 먼저(뽑은 장은 오래된 것부터 뒤로) */
@@ -3599,9 +3745,9 @@ function onClick(e){
       /* 여러 번에 나눈 장(덧붙는 묶음 screenSteps): 앞 번을 다 하면 '다음 ▶' 으로 이어짐. 마지막 번을 다 하면 '✓ 했어요' */
       const steps = W.PLAY.extSteps(s, { wide: innerWidth > (innerHeight - 72) * 1.15 }) || [s];   // 가로로 넓은 화면이면 가로 배치
       const optsAt = i => ({ next: i + 1 < steps.length ? { sheet: steps[i + 1], opts: optsAt(i + 1) } : null,
-        onClose(r){ if (r && r.replaced) return; if (r && r.done && i === steps.length - 1) { markDone(s.id); refreshMarks(); } const el = $('play') && $('play').querySelector(`.pl-sh[data-id="${s.id}"]`); if (el) el.focus({ preventScroll: true }); } });
-      try { PLAY_SCREEN.open(steps[0], optsAt(0)); }
-      catch (er) { say('이 놀이를 열지 못했어요. 다시 눌러 주세요.'); if (W.console) console.warn('PLAY_SCREEN', er); }
+        onClose(r){ if (r && r.replaced) return; clock(false); if (r && r.done && i === steps.length - 1) { markDone(s.id); logPlay('s', 1); refreshMarks(); } const el = $('play') && $('play').querySelector(`.pl-sh[data-id="${s.id}"]`); if (el) el.focus({ preventScroll: true }); } });
+      try { if (PLAY_SCREEN.open(steps[0], optsAt(0)) !== false) clock(true); }
+      catch (er) { clock(false); say('이 놀이를 열지 못했어요. 다시 눌러 주세요.'); if (W.console) console.warn('PLAY_SCREEN', er); }
     } else say('화면 놀이는 아직 준비 중이에요. 곧 열어 드릴게요.');
     return;
   }
@@ -4384,8 +4530,8 @@ html.ps-lock .tod-layer,html:has(.ps-root) .tod-layer,html:has(.ss-pv:not([hidde
   const LS = window.localStorage, KEY = 'hub_kids', IDS = ['c1', 'c2', 'c3'];
   /* 기기마다 다른 것 (login.js DENY 와 같음): 아이를 바꿔도 그대로, 서버에도 안 올림 */
   const DEVICE = [/^sarang_(theme|splash|sync)/, /^sarang_session_/, /^firebase/, /^donate_/, /^hub_printer$/, /^scr_rate$/, /^el-settings$/];
-  /* 부모·계정 것: 아이 기록에 넣지 않음 (hub_kids 목록, 다른 아이 기록 묶음) */
-  const SHARED = [/^hub_kids$/, /^hub_kid_/];
+  /* 부모·계정 것: 아이 기록에 넣지 않음 (hub_kids 목록, 다른 아이 기록 묶음, 리포트 알림 설정 hub_report — src/dash.js) */
+  const SHARED = [/^hub_kids$/, /^hub_kid_/, /^hub_report$/];
   /* 부모가 정한 것: 아이 기록과 함께 올라가지만, 바꿀 아이 기록에 없으면 지금 값을 이어 씀 (화면 안내를 본 기록, 공부 알림 켜고 끄기) */
   const CARRY = ['hub_tour', 'hub_notify'];
   const deviceKey = k => DEVICE.some(r => r.test(k));
@@ -4736,14 +4882,14 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
 #settings .set-child .lg-ins .linkbtn{flex:1 1 0;min-width:0;padding:0 10px}
 @media (max-width:339px){.lg-ins{flex-direction:column}}
 </style>
-<style id="sarang-dash">/* ===== 대시보드 (src/dash.js, 2026-10-03 대표). 색·글꼴은 앱 값 그대로(--pri·--soft·--card·--line·--sub·--ok-*·--warn-*, 나이 단계 테마·어두운 화면을 따라감),
-   칸은 앱 .card (둥글기 15·안쪽 23·그림자). 아래 메뉴 세 칸(오늘 · 모의고사 · 대시보드) ===== */
+<style id="sarang-dash">/* ===== 현황판 (src/dash.js, 2026-10-03 대표). 색·글꼴은 앱 값 그대로(--pri·--soft·--card·--line·--sub·--ok-*·--warn-*, 나이 단계 테마·어두운 화면을 따라감),
+   칸은 앱 .card (둥글기 15·안쪽 23·그림자). 아래 메뉴 세 칸(오늘 · 모의시험 · 현황판) ===== */
 .tabbar.tb3{grid-template-columns:repeat(3,minmax(0,1fr))}
 #app:not([data-tab="dash"]) #dashPane{display:none!important}
 #app[data-tab="dash"]:not([data-tab="today"]) .sarang-dashboard{max-width:none}   /* 태블릿·PC: 좁은 가운데 줄 대신 넓게 (유아 놀이와 같음) */
 .db{display:grid;grid-template-columns:200px minmax(0,1fr);gap:16px;align-items:start;word-break:keep-all;overflow-wrap:anywhere}
 .db[hidden]{display:none}
-/* 왼쪽 세로 메뉴 = 대시보드 안 기능 목록 (대표: 추후 기능은 왼쪽에 세로로) */
+/* 왼쪽 세로 메뉴 = 현황판 안 기능 목록 (대표: 추후 기능은 왼쪽에 세로로) */
 .db-nav{position:sticky;top:12px;display:grid;gap:4px;align-content:start;background:var(--card);border:1px solid var(--line);border-radius:15px;padding:12px;box-shadow:var(--shadow)}
 .db-nav-t{font-size:13px;font-weight:600;color:var(--sub);padding:2px 10px 6px}
 .db-nav-i{display:flex;align-items:center;gap:10px;min-height:44px;padding:8px 10px;border:0;border-radius:12px;background:none;color:var(--ink);font:inherit;font-size:15px;font-weight:600;text-align:left;cursor:pointer}
@@ -4769,8 +4915,10 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
 .db-v small{font-size:14px;font-weight:600;color:var(--sub);margin-left:2px}
 .db-d{font-size:12px;color:var(--sub);line-height:1.4}
 /* 칸 배치 */
-.db-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;align-items:start;grid-template-areas:"subj cal" "chart rv" "weak weak"}
-.a-subj{grid-area:subj}.a-chart{grid-area:chart}.a-cal{grid-area:cal}.a-rv{grid-area:rv}.a-weak{grid-area:weak}.a-more{grid-area:more}
+.db-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:16px;align-items:start;grid-template-areas:"subj cal" "time time" "chart rv" "weak weak"}
+.db-view{display:grid;gap:16px;min-width:0}   /* 학습 현황 / 리포트: 칸 사이는 본문(.db-main)과 같은 16px */
+.db-view[hidden]{display:none}
+.a-time{grid-area:time}.a-subj{grid-area:subj}.a-chart{grid-area:chart}.a-cal{grid-area:cal}.a-rv{grid-area:rv}.a-weak{grid-area:weak}.a-more{grid-area:more}
 .db-box{min-width:0}
 .db-h{display:flex;align-items:baseline;gap:8px;margin:0 0 12px;font-size:15px;font-weight:700;color:var(--ink)}
 .db-h small{margin-left:auto;font-size:12px;font-weight:600;color:var(--sub);text-align:right}
@@ -4834,7 +4982,66 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
 .db-more{width:100%;min-height:44px;margin-top:10px;padding:10px;border:1px solid var(--line);border-radius:12px;background:var(--muted,var(--soft));color:var(--pri);font:inherit;font-size:14px;font-weight:700;cursor:pointer}
 .a-more .db-more{margin-top:0}
 
-/* 대시보드 칸 너비(dash.js 가 w-rail·w-phone 을 붙임. 칸에 container 를 쓰면 폰 서랍(position:fixed)이 칸에 갇혀서 클래스로 함):
+/* 공부 시간 (2026-10-04): 바로 풀기 = 스마트 색(--pri 옅게), 뽑은 장 수 = 프린트 색 점(--pri) */
+.db-time{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:24px}
+.db-tmain,.db-tsub{min-width:0}
+.db-tnums{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px 12px;margin-bottom:12px}
+.db-tn .db-v{font-size:22px}
+.db-up{color:var(--ok-ink);font-weight:700}
+.db-sw.dot{border-radius:50%;background:var(--pri)}
+.db-dot{fill:var(--pri)}
+.db-tchart{min-height:200px}
+.db-h4{margin:0 0 10px;font-size:14px;font-weight:700;color:var(--ink)}
+.db-tsubj{display:grid;gap:10px}
+.db-ts{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;gap:10px;font-size:14px}
+.db-ts b{font-weight:700}
+.db-ts em{font-style:normal;font-size:13px;font-weight:600;color:var(--sub);text-align:right;white-space:nowrap;font-variant-numeric:tabular-nums}
+.db-bar.soft i{background:color-mix(in srgb,var(--pri) 38%,var(--card))}
+.db-tmore{display:none}
+.db-time .db-tmore{margin-top:0}
+/* 리포트 (왼쪽 메뉴) */
+.rp-lists{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr));gap:16px;align-items:start}
+.rp-items{display:grid;gap:8px}
+.rp-item{display:flex;align-items:center;gap:10px;width:100%;min-height:56px;padding:10px 12px 10px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;text-align:left;cursor:pointer}
+.rp-item:hover{background:var(--muted,var(--soft))}
+.rp-item:focus-visible,.rp-back:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.rp-it{flex:1;min-width:0}
+.rp-it b{display:block;font-size:15px;font-weight:700;line-height:1.4}
+.rp-it small{display:block;margin-top:1px;font-size:12px;color:var(--sub);line-height:1.45}
+.rp-go{flex:none;font-size:20px;line-height:1;color:var(--sub)}
+.rp-foot{margin:0 2px}
+.rp-head{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+.rp-back{flex:none;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:999px;background:var(--card);color:var(--pri);font:inherit;font-size:14px;font-weight:700;cursor:pointer;white-space:nowrap}
+.rp-kid{display:flex;align-items:center;gap:10px;min-width:0;flex:1 1 220px}
+.rp-av{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--soft);color:var(--pri);font-weight:800}
+.rp-kid b{display:block;font-size:15px;font-weight:800;line-height:1.4}
+.rp-kid small{display:block;font-size:12px;color:var(--sub)}
+.rp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:16px;align-items:start}
+.rp-l{list-style:none;margin:0;padding:0;display:grid;gap:9px;font-size:14px;line-height:1.5}
+.rp-l li{display:flex;align-items:baseline;gap:8px}
+.rp-l .db-pill{flex:none}
+.rp-chg{display:grid;grid-template-columns:52px minmax(0,1fr) auto;align-items:center;gap:10px;margin-bottom:9px;font-size:14px}
+.rp-chg em{font-style:normal;font-size:12px;font-weight:600;color:var(--sub);white-space:nowrap;font-variant-numeric:tabular-nums}
+.rp-two{position:relative}
+.rp-two i{position:absolute;top:0;bottom:0;left:0}
+.rp-two s{position:absolute;top:0;bottom:0;left:0;z-index:1;border-radius:4px;background:color-mix(in srgb,var(--pri) 38%,var(--card));text-decoration:none}
+.rp-lg{margin-top:4px}
+.rp-chart{min-height:170px}
+.rp-part{fill:color-mix(in srgb,var(--pri) 20%,var(--card));stroke:color-mix(in srgb,var(--pri) 60%,var(--card));stroke-dasharray:3 2}
+.rp-stat{margin-top:0}
+/* 설정 › 알림: 리포트 알림 */
+#settings .rp-when{flex-wrap:wrap;row-gap:6px}
+#settings .rp-sels{display:flex;flex:none;gap:6px;margin:0 8px 0 auto}   /* 오른쪽 끝을 켜고 끄기 단추와 맞춤, 좁으면 다음 줄 오른쪽 */
+#settings .rp-sels select{min-height:44px;padding:0 8px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;font-size:14px}
+#settings .rp-sels select:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+#settings .rp-off{opacity:.45}
+#settings .rp-kid-row{padding-left:12px}
+#settings .rp-set-note{margin:4px 0 6px;font-size:13px;color:var(--sub);line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
+/* 0~4세 놀이 (2026-10-04): 과목 진도·복습·틀린 단원 없음 → 공부 시간(화면 놀이 시간)·주별 놀이·논 날만 */
+.db.tod .a-subj,.db.tod .a-rv,.db.tod .a-weak,.db.tod .db-tsub,.db.tod .db-tmore{display:none!important}
+.db.tod .db-grid{grid-template-areas:"time time" "chart cal"}
+.db.tod .db-time{grid-template-columns:minmax(0,1fr)}
+/* 현황판 칸 너비(dash.js 가 w-rail·w-phone 을 붙임. 칸에 container 를 쓰면 폰 서랍(position:fixed)이 칸에 갇혀서 클래스로 함):
    좁으면(태블릿 세로·폴드 펼침, 960px 이하) 왼쪽 메뉴를 아이콘 줄로 */
 .db.w-rail{grid-template-columns:76px minmax(0,1fr);gap:14px}
 .db.w-rail .db-nav{padding:8px 6px}
@@ -4854,17 +5061,25 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
 .db.w-phone.drawer .db-scrim{display:block;position:fixed;inset:0;z-index:60;background:rgba(10,14,22,.45)}
 /* 본문 너비로 칸 배치 */
 @container dbm (max-width:819px){
-  .db-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"subj subj" "chart chart" "cal rv" "weak weak"}
+  .db-grid{grid-template-columns:repeat(2,minmax(0,1fr));grid-template-areas:"subj subj" "time time" "chart chart" "cal rv" "weak weak"}
   .db-tiles{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .db-time{grid-template-columns:minmax(0,1fr);gap:16px}
+  .db-tnums{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .db.tod .db-grid{grid-template-areas:"time time" "chart chart" "cal cal"}
 }
-@container dbm (max-width:560px){ .db-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"subj" "chart" "cal" "rv" "weak"} }
+@container dbm (max-width:560px){ .db-grid{grid-template-columns:minmax(0,1fr);grid-template-areas:"subj" "time" "chart" "cal" "rv" "weak"} .db.tod .db-grid{grid-template-areas:"time" "chart" "cal"} }
 /* 줄인 판(폰): 늦은 과목만 · 그래프·달력은 '자세히 보기' */
 @container dbm (max-width:480px){
-  .db-main,.db-grid,.db-tiles{gap:10px}
+  .db-main,.db-view,.db-grid,.db-tiles{gap:10px}
   .db-tile.card{padding:12px 14px}
   .db-v{font-size:22px}
   .db-box.card{padding:16px}
-  .db-grid{grid-template-areas:"subj" "rv" "weak" "more" "chart" "cal"}
+  .db-grid{grid-template-areas:"subj" "time" "rv" "weak" "more" "chart" "cal"}
+  .db.tod .db-grid{grid-template-areas:"time" "more" "chart" "cal"}
+  .db-tn .db-v{font-size:20px}
+  .db-tmore{display:block}
+  .db:not(.topen) .db-tsub{display:none}
+  .rp-grid,.rp-lists{gap:10px}
   .db-cp{display:none}
   .db:not(.allsubj) #dbSubj tr.ok{display:none}
   .db.nolate:not(.allsubj) .db-tw{display:none}   /* 늦은 과목이 없으면 빈 표 머리줄도 숨김 */
@@ -4874,6 +5089,47 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
 }
 @media (prefers-reduced-motion:reduce){.db-nav{transition:none}}
 @media print{#dashPane{display:none!important}}
+/* ===== 학습 관리 (2026-10-04 대표): 과목 카드 → 과목 화면에서 시작 범위 → 저장 ===== */
+.db-mg-lead{margin:0;font-size:14.5px;color:var(--sub);line-height:1.5;word-break:keep-all}
+.db-mg-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:12px;min-width:0}
+.db-mg-row{position:relative;display:grid;align-content:start;gap:6px;min-width:0;min-height:96px;box-sizing:border-box;padding:16px 40px 16px 18px;border:1px solid var(--line);border-radius:15px;background:var(--card);color:var(--ink);font:inherit;text-align:left;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.db-mg-row:hover{border-color:var(--pri)}
+.db-mg-row.ch{border-color:var(--pri);box-shadow:0 0 0 1px var(--pri) inset}
+.db-mg-row:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.db-mg-top{display:flex;align-items:center;justify-content:space-between;gap:8px;min-width:0}
+.db-mg-top b{font-size:16px}
+.db-mg-at{font-size:14.5px;font-weight:700;line-height:1.4;word-break:keep-all;overflow-wrap:anywhere;min-width:0}
+.db-mg-at em{font-style:normal;color:var(--pri);margin-right:6px}
+.db-mg-row small{font-size:12.5px;color:var(--sub);line-height:1.4;word-break:keep-all;overflow-wrap:anywhere}
+.db-mg-go{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-style:normal;font-size:22px;line-height:1;color:var(--sub)}
+/* 저장·취소: 목록이 길어도 화면 아래(아래 메뉴 위)에 붙어 있음 */
+.db-mg-bar{position:sticky;bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:5;display:grid;grid-template-columns:1fr 2fr;gap:10px;padding:10px;border:1px solid var(--line);border-radius:15px;background:var(--card);box-shadow:0 6px 20px rgba(0,0,0,.12)}
+.db-mg-bar[hidden]{display:none}
+.db-mg-bar button,.db-mg-box button{min-height:48px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+.db-mg-bar button.pri,.db-mg-box button.pri{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
+.db-mg-ask{position:fixed;top:0;right:0;bottom:0;left:0;z-index:1900;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:16px;background:rgba(0,0,0,.4)}
+.db-mg-ask[hidden]{display:none}
+.db-mg-box{display:grid;gap:10px;width:100%;max-width:400px;box-sizing:border-box;padding:22px 20px 18px;border-radius:16px;background:var(--card);color:var(--ink);box-shadow:0 12px 40px rgba(0,0,0,.25)}
+.db-mg-box b{font-size:17px}
+.db-mg-box span{font-size:14px;color:var(--sub);line-height:1.5;word-break:keep-all;margin-bottom:4px}
+/* 낮은 창(가로 폰): 화면이 낮아 붙여 두면 아래 메뉴와 겹침 → 목록 끝에 둠 */
+@media (max-height:520px){.db-mg-bar{position:static;box-shadow:none}}
+/* ===== 아래 메뉴 '부록' (2026-10-04 13:27 KST 대표): 영단어·영어 듣기, 앞으로 학습 도움 기능을 더하는 목록 (src/hub-ui.js EXTRAS) ===== */
+.tabbar.tb4{grid-template-columns:repeat(4,minmax(0,1fr))}
+#app:not([data-tab="extra"]) #extraPane{display:none!important}
+.ex-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));grid-auto-rows:1fr;gap:12px;margin-top:14px}
+.ex-item{position:relative;display:flex;align-items:center;gap:14px;min-width:0;min-height:76px;box-sizing:border-box;padding:14px 40px 14px 14px;border:1px solid var(--line);border-radius:15px;background:var(--card);color:var(--ink);font:inherit;text-align:left;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.04)}
+.ex-item:hover{border-color:var(--pri)}
+.ex-item:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+.ex-ic{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:12px;background:var(--soft,rgba(0,0,0,.04));color:var(--pri)}
+.ex-ic svg{width:24px;height:24px}
+.ex-t{display:grid;gap:3px;min-width:0}
+.ex-t b{font-size:16px}
+.ex-t small{font-size:12.5px;color:var(--sub);line-height:1.4;word-break:keep-all;overflow-wrap:anywhere}
+.ex-go{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-style:normal;font-size:22px;line-height:1;color:var(--sub)}
+#pane-engx .actions{margin-top:14px}
+/* 가로 폰(높이 520px 이하) 왼쪽 세로 메뉴: 칸을 줄여 '학습 관리'·'숙제'까지 첫 화면에 (판 53 1차 검수 2번) */
+@media (max-height:520px){.db.w-rail .db-nav{gap:2px;padding:6px}.db.w-rail .db-nav-i{min-height:44px;padding:4px;gap:1px}.db.w-rail .db-nav-i svg{width:18px;height:18px}.db.w-rail .db-nav-slot{display:none}}
 </style>
 <style id="sarang-settings">/* 아래로 끌어도 페이지가 새로고침되지 않게 (2026-10-02 대표: 설치한 안드로이드 앱에서 드래그하면 새로고침됨 — 크롬 '당겨서 새로고침'). 맨 위·맨 아래 튕김만 막고 스크롤은 그대로 */
 html,body{overscroll-behavior-y:contain}
@@ -12123,6 +12379,66 @@ function drawSheet(type){
   return c;
 }
 
+const PR_ROW = 15 * PX, PR_TOP = 10 * PX + 14 * PX + 3 * PX, PR_PER = Math.floor((297 * PX - 10 * PX - PR_TOP) / PR_ROW);
+const practiceCount = () => Math.ceil(currentDay().length / PR_PER);
+function drawPractice(pg){
+  const words = currentDay(), pages = practiceCount(), M = 10 * PX, W = 190 * PX, headBottom = M + 14 * PX;
+  const c = document.createElement('canvas'); c.width = 210 * PX; c.height = 297 * PX;
+  const ctx = c.getContext('2d');
+  ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); ctx.fillStyle = '#000'; ctx.strokeStyle = '#000';
+  ctx.textBaseline = 'alphabetic'; ctx.textAlign = 'left';
+  const title = `${lvTitle(state.level)} · ${vRange()}`, fy = headBottom - 3 * PX;
+  ctx.font = `800 ${13 * PT}px ${FONT}`; ctx.fillText(title, M, fy);
+  const tw = ctx.measureText(title).width;
+  ctx.font = `600 ${10 * PT}px ${FONT}`; ctx.fillText(`쓰기 연습${pages > 1 ? ` ${pg + 1}/${pages}` : ''}`, M + tw + 3 * PX, fy);
+  ctx.font = `400 ${9.5 * PT}px ${FONT}`; ctx.textAlign = 'right';
+  let x = M + W;
+  [['날짜', 22], ['이름', 22]].forEach(([label, mm]) => { ctx.beginPath(); ctx.lineWidth = 0.25 * PX; ctx.moveTo(x - mm * PX, fy + 0.8 * PX); ctx.lineTo(x, fy + 0.8 * PX); ctx.stroke(); x -= mm * PX + 1 * PX; ctx.fillText(label, x, fy); x -= ctx.measureText(label).width + 3 * PX; });
+  ctx.textAlign = 'left';
+  ctx.beginPath(); ctx.lineWidth = 0.45 * PX; ctx.moveTo(M, headBottom); ctx.lineTo(M + W, headBottom); ctx.stroke();
+  const LW = 44 * PX, gx = M + LW, gw = W - LW, TS = 8.5 * PX, TF = `500 ${TS}px ${FONT}`;
+  ctx.font = TF;
+  /* 4줄 = 흐린 글씨의 실제 모양: 작은 캔버스에 써 보고 칠해진 점으로 잼 (measureText 높이는 글꼴마다 실제와 달랐음) — 위 줄 = k·l·d·f 꼭대기, 점선 = x 높이, 아래 줄 = g·y·p 끝 */
+  const probe = t => { const q = document.createElement('canvas'); q.width = Math.ceil(TS * 4); q.height = Math.ceil(TS * 2); const g = q.getContext('2d'), by = Math.round(TS * 1.3); g.font = TF; g.fillStyle = '#000'; g.textBaseline = 'alphabetic'; g.fillText(t, 2, by);
+    const d = g.getImageData(0, 0, q.width, q.height).data; let top = -1, bot = -1; for (let y = 0; y < q.height; y++) for (let x = 0; x < q.width; x++) if (d[(y * q.width + x) * 4 + 3] > 96) { if (top < 0) top = y; bot = y; break; } q.width = q.height = 0; return top < 0 ? null : [by - top, bot - by + 1]; };
+  const pa = probe('kldfH'), px = probe('xzvw'), pg2 = probe('gypq');
+  const cap = pa ? pa[0] : TS * 0.8, xh = px ? px[0] : TS * 0.53, dsc = pg2 ? pg2[1] : TS * 0.25;
+  ctx.font = TF;
+  words.slice(pg * PR_PER, pg * PR_PER + PR_PER).forEach((w, k) => {
+    const i = pg * PR_PER + k, y0 = PR_TOP + k * PR_ROW, base = y0 + (PR_ROW + cap - dsc) / 2;
+    ctx.textBaseline = 'alphabetic'; ctx.fillStyle = '#555'; ctx.font = `400 ${8 * PT}px ${FONT}`; ctx.fillText(String(i + 1), M, y0 + 6.2 * PX);
+    ctx.fillStyle = '#000'; fitText(ctx, w.w, LW - 9 * PX, 11, 700); ctx.fillText(w.w, M + 6 * PX, y0 + 6.2 * PX);
+    ctx.fillStyle = '#444'; fitText(ctx, w.m, LW - 9 * PX, 8, 400); ctx.fillText(w.m, M + 6 * PX, y0 + 11 * PX);
+    const line = (y, col, lw, dash) => { ctx.beginPath(); ctx.strokeStyle = col; ctx.lineWidth = lw; ctx.setLineDash(dash || []); ctx.moveTo(gx, y); ctx.lineTo(gx + gw, y); ctx.stroke(); };
+    line(base - cap, '#b8b8b8', 0.15 * PX); line(base - xh, '#c4c4c4', 0.15 * PX, [1.2 * PX, 1 * PX]); line(base, '#7a7a7a', 0.25 * PX); line(base + dsc, '#b8b8b8', 0.15 * PX);
+    ctx.setLineDash([]); ctx.strokeStyle = '#000';
+    ctx.fillStyle = '#c4c4c4'; ctx.font = TF; ctx.fillText(w.w, gx + 2 * PX, base);
+    ctx.fillStyle = '#000';
+    if (k < PR_PER - 1) { ctx.beginPath(); ctx.strokeStyle = '#e2e2e2'; ctx.lineWidth = 0.15 * PX; ctx.moveTo(M, y0 + PR_ROW); ctx.lineTo(M + W, y0 + PR_ROW); ctx.stroke(); ctx.strokeStyle = '#000'; }
+  });
+  return c;
+}
+function makePdfPages(canvases){
+  const enc = s => new TextEncoder().encode(s), parts = [], offsets = []; let len = 0;
+  const push = u => { parts.push(u); len += u.length; }, n = canvases.length, content = 'q 595.28 0 0 841.89 0 0 cm /Im0 Do Q';
+  push(enc('%PDF-1.4\n'));
+  const obj = (id, body) => { offsets[id - 1] = len; push(enc(`${id} 0 obj\n${body}\nendobj\n`)); };
+  obj(1, '<< /Type /Catalog /Pages 2 0 R >>');
+  obj(2, `<< /Type /Pages /Kids [${canvases.map((_, k) => `${3 + k * 3} 0 R`).join(' ')}] /Count ${n} >>`);
+  canvases.forEach((cv, k) => {
+    const pid = 3 + k * 3;
+    obj(pid, `<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595.28 841.89] /Resources << /XObject << /Im0 ${pid + 1} 0 R >> >> /Contents ${pid + 2} 0 R >>`);
+    const bin = atob(cv.toDataURL('image/jpeg', 0.9).split(',')[1]), img = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) img[i] = bin.charCodeAt(i);
+    offsets[pid] = len;
+    push(enc(`${pid + 1} 0 obj\n<< /Type /XObject /Subtype /Image /Width ${cv.width} /Height ${cv.height} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${img.length} >>\nstream\n`));
+    push(img); push(enc('\nendstream\nendobj\n'));
+    obj(pid + 2, `<< /Length ${content.length} >>\nstream\n${content}\nendstream`);
+  });
+  const size = offsets.length + 1, xref = len;
+  push(enc(`xref\n0 ${size}\n0000000000 65535 f \n${offsets.map(o => String(o).padStart(10, '0') + ' 00000 n \n').join('')}trailer\n<< /Size ${size} /Root 1 0 R >>\nstartxref\n${xref}\n%%EOF\n`));
+  return new Blob(parts, { type: 'application/pdf' });
+}
 function makePdf(canvas){
   const b64 = canvas.toDataURL('image/jpeg', 0.9).split(',')[1];
   const bin = atob(b64), img = new Uint8Array(bin.length);
@@ -12176,7 +12492,9 @@ document.querySelectorAll('[data-vpdf]').forEach(b => b.addEventListener('click'
   $('#v-status').textContent = 'PDF를 만드는 중입니다…';
   try {
     await new Promise(r => setTimeout(r, 30));
-    const blob = makePdf(type === 'review' ? drawReviewSheet() : drawSheet(type));
+    const sheet = type === 'review' ? drawReviewSheet() : drawSheet(type);
+    const more = type === 'original' ? Array.from({ length: practiceCount() }, (_, k) => drawPractice(k)) : [];   // 원본 다음 쪽: 쓰기 연습
+    const blob = more.length ? makePdfPages([sheet, ...more]) : makePdf(sheet);
     const name = `영단어_${lvName(state.level)}_${state.day * state.count + 1}번부터_${TYPE_NAME[type].replace(/ /g, '')}.pdf`;
     const res = await savePdf(blob, name);
     $('#v-status').textContent = res.msg;
@@ -12246,6 +12564,7 @@ $('#v-quizWrap').addEventListener('click', e => {
   const btns = document.querySelectorAll('.choices button');
   btns[quiz.choices.indexOf(w)].classList.add('ok');
   if (picked === w) quiz.score++; else { b.classList.add('ng'); quiz.wrong.push(w); }
+  if (window.SARANG_VMEM) { SARANG_VMEM.answer(w, 'c', picked === w); document.dispatchEvent(new CustomEvent('vocab:mem')); }
   $('#nextQ').classList.add('show');
 });
 
@@ -12361,7 +12680,7 @@ function drawReviewSheet(){
 (window.HUB_TODAY = window.HUB_TODAY || {}).vocab = {
   info: () => { const w = currentDay(); return `\u2063${lvName(state.level)} ${state.day + 1}/${dayChunks().length}\u2063 · ${vFew(w)}\u2064 · ${vRange()} 단어 ${w.length}개`; },
   days: () => [state.day + 1, state.day + 1],   // 속 묶음 번호 (검사용)
-  pages: () => [...['original', 'meaning', 'word'].map(t => () => drawSheet(t)), ...(hasReview() ? [drawReviewSheet] : [])],
+  pages: () => [() => drawSheet('original'), ...Array.from({ length: practiceCount() }, (_, k) => () => drawPractice(k)), ...['meaning', 'word'].map(t => () => drawSheet(t)), ...(hasReview() ? [drawReviewSheet] : [])],   // 원본 다음에 쓰기 연습 (2026-10-04)
   done: () => { rememberPrint('original'); renderDays(); }
 };
 
@@ -13812,7 +14131,6 @@ const G = subj => subj === 'ekor' ? st.kgrade : subj === 'wh' ? WGRADES[0] : sub
    그 범위에 그 과목 학년이 하나도 없으면 가장 가까운 학년 하나 */
 const GORD = ['k5', 'k6', 'k7', ...KGRADES];
 const gGap = (a, b) => Math.abs(GORD.indexOf(a) - GORD.indexOf(b));
-const NEAR2 = '학년은 아이 학년 앞뒤 2년까지 고를 수 있어요.';
 function GRN(subj){
   const all = GR(subj), c = childGrade();
   if (subj === 'eng' || GORD.indexOf(c) < 0) return all;
@@ -13833,8 +14151,8 @@ st.guide = !!st.guide;
 if (!st.pos || typeof st.pos !== 'object') st.pos = {};
 if (!st.last || typeof st.last !== 'object') st.last = {};
 if (!st.seen || typeof st.seen !== 'object') st.seen = {};   // 본 기록: { '과목/학년': [[Day, Day], …] } 뽑았거나 화면 공부로 끝낸 Day (복습은 본 Day만)
-if (!st.exam || typeof st.exam !== 'object') delete st.exam;   // 모의고사에서 고른 학기·시험
-if (![20, 30, 40].includes(st.examN)) st.examN = 40;   // 모의고사 과목당 문제 수 (부모가 고름)
+if (!st.exam || typeof st.exam !== 'object') delete st.exam;   // 모의시험에서 고른 학기·시험
+if (![20, 30, 40].includes(st.examN)) st.examN = 40;   // 모의시험 과목당 문제 수 (부모가 고름)
 function save(){ try { localStorage.setItem(KEY, JSON.stringify({ grade: st.grade, kgrade: st.kgrade, egrade: st.egrade, mgrade: st.mgrade, erate: st.erate, hmode: st.hmode, guide: st.guide, pos: st.pos, last: st.last, seen: st.seen, exam: st.exam, examN: st.examN })); } catch (e) {} }
 
 const todayYmd = () => SCH.ymd(new Date());
@@ -14080,7 +14398,7 @@ function titleCard(s, grade, kindLabel, title, sub, info){
 }
 
 /* 문제 한 개 (쪽이 갈리지 않게 한 덩어리)
-   o.exam(모의고사): '도움 ○' 없이 넓게, 물음 둘째 줄부터(대화·글·자료)는 네모 칸 안에,
+   o.exam(모의시험): '도움 ○' 없이 넓게, 물음 둘째 줄부터(대화·글·자료)는 네모 칸 안에,
    짧은 보기는 한 줄에 여럿(5개·3개·2개씩) — 종이를 아끼고 시험지처럼 */
 const NUM = ['①', '②', '③', '④', '⑤', '⑥'];
 function choiceCols(choices, w){
@@ -14225,7 +14543,7 @@ function table(cols, rows, s){
 
 /* 항목들을 쪽으로 나눔 → 캔버스를 만드는 함수 목록 */
 /* sc < 1 이면 본문을 그만큼 줄여 그림 (마지막 쪽에 몇 줄만 넘칠 때 한 장 아끼기)
-   foot(k, n): 쪽 아래 번호 글 (없으면 'k / n', 빈 글이면 번호 없음 — 모의고사처럼 여러 묶음을 한 파일로 이을 때) */
+   foot(k, n): 쪽 아래 번호 글 (없으면 'k / n', 빈 글이면 번호 없음 — 모의시험처럼 여러 묶음을 한 파일로 이을 때) */
 function paginate(items, headLeft, headRight, sc, foot){
   sc = sc || 1;
   const BOT = TOPY + (BOT0 - TOPY) / sc;
@@ -14497,7 +14815,7 @@ function engRecapWords(list){
 }
 
 /* ==================== 수학 그림 fig (CONTENT_SCHEMA_MATH.md 4장) ====================
-   GPT가 숫자·좌표로 적은 그림을 A4 캔버스에 바로 그림 (학습지·부모님 가이드·모의고사 PDF).
+   GPT가 숫자·좌표로 적은 그림을 A4 캔버스에 바로 그림 (학습지·부모님 가이드·모의시험 PDF).
    figBox(fig, 최대 폭) → { w, h, draw(ctx, x, y) }. 모르는 종류는 null (자리 표시만) */
 const FG = { fill: '#e3e6eb', fill2: '#c9ced6', grid: '#e6e9ed', pale: '#f4f5f7', pt: 9.5 };
 const mm = v => v * PX;
@@ -15237,19 +15555,24 @@ function pagesFor(subj, n, kind, to){
   if (!ready(rs[0][1])) return [];
   const s = SUBJ[subj], rc = recapOf(subj, n);
   const hl = `${s.name} · ${GNAME[G(subj)]}${kind === 'guide' ? ' · 부모님 가이드' : ''}`;
-  const pag = (make, d) => {
+  const pag = (make, d) => { const r = pag0(make, d); if (pagesFor.stat) pagesFor.stat.push({ d, n: r.length, last: Math.round((r.lastUsed || 0) / PX) }); return r; };   // stat: 점검용 (쪽 수·끝 쪽에 쓴 높이 mm)
+  const pag0 = (make, d) => {
     const t = (upos(subj, d) || {}).tag || '', hr = kind === 'guide' ? t : `${t} · 이름 ________`;   // 머리글: 단원 안 진도 (Day 번호 없음)
-    const items = make(), best = paginate(items, hl, hr, 1);
-    if (best.length > 1 && best.lastUsed < 100 * PX) {
-      for (const sc of [0.95, 0.91]) { const t = paginate(items, hl, hr, sc); if (t.length < best.length) return t; }
-      /* 줄여도 안 되면 '문제로 확인해요'를 남은 자리(60mm 이상)에서 바로 시작해 봄: 그림이 들어가 문제 칸이 새 쪽으로 밀리며 한 쪽 느는 것을 막음 */
-      const relax = its => its.map(it => it.brkIf ? Object.assign({}, it, { brkIf: 60 }) : it);
-      if (items.some(it => it.brkIf)) for (const sc of [1, 0.95, 0.91]) { const t = paginate(relax(items), hl, hr, sc); if (t.length < best.length) return t; }
-      /* 그래도 끝 쪽이 조금만 넘치면 간격을 모두 같은 비율로 줄여 봄 (단계 차이는 그대로라 기준은 유지, 종이 한 장을 아낌) */
-      for (const k of [0.8]) {
-        const tight = withSpacing(k, make);
-        for (const its of [tight, relax(tight)]) for (const sc of [1, 0.95, 0.91]) { const t = paginate(its, hl, hr, sc); if (t.length < best.length) return t; }
-      }
+    const items = make(); let best = paginate(items, hl, hr, 1);
+    /* 끝 쪽이 조금만 차면(100mm 미만) 한 장 아끼기: 덜 줄이는 방법부터 차례로 시도해 쪽 수가 주는 첫 판을 고름. 줄었는데도 끝 쪽이 또 조금만 차면 한 번 더
+       (판 53 1차 검수 4번: 전에는 한 장 줄인 뒤 멈춰서 초3 영어가 4쪽 중 끝 쪽에 문제 하나만 남았음) */
+    const relax = its => its.map(it => it.brkIf ? Object.assign({}, it, { brkIf: 60 }) : it);   // '문제로 확인해요'를 남은 자리(60mm 이상)에서 바로 시작
+    const tries = function* (){
+      for (const sc of [0.95, 0.91]) yield [items, sc];
+      if (items.some(it => it.brkIf)) for (const sc of [1, 0.95, 0.91]) yield [relax(items), sc];
+      /* 간격을 모두 같은 비율로 줄여 봄 (단계 차이는 그대로라 기준은 유지) */
+      for (const k of [0.8, 0.7]) { const tight = withSpacing(k, make); for (const its of [tight, relax(tight)]) for (const sc of [1, 0.95, 0.91]) yield [its, sc]; }
+    };
+    while (best.length > 1 && best.lastUsed < 100 * PX) {
+      let got = null;
+      for (const [its, sc] of tries()) { const t = paginate(its, hl, hr, sc); if (t.length < best.length) { got = t; break; } }
+      if (!got) break;
+      best = got;
     }
     return best;
   };
@@ -15295,7 +15618,7 @@ function* pdfBuild(canvases){
   return new Blob(parts, { type: 'application/pdf' });
 }
 function toPdf(canvases){ const g = pdfBuild(canvases); let r = g.next(); while (!r.done) r = g.next(); return r.value; }
-/* 쪽이 많을 때(모의고사): 한 쪽을 그릴 때마다 화면에 차례를 넘겨(멈춘 것처럼 보이지 않게) 진행을 알림 */
+/* 쪽이 많을 때(모의시험): 한 쪽을 그릴 때마다 화면에 차례를 넘겨(멈춘 것처럼 보이지 않게) 진행을 알림 */
 async function toPdfAsync(canvases, tick){
   const g = pdfBuild(canvases); let r = g.next();
   while (!r.done) { if (tick) tick(r.value + 1, canvases.length); await new Promise(res => setTimeout(res, 0)); r = g.next(); }
@@ -15304,7 +15627,7 @@ async function toPdfAsync(canvases, tick){
 
 /* ==================== 과목 화면 ==================== */
 function paneHTML(subj){
-  const s = SUBJ[subj], p = subj, kg = GR('ekor');
+  const p = subj;
   return `${subj === 'his' ? `
   <div class="card" id="his-hmode" hidden><div class="label">역사 과정</div><div class="seg" id="his-hseg"><button type="button" data-h="his">한국사</button><button type="button" data-h="wh">세계사</button></div><div class="info">중학교 2학년 역사에는 세계사도 있어요. 한국사와 세계사는 진도를 따로 기억해요.</div></div>
   <div id="pane-wh" hidden></div>
@@ -15312,7 +15635,6 @@ function paneHTML(subj){
   <div class="card"${subj === 'wh' ? ' hidden' : ''}>
     <div class="label">학년</div>
     <div class="seg ss-grades" id="${p}-grades"></div><p class="ss-tiny">펼친 화면에서 쓰면 더 편해요</p>
-    <div class="info">${subj === 'eng' ? '교육과정 성취기준과 기본 어휘로 새로 짠 초3~중3 영어 과정이에요. 학년마다 진도를 따로 기억해요.</div>' : subj === 'ekor' ? `${kg.length ? SHORT[kg[0]] + '~' + SHORT[kg[kg.length - 1]] + ' ' : ''}교과 국어예요. ${NEAR2} 진도는 학년마다 따로 기억해요.</div>` : subj === 'emath' ? `${NEAR2} 진도는 학년마다 따로 기억해요.</div>` : `학년을 바꾸면 사회·과학·한국사가 함께 바뀌어요. ${NEAR2} 진도는 학년마다 따로 기억해요.</div>`}
   </div>
   <div class="card ss-daycard" id="${p}-daycard">
     <div class="label">오늘 할 공부</div>
@@ -15321,13 +15643,10 @@ function paneHTML(subj){
       <div class="tb-day" id="${p}-day"></div>
       <button type="button" id="${p}-next" aria-label="다음 학습지">›</button>
     </div>
-    <div class="ss-lesson" style="--c:${s.color};--t:${s.tint}">
-      <div class="ss-top"><span class="ss-when" id="${p}-when"></span><button type="button" class="ss-pill" id="${p}-pill"></button></div>
-      <strong class="ss-title" id="${p}-title"></strong>
-      <span class="ss-sub" id="${p}-sub"></span>
-    </div>
-    <div class="hj-bar"><i id="${p}-bar"></i></div>
-    <div class="ss-school" id="${p}-school"><span id="${p}-schooltxt"></span><button type="button" class="ss-sync" id="${p}-sync">학교 진도에 맞추기</button></div>
+    <div class="hj-bar ss-ubar"><i id="${p}-bar"></i></div>
+    <div class="ss-lesson" hidden><span class="ss-when" id="${p}-when"></span><strong class="ss-title" id="${p}-title"></strong><span class="ss-sub" id="${p}-sub"></span><span id="${p}-schooltxt"></span></div>
+    <button type="button" class="ss-sheet" id="${p}-pill"><canvas hidden></canvas><span class="ss-sheet-msg"></span></button>
+    <div class="ss-school" id="${p}-school"><button type="button" class="ss-sync" id="${p}-sync">학교 진도에 맞추기</button></div>
   </div>${subj === 'eng' ? `
   <div class="card" id="eng-listen">
     <div class="label">소리 듣기</div>
@@ -15387,16 +15706,20 @@ function renderPane(subj){
   $(p + '-title').textContent = d.title;
   $(p + '-sub').textContent = d.sub;
   const ok = ready(r), ps = packState(pg(subj));
-  /* '학습지 준비됨' 알약 자리에 '학습지 미리보기' 버튼 (2026-09-28 주인 요청). 준비 안 된 Day는 상태 글을 누를 수 없는 버튼 이름으로 */
+  /* 오늘 할 공부 = 단원 · 단원 진행도 · 학습지 첫 장 그대로 (2026-10-04 대표 "다른 설명 없이 오늘의 학습지 첫장만 이미지로").
+     첫 장을 누르면 모든 쪽 미리보기. 준비 안 된 학습지는 빈 종이에 상태 글만 */
   const pvb = $(p + '-pill');
-  pvb.textContent = ok ? '학습지 미리보기' : info.kind === 'off' ? '' : ps === 'loading' ? '불러오는 중' : ps === 'fail' ? '불러오지 못함' : '내용 준비 중';
-  pvb.className = 'ss-pill' + (ok ? ' ok' : ''); pvb.disabled = !ok; pvb.hidden = !pvb.textContent;
-  $(p + '-bar').style.width = L.length ? `${((n - 1) / L.length * 100).toFixed(1)}%` : '0%';
+  pvb.disabled = !ok; pvb.hidden = info.kind === 'off';
+  pvb.setAttribute('aria-label', ok ? `${d.title} 학습지 첫 장 (누르면 모든 쪽 보기)` : '학습지 준비 중');
+  pvb.querySelector('.ss-sheet-msg').textContent = ok ? '' : ps === 'loading' ? '불러오는 중' : ps === 'fail' ? '불러오지 못함' : '내용 준비 중';
+  sheetDraw(subj);
+  $(p + '-bar').style.width = u ? `${(u.k / u.m * 100).toFixed(1)}%` : '0%';   // 단원 안 진행도 (단원 이름 옆 k/m 과 같게)
   $(p + '-prev').disabled = n <= 1; $(p + '-next').disabled = n >= L.length;
   const sd = schoolDay(subj), gapN = n - sd;
   const sdi = L[Math.min(sd, L.length) - 1];
   $(p + '-schooltxt').textContent = !L.length ? '' : `학교는 오늘 ‘${sdi ? sdi.title : ''}’ 차시쯤이에요. ` + (gapN === 0 ? '학교와 같은 진도예요.' : gapN > 0 ? `학습지 ${gapN}개만큼 앞서 있어요.` : `학습지 ${-gapN}개만큼 뒤에 있어요.`);
   $(p + '-sync').hidden = !L.length || gapN === 0;
+  $(p + '-school').hidden = $(p + '-sync').hidden;   // 맞추기 단추가 없으면 빈 줄도 없앰
   const rc = recapOf(subj, n);
   const btn = $(p + '-print');
   if (!btn.dataset.busy) btn.disabled = !ok;
@@ -15409,6 +15732,41 @@ function renderPane(subj){
   renderPlan(subj, n, sd);
   if (subj === 'eng') { renderEngSay(); renderEngBook(); }
 }
+
+/* 학습지 첫 장: PDF 와 같은 pagesFor 첫 쪽을 칸 폭에 맞춰 그림. 보이는 과목 화면만 그리고(안 보이면 보일 때 IntersectionObserver),
+   같은 학습지·같은 폭이면 다시 그리지 않음. 칸은 A4 비율로 먼저 자리를 잡아 그리는 동안 화면이 밀리지 않음 */
+const SHEET = {};
+let sheetObs = null;
+function sheetWatch(btn, subj){
+  if (!window.IntersectionObserver) return;
+  if (!sheetObs) sheetObs = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) sheetDraw(e.target.dataset.subj); }), { rootMargin: '200px 0px' });
+  btn.dataset.subj = subj; sheetObs.observe(btn);
+}
+async function sheetDraw(subj){
+  const btn = $(subj + '-pill'), cv = btn && btn.querySelector('canvas');
+  if (!cv || !btn.offsetParent) return;
+  const S = SHEET[subj] || (SHEET[subj] = { key: '', tok: 0 });
+  const n = curDay(subj), ok = !btn.disabled;
+  const W = Math.min(210 * PX, Math.ceil((btn.clientWidth || 300) * Math.min(devicePixelRatio || 1, 2)));
+  const key = [G(subj), n, ok, Math.ceil(W / 200)].join(':');
+  if (S.key === key) return;
+  S.key = key; const tok = ++S.tok;
+  if (!ok) { cv.hidden = true; return; }
+  const msg = btn.querySelector('.ss-sheet-msg');
+  if (cv.hidden) msg.textContent = '그리는 중';
+  try { await loadForDraw(subj); } catch (e) {}
+  await fontsReady();
+  await new Promise(r => setTimeout(r, 0));
+  if (tok !== S.tok) return;
+  let c = null;
+  try { const pages = pagesFor(subj, n, 'student'); c = pages.length ? pages[0]() : null; } catch (e) {}
+  if (tok !== S.tok) { if (c) c.width = c.height = 0; return; }
+  if (!c) { cv.hidden = true; msg.textContent = '내용 준비 중'; S.key = ''; return; }
+  cv.width = W; cv.height = Math.round(W * 297 / 210);
+  const x = cv.getContext('2d'); x.imageSmoothingQuality = 'high'; x.drawImage(c, 0, 0, cv.width, cv.height); c.width = c.height = 0;
+  cv.hidden = false; msg.textContent = '';
+}
+addEventListener('resize', () => { clearTimeout(sheetDraw.t); sheetDraw.t = setTimeout(() => Object.keys(SHEET).forEach(sheetDraw), 250); });
 
 function renderPlan(subj, n, sd){
   const p = subj, tr = track(subj), box = $(p + '-plan'), L = dayList(subj);
@@ -15628,7 +15986,7 @@ async function printBook(all){
   finally { delete $('eng-bookall').dataset.busy; renderEngBook(); }
 }
 
-/* ==================== 모의고사 ====================
+/* ==================== 모의시험 ====================
    중간고사 = 그 학기 Day의 앞 절반, 기말고사 = 뒤 절반 (Day는 과목 화면과 같은 번호).
    과목마다 범위 안 학습지의 exam 문제(하루 2문제, 선택형)에서 부모가 고른 수(20·30·40, 기본 40)만큼 골라(모자라면 있는 만큼, 20 미만이면 뺌) 한 PDF로:
    표지 → 과목마다 새 쪽에서 시작하는 문제 → 맨 뒤 과목별 정답과 해설.
@@ -15639,7 +15997,7 @@ const EXAM_ORDER = ['ekor', 'eng', 'emath', 'soc', 'sci', 'his', 'wh'];
 const EXAM_KIND = { mid: '중간고사', final: '기말고사' };
 const EXAM_TERM = { sem1: '1학기', sem2: '2학기' };
 const EXAM_LEVEL = { 1: '쉬움', 2: '보통', 3: '어려움' };
-const EX = { name: '모의고사', color: '#2C5945', tint: '#EDF2E9' };
+const EX = { name: '모의시험', color: '#2C5945', tint: '#EDF2E9' };
 const examSubjects = () => EXAM_ORDER.filter(inUse);
 /* 받침이 있으면 a(은), 없으면 b(는) */
 const josa = (w, a, b) => { const c = String(w).charCodeAt(String(w).length - 1) - 0xAC00; return c >= 0 && c < 11172 && c % 28 ? a : b; };
@@ -15724,15 +16082,22 @@ function examPlan(term, kind, withQs){
     return { subj, grade: G(subj), r, ps: packState(pg(subj)), pool: pool.length, n: ok ? Math.min(st.examN, pool.length) : 0, ok, qs: ok && withQs ? examPick(pool, st.examN) : [] };
   }) };
 }
-/* 이번 모의고사에 없는 과목 (아이가 하는 과목 가운데) */
+/* 이번 모의시험에 없는 과목 (아이가 하는 과목 가운데) */
 function examMissing(){
   let c = null; try { c = JSON.parse(localStorage.getItem('hub_child')); } catch (e) {}
   const subs = c && Array.isArray(c.subs) ? c.subs : [];
   return [['kor', '국어', 'ekor'], ['eng', '영어', 'eng'], ['math', '수학', 'emath'], ['hanja', '한자']].filter(([k, , id]) => subs.includes(k) && !(id && inUse(id))).map(x => x[1]);
 }
+/* 빠진 과목 안내: 초1·2 영어는 '아직'이 아니라 학교 영어가 없어서 (10-04 판 53 1차 검수 5번, 대표 확인 전) */
+function examMissNote(miss, end){
+  const noEng = ['e1', 'e2'].includes(childGrade()) && miss.includes('영어'), rest = noEng ? miss.filter(x => x !== '영어') : miss, out = [];
+  if (rest.length) out.push(`${rest.join('·')}${josa(rest[rest.length - 1], '은', '는')} 아직 모의시험 문제가 없어 빠${end}`);
+  if (noEng) out.push(`초1·2는 학교 영어가 없어 영어는 빠${end}`);
+  return out.join(' ');
+}
 const examGradeName = () => { const g = childGrade(); return GNAME[g] ? g : null; };
 
-/* ---------- 모의고사 PDF ---------- */
+/* ---------- 모의시험 PDF ---------- */
 function examHeadRow(n){
   return { h: 11 * PX, draw(ctx, y){
     const yy = y + 6.5 * PX;
@@ -15745,7 +16110,7 @@ function examHeadRow(n){
 }
 function examSubjectItems(x, title){
   const s = SUBJ[x.subj], out = [];
-  out.push(...titleCard(s, x.grade, '모의고사', `${title} ${s.name}`, `시험 범위: ${unitNames(x.r)} · ${x.qs.length}문제`, null));
+  out.push(...titleCard(s, x.grade, '모의시험', `${title} ${s.name}`, `시험 범위: ${unitNames(x.r)} · ${x.qs.length}문제`, null));
   out.push(examHeadRow(x.qs.length), gap(1));
   out.push(...textRows('문제마다 알맞은 답을 하나 골라 번호에 ○표 하세요. 어려운 문제는 건너뛰었다가 마지막에 다시 풀어요.', { pt: 9.5, color: SUB, after: 4 * PX }));
   x.qs.forEach((q, i) => { const it = question({ type: 'choice', q: q.q, choices: q.choices, fig: q.fig, dn: q.dn }, i, s, { exam: true }); if (i === x.qs.length - 1) it[it.length - 1].keep = true; out.push(...it); });   // 마지막 문제와 '끝' 표시는 같은 쪽에
@@ -15798,7 +16163,7 @@ function examCoverItems(plan, use, grade, title, pages){
     ctx.fillStyle = EX.color; ctx.fillRect(MG, y, PW, 1.6 * PX);
     ctx.restore();
     font(ctx, 800, T1); ctx.fillStyle = EX.color; ctx.fillText(GNAME[grade], MG + 8 * PX, y + 12 * PX);
-    font(ctx, 800, T2); ctx.fillStyle = INK; ctx.fillText(`${title} 모의고사`, MG + 8 * PX, y + 25.5 * PX);
+    font(ctx, 800, T2); ctx.fillStyle = INK; ctx.fillText(`${title} 모의시험`, MG + 8 * PX, y + 25.5 * PX);
     font(ctx, 400, 11); ctx.fillStyle = SUB; ctx.fillText(subTxt, MG + 8 * PX, y + 36 * PX);
   } }, gap(5));
   out.push({ h: 14 * PX, draw(ctx, y){
@@ -15813,7 +16178,7 @@ function examCoverItems(plan, use, grade, title, pages){
     use.map((x, i) => [SUBJ[x.subj].name + (x.grade !== grade ? `\n(${SHORT[x.grade]})` : ''), `${unitNames(x.r)}`, String(x.qs.length), `____ / ${x.qs.length}`, pages.subs[i]]), EX));
   const short = plan.subs.filter(x => !x.ok), miss = examMissing();
   if (short.length) out.push(...textRows(`문제가 아직 모자라 이번에 빠진 과목: ${short.map(x => `${SUBJ[x.subj].name} (${x.pool}문제)`).join(', ')}`, { pt: 9.5, color: SUB, after: 1 * PX }));
-  if (miss.length) out.push(...textRows(`${miss.join('·')}${josa(miss[miss.length - 1], '은', '는')} 아직 모의고사 문제가 없어 빠졌어요.`, { pt: 9.5, color: SUB, after: 1 * PX }));
+  if (miss.length) out.push(...textRows(examMissNote(miss, '졌어요.'), { pt: 9.5, color: SUB, after: 1 * PX }));
   out.push(gap(3), ...boxRows('시험 보는 방법', [
     { text: '과목마다 새 쪽에서 시작해요. 한 과목씩 풀고, 과목 사이에는 쉬어요.', bullet: '·' },
     { text: '문제마다 알맞은 답을 하나 골라 번호에 ○표 해요. 답은 하나뿐이에요.', bullet: '·' },
@@ -15825,7 +16190,7 @@ function examCoverItems(plan, use, grade, title, pages){
 /* 쪽 함수 목록 + 묶음별 쪽 번호 (쪽 번호는 파일 전체로 이어짐) */
 function examDoc(plan){
   const use = plan.subs.filter(x => x.ok && x.qs.length), grade = examGradeName() || (use[0] && use[0].grade) || 'e3';
-  const title = `${EXAM_TERM[plan.term]} ${EXAM_KIND[plan.kind]}`, hl = `${title} 모의고사`;
+  const title = `${EXAM_TERM[plan.term]} ${EXAM_KIND[plan.kind]}`, hl = `${title} 모의시험`;
   if (!use.length) return { use, grade, title, pages: [], parts: { cover: 0, subs: [], answers: [], total: 0 } };
   let total = 0;
   /* 묶음 하나: 마지막 쪽에 몇 줄만 넘치면 조금 줄여서 한 쪽 아낌 (학습지와 같은 방법) */
@@ -15851,13 +16216,13 @@ function examDoc(plan){
     parts: { cover: cover.length, subs: use.map((x, i) => at(subs[i], x)), answers: use.map((x, i) => at(ans[i], x)), total } };
 }
 
-/* ---------- 모의고사 카드 (아래 메뉴 '모의고사') ---------- */
+/* ---------- 모의시험 카드 (아래 메뉴 '모의시험') ---------- */
 const EXAM_ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8l4 4v14H4V3h4"/><path d="M8 3v3h8V3M8 12l2 2 4-4M8 18h8"/></svg>';
 function mountExam(){
   if ($('exam') || !$('subj')) return;
   const box = document.createElement('section');
   box.className = 'card exam-card'; box.id = 'exam'; box.hidden = true; box.setAttribute('aria-labelledby', 'examTitle');
-  box.innerHTML = `<div class="label" id="examTitle">${EXAM_ICON}모의고사</div>
+  box.innerHTML = `<div class="label" id="examTitle">${EXAM_ICON}모의시험</div>
     <div class="info">아이 학년 교과 과정의 시험 범위에서 과목마다 고른 수만큼 문제(선택형)를 뽑아 PDF 한 파일로 만들어요. 문제가 모자란 과목은 있는 만큼 넣어요. 정답과 해설은 맨 뒤에 있어요.</div>
     <div class="exam-pick">
       <div><span class="exam-cap" id="examTermCap">학기</span><div class="seg" id="examTerm" role="group" aria-labelledby="examTermCap"><button type="button" data-t="sem1">1학기</button><button type="button" data-t="sem2">2학기</button></div></div>
@@ -15866,9 +16231,9 @@ function mountExam(){
     </div>
     <ul class="exam-list" id="examList"></ul>
     <div class="info exam-note" id="examNote" hidden></div>
-    <div class="actions a2"><button type="button" class="wide pri" id="examPrint">모의고사 PDF 만들기</button></div>
+    <div class="actions a2"><button type="button" class="wide pri" id="examPrint">모의시험 PDF 만들기</button></div>
     <div class="status" id="examMsg" role="status"></div>`;
-  if ($('sarangDashboard')) $('sarangDashboard').append(box); else $('subj').after(box);   // 아래 메뉴 '모의고사' 칸 (과목 카드와 따로)
+  if ($('sarangDashboard')) $('sarangDashboard').append(box); else $('subj').after(box);   // 아래 메뉴 '모의시험' 칸 (과목 카드와 따로)
   box.addEventListener('click', e => {
     const t = e.target.closest('#examTerm button[data-t]'), k = e.target.closest('#examKind button[data-k]'), n = e.target.closest('#examN button[data-n]');
     if (n) { st.examN = +n.dataset.n; save(); return renderExam(); }
@@ -15894,7 +16259,7 @@ function renderExam(){
     return `<li class="${x.ok ? 'ok' : x.ps === 'loading' ? 'wait' : 'short'}" data-subj="${x.subj}"><b style="--c:${s.color}">${s.name}${x.grade !== cg ? ` <small>${SHORT[x.grade]}</small>` : ''}</b><span class="ex-range">${esc(rng)}</span><span class="ex-n">${n}</span></li>`;
   }).join('');
   const list = $('examList'); if (list.dataset.h !== html) { list.innerHTML = html; list.dataset.h = html; }
-  const miss = examMissing(), note = miss.length ? `${miss.join('·')}${josa(miss[miss.length - 1], '은', '는')} 아직 모의고사 문제가 없어 빠져요.` : '';
+  const miss = examMissing(), note = miss.length ? examMissNote(miss, '져요.') : '';
   if ($('examNote').textContent !== note) $('examNote').textContent = note;
   $('examNote').hidden = !note;
   const btn = $('examPrint');
@@ -15905,21 +16270,21 @@ async function printExam(){
   if (btn.dataset.busy) return;
   const sel = examSel();
   m.style.minHeight = m.offsetHeight ? m.offsetHeight + 'px' : '';   // 알림 칸이 줄지 않게 (화면 맨 아래에서 누를 때 스크롤이 튀지 않게)
-  btn.dataset.busy = '1'; btn.disabled = true; msg('모의고사 PDF를 만드는 중입니다…');
+  btn.dataset.busy = '1'; btn.disabled = true; msg('모의시험 PDF를 만드는 중입니다…');
   try {
     await Promise.all(examSubjects().map(subj => loadPack(pg(subj), true)));
     await fontsReady();
     const plan = examPlan(sel.term, sel.kind, true), doc = examDoc(plan);
-    if (!doc.use.length) { msg(plan.subs.some(x => x.ps === 'fail') ? '학습지 내용을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.' : '범위 안 문제가 아직 모자라 모의고사를 만들 수 없어요. 한 과목에 20문제 이상 모이면 만들 수 있어요.'); return; }
-    msg(`모의고사 PDF를 만드는 중입니다… (0 / ${doc.parts.total}쪽)`);
+    if (!doc.use.length) { msg(plan.subs.some(x => x.ps === 'fail') ? '학습지 내용을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.' : '범위 안 문제가 아직 모자라 모의시험을 만들 수 없어요. 한 과목에 20문제 이상 모이면 만들 수 있어요.'); return; }
+    msg(`모의시험 PDF를 만드는 중입니다… (0 / ${doc.parts.total}쪽)`);
     await new Promise(r => setTimeout(r, 30));
-    const blob = await toPdfAsync(doc.pages, (k, n) => msg(`모의고사 PDF를 만드는 중입니다… (${k} / ${n}쪽)`));
-    const res = await HUB_TODAY.savePdf(blob, `모의고사_${SHORT[doc.grade]}_${EXAM_TERM[plan.term]}_${EXAM_KIND[plan.kind]}.pdf`);
+    const blob = await toPdfAsync(doc.pages, (k, n) => msg(`모의시험 PDF를 만드는 중입니다… (${k} / ${n}쪽)`));
+    const res = await HUB_TODAY.savePdf(blob, `모의시험_${SHORT[doc.grade]}_${EXAM_TERM[plan.term]}_${EXAM_KIND[plan.kind]}.pdf`);
     const left = (list, why) => list.length ? ` ${why} ${list.join('·')}${josa(list[list.length - 1], '은', '는')} 빠졌어요.` : '';
     const fail = plan.subs.filter(x => !x.ok && x.ps === 'fail').map(x => SUBJ[x.subj].name), short = plan.subs.filter(x => !x.ok && x.ps !== 'fail').map(x => SUBJ[x.subj].name);
-    msg(res.ok ? `${doc.title} 모의고사 PDF를 저장했습니다 (${doc.use.map(x => `${SUBJ[x.subj].name} ${x.qs.length}`).join(' · ')}문제, ${doc.parts.total}쪽).${left(short, '문제가 모자란')}${left(fail, '학습지를 불러오지 못한')}` : res.msg);
+    msg(res.ok ? `${doc.title} 모의시험 PDF를 저장했습니다 (${doc.use.map(x => `${SUBJ[x.subj].name} ${x.qs.length}`).join(' · ')}문제, ${doc.parts.total}쪽).${left(short, '문제가 모자란')}${left(fail, '학습지를 불러오지 못한')}` : res.msg);
   } catch (e) {
-    msg('모의고사 PDF를 만들지 못했습니다. 다시 눌러 주세요.');
+    msg('모의시험 PDF를 만들지 못했습니다. 다시 눌러 주세요.');
   } finally {
     delete btn.dataset.busy; renderExam();
   }
@@ -15949,6 +16314,7 @@ function mountPane(subj){
   $(p + '-sync').addEventListener('click', () => { setDay(subj, schoolDay(subj)); renderPane(subj); });
   $(p + '-print').addEventListener('click', () => printPane(subj));
   $(p + '-pill').addEventListener('click', () => previewOpen(subj));
+  sheetWatch($(p + '-pill'), subj);
   if (subj === 'eng') {
     $('eng-say').addEventListener('click', e => {
       const b = e.target.closest('button[data-say]'); if (!b || b.disabled) return;
@@ -16290,8 +16656,8 @@ function toSchool(list){ (list || []).forEach(subj => { if (IDS.includes(subj) &
 /* 다른 화면으로 가면 영어 소리를 멈춤 */
 function stopSound(){ if (ETTS.busy) { ETTS.stop(); renderEngSay(); } }
 /* upos·dayCount·dayTitle: 점검용 — 화면에 Day 번호가 없어(2026-10-01) 검사가 속 Day 와 단원 안 진도를 여기서 봄 */
-HUB_TODAY.ssh = { keepFold, termFrac, schoolDay, upos, recap: subj => recapOf(subj, spanStart(subj)).map(x => ({ k: x.k, title: x.r.lesson.title })),   // recap: 대시보드(src/dash.js)가 보는 오늘 학습지의 어제·일주일 전 복습
-   dayCount: subj => dayList(subj).length, dayTitle: (subj, n) => { const r = resolve(subj, n); return r && r.lesson ? r.lesson.title : ''; }, toSchool, screen: screenOpen, screenOk: scrOk, scrCheck, scrNorm, ids: IDS, guideOn: () => st.guide, setGuide, setGrade, setKorGrade, setEngGrade, setMathGrade, stopSound, mountPane, renderPane, hasKor, hasEng, hasMath, hisMode, toPdf, examInfo, renderExam, examOk: () => examSubjects().length > 0, fontsReady };   // examOk: 아이 학년·과목에 모의고사를 만들 교과가 있는지 (없으면 아래 메뉴에서 모의고사를 숨김, 2026-10-01 대표)
+HUB_TODAY.ssh = { pagesFor, keepFold, termFrac, schoolDay, upos, recap: subj => recapOf(subj, spanStart(subj)).map(x => ({ k: x.k, title: x.r.lesson.title })),   // recap: 현황판(src/dash.js)가 보는 오늘 학습지의 어제·일주일 전 복습
+   dayCount: subj => dayList(subj).length, dayTitle: (subj, n) => { const r = resolve(subj, n); return r && r.lesson ? r.lesson.title : ''; }, toSchool, screen: screenOpen, screenOk: scrOk, scrCheck, scrNorm, ids: IDS, guideOn: () => st.guide, setGuide, setGrade, setKorGrade, setEngGrade, setMathGrade, stopSound, mountPane, renderPane, hasKor, hasEng, hasMath, hisMode, toPdf, examInfo, renderExam, examOk: () => examSubjects().length > 0, fontsReady };   // examOk: 아이 학년·과목에 모의시험을 만들 교과가 있는지 (없으면 아래 메뉴에서 모의시험을 숨김, 2026-10-01 대표)
 document.addEventListener('hub:child', renderExam);
 })();
 
@@ -18892,13 +19258,13 @@ HUB_TODAY.ymath = hubModule('ymath');
 window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor, ready, mathModel, mathLesson, recapSrc, rvSrc, sentRecap: (c, day) => { const src = recapSrc(c, day); return src.length ? sentRecapPlan(c, src, rng(seedOf(c.id + ':recap:' + day))) : null; }, plain, marks, balance, SROLE, pic: w => { const im = picOf(w); return im ? im.src : null; }, picE: e => { const im = picOfE(e); return im ? im.src : null; }, cur: p => { const c = courseOf(p); return { course: c, day: dayOf(c) }; } };   // 점검용 + 화면 공부(src/screen/ttobak.js·ymath.js)가 씀: 이름을 바꾸지 말 것
 })();
 
-/* ===== 메인 화면: 아이 학년·과목 · 아래 메뉴(오늘 / 모의고사) · 진도(오늘의 학습·자유 학습) · 시간표 PDF =====
+/* ===== 메인 화면: 아이 학년·과목 · 아래 메뉴(오늘 / 모의시험) · 진도(오늘의 학습·자유 학습) · 시간표 PDF =====
    2026-09-29 주인: 스마트 학습(바로 풀기)과 프린트 학습(뽑아서 풀기)는 같은 무게(입구는 '오늘' 카드, src/screen-frame.js). 아래 메뉴 '화면 공부'·'과목 자료'는 없앰.
    과목 화면(진도·미리보기·연간 계획·레벨 테스트·단어장)은 '오늘' 과목 줄·'다른 과목 더 하기' 줄을 누르거나, '진도 설정' 칸(예전 과목 자료 칸, tab 'subj')에서 엶 */
 (function(){
   const KEY = 'hub_subject', CHILD = 'hub_child';
   const $ = id => document.getElementById(id);
-  const NAME = { kor: '국어', eng: '영어', math: '수학', soc: '사회', sci: '과학', his: '한국사', wh: '세계사', hanja: '한자', yhan: '한자', ymath: '수학', vocab: '영어 부록', listen: '영어 부록', engx: '영어' };
+  const NAME = { kor: '국어', eng: '영어', math: '수학', soc: '사회', sci: '과학', his: '한국사', wh: '세계사', hanja: '한자', yhan: '한자', ymath: '수학', vocab: '영단어', listen: '영어 듣기', engx: '영어' };
   const load = k => { try { return localStorage.getItem(k); } catch (e) { return null; } };
   const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const store = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
@@ -18963,30 +19329,46 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     CARDS.forEach(b => { if (!vis.includes(b) && b.parentNode === box) b.remove(); });
     vis.forEach((b, i) => { if (kids[i] !== b) box.insertBefore(b, kids[i] || null); });   // 제자리인 카드는 옮기지 않음(떠오르는 효과가 다시 돌지 않게)
   }
-  /* ---------- 아래 메뉴 줄: 오늘 / 모의고사 (2026-09-29 주인: '화면 공부'는 오늘 카드로, '과목 자료'는 오늘 과목 줄·진도 설정으로 옮기고 없앰).
+  /* ---------- 아래 메뉴 줄: 오늘 / 모의시험 (2026-09-29 주인: '화면 공부'는 오늘 카드로, '과목 자료'는 오늘 과목 줄·진도 설정으로 옮기고 없앰).
      'subj'(진도 설정 칸: 과목 카드)은 메뉴에 없는 칸으로 남김 — '자유 진도설정'·HUB_NAV.tab('subj')로 엶. 'screen'은 '오늘'로 ---------- */
-  const TABS = [['today', '오늘', '<rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 11h16"/>'],
-    ['exam', '모의고사', '<path d="M8 3h8l4 4v14H4V3h4"/><path d="M8 3v3h8V3M8 12l2 2 4-4M8 18h8"/>'],
-    ['dash', '대시보드', '<rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/>']];   // 대시보드 (src/dash.js, 2026-10-03 대표: 아이 학습 현황, 모든 기기 · 폰은 줄인 판)
-  /* 유아 놀이(k2~k4): 아래 메뉴는 놀이 모음 / 화면 놀이 둘 (설정은 위 톱니바퀴 그대로) */
-  const TABS_T = [['play', '놀이 모음', '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><circle cx="10.5" cy="12" r="1.6"/><path d="M9 17c1.8-1.6 4.2-1.6 6 0"/>'], ['pscreen', '화면 놀이', '<rect x="3" y="5" width="18" height="13" rx="2.5"/><path d="M9 21h6M12 18v3"/><path d="M8 12.5c1.5-3 3-3 4 0s2.5 3 4 0"/>']];
+  /* 2026-10-04 12:56 KST 대표: 순서 현황판 · 학습 · 모의시험 (이름 '오늘'→'학습', '모의고사'→'모의시험'). 앱을 열면 처음 칸은 그대로 '학습' */
+  const TABS = [['dash', '현황판', '<rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/>'],
+    ['today', '학습', '<rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 11h16"/>'],
+    ['exam', '모의시험', '<path d="M8 3h8l4 4v14H4V3h4"/><path d="M8 3v3h8V3M8 12l2 2 4-4M8 18h8"/>'],
+    ['extra', '부록', '<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3M9 7h6M9 10.5h4"/>']];   // 2026-10-04 13:27 KST 대표: 아래 메뉴에 '부록' (영단어·영어 듣기를 영어 과목에서 꺼내 옮김, 앞으로 학습 도움 기능을 더 넣을 자리)   // 현황판 (src/dash.js, 2026-10-03 대표: 아이 학습 현황, 모든 기기 · 폰은 줄인 판)
+  /* 유아 놀이(k2~k4): 아래 메뉴는 현황판 / 놀이 모음 / 화면 놀이 셋 (10-04 12:56 현황판을 맨 앞으로) (2026-10-04 대표: 0~4세에도 현황판. 설정은 위 톱니바퀴 그대로) */
+  const TABS_T = [TABS.find(x => x[0] === 'dash'), ['play', '놀이 모음', '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><circle cx="10.5" cy="12" r="1.6"/><path d="M9 17c1.8-1.6 4.2-1.6 6 0"/>'], ['pscreen', '화면 놀이', '<rect x="3" y="5" width="18" height="13" rx="2.5"/><path d="M9 21h6M12 18v3"/><path d="M8 12.5c1.5-3 3-3 4 0s2.5 3 4 0"/>']];
   let tab = 'today', tabKind = '', backTo = 'subj', backY = 0;
   let subjPop = false;   // 과목 화면을 '‹'로 닫으며 넣어 둔 기록을 되돌리는 중 (subjHist)
   try { if (history.state && history.state.sarangSubj) { const s0 = Object.assign({}, history.state); delete s0.sarangSubj; history.replaceState(s0, ''); } } catch (e) {}   // 새로 고침: 지난번 과목 화면 기록 표시가 남아 있으면 지움 (안 지우면 뒤로 가기가 한 번 헛돎)
   const tabBar = document.createElement('nav'); tabBar.className = 'tabbar'; tabBar.id = 'tabBar'; tabBar.hidden = true; tabBar.setAttribute('aria-label', '메뉴');
-  /* 모의고사를 만들 교과가 없는 학년·과목(유아 5~7세, 국어 없는 초1·2 등)은 모의고사 메뉴를 숨김 → 메뉴가 '오늘' 하나면 아래 메뉴 줄 자체를 숨김 (2026-10-01 대표) */
+  /* 모의시험을 만들 교과가 없는 학년·과목(유아 5~7세, 국어 없는 초1·2 등)은 모의시험 메뉴를 숨김 → 메뉴가 '오늘' 하나면 아래 메뉴 줄 자체를 숨김 (2026-10-01 대표) */
   const examOk = () => !!(window.HUB_TODAY && HUB_TODAY.ssh && HUB_TODAY.ssh.examOk && HUB_TODAY.ssh.examOk());
-  const tabsNow = () => tod() ? TABS_T : TABS.filter(x => x[0] !== 'exam' || examOk());   // 대시보드는 늘 있음 → 유아 5~7세도 오늘 · 대시보드 두 칸
+  /* 부록 목록: 항목을 더하려면 여기에 한 줄 (k = 열 화면 pane-k, ok = 이 아이에게 보일지). 보일 항목이 없으면 아래 메뉴에 부록 칸도 없음 (0~4세는 놀이 메뉴라 없음) */
+  const EXTRAS = [
+    { k: 'vocab', t: '영단어', d: '단계별 단어 학습지와 플래시카드', ok: () => has('vocab'), ic: '<path d="M4 6h9M4 10h7M4 14h5"/><rect x="13" y="11" width="8" height="9" rx="1.5"/><path d="M15.5 17.5l1.5-4 1.5 4M16 16.3h2"/>' },
+    { k: 'listen', t: '영어 듣기', d: '소리를 듣고 익히는 연습', ok: () => has('listen'), ic: '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>' }
+  ];
+  const extras = () => tod() ? [] : EXTRAS.filter(x => { try { return x.ok(); } catch (e) { return false; } });
+  const tabsNow = () => tod() ? TABS_T : TABS.filter(x => (x[0] !== 'exam' || examOk()) && (x[0] !== 'extra' || extras().length));   // 현황판은 늘 있음 → 유아 5~7세도 현황판 · 학습 (영어를 고르면 + 부록)
   function drawTabs(){
-    const L = tabsNow(), k = L === TABS_T ? 't' : 'n' + L.length; if (k === tabKind) return; tabKind = k;
+    const L = tabsNow(), k = L.map(x => x[0]).join(); if (k === tabKind) return; tabKind = k;
     tabBar.innerHTML = L.map(([k, t, d]) => `<button type="button" data-tab="${k}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg><span>${t}</span></button>`).join('');
-    tabBar.classList.toggle('tb2', L.length === 2); tabBar.classList.toggle('tb3', L.length === 3);   // 두 칸 (유아 놀이도 두 칸) · 세 칸 (오늘 · 모의고사 · 대시보드)
+    tabBar.classList.toggle('tb2', L.length === 2); tabBar.classList.toggle('tb3', L.length === 3); tabBar.classList.toggle('tb4', L.length === 4);   // 두 칸 (오늘 · 현황판) · 세 칸 (오늘 · 모의시험 · 현황판, 유아 놀이 · 화면 놀이 · 현황판)
   }
   drawTabs();
   $('app').append(tabBar);
-  $('sarangDashboard').insertAdjacentHTML('beforeend', '<section class="card exam-none" id="examNone"><div class="label">모의고사</div><div class="info">아이 학년에는 아직 모의고사를 만들 교과(국어·수학·사회·과학·한국사 등 시험 범위가 있는 과목)가 없어요.</div></section>');
+  $('sarangDashboard').insertAdjacentHTML('beforeend', '<section class="card ex-pane" id="extraPane" aria-labelledby="extraTitle"><div class="label" id="extraTitle">부록</div><div class="info">진도와 상관없이 언제든 골라 쓰는 학습 자료예요.</div><div class="ex-list" id="extraList"></div></section>');
+  function renderExtras(){
+    const html = extras().map(x => `<button type="button" class="ex-item" data-ex="${x.k}"><span class="ex-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${x.ic}</svg></span><span class="ex-t"><b>${x.t}</b><small>${x.d}</small></span><i class="ex-go" aria-hidden="true">›</i></button>`).join('');
+    if ($('extraList').innerHTML !== html) $('extraList').innerHTML = html;
+  }
+  $('extraList').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; backTo = 'extra'; backY = Math.round(scrollY); open(b.dataset.ex); });
+  $('sarangDashboard').insertAdjacentHTML('beforeend', '<section class="card exam-none" id="examNone"><div class="label">모의시험</div><div class="info">아이 학년에는 아직 모의시험을 만들 교과(국어·수학·사회·과학·한국사 등 시험 범위가 있는 과목)가 없어요.</div></section>');
   function setTab(t){ if (t === 'screen') t = 'today'; if (!tabsNow().some(x => x[0] === t) && !(t === 'subj' && !tod())) return; tab = t; setOpen(false); show('home'); window.scrollTo(0, 0); }
-  tabBar.addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (b) setTab(b.dataset.tab); });
+  tabBar.addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return;
+    const D = window.SARANG_DASH; if (D && D.mgActive && D.mgActive() && b.dataset.tab !== 'dash' && D.guard(() => setTab(b.dataset.tab))) return;   // 학습 관리에서 바꾼 진도를 저장하지 않고 나가면 물음 (src/dash.js)
+    setTab(b.dataset.tab); });
   /* ---------- 자녀 (src/kids.js, 2026-10-02 대표): 둘 이상이면 화면 맨 위(머리줄 아래) 카드로 바꿔 보기, 설정 '자녀' 칸에서 별명·번호·추가 ---------- */
   ($('sarangHero') || $('today')).insertAdjacentHTML('beforebegin', '<div class="kid-bar" id="kidBar" hidden><div class="kid-cards" id="kidCards" role="group" aria-label="자녀 바꾸기"></div></div>');
   $('settings').insertAdjacentHTML('afterbegin', '<div class="label">자녀</div><div id="setKids"></div>');
@@ -19256,9 +19638,10 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     }
     $('onboard').hidden = true; $('setBtnHub').hidden = false; parkWeek();
     const T = tod();   // 유아 놀이: 과목 화면 없이 놀이 모음·화면 놀이만. 형제 프로필로 학년이 바뀌면 메뉴도 바뀜
-    if (T) { s = 'home'; if (tab !== 'play' && tab !== 'pscreen') tab = 'play'; } else if (tab === 'play' || tab === 'pscreen') tab = 'today';
+    if (T) { s = 'home'; if (tab !== 'play' && tab !== 'pscreen' && tab !== 'dash') tab = 'play'; } else if (tab === 'play' || tab === 'pscreen') tab = 'today';
     drawTabs();
-    if (tab === 'exam' && !examOk()) tab = 'today';   // 학년·과목을 바꿔 모의고사가 없어지면 오늘로
+    if (tab === 'exam' && !examOk()) tab = 'today';   // 학년·과목을 바꿔 모의시험이 없어지면 오늘로
+    if (tab === 'extra' && !extras().length) tab = 'today';   // 영어를 빼서 부록에 보일 것이 없으면
     if (s === 'hanja' && has('yhan')) s = 'yhan';
     if (s === 'math' && has('ymath')) s = 'ymath';
     if (s === 'eng' && !has('eng')) s = 'engx';
@@ -19268,28 +19651,27 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     const was = view; view = s;
     subjHist(was, s);
     const home = s === 'home';
-    if (home) backTo = 'subj'; else { if (tab === 'today') backTo = 'today'; tab = 'subj'; }   // 과목 화면: 돌아가기는 연 곳(오늘 줄 또는 진도 설정)으로
+    if (home) backTo = 'subj'; else { if (tab === 'today' || tab === 'extra') backTo = tab; else if (backTo === 'subj' && (s === 'vocab' || s === 'listen')) backTo = 'extra'; tab = 'subj'; }   // 과목 화면: 돌아가기는 연 곳(오늘 줄·부록·진도 설정)으로. 영단어·영어 듣기는 진도 설정 칸에 없으니 모르는 곳에서 열면 부록으로
     const oneTab = tabsNow().length < 2;   // 메뉴가 하나뿐이면 아래 메뉴 줄을 숨기고 그만큼의 아래 여백도 없앰
     $('app').dataset.tab = tab; $('app').classList.toggle('has-tabs', !oneTab); tabBar.hidden = oneTab;
-    tabBar.querySelectorAll('[data-tab]').forEach(b => { if (b.dataset.tab === tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+    const cur = s === 'vocab' || s === 'listen' ? 'extra' : tab;   // 부록 화면을 보는 동안은 부록 칸에 불
+    tabBar.querySelectorAll('[data-tab]').forEach(b => { if (b.dataset.tab === cur) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     document.querySelectorAll('.pane').forEach(p => { p.hidden = home || p.id !== 'pane-' + s; });
     $('subj').hidden = !home; $('subbar').hidden = home;
     $('today').hidden = !(home && m === 'today' && tab === 'today');
     if (!home) {
       $('subTitle').textContent = NAME[s] || '';
-      const ex = s === 'vocab' || s === 'listen';   // 영어 부록 화면: 영단어 | 영어 듣기, '‹'는 영어 화면으로
-      if ($('engSw').hidden === ex) $('engSw').hidden = !ex;
-      $('engSw').querySelectorAll('button').forEach(b => b.classList.toggle('on', b.dataset.s === s));
-      $('homeBtn').setAttribute('aria-label', ex ? '영어로 돌아가기' : '돌아가기');
+      if (!$('engSw').hidden) $('engSw').hidden = true;   // 영단어 | 영어 듣기 바꾸기 줄은 안 씀 (2026-10-04 부록 메뉴로 옮김, 오가는 곳은 부록 목록)
+      $('homeBtn').setAttribute('aria-label', backTo === 'extra' ? '부록으로 돌아가기' : '돌아가기');
     }
     placeGuide(s);
     store(KEY, s);
-    if (home) { renderHome(); if (tab === 'today') tourMaybe(); }
+    if (home) { renderHome(); renderExtras(); if (tab === 'today') tourMaybe(); }
     paceSnap(); paceUi();
-    if (window.PLAY_UI) PLAY_UI.show(T ? tab : null, T ? child().grade : null);
+    if (window.PLAY_UI) PLAY_UI.show(T && tab !== 'dash' ? tab : null, T ? child().grade : null);   // 현황판 칸에서는 놀이 목록을 숨김
     if (window.SARANG_NOTIFY) SARANG_NOTIFY.check();
     renderKids();
-    if (window.SARANG_DASH) SARANG_DASH.show(tab === 'dash' && home);   // 대시보드 칸 (src/dash.js)
+    if (window.SARANG_DASH) SARANG_DASH.show(tab === 'dash' && home);   // 현황판 칸 (src/dash.js)
   }
   function startOnboardSilently(){ const c = child(); ob = { step: c ? 3 : 1, grade: c ? c.grade : null, lv: levelOf(c && c.grade), subs: c ? c.subs.slice() : [], pre: false, again: false, first: !c, askName: !c && needName() }; }
   /* 설정: 오늘의 학습 위에 겹쳐 펼치지 않고 따로 된 화면으로 엶 (2026-10-01 대표). 연 동안 #app.set-open 이 다른 칸을 숨김(src/settings.css).
@@ -19314,7 +19696,7 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     if (!$('settings').hidden && !(history.state && history.state.sarangSettings)) { setPushed = false; renderHome(); setOpen(false); }
   });
   /* 폰 뒤로 가기 (2026-10-03): 과목 화면에 들어가면 기록 한 칸(sarangSubj)을 넣음. 전에는 기록이 없어 뒤로 가기 한 번에 앱이 닫혔음.
-     뒤로 가기 = 열린 레벨 테스트·퀴즈 닫기 → 영어 부록이면 영어 화면 → 아니면 '‹'와 같이 돌아감. '‹'로 닫으면 넣어 둔 기록을 되돌림 */
+     뒤로 가기 = 열린 레벨 테스트·퀴즈 닫기 → 아니면 '‹'와 같이 돌아감 (영단어·영어 듣기는 부록 칸으로). '‹'로 닫으면 넣어 둔 기록을 되돌림 */
   function subjHist(was, s){
     try {
       if (was === 'home' && s !== 'home') { history.scrollRestoration = 'manual'; history.pushState(Object.assign({}, history.state || {}, { sarangSubj: 1 }), ''); }   // 과목 화면 안에서는 스크롤을 각 화면이 정함 (뒤로 가기 때 브라우저가 옛 자리로 옮기면 튐)
@@ -19328,11 +19710,10 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     const lt = $('lt'), qz = $('v-quizWrap');
     if (lt && !lt.hidden) { const b = $('ltQuit') || $('ltDone'); if (b) b.click(); subjRe(); return; }
     if (qz && !qz.classList.contains('hidden')) { const b = $('quitQuiz'); if (b) b.click(); subjRe(); return; }
-    if (view === 'vocab' || view === 'listen') { exBack(); subjRe(); return; }
     $('homeBtn').click();
   });
   function open(s){
-    if (s === 'eng') s = has('eng') ? 'eng' : 'engx';   // 영어 카드는 늘 영어 화면 (영단어·영어 듣기는 그 아래 부록)
+    if (s === 'eng') s = has('eng') ? 'eng' : 'engx';   // 영어 카드는 늘 영어 화면 (영단어·영어 듣기는 아래 메뉴 부록)
     if (s === 'hanja' && has('yhan')) s = 'yhan';
     if (s === 'math' && has('ymath')) s = 'ymath';
     setOpen(false);
@@ -19342,8 +19723,7 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
   addEventListener('resize', () => { if (view === 'home' && !ob) renderHome(); });
   document.addEventListener('hub:refresh', () => { if (view === 'home' && !ob) renderHome(); });   // 학습지 묶음을 읽은 뒤 과목 카드 정보 다시
   /* 과목 화면 '‹': 오늘 줄에서 열었으면 오늘(보던 자리), 진도 설정에서 열었으면 진도 설정 */
-  $('homeBtn').addEventListener('click', e => { if (view !== 'vocab' && view !== 'listen') return; e.stopImmediatePropagation(); exBack(); });   // 영어 부록 → 영어 화면
-  $('homeBtn').addEventListener('click', () => { const t = backTo, y = t === 'today' ? backY : 0; backTo = 'subj'; tab = t; show('home'); window.scrollTo(0, y);
+  $('homeBtn').addEventListener('click', () => { const t = backTo, y = t === 'today' || t === 'dash' || t === 'extra' ? backY : 0; backTo = 'subj'; tab = t; show('home'); window.scrollTo(0, y);
     /* 오늘 칸은 다음 틀에 다시 그려져 높이가 늦게 참 → 그 자리가 생길 때까지 몇 틀 더 (보던 줄로 돌아오게) */
     let n = 0; const again = () => { if (view !== 'home' || Math.abs(scrollY - y) <= 1 || ++n > 20) return; if (document.documentElement.scrollHeight - innerHeight >= y) window.scrollTo(0, y); requestAnimationFrame(again); };
     if (y) requestAnimationFrame(again); });
@@ -19406,7 +19786,9 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     if (on) $('paceNo').focus({ preventScroll: true });
   }
   $('paceBtn').addEventListener('click', () => {
-    if (pace() === 'school') { setPace('free'); setTab('subj'); say('자유 학습으로 바꿨어요. 과목을 눌러 진도를 정해 주세요.'); return; }
+    if (pace() === 'school') {   // 2026-10-04 대표: 현황판 '학습 관리'로 가서 과목마다 시작 범위를 정하고 저장 (저장해야 자유 학습)
+      if (window.SARANG_DASH && SARANG_DASH.manage) { SARANG_DASH.manage(); return; }
+      setPace('free'); setTab('subj'); say('자유 학습으로 바꿨어요. 과목을 눌러 진도를 정해 주세요.'); return; }
     paceAsk($('paceAsk').hidden);
   });
   $('paceNo').addEventListener('click', () => { paceAsk(false); $('paceBtn').focus({ preventScroll: true }); });
@@ -19438,18 +19820,14 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
   /* ---------- 오늘의 학습이면 과목 화면에서 진도를 못 바꿈 (2026-10-02 대표: "진도 수정을 하려면 무조건 자유 학습으로") ----------
      학년·과정·급수·단계·단원·Day 고르기, ‹ ›, 학습지 고르기, 연간 계획 줄, 단어 수, 레벨테스트를 막고, 과목 이름 줄 아래 안내의 '자유 학습으로 바꾸기'로만 풂.
      미리보기·PDF·가이드·소리·단어장·퀴즈·수학 문제 세트·'학교 진도에 맞추기'·한국사/세계사 고르기는 그대로. 막은 칸은 흐리게(연간 계획은 읽기 좋게 그대로) + 누르면 짧은 알림 */
-  /* 영어 부록 (2026-10-02 대표 "영단어·영어 듣기는 과목이 아닌 부록, 정규 교과는 '영어' 그 자체"): 영어 화면 맨 아래 칸에서 들어감.
-     학년 과정이 없는 나이(유아·초1~2)는 영어 화면(engx)에 안내와 부록 칸만 */
-  const EXTRA = '<div class="card eng-extra"><div class="label">부록</div><div class="info">정규 영어 과정과 따로, 진도와 상관없이 언제든 골라 쓰는 자료예요. 영단어는 단계별 단어 학습지, 영어 듣기는 소리를 듣고 익히는 연습이에요.</div>'
-    + '<div class="actions a2"><button type="button" data-ex="vocab">영단어</button><button type="button" data-ex="listen">영어 듣기</button></div></div>';
-  if ($('pane-eng')) $('pane-eng').insertAdjacentHTML('beforeend', EXTRA);
-  $('pane-engx').innerHTML = '<div class="card"><div class="label">영어</div><div class="info">학교 영어는 초등학교 3학년부터 시작해요. 그 전에는 아래 부록에서 영단어와 영어 듣기를 골라 익혀요.</div></div>' + EXTRA;
-  document.addEventListener('click', e => { const b = e.target.closest('.eng-extra [data-ex]'); if (b) { show(b.dataset.ex); window.scrollTo(0, 0); } });
+  /* 영단어·영어 듣기 (2026-10-02 대표 "과목이 아닌 부록") → 2026-10-04 13:27 KST 대표: 영어 화면 안 부록 칸을 없애고 아래 메뉴 '부록'으로 옮김 (EXTRAS 위).
+     학년 과정이 없는 나이(유아·초1~2)의 영어 화면(engx)은 안내와 부록 가는 단추만 */
+  $('pane-engx').innerHTML = '<div class="card"><div class="label">영어</div><div class="info">학교 영어는 초등학교 3학년부터 시작해요. 그 전에는 아래 메뉴 \'부록\'에서 영단어와 영어 듣기를 골라 익혀요.</div><div class="actions"><button type="button" class="wide pri" id="engxGo">부록으로 가기</button></div></div>';
+  $('engxGo').addEventListener('click', () => setTab('extra'));
   /* 영단어 바로 풀기: 오늘 목록에서 빠졌으니 영단어 화면 안에 (뽑아서 풀기 단추들과 같은 칸, 2026-10-02) */
   { const vp = document.querySelector('#pane-vocab [data-vpdf="original"]'); if (vp) vp.insertAdjacentHTML('beforebegin', '<button type="button" class="wide pri" data-scr="vocab" data-from="pane">바로 풀기 (화면으로 공부)</button>'); }
-  function exBack(){ const p = has('eng') ? 'eng' : 'engx'; show(p); const c = $('pane-' + p).querySelector('.eng-extra'); if (c) c.scrollIntoView({ block: 'center' }); }
   const LOCK = ['[id$="-grades"] button', '[id$="-prev"]', '[id$="-next"]', '[id$="-plan"] .ss-row', '#kor-kseg button', '[id$="-courses"] button', '[data-lt]',
-    '#grades button', '#units button', '#days button', '#hj-day'].map(x => (x === '[data-lt]' ? '.pane:not(#pane-vocab) ' : '.pane ') + x).join(', ');   // 영단어 레벨테스트는 영어 부록이라 그대로
+    '#grades button', '#units button', '#days button', '#hj-day'].map(x => (x === '[data-lt]' ? '.pane:not(#pane-vocab) ' : '.pane ') + x).join(', ');   // 영단어 레벨테스트는 부록이라 그대로
   const LOCK_DIM = LOCK.split(', ').filter(x => !x.includes('.ss-row')).join(', ');
   const lockStyle = document.createElement('style');
   lockStyle.textContent = `#app.pace-lock :is(${LOCK}){pointer-events:none;cursor:default}#app.pace-lock :is(${LOCK_DIM}){opacity:.4}`;
@@ -19459,7 +19837,7 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
   function lockUi(){
     const on = locked();
     $('app').classList.toggle('pace-lock', on);
-    const note = on && !['home', 'vocab', 'listen', 'engx'].includes(view);   // 영어 부록(영단어·영어 듣기)은 학교 진도가 아님
+    const note = on && !['home', 'vocab', 'listen', 'engx'].includes(view);   // 부록(영단어·영어 듣기)은 학교 진도가 아님
     if ($('paceLock').hidden === note) $('paceLock').hidden = !note;
   }
   const LOCK_MSG = "오늘의 학습에서는 진도를 바꿀 수 없어요. 위 '자유 학습으로 바꾸기'를 눌러 주세요.";
@@ -19563,7 +19941,9 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
     { el: () => [$('todayWays')], t: '스마트 · 전체 뽑아서 풀기', d: () => "스마트 학습도, 프린트 학습도 좋아요. 과목 줄의 '스마트'는 그 과목을 화면에서 풀고 바로 채점해요. '전체 뽑아서 풀기'는 오늘 과목을 PDF 한 파일로 받아 인쇄해요." + (vis($('hubGuideRow')) ? " 옆의 '가이드 PDF 함께 출력'을 켜면 정답과 해설이 든 부모님용 가이드도 한 파일 더 받아요." : '') },
     { el: () => [$('todayPaper')], t: '프린트 출력 가이드', d: () => "프린터가 있을 때와 없을 때 뽑는 방법을 여기서 펴 보세요." },   // 2026-10-03 대표: '프린트 학습할 때' 제목 지우고 이름을 '프린트 출력 가이드'로
     { el: () => [$('todayMore')], t: '다른 과목 더 하기', d: () => '오늘 시간표에 없는 과목의 지금 진도를 여기서 스마트 학습이나 프린트 학습으로 해요.' },
-    { el: () => [$('tabBar')], fixed: true, t: '아래 메뉴', d: () => examOk() ? "'오늘'·'모의고사'·'대시보드'로 가요. 모의고사에서는 배운 범위로 시험지를 만들고, 대시보드에서는 아이 학습 현황을 한눈에 봐요." : "'오늘'과 '대시보드'로 가요. 대시보드에서는 아이 학습 현황을 한눈에 봐요." },
+    { el: () => [$('tabBar')], fixed: true, t: '아래 메뉴', d: () => { const k = tabsNow().map(x => x[0]), n = tabsNow().map(x => `'${x[1]}'`);   // 마지막 칸 이름(학습·모의시험·부록)이 모두 받침으로 끝나 '으로'
+      return (n.length > 2 ? n.join('·') : n.join('과 ')) + '으로 가요. 현황판에서는 아이 학습 현황을 한눈에 봐요.'
+        + (k.includes('exam') ? ' 모의시험에서는 배운 범위로 시험지를 만들어요.' : '') + (k.includes('extra') ? ' 부록에는 영단어·영어 듣기처럼 진도와 상관없이 쓰는 자료가 있어요.' : ''); } },
     { el: () => [$('setBtnHub')], t: '설정', d: () => '아이 학년·과목은 여기서 바꿔요.' }
   ];
   const calm = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -19708,7 +20088,9 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
   const liveCards = () => { cardsLive = true; newYear(); if (view === 'home' && !ob) { renderHome(); tourMaybe(); } paceSnap(); setTimeout(notify, 400); };   // 오늘 목록을 그리고 안내가 뜰지 정한 뒤
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', liveCards); else setTimeout(liveCards, 0);
   document.addEventListener('hub:refresh', () => setTimeout(notify, 0));   // 화면 공부를 끝내거나 종이로 뽑으면 알림도 바로
-  window.HUB_NAV = { show, renderHome, has, inWeek, placeGuide, tab: setTab, get tabNow(){ return tab; }, pace, setPace };
+  /* 현황판 '학습 관리'에서 과목 화면 열기: '‹'·폰 뒤로는 학습 관리로 */
+  function openFrom(s, from){ backTo = from || 'subj'; backY = Math.round(scrollY); open(PANE[s] || s); }
+  window.HUB_NAV = { show, renderHome, has, inWeek, placeGuide, tab: setTab, get tabNow(){ return tab; }, pace, setPace, say, openFrom };
 })();
 
 /* ===== 오늘의 학습: 요일별 과목의 지금 Day를 PDF 한 파일로 ===== */
@@ -19823,8 +20205,8 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
         return { res, files, fail, saved };
       };
       const part = (n, one = 1) => n > one ? ` (쪽이 많아 ${n}개 파일로 나눠 저장했어요)` : '';
-      const tried = [];   // 쪽을 만들어 본 과목 (취소로 멈추면 뒤 과목은 안 만듦)
-      const sv = await saveParts(t ? '오늘의학습' : '학습지', list, async s => { tried.push(s); const m = HUB_TODAY[s]; if (m.prepare) await m.prepare(); const p = m.pages(t); if (p.length) used.push(s); return p; });   // 오늘의 학습: 주 횟수에 맞춘 k Day 묶음 (t=false: 지금 Day)
+      const tried = [], sheets = {};   // 쪽을 만들어 본 과목 (취소로 멈추면 뒤 과목은 안 만듦) / 과목마다 뽑은 쪽 수 (현황판 '뽑아서 푼 학습지 n장')
+      const sv = await saveParts(t ? '오늘의학습' : '학습지', list, async s => { tried.push(s); const m = HUB_TODAY[s]; if (m.prepare) await m.prepare(); const p = m.pages(t); if (p.length) { used.push(s); sheets[s] = p.length; } return p; });   // 오늘의 학습: 주 횟수에 맞춘 k Day 묶음 (t=false: 지금 Day)
       if (!sv.files && !sv.fail) { $('todayMsg').textContent = '오늘 출력할 학습지가 아직 준비 중이에요.'; return; }
       const res = sv.res, saved = sv.saved;
       const skip = tried.filter(s => !used.includes(s)).map(s => NAME[s]), note = skip.length ? ` (학습지가 아직 준비 중이라 빠진 과목: ${skip.join('·')})` : '';   // 말없이 빠지지 않게
@@ -19834,7 +20216,7 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
         : res.msg;
       /* 종이로 했음(저장된 과목만): 진도·복습 이력(done) → 줄에 '다 했어요 · 프린트'·9시·1시 알림 끔 (src/screen-frame.js 한 길) */
       saved.forEach(s => HUB_TODAY[s].done(t));
-      if (window.SARANG_TODAY) SARANG_TODAY.paper(saved); else if (saved.length && window.SARANG_NOTIFY) SARANG_NOTIFY.printed();
+      if (window.SARANG_TODAY) SARANG_TODAY.paper(saved, sheets); else if (saved.length && window.SARANG_NOTIFY) SARANG_NOTIFY.printed();
       /* 부모님 가이드: 교과 국어·영어·수학(초4~)·사회·과학·한국사·세계사 가이드를 한 파일로 더 (많으면 나눠서). 학습지를 모두 저장했을 때만 */
       const gsubs = saved.filter(s => SSH.includes(s) || (HUB_TODAY[s].hasGuide && HUB_TODAY[s].hasGuide()));
       if (res.ok && HUB_TODAY.ssh.guideOn() && gsubs.length) {
@@ -20012,10 +20394,12 @@ window.TTOBAK = { COURSES, pos: posOf, name: nameOf, model, drawsFor, canvasFor,
    교과(국어·영어·수학 초4~·사회·과학·한국사·세계사)는 ssh-module 의 HUB_TODAY.ssh.screen 이 그림.
    완료(ctx.done)를 받으면 PDF 를 뽑은 것과 같이 그 과목 done(다음 날 다음 Day·복습) + hub_screen_done 기록 + 오늘 공부 알림 해제.
    종이로 뽑은 과목은 hub_paper_done 에 적음(build.py 오늘의 학습 printSubs). 오늘 줄의 '다 했어요 · 스마트/프린트'는 두 기록을 봄.
+   공부 시간(2026-10-04 대표 승인, 현황판 '공부 시간'·리포트): 스마트 학습 화면이 열려 있고 화면이 보이는 동안, 누르거나 넘기는 사이가 5분 안쪽인 시간만 셈
+   (5분 넘게 가만히 있거나 앱을 닫으면 멈춤 → 켜 두기만 한 시간은 안 들어감). hub_study_time = { 날짜: { 과목: 초 } }. 프린트는 시간 대신 쪽 수(n)를 hub_paper_done 에 적음.
    등록: SARANG_SCREEN.register(키, { label, open(ctx), available?(), noDone? }) — open 은 { parent?(on), close?(), stop?() } (또는 그 약속)을 돌려줌 */
 window.SARANG_SCREEN = (function(){
   const $ = id => document.getElementById(id);
-  const REG = {}, DONE = 'hub_screen_done', PAPER = 'hub_paper_done';
+  const REG = {}, DONE = 'hub_screen_done', PAPER = 'hub_paper_done', TIME = 'hub_study_time', KEEP_DAYS = 70;   // 70일: 월간 리포트가 지난달을 다 볼 수 있게
   const NAME = { kor: '국어', eng: '영어', math: '수학', ymath: '수학', vocab: '영단어', hanja: '한자', yhan: '한자', listen: '영어 듣기', soc: '사회', sci: '과학', his: '한국사', wh: '세계사' };
   const SSH = { kor: 'ekor', math: 'emath', eng: 'eng', soc: 'soc', sci: 'sci', his: 'his', wh: 'wh' };   // 교과 화면(ssh-module)
   const T = () => window.HUB_TODAY || {};
@@ -20053,13 +20437,14 @@ window.SARANG_SCREEN = (function(){
   function put(k, s, v){
     const m = doneMap(k), d = ymd();
     (m[d] = m[d] || {})[s] = v;
-    Object.keys(m).sort((a, b) => new Date(a) - new Date(b)).slice(0, -30).forEach(x => delete m[x]);   // 30일만
+    trim(m);
     try { localStorage.setItem(k, JSON.stringify(m)); } catch (e) {}
   }
+  const trim = m => Object.keys(m).sort((a, b) => new Date(a) - new Date(b)).slice(0, -KEEP_DAYS).forEach(x => delete m[x]);   // 날짜 70개만
   /* 한 공부 적기(스마트·프린트 한 길): 과목 진도(done)를 먼저 넘긴 뒤 부름 → 그 과목의 지금 할 일로 적고 공부 시작 알림을 끔.
      저장·풀이를 실제로 마친 과목만 넘김 (취소·실패면 부르지 않음) */
-  function complete(k, list, more){
-    (list || []).forEach(s => put(k, s, Object.assign({ at: Date.now() }, more || {}, { task: task(s) })));
+  function complete(k, list, more, each){   // each: 과목마다 더 적을 것 { 과목: { n: 쪽 수 } }
+    (list || []).forEach(s => put(k, s, Object.assign({ at: Date.now() }, more || {}, (each || {})[s] || {}, { task: task(s) })));
     if (list && list.length && window.SARANG_NOTIFY && SARANG_NOTIFY.printed) SARANG_NOTIFY.printed();
     document.dispatchEvent(new CustomEvent('hub:refresh'));
   }
@@ -20084,6 +20469,36 @@ window.SARANG_SCREEN = (function(){
     $('scrBody').append(box);
   }
 
+  /* ---------- 공부 시간 ----------
+     누르기·키·넘기기(스크롤) 사이가 IDLE 안쪽이면 그 사이를 셈. 화면을 가리면(다른 앱·탭) 거기서 끊고, 다시 보이면 새로 셈 */
+  const IDLE = 5 * 60 * 1000;
+  const clock = { s: null, last: 0, acc: 0, day: '' };
+  function addTime(s, ms){
+    const sec = Math.round(ms / 1000); if (!s || sec <= 0) return;
+    const m = doneMap(TIME), d = ymd(), o = m[d] = m[d] && typeof m[d] === 'object' ? m[d] : {};
+    o[s] = (+o[s] || 0) + sec; trim(m);
+    try { localStorage.setItem(TIME, JSON.stringify(m)); } catch (e) {}
+  }
+  function tick(now){   // 지난 손짓부터 지금까지(5분 안쪽이면)를 쌓음
+    if (!clock.s || !clock.last) return;
+    const gap = now - clock.last;
+    if (gap > 0 && gap <= IDLE) clock.acc += gap;
+    clock.last = now;
+    if (clock.day !== ymd()) { flush(); clock.day = ymd(); }
+    else if (clock.acc >= 60000) flush();   // 1분마다 적음 (앱이 갑자기 꺼져도 거의 남게)
+  }
+  function flush(){ if (clock.acc) { addTime(clock.s, clock.acc); clock.acc = 0; } }
+  function clockStart(s){ clockStop(); clock.s = s; clock.day = ymd(); clock.acc = 0; clock.last = document.visibilityState === 'hidden' ? 0 : Date.now(); }
+  function clockStop(){ if (!clock.s) return; if (clock.last) tick(Date.now()); flush(); clock.s = null; clock.last = 0; }
+  const poke = () => { if (!clock.s) return; const now = Date.now(); if (clock.last) tick(now); else clock.last = now; };
+  ['pointerdown', 'keydown', 'wheel', 'touchstart', 'scroll', 'input'].forEach(t => addEventListener(t, poke, { passive: true, capture: true }));
+  document.addEventListener('visibilitychange', () => {
+    if (!clock.s) return;
+    if (document.visibilityState === 'hidden') { if (clock.last) tick(Date.now()); flush(); clock.last = 0; }
+    else clock.last = Date.now();
+  });
+  addEventListener('pagehide', () => { if (clock.s && clock.last) { tick(Date.now()); flush(); } });
+
   /* ---------- 화면 ---------- */
   function mount(){
     if ($('screenView') || !$('app')) return;
@@ -20096,7 +20511,22 @@ window.SARANG_SCREEN = (function(){
     $('scrClose').addEventListener('click', close);
     $('scrBody').addEventListener('click', e => { if (e.target.closest('.scr-back2')) close(); });
     $('scrPar').addEventListener('change', e => setParent(e.target.checked));
-    addEventListener('popstate', () => { if (cur && !cur.closing && !(history.state && history.state.sarangScreen)) shut(); });   // 화면 위에 연 사진 크게 보기(zoom.js)를 뒤로 가기로 닫을 때는 화면 공부 기록으로 돌아올 뿐이라 닫지 않음
+    addEventListener('popstate', () => {
+      if (!cur || cur.closing || (history.state && history.state.sarangScreen)) return;   // 화면 위에 연 사진 크게 보기(zoom.js)를 뒤로 가기로 닫을 때는 화면 공부 기록으로 돌아올 뿐이라 닫지 않음
+      if (busy()) { try { history.pushState({ sarangScreen: 1 }, ''); } catch (e) {} window.scrollTo(0, cur.sy || 0); ask(); return; }   // 풀던 중: 기록을 다시 넣고 물음
+      shut();
+    });
+    /* 풀던 중 나가기 (2026-10-04 대표: "스마트학습 진행 중 뒤로가기를 누르면 경고메시지가 나와야 함, 모르고 눌렀더니 지워져버리네").
+       아이가 답을 고르거나 쓰기 시작하면(풀이 칸의 입력·단추·펜) 폰 뒤로 가기·'‹ 닫기'·새로 고침 때 먼저 물음. 마친 뒤(scr-fin)는 묻지 않음 */
+    const mark = e => {
+      const c = cur, t = e.target; if (!c || c.fin || !t || !t.closest || !t.closest('#scrBody .scr-mod') || t.closest('.scr-fin')) return;
+      if (e.type === 'click' && !t.closest('button, [role="button"], input, label, select, textarea')) return;
+      if (e.type === 'pointerdown' && !t.closest('canvas')) return;
+      c.dirty = true;
+    };
+    ['input', 'change', 'click', 'pointerdown'].forEach(t => v.addEventListener(t, mark, true));
+    addEventListener('scroll', () => { if (cur) cur.sy = window.scrollY; }, { passive: true });
+    addEventListener('beforeunload', e => { if (busy()) { e.preventDefault(); e.returnValue = ''; } });   // 화면 위에 연 사진 크게 보기(zoom.js)를 뒤로 가기로 닫을 때는 화면 공부 기록으로 돌아올 뿐이라 닫지 않음
   }
   /* 부모님 보기: 위에 가이드·정답이 늘어도 보던 곳은 제자리 */
   function setParent(on){
@@ -20116,6 +20546,7 @@ window.SARANG_SCREEN = (function(){
     if (prev) shut(chain);
     if (T().ssh && T().ssh.stopSound) T().ssh.stopSound();
     const c = cur = { s: t.hub, key: t.key, hub: t.hub, from: from === 'today' ? 'today' : 'pane', y: chain ? prev.y : window.scrollY, par: false, api: null };
+    clockStart(t.hub);
     $('app').classList.add('scr-on');
     $('screenView').hidden = false;
     $('scrTitle').textContent = `${NAME[t.hub] || t.def.label || ''} · 스마트 학습`;
@@ -20137,7 +20568,8 @@ window.SARANG_SCREEN = (function(){
   }
   function shut(keep){
     const c = cur; if (!c) return;
-    cur = null;
+    cur = null; clockStop();
+    if ($('scrAsk')) $('scrAsk').hidden = true;
     try { if (c.api) { if (c.api.close) c.api.close(); if (c.api.stop && c.api.stop !== c.api.close) c.api.stop(); } } catch (e) {}
     $('scrBody').innerHTML = '';
     if (keep) return;   // 곧 다음 과목을 엶
@@ -20147,8 +20579,32 @@ window.SARANG_SCREEN = (function(){
     document.dispatchEvent(new CustomEvent('hub:refresh'));
   }
   function close(){
+    if (busy()) { ask(); return; }
+    leave();
+  }
+  function leave(){
     if (cur && cur.pushed && history.state && history.state.sarangScreen) { cur.closing = true; history.back(); setTimeout(shut, 0); return; }   // 뒤로 가기 한 칸도 같이 씀
     shut();
+  }
+  const busy = () => !!(cur && cur.dirty && !cur.fin && !(cur.api && cur.api.busy === false));
+  /* 그만할지 묻는 창: '계속 풀기'(기본, Esc·바깥 누름) / '그만하기' */
+  function ask(){
+    let d = $('scrAsk');
+    if (!d) {
+      d = document.createElement('div'); d.id = 'scrAsk'; d.className = 'scr-ask'; d.hidden = true;
+      d.innerHTML = '<div class="scr-ask-card" role="alertdialog" aria-modal="true" aria-labelledby="scrAskT" aria-describedby="scrAskD">'
+        + '<b id="scrAskT">공부를 그만할까요?</b><p id="scrAskD">지금 나가면 풀던 답은 저장되지 않아요.</p>'
+        + '<div class="scr-ask-btns"><button type="button" class="linkbtn" id="scrAskGo">그만하기</button><button type="button" class="pri" id="scrAskStay">계속 풀기</button></div></div>';
+      $('screenView').append(d);
+      const hide = () => { d.hidden = true; document.removeEventListener('keydown', key, true); };
+      const key = e => { if (e.key === 'Escape') { e.preventDefault(); stay(); } else if (e.key === 'Tab') { const f = [$('scrAskGo'), $('scrAskStay')], i = f.indexOf(document.activeElement); e.preventDefault(); f[(i + 1) % 2].focus(); } };
+      const stay = () => { hide(); if (d.back && d.back.isConnected) d.back.focus({ preventScroll: true }); };
+      d.addEventListener('click', e => { if (e.target === d) stay(); });
+      $('scrAskStay').addEventListener('click', stay);
+      $('scrAskGo').addEventListener('click', () => { hide(); if (cur) cur.dirty = false; leave(); });
+      d.open = () => { d.back = document.activeElement; d.hidden = false; document.addEventListener('keydown', key, true); $('scrAskStay').focus({ preventScroll: true }); };
+    }
+    if (d.hidden) d.open();
   }
 
   /* ---------- 입구: 메인 '오늘' 카드 (2026-09-29 주인: 화면·종이 같은 무게) ----------
@@ -20204,12 +20660,13 @@ window.SARANG_SCREEN = (function(){
   window.SARANG_TODAY = {
     act, start, ways, others, refresh,
     /* 종이로 한 과목(오늘 카드 '프린트'·'뽑아서 풀기', 과목 화면 PDF): 저장된 과목만, 그 과목 done 뒤에 */
-    paper(list){ complete(PAPER, list); },
+    paper(list, pages){ complete(PAPER, list, null, pages && typeof pages === 'object' ? Object.fromEntries(Object.entries(pages).filter(([, n]) => n > 0).map(([s, n]) => [s, { n }])) : null); },   // pages: { 과목: 뽑은 쪽 수 } (오늘의 학습 인쇄만 넘김)
     started: () => { const d = ymd(); return [DONE, PAPER].some(k => Object.keys(doneMap(k)[d] || {}).length); }
   };
   return {
     register(k, def){ REG[k] = def; },
     open, close, can: s => can(s, false), refresh, list: () => Object.keys(REG),
+    clock: { start: s => { if (!cur) clockStart(s); }, stop: () => { if (!cur) clockStop(); } },   // 유아 화면 놀이(play-module.js)도 같은 방식으로 시간을 잼 ('play')
     get current(){ return cur && { s: cur.s, key: cur.key, from: cur.from }; }
   };
 })();
@@ -20640,6 +21097,91 @@ const reg = () => window.SARANG_SCREEN && SARANG_SCREEN.register('listen', {
 if (window.SARANG_SCREEN) reg(); else document.addEventListener('DOMContentLoaded', reg);
 })();
 
+/* ===== 영단어 '외웠어요' 기록 (2026-10-04 대표 카드 '3+2 간단') =====
+   - 처음 익힐 때: 한 단어를 3번 맞히면 '익히는 중' (섞인 문제 속에서. 첫 시도가 아니어도 맞힌 것은 셈)
+   - 그다음 날(D+1)과 그로부터 6일 뒤(처음 날부터 D+7)에 그날 처음 푼 답이 맞으면 한 칸씩, 두 칸 다 맞으면 '외웠어요'.
+     틀리면 그 칸을 다음 날 다시. 확인할 날이 아닌 날 푼 것은 연습으로만 봄 (기록에 안 넣음)
+   - 초3 이상은 영어→뜻(c)과 뜻→철자(s) 둘 다 맞혀야 셈, 유아·초1~2는 영어→뜻만 (조정 세션 기본값, 대표 확인 전)
+   - 플래시카드 '알아요'는 아이 스스로 고른 표시라 세지 않음: 실제로 고르거나 쓴 답만 이 기록으로 들어옴
+   - 단어 글자(소문자)로 묶음: 다른 단계에 같은 단어가 있어도 한 번 외우면 같이 외운 것. 아이마다 따로(kids.js 가 아이 기록으로 옮김) ===== */
+(function () {
+  const KEY = 'vocab_mem';
+  const k = w => String(w || '').normalize('NFKC').toLowerCase().replace(/\s+/g, ' ').trim();
+  const dayNo = () => { const d = new Date(); return Math.floor(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) / 864e5); };
+  let DB = null;
+  function load() {
+    if (DB) return DB;
+    try { DB = JSON.parse(localStorage.getItem(KEY)); } catch (e) { DB = null; }
+    if (!DB || typeof DB !== 'object' || !DB.w || typeof DB.w !== 'object') DB = { v: 1, w: {} };
+    return DB;
+  }
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(DB)); } catch (e) {} };
+  addEventListener('storage', e => { if (e.key === KEY || e.key === null) DB = null; });   // 다른 창·아이 바꾸기
+  /* 아이 학년: 유아(k)·초1·2는 영어→뜻만 */
+  function need() {
+    let g = ''; try { g = (JSON.parse(localStorage.getItem('hub_child')) || {}).grade || ''; } catch (e) {}
+    return /^(k|e1$|e2$)/.test(g) ? ['c'] : ['c', 's'];
+  }
+  const get = w => load().w[k(w)] || null;
+  /* 단계: 0 처음 익히는 중(3번 전) · 1 익히는 중(다음 날 확인) · 2 익히는 중(7일째 확인) · 3 외웠어요 */
+  function state(w) {
+    const r = get(w), t = dayNo();
+    if (!r) return { st: 0, n: 0, due: false, seen: false };
+    return { st: r.s, n: r.n || 0, dc: !!r.dc, ds: !!r.ds, due: (r.s === 1 || r.s === 2) && r.due <= t && !(r.a && r.a.d === t && r.a.end), seen: true };
+  }
+  /* 답 하나 기록: dir 'c' 영어→뜻, 's' 뜻→철자. 돌려줌: 'learn' 'learned'(익히는 중이 됨) 'pass' 'mem'(외웠어요) 'fail' 'skip' */
+  function answer(word, dir, ok) {
+    if (!word || !word.w || (dir !== 'c' && dir !== 's')) return 'skip';
+    const db = load(), key = k(word.w), t = dayNo(), nd = need();
+    let r = db.w[key];
+    if (!r) r = db.w[key] = { s: 0, n: 0 };
+    r.m = word.m || r.m || ''; if (word.p) r.p = word.p; r.w = word.w;
+    let out = 'skip';
+    if (r.s === 0) {
+      if (ok) {
+        r.n = (r.n || 0) + 1; r['d' + dir] = 1;   // dc·ds: 그 방향으로 맞힌 적 있음
+        if (r.n >= 3 && nd.every(d => r['d' + d])) { r.s = 1; r.t0 = t; r.due = t + 1; delete r.dc; delete r.ds; delete r.seen; out = 'learned'; }
+        else out = 'learn';
+      } else out = 'learn';
+      if (r.s === 0 && r.n === 0 && !ok) r.seen = t;   // 틀리기만 해도 '본 단어' (익히기 문제에 다시 넣음)
+    } else if ((r.s === 1 || r.s === 2) && r.due <= t && nd.includes(dir)) {
+      if (!r.a || r.a.d !== t) r.a = { d: t };
+      if (!r.a.end && r.a[dir] == null) {
+        r.a[dir] = ok ? 1 : 0;
+        if (!ok) { r.due = t + 1; r.a.end = 1; out = 'fail'; }
+        else if (nd.every(d => r.a[d] === 1)) {
+          r.a.end = 1;
+          if (r.s === 1) { r.s = 2; r.due = t + 6; out = 'pass'; }
+          else { r.s = 3; r.mem = t; delete r.due; out = 'mem'; }
+        } else out = 'pass1';
+      }
+    }
+    if (r.s === 0) r.last = t;
+    save();
+    return out;
+  }
+  /* 오늘 확인할 단어 (다음 날·7일째 확인이 오늘이거나 지난 것, 아직 오늘 끝내지 않은 것) */
+  function due() {
+    const db = load(), t = dayNo(), out = [];
+    for (const r of Object.values(db.w)) if ((r.s === 1 || r.s === 2) && r.due <= t && !(r.a && r.a.d === t && r.a.end)) out.push({ w: r.w, m: r.m, p: r.p || '', st: r.s, left: need().filter(d => !(r.a && r.a.d === t && r.a[d] === 1)) });
+    return out;
+  }
+  /* 처음 익히는 중인데 3번을 못 채운 단어 (전에 본 것) */
+  function learning() {
+    const db = load(), out = [];
+    for (const r of Object.values(db.w)) if (r.s === 0 && ((r.n || 0) > 0 || r.seen)) out.push({ w: r.w, m: r.m, p: r.p || '' });
+    return out;
+  }
+  /* 단어 목록의 상태 세기 */
+  function count(words) {
+    const o = { mem: 0, mid: 0, due: 0, todo: 0, n: (words || []).length };
+    (words || []).forEach(w => { const s = state(w.w); if (s.st === 3) o.mem++; else if (s.st >= 1) o.mid++; else o.todo++; if (s.due) o.due++; });
+    return o;
+  }
+  function counts() { const db = load(), o = { mem: 0, mid: 0, due: due().length }; for (const r of Object.values(db.w)) { if (r.s === 3) o.mem++; else if (r.s >= 1) o.mid++; } return o; }
+  window.SARANG_VMEM = { answer, state, due, learning, count, counts, need, dayNo, key: k };
+})();
+
 /* ===== 화면 공부: 영단어 (개발 3) — 설명은 docs/화면공부/vocab.md =====
    그날 학습지(원본·뜻 가리기·단어 가리기·복습지)와 같은 단어로: 단어 익히기(듣기·가리기) → 따라 쓰기(공용 펜, 영어 4줄)
    → 뜻 고르기 → 철자 쓰기 → 복습(① 뜻 고르기 ② 철자). '다 풀었어요'에 채점, '공부 끝'에 ctx.done(result) */
@@ -20741,6 +21283,8 @@ function open(ctx){
     }
     const y = $('[data-svgrade]').getBoundingClientRect().top;
     const first = !st.graded; st.graded = true; st.warned = false; mark();
+    /* 외웠어요 기록(vmem.js): 채점한 답을 한 번씩 (다시 풀기는 다시 푼 것만). 확인할 날의 복습 단어는 그날 처음 푼 답만 셈 */
+    if (window.SARANG_VMEM) { Q.forEach(q => { if (q.rec || q.done === false || !answered(q)) return; q.rec = true; SARANG_VMEM.answer(q.w, q.k === 'c' ? 'c' : 's', right(q)); }); document.dispatchEvent(new CustomEvent('vocab:mem')); }
     if (first) {
       const cnt = p => { const l = part(p); return [l.filter(right).length, l.length]; };
       st.result = { subj: 'vocab', level: D.level, day: D.day, score: Q.filter(right).length, total: Q.length,
@@ -20758,7 +21302,7 @@ function open(ctx){
   }
   function retry(){
     const bad = Q.filter(q => !right(q)); if (!bad.length) return;
-    Q.forEach(q => { q.done = bad.includes(q) ? null : false; });   // false = 맞혀서 채점된 채로 둠
+    Q.forEach(q => { q.done = bad.includes(q) ? null : false; if (bad.includes(q)) q.rec = false; });   // false = 맞혀서 채점된 채로 둠
     bad.forEach(q => { q.pick = null; q.val = ''; const inp = $(`input[data-svq="${q.i}"]`); if (inp) inp.value = '';
       if (q.k === 'c') { q.ch = choices(q.w, pool); $(`.sv-q[data-svq="${q.i}"] .sv-ch`).innerHTML = q.ch.map((c, k) => `<button type="button" data-svq="${q.i}" data-svk="${k}">${esc(c.m)}</button>`).join(''); } });
     st.graded = null; mark();
@@ -22456,6 +23000,394 @@ if (window.SARANG_SCREEN) reg(); else document.addEventListener('DOMContentLoade
   document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches(SEL)) { e.preventDefault(); open(e.target); } });
   window.SARANG_ZOOM = { open, close, isOpen: () => !!box && !box.hidden };
 })();
+
+/* ===== 영단어 플래시카드 (2026-10-04 대표: "영단어 부록 내에 '플래시카드' 기능") =====
+   영단어 화면에서 고른 단계·'학습지 고르기' 묶음(학습지와 같은 단어)을 카드로: 앞 = 영어·읽는 소리, 누르면 뒤 = 뜻.
+   - 넘기기: '이전'·'다음', 카드를 옆으로 밀기, ← → 키. 뒤집기: 카드 누르기·'뒤집기'·Space·Enter
+   - 뒤집은 뒤 '알아요'·'헷갈려요'를 누르면 표시하고 다음 카드. 끝나면 헷갈린 카드만 다시 보기
+   - '섞기'·'뜻 먼저'는 이 기기에 기억. 소리는 영단어 바로 풀기와 같은 녹음(SARANG_TTS)
+   - 닫기: '‹ 닫기'·Esc·폰 뒤로 단추 (뒤 화면 자리는 그대로)
+   아이 기기로 보내기는 자녀 모드(서버)를 만들 때 이 카드에 붙임 ===== */
+(function () {
+  const pane = document.getElementById('pane-vocab');
+  if (!pane) return;
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const KEY = 'vocab_flash';
+  const data = () => { try { return window.HUB_TODAY && HUB_TODAY.vocab && HUB_TODAY.vocab.screen ? HUB_TODAY.vocab.screen() : null; } catch (e) { return null; } };
+  const pref = (() => { try { const o = JSON.parse(localStorage.getItem(KEY)); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } })();
+  const keep = () => { try { localStorage.setItem(KEY, JSON.stringify({ mix: !!pref.mix, rev: !!pref.rev })); } catch (e) {} };
+  const SPK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+  /* 영단어 화면의 칸: 학습지 버튼 칸 아래 */
+  const entry = document.createElement('div');
+  entry.className = 'card fc-entry';
+  entry.innerHTML = '<div class="label">플래시카드</div><div class="actions"><button type="button" class="wide" id="fcOpen">플래시카드 보기</button></div>';
+  const pdf = pane.querySelector('[data-vpdf]');
+  (pdf && pdf.closest('.card') ? pdf.closest('.card') : pane.lastElementChild).after(entry);
+  const openBtn = entry.querySelector('#fcOpen');
+  function label() { const D = data(), n = D && D.words ? D.words.length : 0; openBtn.textContent = n ? `플래시카드 보기 (${n}장)` : '플래시카드 보기'; openBtn.disabled = !n; }
+  ['click', 'input', 'change'].forEach(t => pane.addEventListener(t, () => setTimeout(label, 0)));
+  document.addEventListener('hub:refresh', () => setTimeout(label, 0));
+  label();
+
+  let box = null, S = null, pushed = false, popping = false, opener = null;
+  const $ = id => box.querySelector('#' + id);
+  function build() {
+    box = document.createElement('div');
+    box.className = 'fc'; box.id = 'fcView'; box.hidden = true;
+    box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-labelledby', 'fcT');
+    box.innerHTML = '<div class="fc-head"><button type="button" class="fc-x" id="fcX">‹ 닫기</button><b class="fc-t" id="fcT">플래시카드</b><span class="fc-n" id="fcN" aria-live="polite"></span></div>'
+      + '<div class="fc-opts"><button type="button" id="fcMix" aria-pressed="false">섞기</button><button type="button" id="fcRev" aria-pressed="false">뜻 먼저</button></div>'
+      + '<div class="fc-stage" id="fcStage"><div class="fc-box"><button type="button" class="fc-card" id="fcCard"><span class="fc-in"><span class="fc-face fc-f"><b class="fc-big" id="fcF1"></b><small id="fcF2"></small></span><span class="fc-face fc-b"><b class="fc-big" id="fcB1"></b><small id="fcB2"></small></span></span></button>'
+      + `<button type="button" class="fc-spk" id="fcSpk" aria-label="소리 듣기">${SPK}</button><span class="fc-tag" id="fcTag" hidden></span></div></div>`
+      + '<div class="fc-mark" id="fcMark"><button type="button" data-fk="1">알아요</button><button type="button" data-fk="0">헷갈려요</button></div>'
+      + '<div class="fc-nav" id="fcNav"><button type="button" id="fcPrev">‹ 이전</button><button type="button" class="fc-flip" id="fcFlip">뒤집기</button><button type="button" id="fcNext">다음 ›</button></div>'
+      + '<div class="fc-end" id="fcEnd" hidden><b id="fcEndT"></b><span id="fcEndS"></span><div class="fc-end-btns"><button type="button" class="fc-pri" id="fcAgainNg">헷갈린 카드만 다시</button><button type="button" id="fcAgain">처음부터 다시</button><button type="button" id="fcQuiz" hidden>외웠는지 확인하기</button><button type="button" id="fcDone">닫기</button></div></div>';
+    document.body.append(box);
+    $('fcX').addEventListener('click', () => close());
+    $('fcDone').addEventListener('click', () => close());
+    $('fcMix').addEventListener('click', () => { pref.mix = !pref.mix; keep(); start(S.all); });
+    $('fcRev').addEventListener('click', () => { pref.rev = !pref.rev; keep(); S.flip = false; paint(); });
+    $('fcCard').addEventListener('click', () => { if (S.swiped) { S.swiped = false; return; } flip(); });
+    $('fcFlip').addEventListener('click', flip);
+    $('fcPrev').addEventListener('click', () => go(-1));
+    $('fcNext').addEventListener('click', () => go(1));
+    $('fcSpk').addEventListener('click', () => say(cur().w));
+    $('fcMark').addEventListener('click', e => { const b = e.target.closest('[data-fk]'); if (!b || !S.flip) return; S.mark[S.i] = b.dataset.fk === '1'; go(1); });
+    $('fcAgain').addEventListener('click', () => start(S.all));
+    /* 플래시카드 '알아요'는 외운 기록에 넣지 않음 → 끝 화면에서 '외웠는지 확인'(vquiz.js)으로 이어 감. 뒤로 가기 기록을 먼저 되돌린 뒤 엶 */
+    $('fcQuiz').addEventListener('click', () => { const Q = window.SARANG_VQUIZ; if (!Q) return; const was = pushed; if (was) addEventListener('popstate', () => setTimeout(Q.open, 0), { once: true }); close(); if (!was) Q.open(); });
+    $('fcAgainNg').addEventListener('click', () => start(S.list.filter((w, i) => S.mark[i] === false)));
+    /* 옆으로 밀어 넘기기 (세로 스크롤은 그대로) */
+    const st = $('fcStage');
+    st.addEventListener('pointerdown', e => { S.px = e.clientX; S.py = e.clientY; S.swiped = false; });
+    st.addEventListener('pointerup', e => {
+      if (S.px == null) return;
+      const dx = e.clientX - S.px, dy = e.clientY - S.py; S.px = null;
+      if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy) * 1.5) { S.swiped = true; go(dx < 0 ? 1 : -1); setTimeout(() => { S.swiped = false; }, 400); }
+    });
+    st.addEventListener('pointercancel', () => { S.px = null; });
+    box.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+      if (e.target.closest('.fc-opts, .fc-end, .fc-head')) { if (e.key === 'Tab') trap(e); return; }
+      if (e.key === 'ArrowRight') { e.preventDefault(); go(1); }
+      else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+      else if ((e.key === ' ' || e.key === 'Enter') && !e.target.closest('.fc-mark, .fc-nav, .fc-spk')) { e.preventDefault(); flip(); }
+      else if (e.key === 'Tab') trap(e);
+    });
+    addEventListener('popstate', () => {
+      if (popping) { popping = false; return; }
+      if (!box.hidden && !(history.state && history.state.sarangFlash)) { pushed = false; close(true); }
+    });
+    addEventListener('resize', () => { if (box && !box.hidden) fit(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && box && !box.hidden && !box.contains(e.target)) { e.preventDefault(); close(); } });   // 초점이 창 밖으로 나갔을 때도 Esc 로 닫힘
+  }
+  function trap(e) {   // 창 안에서만 돎
+    const f = [...box.querySelectorAll('button')].filter(b => !b.disabled && b.offsetParent && getComputedStyle(b).visibility !== 'hidden');
+    if (!f.length) return;
+    e.preventDefault();
+    f[(f.indexOf(document.activeElement) + (e.shiftKey ? f.length - 1 : 1) + f.length) % f.length].focus({ preventScroll: true });
+  }
+  const T = () => window.SARANG_TTS;
+  const sound = () => !!(T() && T().ok());
+  const say = t => { if (sound()) T().run('fc', [{ t }]); };
+  const stopSay = () => { try { if (T() && T().stop) T().stop(); } catch (e) {} };
+  const cur = () => S.list[S.i] || {};
+  function start(list) {
+    const words = (list || []).slice();
+    if (pref.mix) for (let i = words.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [words[i], words[j]] = [words[j], words[i]]; }
+    S.list = words; S.i = 0; S.flip = false; S.mark = words.map(() => null); S.end = false;
+    paint();
+    if (box && !box.hidden) $('fcCard').focus({ preventScroll: true });   // 끝 화면 단추가 사라져도 키(Esc·←→)가 창에 남게
+  }
+  function flip() { if (S.end) return; S.flip = !S.flip; paint(); }
+  function go(d) {
+    if (S.end) return;
+    stopSay();
+    if (d > 0 && S.i >= S.list.length - 1) { S.end = true; paint(); return; }
+    const i = Math.max(0, Math.min(S.list.length - 1, S.i + d));
+    if (i === S.i) return;
+    S.i = i; S.flip = false; paint();
+  }
+  function paint() {
+    $('fcMix').setAttribute('aria-pressed', String(!!pref.mix)); $('fcRev').setAttribute('aria-pressed', String(!!pref.rev));
+    const end = S.end, w = cur(), n = S.list.length;
+    $('fcEnd').hidden = !end; box.classList.toggle('fc-done', end);
+    $('fcN').textContent = end ? '' : `${S.i + 1} / ${n}`;   // 끝 화면은 가운데 글이 알려 줌 (같은 말 두 번 안 함)
+    if (end) {
+      const ok = S.mark.filter(x => x === true).length, ng = S.mark.filter(x => x === false).length;
+      $('fcEndT').textContent = `${n}장을 모두 봤어요.`;
+      $('fcEndS').textContent = ok || ng ? `알아요 ${ok}장 · 헷갈려요 ${ng}장` : '';
+      $('fcAgainNg').hidden = !ng; $('fcAgainNg').textContent = `헷갈린 ${ng}장만 다시`;
+      $('fcQuiz').hidden = !(window.SARANG_VQUIZ && SARANG_VQUIZ.todo());
+      $(ng ? 'fcAgainNg' : 'fcAgain').focus({ preventScroll: true });
+      return;
+    }
+    const front = pref.rev ? [w.m, ''] : [w.w, w.p], back = pref.rev ? [w.w, w.p] : [w.m, w.w];
+    $('fcF1').textContent = front[0] || ''; $('fcF2').textContent = front[1] || '';
+    $('fcB1').textContent = back[0] || ''; $('fcB2').textContent = back[1] || '';
+    $('fcF1').lang = pref.rev ? 'ko' : 'en'; $('fcB1').lang = pref.rev ? 'en' : 'ko';
+    box.classList.toggle('fc-flipped', S.flip);
+    $('fcCard').setAttribute('aria-label', S.flip ? `뒷면: ${back[0]}${back[1] ? ', ' + back[1] : ''}. 누르면 앞면` : `앞면: ${front[0]}${front[1] ? ', ' + front[1] : ''}. 누르면 뒷면`);
+    $('fcSpk').hidden = !sound();
+    { const V = window.SARANG_VMEM, st = V && w.w ? V.state(w.w).st : 0, tag = $('fcTag');   // 외운 정도 (실제로 맞힌 기록, vmem.js)
+      tag.hidden = !st; tag.textContent = st === 3 ? '외웠어요' : '익히는 중'; tag.classList.toggle('mem', st === 3); }
+    $('fcSpk').setAttribute('aria-label', `${w.w} 소리 듣기`);
+    $('fcPrev').disabled = S.i === 0;
+    $('fcNext').textContent = S.i >= n - 1 ? '다 봤어요' : '다음 ›';
+    $('fcMark').classList.toggle('on', S.flip);
+    $('fcMark').querySelectorAll('button').forEach(b => { b.disabled = !S.flip; b.classList.toggle('sel', S.mark[S.i] === (b.dataset.fk === '1')); });
+    fit();
+  }
+  /* 긴 단어·뜻은 카드 폭에 맞춰 글자를 줄임 */
+  function fit() {
+    if (!box || box.hidden) return;
+    box.querySelectorAll('.fc-big').forEach(b => {
+      b.style.fontSize = '';
+      let s = parseFloat(getComputedStyle(b).fontSize) || 40;
+      const face = b.parentElement, max = face.clientWidth - 8;
+      while (s > 18 && (b.scrollWidth > max || b.offsetHeight > face.clientHeight * 0.62)) { s -= 2; b.style.fontSize = s + 'px'; }
+    });
+  }
+  function open() {
+    const D = data();
+    if (!D || !D.words || !D.words.length) return;
+    if (!box) build();
+    opener = document.activeElement;
+    const a = D.day * D.count + 1;
+    $('fcT').textContent = `${D.name || '영단어'} · ${a}~${a + D.words.length - 1}번`;
+    S = { all: D.words.slice(), list: [], i: 0, flip: false, mark: [], end: false, px: null, swiped: false };
+    box.hidden = false; document.documentElement.classList.add('fc-lock');
+    try { history.pushState(Object.assign({}, history.state || {}, { sarangFlash: 1 }), ''); pushed = true; } catch (e) {}
+    start(S.all);
+    $('fcCard').focus({ preventScroll: true });
+  }
+  function close(fromPop) {
+    if (!box || box.hidden) return;
+    stopSay();
+    box.hidden = true; document.documentElement.classList.remove('fc-lock');
+    if (!fromPop && pushed && history.state && history.state.sarangFlash) { popping = true; try { history.back(); } catch (e) { popping = false; } }
+    pushed = false;
+    if (opener && opener.isConnected) { try { opener.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  openBtn.addEventListener('click', open);
+  window.SARANG_FLASH = { open, close, isOpen: () => !!box && !box.hidden };
+})();
+
+/* ===== 영단어 '외웠는지 확인' (2026-10-04 대표 카드 '3+2 간단', 기록 규칙은 vmem.js) =====
+   영단어 부록 화면의 칸: 외웠어요·익히는 중 수 + '확인하기'. 누르면 한 문제씩:
+   ① 오늘 확인할 단어(다음 날·7일째) — 그날 처음 푼 답만 셈
+   ② 익히는 단어(지금 고른 묶음 + 전에 보다 만 단어) — 섞어서 한 단어를 3번 맞힐 때까지 (틀리거나 덜 채운 단어는 몇 문제 뒤에 다시)
+   문제: 영어→뜻 4개 중 고르기, 초3 이상은 뜻→철자 쓰기도. 닫으면 거기까지 기록돼 있음. 화면 틀은 플래시카드(.fc)와 같음 ===== */
+(function () {
+  const pane = document.getElementById('pane-vocab');
+  if (!pane || !window.SARANG_VMEM) return;
+  const M = window.SARANG_VMEM;
+  const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const norm = s => String(s || '').normalize('NFKC').toLowerCase().replace(/[’‘`]/g, "'").replace(/\s+/g, ' ').trim().replace(/[.!?]+$/, '');
+  const toks = m => String(m).split(',').map(s => s.trim());
+  const overlap = (a, b) => { const t = toks(b); return toks(a).some(x => t.includes(x)); };
+  function choices(w, pool) {   // 영단어 바로 풀기(vocab.js)와 같은 규칙: 뜻이 겹치는 단어는 보기에서 뺌
+    const out = [];
+    for (const x of shuffle(pool)) {
+      if (M.key(x.w) === M.key(w.w) || overlap(x.m, w.m) || out.some(p => overlap(p.m, x.m))) continue;
+      out.push(x); if (out.length === 3) break;
+    }
+    return shuffle([w, ...out]);
+  }
+  const data = () => { try { return window.HUB_TODAY && HUB_TODAY.vocab && HUB_TODAY.vocab.screen ? HUB_TODAY.vocab.screen() : null; } catch (e) { return null; } };
+  const SPK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
+
+  /* 할 일 목록: 확인(chk) 먼저, 그다음 익히기(learn) */
+  function plan() {
+    const D = data(), words = D && D.words ? D.words : [];
+    const chk = shuffle(M.due()).flatMap(x => x.left.map(dir => ({ kind: 'chk', w: { w: x.w, m: x.m, p: x.p }, dir, st: x.st })));
+    const seen = new Set(), learn = [];
+    [...words, ...M.learning()].forEach(w => { const k = M.key(w.w); if (seen.has(k) || M.state(w.w).st !== 0) return; seen.add(k); learn.push({ w: w.w, m: w.m, p: w.p || '' }); });
+    return { chk, learn: shuffle(learn), pool: [...(D && D.pool && D.pool.length >= 8 ? D.pool : []), ...words, ...M.due(), ...M.learning()] };
+  }
+  function todo() { const p = plan(); return new Set([...p.chk.map(x => M.key(x.w.w)), ...p.learn.map(w => M.key(w.w))]).size; }
+
+  /* 영단어 화면의 칸: 플래시카드 칸 아래 */
+  const entry = document.createElement('div');
+  entry.className = 'card vq-entry';
+  entry.innerHTML = '<div class="label">외웠는지 확인</div><div class="vq-sum" id="vqSum"></div><div class="actions"><button type="button" class="wide" id="vqOpen">확인하기</button></div>'
+    + '<div class="info">한 단어를 3번 맞히면 익히는 중, 다음 날과 7일째에 바로 맞히면 외웠어요.</div>';
+  const pdf = pane.querySelector('[data-vpdf]'), after = pane.querySelector('.fc-entry') || (pdf && pdf.closest('.card'));
+  (after || pane.lastElementChild).after(entry);
+  const openBtn = entry.querySelector('#vqOpen');
+  function label() {
+    const D = data(), c = M.count(D && D.pool ? D.pool : []), n = todo(), due = M.due().length;
+    entry.querySelector('#vqSum').innerHTML = `<span><b>${c.mem}</b> 외웠어요</span><span><b>${c.mid}</b> 익히는 중</span><span><b>${due}</b> 오늘 확인</span>`;
+    openBtn.textContent = n ? `확인하기 (${n}단어)` : '오늘 확인할 단어가 없어요';
+    openBtn.disabled = !n;
+  }
+  ['click', 'input', 'change'].forEach(t => pane.addEventListener(t, () => setTimeout(label, 0)));
+  document.addEventListener('hub:refresh', () => setTimeout(label, 0));
+  label();
+
+  let box = null, S = null, pushed = false, popping = false, opener = null;
+  const $ = id => box.querySelector('#' + id);
+  function build() {
+    box = document.createElement('div');
+    box.className = 'fc vq'; box.id = 'vqView'; box.hidden = true;
+    box.setAttribute('role', 'dialog'); box.setAttribute('aria-modal', 'true'); box.setAttribute('aria-labelledby', 'vqT');
+    box.innerHTML = '<div class="fc-head"><button type="button" class="fc-x" id="vqX">‹ 닫기</button><b class="fc-t" id="vqT">외웠는지 확인</b><span class="fc-n" id="vqN" aria-live="polite"></span></div>'
+      + '<div class="vq-kind" id="vqKind"></div>'
+      + '<div class="fc-stage vq-stage"><div class="fc-box"><div class="vq-card" id="vqCard"><b class="fc-big" id="vqQ"></b><small id="vqQ2"></small><div class="vq-fb" id="vqFb" role="status"></div></div>'
+      + `<button type="button" class="fc-spk" id="vqSpk" aria-label="소리 듣기">${SPK}</button></div></div>`
+      + '<div class="vq-ans" id="vqAns"></div>'
+      + '<div class="vq-nav"><button type="button" class="fc-pri" id="vqNext" disabled>다음 ›</button></div>'
+      + '<div class="fc-end" id="vqEnd" hidden><b id="vqEndT"></b><span id="vqEndS"></span><div class="fc-end-btns"><button type="button" class="fc-pri" id="vqDone">닫기</button></div></div>';
+    document.body.append(box);
+    $('vqX').addEventListener('click', () => close());
+    $('vqDone').addEventListener('click', () => close());
+    $('vqNext').addEventListener('click', next);
+    $('vqSpk').addEventListener('click', () => say(S.q.w.w));
+    $('vqAns').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b || S.done) return;
+      if (b.dataset.vqk != null) return pick(+b.dataset.vqk);
+      if (b.id === 'vqGo') return spell();
+    });
+    box.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { e.preventDefault(); close(); return; }
+      if (e.key === 'Enter' && e.target.id === 'vqIn') { e.preventDefault(); if (!S.done) spell(); else next(); return; }
+      if (e.key === 'Tab') return trap(e);
+      if (!S || S.end || e.target.tagName === 'INPUT') return;
+      if (/^[1-4]$/.test(e.key) && S.q && S.q.dir === 'c' && !S.done) { e.preventDefault(); pick(+e.key - 1); }
+    });
+    addEventListener('popstate', () => {
+      if (popping) { popping = false; return; }
+      if (!box.hidden && !(history.state && history.state.sarangVq)) { pushed = false; close(true); }
+    });
+    addEventListener('resize', () => { if (box && !box.hidden) fit(); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape' && box && !box.hidden && !box.contains(e.target)) { e.preventDefault(); close(); } });
+  }
+  function trap(e) {
+    const f = [...box.querySelectorAll('button, input')].filter(b => !b.disabled && b.offsetParent && getComputedStyle(b).visibility !== 'hidden');
+    if (!f.length) return;
+    e.preventDefault();
+    f[(f.indexOf(document.activeElement) + (e.shiftKey ? f.length - 1 : 1) + f.length) % f.length].focus({ preventScroll: true });
+  }
+  const T = () => window.SARANG_TTS;
+  const sound = () => !!(T() && T().ok());
+  const say = t => { if (sound()) T().run('vq', [{ t }]); };
+  const stopSay = () => { try { if (T() && T().stop) T().stop(); } catch (e) {} };
+  const need = () => M.need();
+  /* 익힐 단어의 다음 문제 방향: 아직 맞힌 적 없는 방향 먼저, 그다음은 번갈아 */
+  function dirFor(w) {
+    const s = M.state(w.w), nd = need();
+    if (nd.length < 2) return 'c';
+    if (!s.dc) return 'c';
+    if (!s.ds) return 's';
+    return (s.n % 2) ? 's' : 'c';
+  }
+  function left() {   // 남은 단어 수 (지금 문제의 단어는 아직 안 풀었거나 다시 나올 때만)
+    const cur = S.q && (!S.done || (S.q.kind === 'learn' && M.state(S.q.w.w).st === 0)) ? [M.key(S.q.w.w)] : [];
+    return new Set([...cur, ...S.chk.slice(S.ci).filter(x => M.state(x.w.w).due).map(x => M.key(x.w.w)), ...S.learn.map(w => M.key(w.w))]).size;
+  }
+  function next() {
+    stopSay();
+    if (S.q && S.q.kind === 'learn') {   // 덜 채웠으면 몇 문제 뒤에 다시 (섞어서)
+      const w = S.q.w, st = M.state(w.w).st;
+      if (st === 0) { const at = Math.min(S.learn.length, 2 + Math.floor(Math.random() * 3)); S.learn.splice(at, 0, w); }
+      else S.got.learned++;
+    }
+    S.q = null; S.done = false;
+    while (S.ci < S.chk.length && !S.q) { const x = S.chk[S.ci++]; if (M.state(x.w.w).due) S.q = x; }   // 같은 날 앞 방향을 틀려 끝난 단어는 건너뜀
+    if (!S.q && S.learn.length) { const w = S.learn.shift(); S.q = { kind: 'learn', w, dir: dirFor(w) }; }
+    if (!S.q) { S.end = true; paint(); return; }
+    if (S.q.dir === 'c') S.q.ch = choices(S.q.w, S.pool);
+    paint();
+  }
+  function result(ok, r) {
+    S.done = true; S.q.ok = ok;
+    if (r === 'mem') S.got.mem++;
+    if (r === 'fail') S.got.fail++;
+    const fb = $('vqFb');
+    const msg = r === 'mem' ? '맞았어요! 이제 외웠어요.' : r === 'learned' ? '맞았어요! 이제 익히는 중이에요.' : r === 'pass' ? '맞았어요! 7일째에 한 번 더 확인해요.' : ok ? '맞았어요!' : (r === 'fail' ? '내일 다시 확인해요. ' : '') + '정답: ';
+    fb.className = 'vq-fb ' + (ok ? 'ok' : 'ng');
+    fb.innerHTML = esc(msg) + (ok ? '' : `<b lang="${S.q.dir === 'c' ? 'ko' : 'en'}">${esc(S.q.dir === 'c' ? S.q.w.m : S.q.w.w)}</b>`);
+    if (!ok || S.q.dir === 's') say(S.q.w.w);
+    $('vqNext').disabled = false;
+    $('vqNext').textContent = left() ? '다음 ›' : '끝내기';
+    $('vqNext').focus({ preventScroll: true });
+    paintCount();
+  }
+  function pick(k) {
+    const q = S.q; if (!q || q.dir !== 'c' || S.done || !q.ch[k]) return;
+    const ok = M.key(q.ch[k].w) === M.key(q.w.w);
+    $('vqAns').querySelectorAll('[data-vqk]').forEach((b, i) => { b.disabled = true; b.classList.toggle('ok', M.key(q.ch[i].w) === M.key(q.w.w)); b.classList.toggle('ng', i === k && !ok); });
+    result(ok, M.answer(q.w, 'c', ok));
+  }
+  function spell() {
+    const q = S.q, inp = $('vqIn'); if (!q || q.dir !== 's' || S.done || !inp) return;
+    if (!inp.value.trim()) { inp.focus(); return; }
+    const ok = norm(inp.value) === norm(q.w.w);
+    inp.readOnly = true; inp.classList.add(ok ? 'ok' : 'ng'); $('vqGo').disabled = true;
+    result(ok, M.answer(q.w, 's', ok));
+  }
+  function paintCount() { $('vqN').textContent = S.end ? '' : `남은 단어 ${left()}`; }
+  function paint() {
+    const end = S.end;
+    $('vqEnd').hidden = !end; box.classList.toggle('fc-done', end);
+    if (end) {
+      const c = M.counts();
+      $('vqEndT').textContent = S.total ? '오늘 할 확인을 다 했어요.' : '오늘 확인할 단어가 없어요.';
+      $('vqEndS').textContent = `외웠어요 ${c.mem}단어 · 익히는 중 ${c.mid}단어` + (S.got.fail ? ` · 내일 다시 ${S.got.fail}단어` : '') + (S.got.learned ? '. 오늘 익힌 단어는 내일 다시 확인해요.' : '');
+      $('vqN').textContent = '';
+      $('vqDone').focus({ preventScroll: true });
+      return;
+    }
+    const q = S.q, w = q.w;
+    $('vqKind').textContent = q.kind === 'chk' ? (q.st === 1 ? '다음 날 확인 · 처음 푼 답만 세요' : '7일째 확인 · 처음 푼 답만 세요') : `처음 익히기 · ${Math.min(M.state(w.w).n, 2) + 1}번째 맞히기`;
+    $('vqKind').className = 'vq-kind ' + q.kind;
+    $('vqQ').textContent = q.dir === 'c' ? w.w : w.m; $('vqQ').lang = q.dir === 'c' ? 'en' : 'ko';
+    $('vqQ2').textContent = q.dir === 'c' ? (w.p || '') : '영어 단어를 쓰세요';
+    $('vqFb').className = 'vq-fb'; $('vqFb').textContent = '';
+    $('vqSpk').hidden = !sound() || q.dir === 's';
+    $('vqSpk').setAttribute('aria-label', `${w.w} 소리 듣기`);
+    $('vqAns').className = 'vq-ans ' + q.dir;
+    $('vqAns').innerHTML = q.dir === 'c'
+      ? q.ch.map((c, k) => `<button type="button" data-vqk="${k}"><i>${k + 1}</i><span>${esc(c.m)}</span></button>`).join('')
+      : '<input type="text" id="vqIn" lang="en" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="done" aria-label="영어 단어 쓰기"><button type="button" class="fc-pri" id="vqGo">확인</button>';
+    $('vqNext').disabled = true; $('vqNext').textContent = '다음 ›';
+    paintCount(); fit();
+    if (q.dir === 's') $('vqIn').focus({ preventScroll: true }); else $('vqCard').focus({ preventScroll: true });
+  }
+  function fit() {
+    if (!box || box.hidden) return;
+    const b = $('vqQ'), face = $('vqCard');
+    b.style.fontSize = '';
+    let s = parseFloat(getComputedStyle(b).fontSize) || 40;
+    const max = face.clientWidth - 16;
+    while (s > 18 && (b.scrollWidth > max || b.offsetHeight > face.clientHeight * 0.5)) { s -= 2; b.style.fontSize = s + 'px'; }
+  }
+  function open() {
+    if (!box) build();
+    opener = document.activeElement;
+    const p = plan();
+    S = { chk: p.chk, ci: 0, learn: p.learn, pool: p.pool, q: null, done: false, end: false, got: { mem: 0, learned: 0, fail: 0 }, total: p.chk.length + p.learn.length };
+    box.hidden = false; document.documentElement.classList.add('fc-lock');
+    try { history.pushState(Object.assign({}, history.state || {}, { sarangVq: 1 }), ''); pushed = true; } catch (e) {}
+    $('vqCard').tabIndex = -1;
+    next();
+  }
+  function close(fromPop) {
+    if (!box || box.hidden) return;
+    stopSay();
+    box.hidden = true; document.documentElement.classList.remove('fc-lock');
+    if (!fromPop && pushed && history.state && history.state.sarangVq) { popping = true; try { history.back(); } catch (e) { popping = false; } }
+    pushed = false;
+    label();
+    document.dispatchEvent(new CustomEvent('vocab:mem'));
+    if (opener && opener.isConnected) { try { opener.focus({ preventScroll: true }); } catch (e) {} }
+  }
+  openBtn.addEventListener('click', open);
+  document.addEventListener('vocab:mem', () => setTimeout(label, 0));
+  window.SARANG_VQUIZ = { open, close, isOpen: () => !!box && !box.hidden, label, todo };
+})();
 </script>
 <script>/* ===== 유아 화면 놀이 (docs/유아놀이_설계.md 6장) — 담당: 화면 놀이 에이전트 =====
    쓰는 법: PLAY_SCREEN.open(sheet, { onClose })  → 전체 화면 놀이. 닫으면 onClose() 부름
@@ -23328,7 +24260,7 @@ window.DONATE_CORE = (function(){
   }
 
   /* ---------- 관리자: 승인한 기부 문제 → 앱 학습지 형식 ----------
-     d.review = { key: 'sem1-L3-P1', level: 1~3 (5지·중학 모의고사), calc: '식' (수학: 답이 수일 때), dropImage: true } — 관리자가 정함
+     d.review = { key: 'sem1-L3-P1', level: 1~3 (5지·중학 모의시험), calc: '식' (수학: 답이 수일 때), dropImage: true } — 관리자가 정함
      결과: { ok, reason?, warn[], out: { id, target: {subject, grade, key, file, list}, question?, answer?, exam?, accept[], credit } } */
   const CIRCLED = ['soc', 'sci', 'his', 'wh'];   // 이 과목들은 choice 정답을 "① 보기" 로 씀 (지금 학습지 대부분이 그 모양). 국어·영어·수학은 보기 글자 그대로
   const plainNumber = t => /^-?\d+(\.\d+)?(\/\d+)?\s*[a-zA-Z가-힣²³°%]*$/.test(String(t).trim());
@@ -23374,9 +24306,9 @@ window.DONATE_CORE = (function(){
         }
       }
       if (p.n === 5) {
-        if (g[0] !== 'm') return fail("초등 5지선다: 초등 학습지·모의고사는 4지예요. '보기 수'를 4지로 바꾸고 뺄 보기를 정한 뒤 내보내 주세요");
+        if (g[0] !== 'm') return fail("초등 5지선다: 초등 학습지·모의시험은 4지예요. '보기 수'를 4지로 바꾸고 뺄 보기를 정한 뒤 내보내 주세요");
         const level = [1, 2, 3].includes(r.level) ? r.level : 2;
-        if (![1, 2, 3].includes(r.level)) warn.push('모의고사 난이도(level)를 정하지 않아 보통(2)으로 넣어요');
+        if (![1, 2, 3].includes(r.level)) warn.push('모의시험 난이도(level)를 정하지 않아 보통(2)으로 넣어요');
         target.list = 'exam';
         out.exam = { q: p.q, choices: ch, a, explain: p.explain, level };
         if (needCalc(ch[a])) { if (!r.calc) return fail('수학: 답이 수예요. 계산 확인 식(calc)을 적어 주세요'); out.exam.calc = r.calc; }
@@ -23597,8 +24529,8 @@ window.DONATE_CORE = (function(){
   /* 보기 칸: 한 줄로 시작해 긴 보기는 줄을 늘림 (좁은 화면에서 글이 칸 밖으로 숨지 않게) */
   function grow(el){ (el ? [el] : document.querySelectorAll('#donateView .dn-grow')).forEach(e => { e.style.height = 'auto'; e.style.height = e.scrollHeight + 2 + 'px'; }); }
   function counts(){ const f = (id, v, max) => { const e = $(id); if (e) { const n = C.len(v); e.textContent = `${n}/${max}`; e.classList.toggle('over', n > max); } }; f('dnQn', draft.payload.q, C.LIM.q[1]); f('dnExn', draft.payload.explain, C.LIM.explain[1]); }
-  /* 보기 수 안내: 5지는 중학 모의고사, 초등은 사랑교육이 4지로 줄여 넣음 */
-  const nnote = () => (draft.payload || {}).n !== 5 ? '학습지 문제는 보기 4개예요.' : String(draft.grade)[0] === 'm' ? '5지선다는 중학교 모의고사 문제로 써요.' : '초등 학습지는 보기 4개예요. 5개로 보내 주시면 사랑교육이 하나를 빼 4개로 줄여 넣어요.';
+  /* 보기 수 안내: 5지는 중학 모의시험, 초등은 사랑교육이 4지로 줄여 넣음 */
+  const nnote = () => (draft.payload || {}).n !== 5 ? '학습지 문제는 보기 4개예요.' : String(draft.grade)[0] === 'm' ? '5지선다는 중학교 모의시험 문제로 써요.' : '초등 학습지는 보기 4개예요. 5개로 보내 주시면 사랑교육이 하나를 빼 4개로 줄여 넣어요.';
   function renderFields(){
     /* 틀을 바꿔도 누른 단추와 보던 곳은 제자리: 쪽이 짧아져 스크롤이 당겨지지 않게 아래에 빈칸을 잠깐 둠 */
     const docH = document.documentElement.scrollHeight;
@@ -24352,20 +25284,31 @@ window.DONATE_CORE = (function(){
   };
 })();
 </script>
-<script>/* ===== 대시보드 (2026-10-03 대표 확정, 시안 https://claude.ai/artifact/WfiJbCo3ygZHqaYWpwaPCa) =====
-   아래 메뉴 '대시보드' 칸: 지금 보는 아이의 학습 현황 (아이는 위 자녀 카드로 바꿈 — 바꾸면 새로 켜지므로 이 칸으로 다시 엶).
-   - 왼쪽 세로 메뉴 = 대시보드 안 기능 목록 (대표: 추후 기능은 왼쪽에 세로로). PC 는 글자 메뉴, 좁으면 아이콘 줄, 폰은 ☰ 서랍
+<script>/* ===== 현황판 (2026-10-03 대표 확정, 시안 https://claude.ai/artifact/WfiJbCo3ygZHqaYWpwaPCa) =====
+   아래 메뉴 '현황판' 칸: 지금 보는 아이의 학습 현황 (아이는 위 자녀 카드로 바꿈 — 바꾸면 새로 켜지므로 이 칸으로 다시 엶).
+   - 왼쪽 세로 메뉴 = 현황판 안 기능 목록 (대표: 추후 기능은 왼쪽에 세로로). PC 는 글자 메뉴, 좁으면 아이콘 줄, 폰은 ☰ 서랍
    - 전체판(PC·태블릿·폴드 펼침) / 줄인 판(폰·플립: 늦은 과목만, 그래프·달력은 '자세히 보기')은 칸 너비로 나눔 (src/dash.css)
    - 기록: 진도 = 과목 모듈 info(false)·days(false), 학교 진도 = HUB_TODAY.ssh.schoolDay, 공부한 날 = hub_paper_done(프린트)·hub_screen_done(스마트)
      { 'YYYY-M-D': { 과목: { at, task, score|ok, total } } } (src/screen-frame.js, 날짜 30개까지), 복습 = HUB_TODAY.ssh.recap
-   hub-ui.js 가 화면을 바꿀 때마다 SARANG_DASH.show(대시보드인지) 를 부름 */
+   - 공부 시간(2026-10-04 대표 승인 "ㄱㄱ", 시안 https://claude.ai/artifact/By7ftCmFw2zGqDosniD4YF): 바로 풀기 시간 = hub_study_time { 날짜: { 과목: 초 } }
+     (src/screen-frame.js 가 잼, 5분 넘게 가만히 있으면 멈춤), 뽑아서 푼 학습지 = hub_paper_done 의 n(쪽 수, 없으면 1장)
+   - 왼쪽 메뉴 '리포트': 주간(월~일)·월간 리포트 목록 → 누르면 리포트 (기록이 남은 70일 안). 진행 중인 이번 주·이번 달도 맨 위에 둠.
+     월간 '진도 변화'는 hub_dash_pct { 'YYYY-M': { 과목: [그 달 처음 본 %, 마지막 본 %] } } (앱을 켤 때·현황판을 열 때 적음)
+   - 리포트 알림 설정(설정 › 알림): hub_report { w, wd, wt, m, mt, off:[아이 id] } 부모 것(아이를 바꿔도 그대로, src/kids.js SHARED).
+     폰 푸시는 서버(숙제 푸시와 같은 길)가 생기면 이 값으로 보냄 — 지금은 설정만 저장
+   - 0~4세 놀이(k2~k4, 2026-10-04 대표 "0~4세에도 넣어야지"): 과목·진도·복습·틀린 단원 대신 놀이 기록
+     play_log { 날짜: { p: 뽑은 장, s: 화면으로 끝낸 장 } } (play-module.js, 그 전 기록은 play_printed·play_done 의 마지막 날짜로 셈), 화면 놀이 시간 = hub_study_time 'play'
+   - 왼쪽 메뉴 '학습 관리'(2026-10-04 12:28 KST 대표): 과목 카드를 누르면 그 과목 화면에서 시작 범위를 정하고, 다 정하면 '저장'.
+     메인 '자유 진도설정'도 여기로 옴. 저장 전에는 바꾼 진도가 학습에 반영되지 않음: 들어올 때 아이 기록(진도·방식)을 sessionStorage 'hub_mgmt' 에 찍어 두고,
+     '취소'·'되돌리기'면 그대로 되돌린 뒤 새로 켬. 바꾸고 저장 없이 다른 메뉴로 가면 저장할지 물음. 0~4세 놀이에는 없음
+   hub-ui.js 가 화면을 바꿀 때마다 SARANG_DASH.show(현황판인지) 를 부름 */
 (function(){
   const $ = id => document.getElementById(id);
   const ORDER = ['kor', 'eng', 'math', 'ymath', 'vocab', 'hanja', 'yhan', 'soc', 'sci', 'his', 'wh'];
   const NAME = { kor: '국어', eng: '영어', math: '수학', ymath: '수학', vocab: '영단어', hanja: '한자', yhan: '한자', soc: '사회', sci: '과학', his: '한국사', wh: '세계사' };
   const SSH = { soc: 'soc', sci: 'sci', his: 'his', wh: 'wh', eng: 'eng' };   // 학교 진도를 셀 수 있는 과목 (국어·수학은 교과 과정일 때만, sshId)
   const WD = ['일', '월', '화', '수', '목', '금', '토'];
-  const KEEP = 'hub_dash_on';   // 대시보드에서 아이를 바꾸면(새로 켜짐) 다시 이 칸으로
+  const KEEP = 'hub_dash_on';   // 현황판에서 아이를 바꾸면(새로 켜짐) 다시 이 칸으로
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
   const J = k => { try { const v = JSON.parse(localStorage.getItem(k)); return v && typeof v === 'object' ? v : {}; } catch (e) { return {}; } };
   const key = d => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
@@ -24374,7 +25317,24 @@ window.DONATE_CORE = (function(){
   const monday = d => addD(day0(d), -((d.getDay() + 6) % 7));
   const H = () => window.HUB_TODAY || {};
   const NAV = () => window.HUB_NAV;
-  let on = false, open = false, allSubj = false, drawer = false, root = null;
+  const GNAME = { k2: '2세', k3: '3세', k4: '4세', k5: '5세', k6: '6세', k7: '7세', e1: '초1', e2: '초2', e3: '초3', e4: '초4', e5: '초5', e6: '초6', m1: '중1', m2: '중2', m3: '중3' };
+  const isTod = () => ['k2', 'k3', 'k4'].includes(J('hub_child').grade);
+  const Wd = () => isTod() ? { p: '뽑아서', s: '화면', u: '장', act: '놀이', did: '논' } : { p: '프린트', s: '스마트', u: '과목', act: '공부', did: '공부한' };
+  /* 놀이 기록: { 'Y-M-D': { p, s } } — play_log 에 없는 날은 play_printed·play_done(장마다 마지막 날)로 셈 */
+  function playDays(){
+    const out = {}, un = d => { const [y, m, dd] = String(d).split('-').map(Number); return `${y}-${m}-${dd}`; };
+    [['play_printed', 'p'], ['play_done', 's']].forEach(([k, w]) => Object.values(J(k)).forEach(d => { if (typeof d !== 'string') return; const o = out[un(d)] = out[un(d)] || { p: 0, s: 0 }; o[w]++; }));
+    Object.entries(J('play_log')).forEach(([d, v]) => { if (!v || typeof v !== 'object') return; const o = out[d] = out[d] || { p: 0, s: 0 }; o.p = Math.max(o.p, +v.p || 0); o.s = Math.max(o.s, +v.s || 0); });
+    return out;
+  }
+  const ymdOf = k => { const [y, m, d] = String(k).split('-').map(Number); return new Date(y, m - 1, d); };
+  const josa = (w, a, b) => { const c = String(w).charCodeAt(String(w).length - 1); return w + (c >= 0xAC00 && c <= 0xD7A3 && (c - 0xAC00) % 28 ? a : b); };
+  /* 분 → '3시간 56분' (html: 숫자 크게·단위 작게) */
+  function fmtMin(m, html){
+    m = Math.round(m); const h = Math.floor(m / 60), r = m % 60, u = t => html ? `<small>${t}</small>` : t;
+    return h ? `${h}${u('시간')}${r ? (html ? ' ' : ' ') + r + u('분') : ''}` : `${r}${u('분')}`;
+  }
+  let on = false, open = false, allSubj = false, drawer = false, root = null, view = 'stat', tOpen = false, rep = null, repPushed = false, repPop = false;
 
   /* ---------- 기록 읽기 ---------- */
   function sshId(s){
@@ -24415,7 +25375,9 @@ window.DONATE_CORE = (function(){
 
   /* 날짜별 한 공부: { 'YYYY-M-D': { p: [과목], s: [과목] } } */
   function studied(){
-    const P = J('hub_paper_done'), S = J('hub_screen_done'), out = {};
+    const out = {};
+    if (isTod()) { Object.entries(playDays()).forEach(([d, v]) => { out[d] = { p: Array(v.p).fill('play'), s: Array(v.s).fill('play') }; }); return out; }   // 0~4세: 장 수만큼
+    const P = J('hub_paper_done'), S = J('hub_screen_done');
     Object.entries(P).forEach(([d, v]) => { (out[d] = out[d] || { p: [], s: [] }).p = Object.keys(v || {}); });
     Object.entries(S).forEach(([d, v]) => { (out[d] = out[d] || { p: [], s: [] }).s = Object.keys(v || {}); });
     return out;
@@ -24426,7 +25388,7 @@ window.DONATE_CORE = (function(){
     for (let i = 0; i < 60; i++) {
       const d = addD(today, -i), r = rec[key(d)], did = !!r && (r.p.length + r.s.length) > 0;
       if (did) { n++; continue; }
-      if (i === 0 || !scheduled(d)) continue;   // 오늘 아직 안 했거나 쉬는 날(시간표에 과목이 없는 요일)은 건너뜀
+      if (i === 0 || (!isTod() && !scheduled(d))) continue;   // 오늘 아직 안 했거나 (0~4세는 시간표가 없어 하루라도 쉬면 끊김) 쉬는 날(시간표에 과목이 없는 요일)은 건너뜀
       break;
     }
     return n;
@@ -24444,44 +25406,109 @@ window.DONATE_CORE = (function(){
     return out;
   }
 
+  /* 기간 [a, b] (날짜, b 포함) 모아 보기: 공부한 날·바로 풀기 시간·뽑은 장 수·정답률·단원별 정답·한 학습지 */
+  function stats(a, b){
+    const P = J('hub_paper_done'), S = J('hub_screen_done'), T = J('hub_study_time');
+    const o = { days: 0, sec: 0, tDays: 0, sheets: 0, pN: 0, sN: 0, ok: 0, total: 0, subj: {}, day: {}, units: {}, tasks: [], any: false };
+    const inR = k => { const d = ymdOf(k); return d >= a && d <= b; };
+    const studiedDay = {};
+    if (isTod()) Object.entries(playDays()).forEach(([k, v]) => { if (!inR(k) || !(v.p + v.s)) return; studiedDay[k] = 1; o.pN += v.p; o.sN += v.s; o.sheets += v.p; (o.day[k] = o.day[k] || { sec: 0, sh: 0 }).sh += v.p; });
+    else Object.entries(P).forEach(([k, v]) => { if (!inR(k) || !v) return; Object.entries(v).forEach(([s, x]) => {
+      const n = x && typeof x === 'object' && x.n > 0 ? x.n : 1; o.sheets += n; o.pN++; studiedDay[k] = 1; (o.day[k] = o.day[k] || { sec: 0, sh: 0 }).sh += n;
+      if (x && x.task) o.tasks.push({ k, s, task: x.task }); }); });
+    if (!isTod()) Object.entries(S).forEach(([k, v]) => { if (!inR(k) || !v) return; Object.entries(v).forEach(([s, x]) => {
+      o.sN++; studiedDay[k] = 1; if (!x || typeof x !== 'object') return;
+      if (x.task) o.tasks.push({ k, s, task: x.task });
+      const ok = typeof x.score === 'number' ? x.score : typeof x.ok === 'number' ? x.ok : null, total = typeof x.total === 'number' ? x.total : null;
+      if (ok == null || !total) return;
+      o.ok += Math.min(ok, total); o.total += total;
+      const Pi = parseInfo(x.task), unit = (Pi.rest.split(' · ')[0] || Pi.title || '').trim(), uk = s + '|' + unit;
+      const u = o.units[uk] = o.units[uk] || { s, unit, ok: 0, total: 0 }; u.ok += Math.min(ok, total); u.total += total; }); });
+    const tod = isTod();
+    Object.entries(T).forEach(([k, v]) => { if (!inR(k) || !v) return; let daySec = 0;
+      Object.entries(v).forEach(([s, sec]) => { sec = +sec || 0; if (sec <= 0 || (s === 'play') !== tod) return; daySec += sec; o.subj[s] = (o.subj[s] || 0) + sec; });
+      if (daySec > 0) { o.sec += daySec; o.tDays++; (o.day[k] = o.day[k] || { sec: 0, sh: 0 }).sec += daySec; } });
+    o.days = Object.keys(studiedDay).length; o.any = o.days > 0 || o.sec > 0;
+    o.weak = Object.values(o.units).filter(u => u.total >= 3 && u.ok / u.total < 0.9).sort((x, y) => x.ok / x.total - y.ok / y.total);
+    o.good = Object.values(o.units).filter(u => u.total >= 3 && u.ok / u.total >= 0.9).sort((x, y) => y.ok / y.total - x.ok / x.total || y.total - x.total);
+    return o;
+  }
+  /* 기록이 남은 가장 이른 날 (없으면 null) */
+  function firstDay(){
+    let f = null; const see = d => { const t = ymdOf(d); if (!isNaN(t) && (!f || t < f)) f = t; };
+    if (isTod()) Object.keys(playDays()).forEach(see); else ['hub_paper_done', 'hub_screen_done'].forEach(k => Object.keys(J(k)).forEach(see));
+    Object.keys(J('hub_study_time')).forEach(see);
+    return f;
+  }
+  /* 월간 진도 변화: 이 달에 처음 본 % 와 마지막 본 % */
+  function notePct(){
+    const N = NAV(); if (!N || !N.pace) return;
+    const now = new Date(), ym = `${now.getFullYear()}-${now.getMonth() + 1}`, m = J('hub_dash_pct'), cur = m[ym] && typeof m[ym] === 'object' ? m[ym] : {};
+    let ch = false;
+    subjects().forEach(s => { let r = null; try { r = row(s); } catch (e) {} if (!r || r.pct == null) return;
+      const v = Array.isArray(cur[s]) ? cur[s] : null;
+      if (!v) { cur[s] = [r.pct, r.pct]; ch = true; } else if (v[1] !== r.pct) { v[1] = r.pct; ch = true; } });
+    if (!ch) return;
+    m[ym] = cur; Object.keys(m).sort((a, b) => ymdOf(a + '-1') - ymdOf(b + '-1')).slice(0, -3).forEach(k => delete m[k]);
+    try { localStorage.setItem('hub_dash_pct', JSON.stringify(m)); } catch (e) {}
+  }
+
   /* ---------- 그리기 ---------- */
   const ICON = {
     stat: '<path d="M4 20V10M10 20V4M16 20v-7M21 20H3"/>',
     hw: '<path d="M8 4h8v3H8zM6 6H5v15h14V6h-1M9 12h6M9 16h4"/>',
+    rep: '<path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5"/>',
+    mgmt: '<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
     menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
     x: '<path d="M6 6l12 12M18 6L6 18"/>'
   };
   const svg = (d, c) => `<svg class="${c || ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
   function mount(){
     if (root || !$('sarangDashboard')) return;
-    root = document.createElement('section'); root.id = 'dashPane'; root.className = 'db'; root.hidden = true; root.setAttribute('aria-label', '대시보드');
+    root = document.createElement('section'); root.id = 'dashPane'; root.className = 'db'; root.hidden = true; root.setAttribute('aria-label', '현황판');
     root.innerHTML = `<div class="db-scrim" id="dbScrim" hidden></div>
-      <nav class="db-nav" id="dbNav" aria-label="대시보드 기능">
-        <div class="db-nav-t">대시보드</div>
+      <nav class="db-nav" id="dbNav" aria-label="현황판 기능">
+        <div class="db-nav-t">현황판</div>
         <button type="button" class="db-nav-i on" aria-current="page" data-dbnav="stat">${svg(ICON.stat)}<span>학습 현황</span></button>
+        <button type="button" class="db-nav-i" data-dbnav="rep">${svg(ICON.rep)}<span>리포트</span></button>
+        <button type="button" class="db-nav-i" data-dbnav="mgmt">${svg(ICON.mgmt)}<span>학습 관리</span></button>
         <button type="button" class="db-nav-i soon" aria-disabled="true" data-dbnav="hw">${svg(ICON.hw)}<span>숙제</span><em>준비 중</em></button>
         <div class="db-nav-slot">새 기능은 이 아래로 추가돼요</div>
       </nav>
       <div class="db-main" id="dbMain">
-        <div class="db-head"><button type="button" class="db-hamb" id="dbHamb" aria-label="대시보드 메뉴 열기" aria-expanded="false" aria-controls="dbNav">${svg(ICON.menu)}</button><h2 class="db-title">학습 현황</h2><span class="db-date" id="dbDate"></span></div>
+        <div class="db-head"><button type="button" class="db-hamb" id="dbHamb" aria-label="현황판 메뉴 열기" aria-expanded="false" aria-controls="dbNav">${svg(ICON.menu)}</button><h2 class="db-title" id="dbTitle">학습 현황</h2><span class="db-date" id="dbDate"></span></div>
+        <div class="db-view" id="dbStat">
         <div class="db-tiles" id="dbTiles"></div>
         <div class="db-grid">
           <section class="card db-box a-subj"><h3 class="db-h">과목별 진도 <small id="dbSubjSmall">학교 진도와 비교</small></h3>
             <div class="db-tw"><table class="db-tb"><thead><tr><th>과목</th><th>지금 배우는 단원</th><th class="db-cp">이번 학기</th><th>학교 진도</th></tr></thead><tbody id="dbSubj"></tbody></table></div>
             <div class="db-ph" id="dbSubjNote"></div></section>
-          <section class="card db-box a-chart"><h3 class="db-h">주별 공부 <small>최근 5주 · 과목 수</small></h3>
-            <div class="db-legend"><span><i class="db-sw p"></i>프린트</span><span><i class="db-sw s"></i>스마트</span></div>
+          <section class="card db-box a-time"><h3 class="db-h"><span data-w="tH">공부 시간</span> <small id="dbTSmall"></small></h3>
+            <div class="db-time">
+              <div class="db-tmain"><div class="db-tnums" id="dbTNums"></div>
+                <div class="db-legend"><span><i class="db-sw s"></i><b data-w="tS">바로 풀기 (분)</b></span><span><i class="db-sw dot"></i><b data-w="tP">뽑아서 푼 장 수</b></span></div>
+                <div class="db-chart db-tchart" id="dbTChart"></div></div>
+              <button type="button" class="db-more db-tmore" id="dbTMore" aria-expanded="false">과목별 시간 보기</button>
+              <div class="db-tsub"><h4 class="db-h4">과목별 바로 풀기 시간</h4><div class="db-tsubj" id="dbTSubj"></div>
+                <p class="db-note">스마트 학습 화면을 연 동안, 5분 넘게 아무것도 누르지 않으면 시간을 멈춰요. 켜 두기만 한 시간은 들어가지 않아요. 뽑아서 푼 학습지는 종이라 시간 대신 장 수로 세요.</p></div>
+            </div></section>
+          <section class="card db-box a-chart"><h3 class="db-h"><span data-w="weekH">주별 공부</span> <small data-w="weekS">최근 5주 · 과목 수</small></h3>
+            <div class="db-legend"><span><i class="db-sw p"></i><b data-w="p">프린트</b></span><span><i class="db-sw s"></i><b data-w="s">스마트</b></span></div>
             <div class="db-chart" id="dbChart"></div></section>
-          <section class="card db-box a-cal"><h3 class="db-h">공부한 날 <small>최근 5주</small></h3>
-            <div class="db-legend"><span><i class="db-sw p"></i>프린트</span><span><i class="db-sw s"></i>스마트</span><span><i class="db-sw b"></i>둘 다</span><span><i class="db-sw n"></i>쉼</span></div>
+          <section class="card db-box a-cal"><h3 class="db-h"><span data-w="calH">공부한 날</span> <small>최근 5주</small></h3>
+            <div class="db-legend"><span><i class="db-sw p"></i><b data-w="p">프린트</b></span><span><i class="db-sw s"></i><b data-w="s">스마트</b></span><span><i class="db-sw b"></i>둘 다</span><span><i class="db-sw n"></i>쉼</span></div>
             <div class="db-cal" id="dbCal"></div></section>
           <section class="card db-box a-rv"><h3 class="db-h">오늘 복습 <small>D+1 · D+7</small></h3>
             <div class="db-rv" id="dbRv"></div>
             <p class="db-note">오늘 학습지에 함께 나오는 복습이에요. 실제로 푼 학습지만 복습에 나와요.</p></section>
           <section class="card db-box a-weak"><h3 class="db-h">많이 틀린 단원 <small>스마트 학습 정답률 · 최근 30일</small></h3>
             <div class="db-weak" id="dbWeak"></div></section>
-          <div class="db-ph a-more"><button type="button" class="db-more" id="dbMore" aria-expanded="false">자세히 보기 (주별 공부 · 공부한 날)</button></div>
+          <div class="db-ph a-more"><button type="button" class="db-more" id="dbMore" aria-expanded="false">자세히 보기</button></div>
         </div>
+        </div>
+        <div class="db-view" id="dbRep" hidden></div>
+        <div class="db-view db-mg" id="dbMgmt" hidden><p class="db-mg-lead" id="dbMgLead"></p><div class="db-mg-list" id="dbMgList"></div>
+          <div class="db-mg-bar" id="dbMgBar" hidden><button type="button" id="dbMgCancel">취소</button><button type="button" class="pri" id="dbMgSave">저장</button></div></div>
       </div>`;
     $('sarangDashboard').append(root);
     root.addEventListener('click', e => {
@@ -24489,11 +25516,26 @@ window.DONATE_CORE = (function(){
       if (b.id === 'dbHamb') return setDrawer(!drawer);
       if (b.id === 'dbMore') { open = !open; paintOpen(); if (open) chart(); return; }
       if (b.id === 'dbAllSubj') { allSubj = !allSubj; paintSubjMode(); return; }
-      if (b.dataset.dbnav === 'stat') return setDrawer(false);
+      if (b.id === 'dbTMore') { tOpen = !tOpen; paintTOpen(); return; }
+      if (b.dataset.dbnav === 'stat' || b.dataset.dbnav === 'rep' || b.dataset.dbnav === 'mgmt') { const v = b.dataset.dbnav; setDrawer(false); if (v !== 'mgmt' && guard(() => setView(v))) return; setView(v); return; }
+      if (b.dataset.mg) { if (!mgRead()) mgStart(); const N = NAV(); if (N && N.openFrom) N.openFrom(b.dataset.mg, 'dash'); return; }
+      if (b.id === 'dbMgSave') return mgSave();
+      if (b.id === 'dbMgCancel') return mgCancel();
+      if (b.dataset.rep) { openRep(b.dataset.rep); return; }
+      if (b.id === 'dbRepBack') { closeRep(); return; }
+      if (b.id === 'dbRepStat') { closeRep(true); setView('stat'); return; }
     });
+    addEventListener('popstate', () => {
+      if (repPop) { repPop = false; return; }
+      if (rep && !(history.state && history.state.sarangRep)) { repPushed = false; rep = null; paintRep(); }   // 폰 뒤로 가기: 리포트 → 목록
+    });
+    try { if (history.state && history.state.sarangRep) { const s0 = Object.assign({}, history.state); delete s0.sarangRep; history.replaceState(s0, ''); } } catch (e) {}   // 새로 고침 뒤 남은 표시
     $('dbScrim').addEventListener('click', () => setDrawer(false));
     document.addEventListener('keydown', e => { if (drawer && e.key === 'Escape') { setDrawer(false); $('dbHamb').focus({ preventScroll: true }); } });
-    if (window.ResizeObserver) { let w0 = 0; new ResizeObserver(() => { fitW(); const w = $('dbChart') ? $('dbChart').clientWidth : 0; if (on && w && Math.abs(w - w0) > 4) { w0 = w; chart(); paintSubjMode(); } }).observe(root); }
+    if (window.ResizeObserver) { let w0 = 0, t0 = 0, r0 = 0; new ResizeObserver(() => { fitW(); if (!on) return;
+      const w = $('dbChart') ? $('dbChart').clientWidth : 0; if (w && Math.abs(w - w0) > 4) { w0 = w; chart(); paintSubjMode(); }
+      const t = $('dbTChart') ? $('dbTChart').clientWidth : 0; if (t && Math.abs(t - t0) > 4) { t0 = t; tchart(); }
+      const r = root.querySelector('.rp-chart') ? root.querySelector('.rp-chart').clientWidth : 0; if (r && Math.abs(r - r0) > 4) { r0 = r; paintRep(); } }).observe(root); }
   }
   /* 칸 너비 → 왼쪽 메뉴 모양 (dash.css .w-rail 아이콘 줄 · .w-phone 서랍) */
   function fitW(){
@@ -24503,12 +25545,29 @@ window.DONATE_CORE = (function(){
   }
   function setDrawer(o){
     drawer = !!o; root.classList.toggle('drawer', drawer); $('dbScrim').hidden = !drawer;
-    $('dbHamb').setAttribute('aria-expanded', String(drawer)); $('dbHamb').setAttribute('aria-label', drawer ? '대시보드 메뉴 닫기' : '대시보드 메뉴 열기');
+    $('dbHamb').setAttribute('aria-expanded', String(drawer)); $('dbHamb').setAttribute('aria-label', drawer ? '현황판 메뉴 닫기' : '현황판 메뉴 열기');
   }
   function paintOpen(){
     root.classList.toggle('open', open);
     $('dbMore').setAttribute('aria-expanded', String(open));
-    $('dbMore').textContent = open ? '접기' : '자세히 보기 (주별 공부 · 공부한 날)';
+    $('dbMore').textContent = open ? '접기' : isTod() ? '자세히 보기 (주별 놀이 · 논 날)' : '자세히 보기 (주별 공부 · 공부한 날)';
+  }
+  function paintTOpen(){
+    root.classList.toggle('topen', tOpen);
+    $('dbTMore').setAttribute('aria-expanded', String(tOpen));
+    $('dbTMore').textContent = tOpen ? '접기' : '과목별 시간 보기';
+  }
+  /* 왼쪽 메뉴: 학습 현황 / 리포트 */
+  function setView(v){
+    if (v !== 'stat' && v !== 'rep' && v !== 'mgmt') return;
+    if (v === 'mgmt' && isTod()) v = 'stat';
+    if (v !== 'rep' && rep) closeRep(true);
+    view = v;
+    root.querySelectorAll('[data-dbnav]').forEach(b => { const o = b.dataset.dbnav === v; b.classList.toggle('on', o); if (o) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
+    $('dbStat').hidden = v !== 'stat'; $('dbRep').hidden = v !== 'rep'; $('dbMgmt').hidden = v !== 'mgmt';
+    $('dbTitle').textContent = v === 'rep' ? '리포트' : v === 'mgmt' ? '학습 관리' : isTod() ? '놀이 현황' : '학습 현황';
+    if (v === 'stat') render(); else if (v === 'mgmt') paintMgmt(); else paintRep();
+    window.scrollTo(0, Math.min(window.scrollY, Math.max(0, root.getBoundingClientRect().top + window.scrollY - 12)));   // 긴 학습 현황 아래에서 짧은 리포트로 바꾸면 빈 곳에 남지 않게
   }
   const narrow = () => !!root && root.querySelector('.db-ph') && getComputedStyle(root.querySelector('.db-ph')).display !== 'none';   // 줄인 판인지 (dash.css 가 정함)
   function paintSubjMode(){
@@ -24532,6 +25591,21 @@ window.DONATE_CORE = (function(){
     const R = results(), wk = R.filter(x => { const [y, m, d] = x.d.split('-').map(Number); return new Date(y, m - 1, d) >= addD(today, -6); });
     const sc = wk.reduce((a, x) => [a[0] + x.ok, a[1] + x.total], [0, 0]);
     const tile = (k, v, u, d) => `<div class="card db-tile"><div class="db-k">${k}</div><div class="db-v">${v}${u ? `<small>${u}</small>` : ''}</div><div class="db-d">${d}</div></div>`;
+    const T0 = isTod(), w0 = Wd(), WORDS = { p: w0.p, s: w0.s, weekH: T0 ? '주별 놀이' : '주별 공부', weekS: T0 ? '최근 5주 · 장 수' : '최근 5주 · 과목 수', calH: T0 ? '논 날' : '공부한 날', tH: T0 ? '놀이 시간' : '공부 시간', tS: T0 ? '화면 놀이 (분)' : '바로 풀기 (분)', tP: T0 ? '뽑은 장 수' : '뽑아서 푼 장 수' };
+    root.querySelectorAll('[data-w]').forEach(e => { const t = WORDS[e.dataset.w]; if (t && e.textContent !== t) e.textContent = t; });
+    root.classList.toggle('tod', T0);
+    if (view === 'stat') $('dbTitle').textContent = T0 ? '놀이 현황' : '학습 현황';
+    { const mb = root.querySelector('[data-dbnav="mgmt"]'); if (mb) mb.hidden = T0; }
+    const navT = root.querySelector('[data-dbnav="stat"] span'); if (navT) navT.textContent = T0 ? '놀이 현황' : '학습 현황';
+    if (T0) {   // 0~4세 놀이: 숫자 4개 = 논 날·연속·이번 주 뽑은 장·화면으로 한 장
+      const ws = stats(mon, today);
+      $('dbTiles').innerHTML = tile('이번 주 논 날', week, `/${past}일`, `${WD[1]}요일부터 오늘까지`)
+        + tile('연속 놀이', streak(rec, today), '일', '오늘 아직 안 했으면 어제까지')
+        + tile('뽑아서 한 놀이', ws.pN, '장', '이번 주')
+        + tile('화면 놀이', ws.sN, '장', '이번 주 끝까지 한 장');
+      cal(rec, today); chart(); timeBox(today);
+      return;
+    }
     $('dbTiles').innerHTML = tile('이번 주 공부한 날', week, `/${past}일`, `${WD[1]}요일부터 오늘까지`)
       + tile('연속 공부', streak(rec, today), '일', '쉬는 요일은 빼고 셈')
       + tile('오늘 공부', tod.length ? doneT : '-', tod.length ? `/${tod.length}과목` : '', tod.length ? '시간표의 오늘 과목' : '오늘은 시간표에 과목이 없어요')
@@ -24548,22 +25622,63 @@ window.DONATE_CORE = (function(){
       l.forEach(x => rv.push(`<div class="db-rv-i"><span class="db-rv-k">D+${x.k}</span><span class="db-rv-t"><b>${esc(NAME[s])}</b> ${esc(x.title)}</span><span class="db-pill ${did ? 'ok' : 'late'}">${did ? '✓ 함' : '오늘 할 일'}</span></div>`)); });
     $('dbRv').innerHTML = rv.length ? rv.join('') : '<p class="db-empty">오늘 학습지에 나올 복습이 없어요. 학습지를 풀어 나가면 어제·일주일 전 내용이 복습으로 나와요.</p>';
     /* 많이 틀린 단원 */
-    const by = {}; R.forEach(x => { const k = x.s + '|' + x.unit; const o = by[k] = by[k] || { s: x.s, unit: x.unit, ok: 0, total: 0 }; o.ok += x.ok; o.total += x.total; });
+    const by = {}; R.filter(x => ymdOf(x.d) >= addD(today, -29)).forEach(x => { const k = x.s + '|' + x.unit; const o = by[k] = by[k] || { s: x.s, unit: x.unit, ok: 0, total: 0 }; o.ok += x.ok; o.total += x.total; });
     const weak = Object.values(by).filter(o => o.total >= 3 && o.ok / o.total < 0.9).sort((a, b) => a.ok / a.total - b.ok / b.total).slice(0, 3);
+    const R30 = R.filter(x => ymdOf(x.d) >= addD(today, -29));
     $('dbWeak').innerHTML = weak.length ? weak.map(o => { const p = Math.round(o.ok / o.total * 100); return `<div class="db-weak-i"><span>${esc(o.unit || NAME[o.s] || '')}<small>${esc(NAME[o.s] || '')}</small></span><b>${p}%</b><div class="db-bar warn" role="img" aria-label="정답률 ${p}%"><i style="width:${p}%"></i></div></div>`; }).join('')
-      : `<p class="db-empty">${R.length ? '정답률이 90%보다 낮은 단원이 없어요. 잘하고 있어요.' : '스마트 학습(바로 풀기) 기록이 쌓이면 정답률이 낮은 단원을 보여 줘요.'}</p>`;
-    cal(rec, today); chart();
+      : `<p class="db-empty">${R30.length ? '정답률이 90%보다 낮은 단원이 없어요. 잘하고 있어요.' : '스마트 학습(바로 풀기) 기록이 쌓이면 정답률이 낮은 단원을 보여 줘요.'}</p>`;
+    cal(rec, today); chart(); timeBox(today); notePct();
+  }
+  /* 공부 시간 칸: 이번 주(월~오늘) 바로 풀기 시간·뽑은 장 수, 지난주 같은 요일까지와 비교 */
+  function timeBox(today){
+    const mon = monday(today);
+    const w = stats(mon, today), lw = stats(addD(mon, -7), addD(today, -7)), lwAll = stats(addD(mon, -7), addD(mon, -1));
+    const min = w.sec / 60, diff = Math.round((w.sec - lw.sec) / 60);
+    let best = null; Object.entries(w.day).forEach(([k, v]) => { if (v.sec > 0 && (!best || v.sec > best[1])) best = [k, v.sec]; });
+    $('dbTSmall').textContent = `이번 주 · ${mon.getMonth() + 1}월 ${mon.getDate()}일(월)부터`;
+    const num = (k, v, d) => `<div class="db-tn"><div class="db-k">${k}</div><div class="db-v">${v}</div><div class="db-d">${d}</div></div>`, T0 = isTod();
+    $('dbTNums').innerHTML = num(T0 ? '화면 놀이 시간' : '바로 풀기 시간', w.sec ? fmtMin(min, true) : '0<small>분</small>',
+        !lw.sec && !w.sec ? (T0 ? '화면 놀이를 하면 시간이 쌓여요' : '스마트 학습을 하면 시간이 쌓여요') : !lw.sec ? `지난주 이맘때는 기록이 없어요` : diff > 0 ? `지난주 이맘때보다 <b class="db-up">${fmtMin(diff)} 더</b>` : diff < 0 ? `지난주 이맘때보다 ${fmtMin(-diff)} 적게` : '지난주 이맘때와 같아요')
+      + num(T0 ? '화면 논 날 하루 평균' : '바로 푼 날 하루 평균', w.tDays ? fmtMin(min / w.tDays, true) : '-', w.tDays ? `${w.tDays}일 ${T0 ? '화면 놀이' : '바로 풀기'}` : '아직 없어요')
+      + num(T0 ? '뽑아서 한 놀이' : '뽑아서 푼 학습지', `${w.sheets}<small>장</small>`, lwAll.sheets ? `지난주 ${lwAll.sheets}장` : '지난주 기록 없음')
+      + num(T0 ? '가장 오래 논 날' : '가장 오래 한 날', best ? fmtMin(best[1] / 60, true) : '-', best ? (() => { const d = ymdOf(best[0]); return `${d.getMonth() + 1}월 ${d.getDate()}일 (${WD[d.getDay()]})`; })() : '아직 없어요');
+    const subs = Object.entries(w.subj).sort((a, b) => b[1] - a[1]), top = subs.length ? subs[0][1] : 0;
+    $('dbTSubj').innerHTML = subs.length ? subs.map(([s, sec]) => `<div class="db-ts"><b>${esc(NAME[s] || s)}</b><div class="db-bar soft" role="img" aria-label="${esc(NAME[s] || s)} ${fmtMin(sec / 60)}"><i style="width:${Math.max(3, sec / top * 100)}%"></i></div><em>${fmtMin(sec / 60)}</em></div>`).join('')
+      : '<p class="db-empty">이번 주에는 아직 스마트 학습(바로 풀기)을 하지 않았어요.</p>';
+    tchart(); paintTOpen();
+  }
+  /* 요일별 막대(바로 풀기 분) + 아래 점(뽑은 장 수) */
+  function tchart(){
+    const box = $('dbTChart'); if (!box || !root || $('dbStat').hidden) return;
+    const today = day0(new Date()), mon = monday(today), w = stats(mon, today), rec = studied();
+    const W = Math.max(260, Math.min(620, box.clientWidth || 0)), Hh = 200, L = 28, R = 6, T = 20, B = 46, ch = Hh - T - B, cw = (W - L - R) / 7;
+    const days = []; for (let i = 0; i < 7; i++) { const d = addD(mon, i), k = key(d), v = w.day[k] || { sec: 0, sh: 0 }; days.push({ d, m: Math.round(v.sec / 60), sh: v.sh, fut: d > today, did: !!rec[k] && (rec[k].p.length + rec[k].s.length) > 0 }); }
+    const top = Math.max(30, Math.ceil(Math.max(...days.map(x => x.m)) / 30) * 30), y = v => T + ch - ch * v / top;
+    let s = `<svg viewBox="0 0 ${W} ${Hh}" width="${W}" height="${Hh}" role="img" aria-label="이번 주 요일별 바로 풀기 시간과 뽑아서 푼 장 수">`;
+    [0, top / 2, top].forEach(g => { s += `<line x1="${L}" x2="${W - R}" y1="${y(g)}" y2="${y(g)}" class="db-grid-l"/><text x="${L - 6}" y="${y(g) + 4}" text-anchor="end">${g}</text>`; });
+    days.forEach((x, i) => {
+      const cx = L + cw * i + cw / 2, bw = Math.min(34, cw * 0.55), isT = +x.d === +today;
+      if (x.m > 0) { const h = y(0) - y(x.m), r = Math.min(4, h, bw / 2), bx = cx - bw / 2, yt = y(x.m);
+        s += `<path d="M${bx},${y(0)}V${yt + r}q0,-${r} ${r},-${r}H${bx + bw - r}q${r},0 ${r},${r}V${y(0)}Z" class="db-m-s"/><text class="db-tot" x="${cx}" y="${yt - 6}" text-anchor="middle">${x.m}</text>`; }
+      else if (!x.fut && !x.did) s += `<text x="${cx}" y="${y(0) - 6}" text-anchor="middle">쉼</text>`;
+      s += `<text x="${cx}" y="${y(0) + 17}" text-anchor="middle"${isT ? ' class="db-tot"' : ''}>${isT ? '오늘' : WD[x.d.getDay()]}</text>`;
+      const n = Math.min(x.sh, 6), gap = Math.min(9, (cw - 8) / Math.max(n, 1));
+      for (let k = 0; k < n; k++) s += `<circle cx="${cx - (n - 1) * gap / 2 + k * gap}" cy="${y(0) + 33}" r="3.4" class="db-dot"/>`;
+      if (x.sh > 6) s += `<text x="${cx + (n - 1) * gap / 2 + 8}" y="${y(0) + 37}">+</text>`;
+      s += `<rect class="db-hit" x="${L + cw * i}" y="${T}" width="${cw}" height="${Hh - T}"><title>${x.d.getMonth() + 1}월 ${x.d.getDate()}일 (${WD[x.d.getDay()]}) · 바로 풀기 ${x.m}분 · 뽑아서 ${x.sh}장</title></rect>`;
+    });
+    box.innerHTML = s + '</svg>';
   }
   function cal(rec, today){
-    const start = addD(monday(today), -28);
+    const start = addD(monday(today), -28), w = Wd();
     let h = ['월', '화', '수', '목', '금', '토', '일'].map(d => `<div class="db-ch">${d}</div>`).join('');
     for (let i = 0; i < 35; i++) {
       const d = addD(start, i), r = rec[key(d)], lab = `${d.getMonth() + 1}월 ${d.getDate()}일`;
-      let c = 'n', t = '공부 안 함';
+      let c = 'n', t = `${w.act} 안 함`;
       if (d > today) { c = 'f'; t = '아직'; }
-      else if (r && r.p.length && r.s.length) { c = 'b'; t = `프린트 ${r.p.length} · 스마트 ${r.s.length}과목`; }
-      else if (r && r.p.length) { c = 'p'; t = `프린트 ${r.p.length}과목`; }
-      else if (r && r.s.length) { c = 's'; t = `스마트 ${r.s.length}과목`; }
+      else if (r && r.p.length && r.s.length) { c = 'b'; t = `${w.p} ${r.p.length} · ${w.s} ${r.s.length}${w.u}`; }
+      else if (r && r.p.length) { c = 'p'; t = `${w.p} ${r.p.length}${w.u}`; }
+      else if (r && r.s.length) { c = 's'; t = `${w.s} ${r.s.length}${w.u}`; }
       h += `<div class="db-c ${c}${+d === +today ? ' t' : ''}" title="${lab} · ${t}" aria-label="${lab} ${t}">${d.getDate()}</div>`;
     }
     $('dbCal').innerHTML = h;
@@ -24571,11 +25686,11 @@ window.DONATE_CORE = (function(){
   function chart(){
     const box = $('dbChart'); if (!box) return;
     const W = Math.max(280, box.clientWidth || 0), Hh = 190, L = 26, B = 24, T = 18;
-    const today = day0(new Date()), rec = studied(), mon = monday(today);
+    const today = day0(new Date()), rec = studied(), mon = monday(today), Wo = Wd();
     const weeks = []; for (let w = 4; w >= 0; w--) { const a = addD(mon, -7 * w); let p = 0, s = 0; for (let i = 0; i < 7; i++) { const r = rec[key(addD(a, i))]; if (r) { p += r.p.length; s += r.s.length; } } weeks.push({ a, p, s }); }
     const top = Math.max(5, Math.ceil(Math.max(...weeks.map(x => x.p + x.s)) / 5) * 5), n = weeks.length, step = (W - L - 8) / n, bw = Math.min(40, step * 0.5);
     const y = v => Hh - B - v / top * (Hh - B - T);
-    let s = `<svg viewBox="0 0 ${W} ${Hh}" width="${W}" height="${Hh}" role="img" aria-label="최근 5주 주별로 공부한 과목 수">`;
+    let s = `<svg viewBox="0 0 ${W} ${Hh}" width="${W}" height="${Hh}" role="img" aria-label="최근 5주 주별로 ${Wo.act}한 ${Wo.u} 수">`;
     [0, top / 2, top].forEach(g => { s += `<line x1="${L}" x2="${W - 4}" y1="${y(g)}" y2="${y(g)}" class="db-grid-l"/><text x="${L - 6}" y="${y(g) + 4}" text-anchor="end">${g}</text>`; });
     const bar = (x, y0, y1, cls, round) => { const h = y0 - y1; if (h <= 0) return ''; const r = round ? Math.min(4, h, bw / 2) : 0;
       return `<path d="M${x},${y0}V${y1 + r}${r ? `q0,-${r} ${r},-${r}H${x + bw - r}q${r},0 ${r},${r}` : `H${x + bw}`}V${y0}Z" class="${cls}"/>`; };
@@ -24585,25 +25700,255 @@ window.DONATE_CORE = (function(){
       if (w.s) s += bar(x, w.p ? yp - 1 : y(0), ys, 'db-m-s', true);
       s += `<text x="${x + bw / 2}" y="${Hh - 6}" text-anchor="middle">${last ? '이번 주' : `${w.a.getMonth() + 1}/${w.a.getDate()}`}</text>`;
       s += w.p + w.s ? `<text class="db-tot" x="${x + bw / 2}" y="${ys - 6}" text-anchor="middle">${w.p + w.s}</text>` : '';
-      s += `<rect class="db-hit" x="${L + i * step}" y="${T}" width="${step}" height="${Hh - B - T}"><title>${last ? '이번 주' : `${w.a.getMonth() + 1}월 ${w.a.getDate()}일 주`} · 프린트 ${w.p} · 스마트 ${w.s}과목</title></rect>`;
+      s += `<rect class="db-hit" x="${L + i * step}" y="${T}" width="${step}" height="${Hh - B - T}"><title>${last ? '이번 주' : `${w.a.getMonth() + 1}월 ${w.a.getDate()}일 주`} · ${Wo.p} ${w.p} · ${Wo.s} ${w.s}${Wo.u}</title></rect>`;
     });
     box.innerHTML = s + '</svg>';
   }
+
+  /* ---------- 리포트 (왼쪽 메뉴) ----------
+     목록: 주간(월~일) 최근 9주·월간 최근 3달 가운데 기록이 남은 것 (이번 주·이번 달은 '진행 중'). 누르면 리포트, 폰 뒤로 가기는 목록으로 */
+  const fmtD = d => `${d.getMonth() + 1}월 ${d.getDate()}일`;
+  function range(id){
+    const today = day0(new Date()), [t, v] = String(id).split(':');
+    if (t === 'w') { const a = ymdOf(v), e = addD(a, 6); return { t, a, e, b: e > today ? today : e, live: e >= today }; }
+    if (t === 'm') { const [y, m] = v.split('-').map(Number), a = new Date(y, m - 1, 1), e = new Date(y, m, 0); return { t, a, e, b: e > today ? today : e, live: e >= today }; }
+    return null;
+  }
+  function repIds(){
+    const today = day0(new Date()), f = firstDay(), mon = monday(today), w = [], m = [];
+    for (let i = 0; i < 9; i++) { const a = addD(mon, -7 * i); if (i && (!f || addD(a, 6) < f)) break; w.push('w:' + key(a)); }
+    for (let i = 0; i < 3; i++) { const a = new Date(today.getFullYear(), today.getMonth() - i, 1); if (i && (!f || new Date(a.getFullYear(), a.getMonth() + 1, 0) < f)) break; m.push(`m:${a.getFullYear()}-${a.getMonth() + 1}`); }
+    return { w, m };
+  }
+  const repName = r => r.t === 'w' ? `${fmtD(r.a)} ~ ${fmtD(r.e)}` : `${r.a.getFullYear()}년 ${r.a.getMonth() + 1}월`;
+  function sumLine(o){
+    const T0 = isTod();
+    if (!o.any) return `${T0 ? '놀이' : '공부'} 기록이 없어요`;
+    return [`${o.days}일 ${T0 ? '놀이' : '공부'}`, o.sec ? `${T0 ? '화면 놀이' : '바로 풀기'} ${fmtMin(o.sec / 60)}` : '', o.sheets ? `뽑아서 ${o.sheets}장` : ''].filter(Boolean).join(' · ');
+  }
+  function paintRep(){
+    const box = $('dbRep'); if (!box || box.hidden) return;
+    if (!rep) {
+      const L = repIds(), item = id => { const r = range(id), o = stats(r.a, r.b);
+        return `<button type="button" class="rp-item" data-rep="${id}"><span class="rp-it"><b>${r.t === 'm' ? `${r.a.getMonth() + 1}월 리포트` : repName(r)}</b><small>${sumLine(o)}</small></span>${r.live ? '<span class="db-pill ahead">진행 중</span>' : ''}<span class="rp-go" aria-hidden="true">›</span></button>`; };
+      box.innerHTML = `<div class="rp-lists">
+        <section class="card db-box"><h3 class="db-h">주간 리포트 <small>월요일 ~ 일요일</small></h3><div class="rp-items">${L.w.map(item).join('')}</div></section>
+        <section class="card db-box"><h3 class="db-h">월간 리포트 <small>1일 ~ 말일</small></h3><div class="rp-items">${L.m.map(item).join('')}</div></section></div>
+        <p class="db-note rp-foot">리포트 알림은 설정 › 알림에서 켜고 끄거나 보내는 때를 바꿀 수 있어요. 알림을 꺼도 리포트는 여기에 쌓여요. 기록은 이 아이의 최근 70일 공부까지 남아요.</p>`;
+      return;
+    }
+    const r = range(rep); if (!r) { rep = null; return paintRep(); }
+    const o = stats(r.a, r.b), weekly = r.t === 'w';
+    const pa = weekly ? addD(r.a, -7) : new Date(r.a.getFullYear(), r.a.getMonth() - 1, 1);
+    const pe = weekly ? addD(r.a, -1) : new Date(r.a.getFullYear(), r.a.getMonth(), 0);
+    const pb = r.live ? (weekly ? addD(r.b, -7) : (() => { const d = new Date(pa.getFullYear(), pa.getMonth(), r.b.getDate()); return d > pe ? pe : d; })()) : pe;
+    const p = stats(pa, pb), f = firstDay(), pNo = !p.any && (!f || f > pa);
+    const pLab = weekly ? (r.live ? '지난주 이맘때' : '지난주') : `${pa.getMonth() + 1}월${r.live ? ' 이맘때' : ''}`;
+    const span = Math.round((r.b - r.a) / 864e5) + 1, full = Math.round((r.e - r.a) / 864e5) + 1;
+    const kids = window.SARANG_KIDS, nm = kids ? kids.label(kids.now()) : '우리 아이', g = GNAME[J('hub_child').grade] || '';
+    const tile = (k, v, d) => `<div class="card db-tile"><div class="db-k">${k}</div><div class="db-v">${v}</div><div class="db-d">${d}</div></div>`;
+    const pct = (x) => x.total ? Math.round(x.ok / x.total * 100) : null;
+    const dm = Math.round((o.sec - p.sec) / 60), T0 = isTod(), w0 = Wd();
+    const dmT = pNo ? `${pLab} 기록 없음` : dm > 0 ? `${pLab}보다 <b class="db-up">${fmtMin(dm)} 더</b>` : dm < 0 ? `${pLab}보다 ${fmtMin(-dm)} 적게` : `${pLab}와 같아요`;
+    const tiles = T0 ? tile('논 날', `${o.days}<small>/${r.live ? span : full}일</small>`, pNo ? `${pLab} 기록 없음` : `${pLab} ${p.days}일`)   // 0~4세 놀이
+      + tile('화면 놀이 시간', o.sec ? fmtMin(o.sec / 60, true) : '0<small>분</small>', dmT)
+      + tile('뽑아서 한 놀이', `${o.pN}<small>장</small>`, pNo ? `${pLab} 기록 없음` : `${pLab} ${p.pN}장`)
+      + tile('화면 놀이', `${o.sN}<small>장</small>`, pNo ? `${pLab} 기록 없음` : `${pLab} ${p.sN}장`)
+      : tile('공부한 날', `${o.days}<small>/${r.live ? span : full}일</small>`, pNo ? `${pLab} 기록 없음` : `${pLab} ${p.days}일`)
+      + tile('바로 풀기 시간', o.sec ? fmtMin(o.sec / 60, true) : '0<small>분</small>', pNo ? `${pLab} 기록 없음` : dm > 0 ? `${pLab}보다 <b class="db-up">${fmtMin(dm)} 더</b>` : dm < 0 ? `${pLab}보다 ${fmtMin(-dm)} 적게` : `${pLab}와 같아요`)
+      + tile('끝낸 학습지', `${o.pN + o.sN}<small>개</small>`, `프린트 ${o.pN} · 스마트 ${o.sN}`)
+      + tile('바로 풀기 정답률', pct(o) == null ? '-' : `${pct(o)}<small>%</small>`, pct(o) == null ? '스마트 학습 점수가 없어요' : pNo || pct(p) == null ? `${o.total}문제` : `${pLab} ${pct(p)}%`);
+    const li = (cls, tag, t) => `<li><span class="db-pill ${cls}">${tag}</span><span>${t}</span></li>`;
+    const card = (h, body, cls) => `<section class="card db-box ${cls || ''}"><h3 class="db-h">${h}</h3>${body}</section>`;
+    const unitT = u => `${esc(NAME[u.s] || u.s)} ${esc(u.unit)} · 정답률 ${Math.round(u.ok / u.total * 100)}%`;
+    let cards = '';
+    if (weekly) {
+      const good = [];
+      if (!pNo && o.days > p.days) good.push(`${pLab}보다 ${o.days - p.days}일 더 ${T0 ? '놀았어요' : '공부했어요'}`);
+      if (!pNo && dm >= 5) good.push(`${T0 ? '화면 놀이' : '바로 풀기'}를 ${pLab}보다 ${fmtMin(dm)} 더 했어요`);
+      if (T0 && o.sN) good.push(`화면 놀이를 ${o.sN}장 끝까지 했어요`);
+      o.good.slice(0, 2).forEach(u => good.push(unitT(u)));
+      if (!good.length && o.days) good.push(`${o.days}일 ${T0 ? '놀았어요' : '공부했어요'}`);
+      const care = [];
+      if (r.live && !T0) subjects().forEach(s => { let x = null; try { x = row(s); } catch (e) {} if (x && x.st === 'late') care.push(['late', '늦음', `${esc(josa(x.name, '은', '는'))} 학교 진도보다 학습지 ${-x.gap}개 늦어요`]); });
+      o.weak.slice(0, 3).forEach(u => care.push(['late', '다시 보기', unitT(u)]));
+      if (!o.days && !r.live) care.push(['late', '쉼', `이 주에는 ${w0.did} 날이 없어요`]);
+      cards += card('잘한 점', good.length ? `<ul class="rp-l">${good.map(t => li('ok', '잘함', t)).join('')}</ul>` : `<p class="db-empty">${w0.act} 기록이 쌓이면 잘한 점을 찾아 드려요.</p>`);
+      cards += card('챙겨 주세요', care.length ? `<ul class="rp-l">${care.map(c => li(c[0], c[1], c[2])).join('')}</ul>` : '<p class="db-empty">챙길 것이 없어요. 잘하고 있어요.</p>');
+      if (r.live && !T0) {   // 이번 주에 푼 교과 학습지 → 일주일 뒤 복습(D+7)에 나옴
+        const seen = new Set(), rv = [];
+        o.tasks.slice().sort((x, y) => ymdOf(y.k) - ymdOf(x.k)).forEach(x => { if (!sshId(x.s)) return; const t = parseInfo(x.task).title.trim(), k = x.s + '|' + t; if (!t || seen.has(k) || rv.length >= 4) return; seen.add(k); rv.push(li('ahead', 'D+7', `${esc(NAME[x.s] || x.s)} ${esc(t)}`)); });
+        cards += card('다음 주 복습', rv.length ? `<ul class="rp-l">${rv.join('')}</ul><p class="db-note">이번 주에 푼 학습지가 일주일 뒤 복습으로 나와요.</p>` : '<p class="db-empty">이번 주에 푼 교과 학습지(국어·영어·수학·사회·과학·한국사)가 있으면 일주일 뒤 복습으로 나와요.</p>');
+      }
+    } else {
+      cards += card(`주별 ${T0 ? '화면 놀이' : '바로 풀기'} 시간 <small>분</small>`, '<div class="db-chart rp-chart" id="rpChart"></div>', 'rp-wide');
+      if (T0) cards += card('이 달 놀이', `<ul class="rp-l">${li('ahead', '뽑아서', `${o.pN}장 뽑아서 놀았어요`)}${li('ahead', '화면', `화면 놀이 ${o.sN}장을 끝까지 했어요`)}${li('ahead', '논 날', `${o.days}일`)}</ul>`);
+      else {
+      const ym = `${r.a.getFullYear()}-${r.a.getMonth() + 1}`, pm = J('hub_dash_pct')[ym] || {};
+      const ch = ORDER.filter(s => Array.isArray(pm[s])).map(s => { const [x, y] = pm[s].map(v => Math.max(0, Math.min(100, +v || 0)));
+        return `<div class="rp-chg"><b>${esc(NAME[s] || s)}</b><div class="db-bar rp-two" role="img" aria-label="${esc(NAME[s] || s)} ${x}%에서 ${y}%"><s style="width:${x}%"></s><i style="width:${y}%"></i></div><em>${x}% → ${y}%</em></div>`; });
+      cards += card('이번 학기 진도 <small>이 달 처음 → 마지막으로 연 날</small>', ch.length ? ch.join('') + '<div class="db-legend rp-lg"><span><i class="db-sw s"></i>처음</span><span><i class="db-sw p"></i>마지막</span></div>' : '<p class="db-empty">이 달에 진도를 기록한 날이 없어요. 현황판을 열거나 앱을 켜면 그날 진도를 적어 둬요.</p>');
+      cards += card('많이 틀린 단원 <small>스마트 학습 · 3문제 이상</small>', o.weak.length ? `<ul class="rp-l">${o.weak.slice(0, 3).map(u => li('late', '다시 보기', unitT(u))).join('')}</ul>` : `<p class="db-empty">${o.total ? '정답률이 90%보다 낮은 단원이 없어요.' : '스마트 학습 점수가 아직 없어요.'}</p>`);
+      }
+    }
+    box.innerHTML = `<div class="rp-head"><button type="button" class="rp-back" id="dbRepBack">‹ 리포트 목록</button>
+        <div class="rp-kid"><span class="rp-av" aria-hidden="true">${esc(nm.slice(0, 1))}</span><div><b>${esc(nm)}${g ? ' · ' + g : ''} · ${weekly ? '주간' : '월간'} 리포트</b><small>${fmtD(r.a)} ~ ${fmtD(r.e)}${r.live ? ' · 진행 중' : ''}</small></div></div></div>
+      <div class="db-tiles">${tiles}</div>
+      <div class="rp-grid">${cards}</div>
+      <button type="button" class="db-more rp-stat" id="dbRepStat">${T0 ? '놀이' : '학습'} 현황 보기</button>`;
+    if (!weekly) rchart(r);
+  }
+  function rchart(r){
+    const box = $('rpChart'); if (!box) return;
+    const W = Math.max(260, Math.min(640, box.clientWidth || 300)), Hh = 170, L = 8, R = 8, T = 20, B = 24, ch = Hh - T - B;
+    const ws = []; for (let a = monday(r.a); a <= r.e; a = addD(a, 7)) { const s0 = a < r.a ? r.a : a, e0 = addD(a, 6) > r.e ? r.e : addD(a, 6); const o = s0 <= r.b ? stats(s0, e0 > r.b ? r.b : e0) : null; ws.push({ s0, m: o ? Math.round(o.sec / 60) : 0, part: e0 > r.b, fut: s0 > r.b }); }
+    const top = Math.max(30, ...ws.map(w => w.m)), cw = (W - L - R) / ws.length, bw = Math.min(40, cw * 0.56), y = v => T + ch - ch * v / top;
+    let s = `<svg viewBox="0 0 ${W} ${Hh}" width="${W}" height="${Hh}" role="img" aria-label="주별 ${isTod() ? '화면 놀이' : '바로 풀기'} 시간"><line x1="${L}" x2="${W - R}" y1="${y(0)}" y2="${y(0)}" class="db-grid-l"/>`;
+    ws.forEach((w, i) => { const cx = L + cw * i + cw / 2, bx = cx - bw / 2;
+      if (w.m > 0) { const h = y(0) - y(w.m), rr = Math.min(4, h, bw / 2); s += `<path d="M${bx},${y(0)}V${y(w.m) + rr}q0,-${rr} ${rr},-${rr}H${bx + bw - rr}q${rr},0 ${rr},${rr}V${y(0)}Z" class="db-m-s${w.part ? ' rp-part' : ''}"/>`; }
+      if (!w.fut) s += `<text class="db-tot" x="${cx}" y="${y(w.m) - 6}" text-anchor="middle">${w.m}</text>`;
+      s += `<text x="${cx}" y="${Hh - 6}" text-anchor="middle">${w.s0.getMonth() + 1}/${w.s0.getDate()}~</text>`; });
+    box.innerHTML = s + '</svg>';
+  }
+  function openRep(id){
+    if (!range(id)) return;
+    rep = id;
+    if (!repPushed) { try { history.pushState(Object.assign({}, history.state || {}, { sarangRep: 1 }), ''); repPushed = true; } catch (e) {} }
+    paintRep();
+    const top = root.getBoundingClientRect().top + window.scrollY - 8; if (window.scrollY > top) window.scrollTo(0, Math.max(0, top));   // 목록 아래쪽에서 열면 리포트 맨 위로
+  }
+  function closeRep(quiet){
+    if (!rep) return;
+    rep = null;
+    if (repPushed && history.state && history.state.sarangRep) { repPop = true; try { history.back(); } catch (e) { repPop = false; } }
+    repPushed = false;
+    if (!quiet) paintRep();
+  }
+
+  /* ---------- 설정 › 알림: 리포트 알림 (hub_report, 부모 것) ---------- */
+  const RP0 = { w: 1, wd: 0, wt: 20, m: 1, mt: 9, off: [] };   // 주간 일요일 20시 · 월간 1일 9시 (2026-10-04 대표 승인 기본값)
+  const WT = [[9, '오전 9시'], [18, '오후 6시'], [20, '오후 8시']], MT = [[9, '오전 9시'], [20, '오후 8시']], WDS = [1, 5, 6, 0];
+  function rpRead(){ const v = J('hub_report'); return { w: v.w === 0 ? 0 : 1, wd: WDS.includes(v.wd) ? v.wd : RP0.wd, wt: WT.some(x => x[0] === v.wt) ? v.wt : RP0.wt, m: v.m === 0 ? 0 : 1, mt: MT.some(x => x[0] === v.mt) ? v.mt : RP0.mt, off: Array.isArray(v.off) ? v.off.filter(x => typeof x === 'string') : [] }; }
+  function rpSave(o){ try { localStorage.setItem('hub_report', JSON.stringify(o)); } catch (e) {} }
+  function repSettings(){
+    const n0 = document.querySelector('#settings .set-notify'); if (!n0 || $('rpW')) return;
+    const c = rpRead(), opt = (L, v) => L.map(([k, t]) => `<option value="${k}"${k === v ? ' selected' : ''}>${t}</option>`).join('');
+    n0.insertAdjacentHTML('afterend', `<label class="set-child"><span><b>주간 리포트</b><small>지난 한 주(월~일) 공부를 정리해서 부모님 폰으로 알려 드려요.</small></span><input type="checkbox" class="set-switch" id="rpW" role="switch"></label>
+      <div class="set-child rp-when" id="rpWRow"><span><b>보내는 때</b></span><div class="rp-sels"><select id="rpWd" aria-label="주간 리포트 요일">${opt(WDS.map(d => [d, WD[d] + '요일']), c.wd)}</select><select id="rpWt" aria-label="주간 리포트 시간">${opt(WT, c.wt)}</select></div></div>
+      <label class="set-child"><span><b>월간 리포트</b><small>지난달 한 달 공부를 정리해서 매달 1일에 알려 드려요.</small></span><input type="checkbox" class="set-switch" id="rpM" role="switch"></label>
+      <div class="set-child rp-when" id="rpMRow"><span><b>보내는 때</b><small>매달 1일</small></span><div class="rp-sels"><select id="rpMt" aria-label="월간 리포트 시간">${opt(MT, c.mt)}</select></div></div>
+      <div id="rpKids"></div>
+      <p class="rp-set-note">리포트 알림은 부모님 폰으로만 가고, 아이가 여럿이면 한 번에 묶어서 보내요. 밤 9시부터 아침 8시까지는 보내지 않아요. 폰 알림은 준비 중이라 지금은 설정만 저장돼요. 리포트는 현황판 › 리포트에서 언제든 볼 수 있어요.</p>`);
+    $('rpW').checked = !!c.w; $('rpM').checked = !!c.m;
+    const paint = () => { const o = rpRead(); $('rpWRow').classList.toggle('rp-off', !o.w); $('rpMRow').classList.toggle('rp-off', !o.m);
+      ['rpWd', 'rpWt'].forEach(i => { $(i).disabled = !o.w; }); $('rpMt').disabled = !o.m;
+      const K = window.SARANG_KIDS, L = K ? K.list() : [];   // 아이가 둘 이상일 때만: 리포트에 넣을 아이
+      const html = L.length > 1 ? '<div class="set-child"><span><b>리포트에 넣을 아이</b></span></div>' + L.map(k => `<label class="set-child rp-kid-row"><span>${esc(K.label(k))}</span><input type="checkbox" class="set-switch" data-rpkid="${esc(k.id)}" role="switch"${o.off.includes(k.id) ? '' : ' checked'}></label>`).join('') : '';
+      if ($('rpKids').dataset.h !== html) { $('rpKids').innerHTML = html; $('rpKids').dataset.h = html; } };
+    const set = f => { const o = rpRead(); f(o); rpSave(o); paint(); };
+    $('rpW').addEventListener('change', e => set(o => { o.w = e.target.checked ? 1 : 0; }));
+    $('rpM').addEventListener('change', e => set(o => { o.m = e.target.checked ? 1 : 0; }));
+    $('rpWd').addEventListener('change', e => set(o => { o.wd = +e.target.value; }));
+    $('rpWt').addEventListener('change', e => set(o => { o.wt = +e.target.value; }));
+    $('rpMt').addEventListener('change', e => set(o => { o.mt = +e.target.value; }));
+    $('rpKids').addEventListener('change', e => { const id = e.target.dataset.rpkid; if (!id) return; set(o => { o.off = o.off.filter(x => x !== id); if (!e.target.checked) o.off.push(id); }); });
+    document.addEventListener('hub:child', paint);
+    paint();
+  }
+
+  /* ---------- 학습 관리 (2026-10-04 대표): 과목마다 시작 범위 정하고 저장 ---------- */
+  const MG = 'hub_mgmt';
+  /* 되돌리지 않는 것: 공부 기록·현황판 기록·부모 설정·기기 것 (진도·방식·과목 상태만 되돌림) */
+  const MG_KEEP = [/^hub_(study_time|paper_done|screen_done|dash_pct|dash_on|report|kids|kid_|tour|notify|printer|subject)/, /^(play_log|play_printed|play_done|vocab_mem|vocab_flash|scr_rate|el-settings)$/, /^sarang_/, /^firebase/, /^donate_/];
+  const mgKeep = k => MG_KEEP.some(r => r.test(k));
+  function mgRead(){ try { const o = JSON.parse(sessionStorage.getItem(MG)); return o && o.snap ? o : null; } catch (e) { return null; } }
+  function mgWrite(o){ try { if (o) sessionStorage.setItem(MG, JSON.stringify(o)); else sessionStorage.removeItem(MG); } catch (e) {} }
+  const mgInfo = s => { try { const r = row(s); return r.tag + '|' + r.title; } catch (e) { return ''; } };
+  function mgStart(){
+    if (mgRead()) return;
+    const snap = {}; for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && !mgKeep(k)) snap[k] = localStorage.getItem(k); }
+    const N = NAV(), pace = N && N.pace ? N.pace() : 'free';
+    mgWrite({ snap, pace, infos: Object.fromEntries(subjects().map(s => [s, mgInfo(s)])) });
+    if (pace === 'school' && N.setPace) N.setPace('free');   // 정하는 동안은 과목 화면에서 진도를 옮길 수 있게 (저장 안 하면 되돌림)
+  }
+  function mgChanged(){ const o = mgRead(); if (!o) return []; return subjects().filter(s => s in o.infos && mgInfo(s) && mgInfo(s) !== o.infos[s]); }
+  function mgEnd(keep){ const o = mgRead(); mgWrite(null); if (!keep && o && NAV() && NAV().setPace) NAV().setPace(o.pace); }   // 바꾼 것이 없으면 방식도 그대로
+  function mgSave(next){
+    const ch = mgChanged(), N = NAV();
+    mgEnd(ch.length > 0);
+    if (ch.length && N.setPace) N.setPace('free');
+    document.dispatchEvent(new CustomEvent('hub:refresh'));
+    if (N.say) N.say(ch.length ? `저장했어요. 학습에서 정한 진도로 공부해요. (${ch.map(s => NAME[s]).join('·')})` : '바꾼 진도가 없어요.');
+    if (typeof next === 'function') next(); else if (ch.length) N.tab('today'); else if (on) paintMgmt();
+  }
+  function mgCancel(){
+    const o = mgRead(); if (!o) return;
+    if (!mgChanged().length) { mgEnd(false); if (on) paintMgmt(); if (NAV().say) NAV().say('바꾼 진도가 없어 그대로예요.'); return; }
+    const ks = []; for (let i = 0; i < localStorage.length; i++) ks.push(localStorage.key(i));
+    ks.forEach(k => { if (k && !mgKeep(k) && !(k in o.snap)) localStorage.removeItem(k); });
+    Object.entries(o.snap).forEach(([k, v]) => { try { localStorage.setItem(k, v); } catch (e) {} });
+    mgWrite(null);
+    try { sessionStorage.setItem('hub_mgmt_undo', '1'); sessionStorage.removeItem(KEEP); } catch (e) {}
+    location.reload();   // 과목 화면들이 진도를 처음부터 다시 읽게
+  }
+  /* 저장 없이 다른 메뉴로: 바꾼 것이 있으면 물음 (go = 원래 가려던 곳) */
+  let ask = null, askGo = null;
+  function guard(go){
+    if (!mgRead()) return false;
+    if (!mgChanged().length) { mgEnd(false); return false; }
+    askGo = go;
+    if (!ask) {
+      ask = document.createElement('div'); ask.className = 'db-mg-ask'; ask.hidden = true;
+      ask.innerHTML = '<div class="db-mg-box" role="alertdialog" aria-modal="true" aria-labelledby="dbMgAskT" aria-describedby="dbMgAskS"><b id="dbMgAskT">바꾼 진도를 저장할까요?</b><span id="dbMgAskS"></span>'
+        + '<button type="button" class="pri" data-mga="save">저장</button><button type="button" data-mga="undo">되돌리기</button><button type="button" data-mga="stay">계속 고치기</button></div>';
+      document.body.append(ask);
+      ask.addEventListener('click', e => {
+        const b = e.target.closest('[data-mga]'); if (!b && e.target !== ask) return;
+        const a = b ? b.dataset.mga : 'stay', go2 = askGo; ask.hidden = true; askGo = null;
+        if (a === 'save') mgSave(go2); else if (a === 'undo') mgCancel(); else { const N = NAV(); if (N && N.tabNow !== 'dash') N.tab('dash'); setView('mgmt'); }
+      });
+      ask.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); ask.querySelector('[data-mga="stay"]').click(); }
+        if (e.key === 'Tab') { const f = [...ask.querySelectorAll('button')], i = f.indexOf(document.activeElement); e.preventDefault(); f[(i + (e.shiftKey ? f.length - 1 : 1) + f.length) % f.length].focus(); } });
+    }
+    const ch = mgChanged();
+    ask.querySelector('#dbMgAskS').textContent = `${ch.map(s => NAME[s]).join('·')} 진도를 바꿨어요. 저장하지 않으면 원래 진도로 돌아가요.`;
+    ask.hidden = false; ask.querySelector('[data-mga="save"]').focus({ preventScroll: true });
+    return true;
+  }
+  function paintMgmt(){
+    if (!root) return;
+    const o = mgRead(), ch = new Set(mgChanged()), subs = subjects(), N = NAV();
+    $('dbMgLead').textContent = o ? (ch.size ? `${ch.size}과목을 바꿨어요. 다 정했으면 저장을 눌러 주세요.` : '과목을 눌러 시작할 곳을 정한 뒤 저장을 눌러 주세요.')
+      : N && N.pace && N.pace() === 'school' ? '지금은 학교 진도대로 가요. 과목을 누르면 시작할 곳을 바꿀 수 있어요.' : '과목을 누르면 시작할 곳을 바꿀 수 있어요.';
+    $('dbMgList').innerHTML = subs.length ? subs.map(s => { const r = row(s);
+      return `<button type="button" class="db-mg-row${ch.has(s) ? ' ch' : ''}" data-mg="${s}"><span class="db-mg-top"><b>${esc(r.name)}</b>${ch.has(s) ? '<span class="db-pill ahead">바꿈</span>' : pill(r)}</span>`
+        + `<span class="db-mg-at">${r.tag ? `<em>${esc(r.tag)}</em>` : ''}${esc(r.title)}</span>${r.rest ? `<small>${esc(r.rest)}</small>` : ''}<i class="db-mg-go" aria-hidden="true">›</i></button>`; }).join('')
+      : '<p class="db-empty">고른 과목이 없어요.</p>';
+    $('dbMgBar').hidden = !o;
+    $('dbMgSave').textContent = ch.size ? `저장 (${ch.size}과목)` : '저장';
+  }
+  /* 취소로 새로 켠 뒤 알림 */
+  document.addEventListener('DOMContentLoaded', () => setTimeout(() => { let u = null; try { u = sessionStorage.getItem('hub_mgmt_undo'); sessionStorage.removeItem('hub_mgmt_undo'); } catch (e) {} if (u && NAV() && NAV().say) NAV().say('바꾼 진도를 되돌렸어요.'); }, 300));
+  /* 메인 '자유 진도설정': 학습 관리로 */
+  function manage(){ mount(); mgStart(); const N = NAV(); if (N) N.tab('dash'); setView('mgmt');
+    window.scrollTo(0, innerHeight <= 520 && root ? Math.max(0, Math.round(root.getBoundingClientRect().top + scrollY - 8)) : 0); }   // 가로 폰: 왼쪽 메뉴 '학습 관리'·'숙제'가 아래 메뉴에 가리지 않게 현황판 칸 위까지 내림 (판 53 1차 검수 2번)
 
   function show(o){
     mount(); if (!root) return;
     on = !!o; root.hidden = !on;
     try { if (on) sessionStorage.setItem(KEEP, '1'); else sessionStorage.removeItem(KEEP); } catch (e) {}
-    if (!on) { if (drawer) setDrawer(false); return; }
-    fitW(); render(); paintOpen();
+    if (!on) { if (drawer) setDrawer(false); if (rep) closeRep(true); return; }
+    if (view === 'mgmt' && isTod()) setView('stat');
+    fitW(); if (view === 'rep') paintRep(); else if (view === 'mgmt') { render(); paintMgmt(); } else render(); paintOpen();
   }
-  document.addEventListener('hub:refresh', () => { if (on) render(); });
-  /* 아이를 바꾸면 앱이 새로 켜짐: 대시보드에서 바꿨으면 다시 대시보드로 */
+  document.addEventListener('hub:refresh', () => { if (!on) return; if (view === 'rep') paintRep(); else render(); if (view === 'mgmt') paintMgmt(); });
+  /* 아이를 바꾸면 앱이 새로 켜짐: 현황판에서 바꿨으면 다시 현황판으로 */
   document.addEventListener('DOMContentLoaded', () => setTimeout(() => {
     let k = null; try { k = sessionStorage.getItem(KEEP); } catch (e) {}
     const N = NAV(); if (k && N && N.tabNow !== 'dash') N.tab('dash');
   }, 0));
-  window.SARANG_DASH = { show, render };
+  document.addEventListener('DOMContentLoaded', () => { setTimeout(() => { try { notePct(); } catch (e) {} }, 4000); repSettings(); });   // 현황판을 안 열어도 이 달 진도를 적어 둠 (과목 학습지를 읽은 뒤)
+  window.SARANG_DASH = { show, render, manage, guard, view: v => setView(v), get viewNow(){ return view; }, mgActive: () => !!mgRead(), mgChanged };
 })();
 </script>
 <script>/* ===== 배경음악 (0~7세, 2026-10-02 대표: 아기자기한 배경음, 휴대폰 합성음 말고 외부 무료 곡) =====
