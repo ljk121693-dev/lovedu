@@ -3,319 +3,379 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>사랑교육 lovedu.kr</title>
-<meta name="description" content="사교육 대신 사랑교육. 유아부터 중3까지 PC·휴대폰·태블릿으로 바로 푸는 스마트 학습과 뽑아서 푸는 프린트 학습, 둘 다 되는 매일 공부. 월 9,900원(연간이면 월 7,700원꼴), 약정 없음, 0~4세 무료, 7일 무료 체험.">
+<meta name="color-scheme" content="light dark">
+<title>사랑교육 · 아이와 함께하는 매일의 배움</title>
+<meta name="description" content="스마트 학습과 프린트 학습, 둘 다 되는 사랑교육. 유아부터 중3까지, 아이에게 맞는 진도로 공부해요. 월 9,900원, 연간 92,400원. 0~4세 무료, 가입일부터 7일 무료 체험.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@600;700;900&display=swap">
 <style>
-/* 레이아웃: 한 줄 상단바 + 학습지 한 장이 놓인 첫 화면 + 좁은 본문 단 + 사업자 정보 바닥글. 색·글꼴은 사랑교육 홍보 시안을 그대로 씀 */
 :root{
-  --bg:#f5f4ef; --card:#fffefa; --ink:#25392f; --soft:#5b6b60; --line:#e1e5dc;
-  --hero:#e8ecdf; --hero-line:#d1dac5; --accent:#ae765c; --hl:#fff4c2; --hl-line:#ecd98a;
-  --paper:#ffffff; --paper-ink:#2a2a2a; --paper-soft:#666; --paper-line:#d9d6cc;
-  --btn-ink:#fffefa; --bar:rgba(245,244,239,.92); --chip-ink:#ffffff;
-  --pencil:#c0392b; --bezel:#1d2a23; --ok-bg:#e6f3ec;
-  --k-kor:#A5432F; --k-eng:#2F5BD3; --k-math:#B8651C; --k-soc:#2F8A5B; --k-sci:#1F7F80; --k-his:#7A6A4F; --k-han:#8A4FB0;
+  color-scheme:light;
+  --bg:#f5f4ef;--card:#fffefa;--ink:#25392f;--soft:#5b6b60;--line:#e1e5dc;
+  --hero:#e8ecdf;--hero-line:#d1dac5;--accent:#ae765c;--hl:#fff4c2;--hl-line:#ecd98a;
+  --paper:#ffffff;--paper-ink:#2a2a2a;--paper-soft:#666;--paper-line:#d9d6cc;
+  --btn-ink:#fffefa;--bar:rgba(245,244,239,.96);--green:#2c5945;--ok-bg:#e6f3ec;
+  --k-kor:#A5432F;--k-eng:#2F5BD3;--k-math:#B8651C;--k-soc:#2F8A5B;--k-sci:#1F7F80;--k-his:#7A6A4F;--k-han:#8A4FB0;
   --serif:"Noto Serif KR","Apple SD Gothic Neo","Malgun Gothic",serif;
   --sans:"Noto Sans KR","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+  --rail:252px;--bar-height:72px;--shadow:0 12px 36px -24px rgba(37,57,47,.3);
 }
-@media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]){
+@media(prefers-color-scheme:dark){
+  :root{
     color-scheme:dark;
-    --bg:#17241e; --card:#1e2d25; --ink:#e7ecdf; --soft:#a9b7aa; --line:#354539;
-    --hero:#263928; --hero-line:#4f6248; --accent:#d3a58b; --hl:#3e432b; --hl-line:#656947;
-    --paper:#f4f2ea; --paper-ink:#2a2a2a; --paper-soft:#666; --paper-line:#d9d6cc;
-    --btn-ink:#17241e; --bar:rgba(23,36,30,.92);
+    --bg:#17241e;--card:#1e2d25;--ink:#e7ecdf;--soft:#a9b7aa;--line:#354539;
+    --hero:#263928;--hero-line:#4f6248;--accent:#d3a58b;--hl:#3e432b;--hl-line:#656947;
+    --paper:#f4f2ea;--btn-ink:#17241e;--bar:rgba(23,36,30,.96);--green:#bad2b9;
+    --shadow:0 12px 36px -24px rgba(0,0,0,.7);
   }
 }
-:root[data-theme="dark"]{
-  color-scheme:dark;
-  --bg:#17241e; --card:#1e2d25; --ink:#e7ecdf; --soft:#a9b7aa; --line:#354539;
-  --hero:#263928; --hero-line:#4f6248; --accent:#d3a58b; --hl:#3e432b; --hl-line:#656947;
-  --paper:#f4f2ea; --paper-ink:#2a2a2a; --paper-soft:#666; --paper-line:#d9d6cc;
-  --btn-ink:#17241e; --bar:rgba(23,36,30,.92);
-}
 *{box-sizing:border-box}
-html{scroll-padding-top:72px}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.7;padding-inline:16px;padding-block:0;overflow-x:hidden;word-break:keep-all;overflow-wrap:anywhere}
-.wrap{max-width:980px;margin:0 auto}
-h1,h2,h3{font-family:var(--serif);text-wrap:balance;margin:0;line-height:1.3}
-p{margin:0}
+[hidden]{display:none!important}
+html{scrollbar-gutter:stable;overflow-anchor:none}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.75 var(--sans);word-break:keep-all;overflow-wrap:anywhere}
+button,a{-webkit-tap-highlight-color:transparent}
+button{font:inherit}
 a{color:inherit}
-.eyebrow{font-size:13px;letter-spacing:.08em;color:var(--accent);font-weight:700}
+p,h1,h2,h3{margin:0}
+h1,h2,h3{font-family:var(--serif);line-height:1.4;letter-spacing:-.035em;text-wrap:balance}
+h1{font-size:clamp(28px,3.1vw,42px);font-weight:700}
+h2{font-size:24px}h3{font-size:19px}
+:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+[tabindex="-1"]:focus{outline:none}
 .soft{color:var(--soft)}
-.meta{font-size:13px;color:var(--soft)}
-.nw{white-space:nowrap}
-mark{background:var(--hl);color:inherit;padding:0 .2em;border-bottom:2px solid var(--hl-line)}
-.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--ink);color:var(--btn-ink);font-weight:700;border:0;border-radius:999px;padding:12px 24px;font-size:16px;font-family:var(--sans);line-height:1.4;cursor:pointer;text-decoration:none;white-space:nowrap}
-.btn.sm{padding:8px 16px;font-size:14px}
-.btn:focus-visible,.nav a:focus-visible,summary:focus-visible,footer a:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+.eyebrow{color:var(--green);font-size:13px;font-weight:700;letter-spacing:.04em}
+.tagline{color:var(--soft);font-size:13px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;min-width:0}
+.section-heading{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:32px 0 16px}
+.section-heading h2{font-size:22px}
+.section-heading p{font-size:13px;color:var(--soft)}
+.panel-head{max-width:780px;margin-bottom:28px}
+.panel-head h1{margin:10px 0 12px}
+.panel-head>p:last-child{color:var(--soft)}
+.skip{position:fixed;top:-100px;left:16px;z-index:100;background:var(--ink);color:var(--btn-ink);padding:10px 16px;border-radius:8px}
+.skip:focus{top:12px}
 
-/* 상단바 */
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;margin-inline:-16px;padding:10px 16px;background:var(--bar);backdrop-filter:saturate(1.2) blur(8px);-webkit-backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--line)}
-.top .in{max-width:980px;margin:0 auto;display:flex;align-items:center;gap:20px}
-.logo{font-family:var(--serif);font-weight:900;font-size:20px;text-decoration:none;letter-spacing:-.01em;white-space:nowrap}
-.nav{display:flex;gap:18px;margin-left:auto;font-size:15px}
-.nav a{text-decoration:none;color:var(--soft)}
-.nav a:hover{color:var(--ink)}
+/* 메뉴와 시작하기는 하나의 요소를 화면 크기에 맞게 배치한다. */
+.site-header{position:fixed;inset:0 auto 0 0;z-index:30;width:var(--rail);padding:32px 20px 24px;background:var(--card);border-right:1px solid var(--line);display:flex;flex-direction:column}
+.brand{display:flex;align-items:center;gap:12px;min-height:44px;text-decoration:none;white-space:nowrap;font:900 23px/1.4 var(--serif);letter-spacing:-.04em}
+.brand svg{width:42px;height:42px;flex:none}
+.rail-caption{margin:20px 4px 32px;font-size:12px;color:var(--soft);line-height:1.8}
+.menu{display:grid;gap:8px;min-height:0;overflow-y:auto;overscroll-behavior:contain;align-content:start;flex:1}
+.menu a{display:flex;align-items:center;gap:12px;min-height:50px;padding:10px 12px;border:1px solid transparent;border-radius:12px;text-decoration:none;color:var(--soft);font-size:16px;font-weight:500}
+.menu a:hover{background:var(--bg);color:var(--ink)}
+.menu a[aria-current="page"]{background:var(--hero);border-color:var(--hero-line);color:var(--ink);font-weight:700}
+.nav-index{width:25px;flex:none;color:var(--soft);font-size:13px;font-variant-numeric:tabular-nums}
+.menu a[aria-current="page"] .nav-index{color:var(--green)}
+.rail-bottom{margin-top:auto;padding-top:30px}
+.rail-bottom p{margin:0 4px 16px;font-size:12px;color:var(--soft);line-height:1.8}
+.start{display:flex;align-items:center;justify-content:center;min-height:48px;gap:4px;background:var(--ink);color:var(--btn-ink);border-radius:12px;text-decoration:none;font-size:14px;font-weight:700;white-space:nowrap;padding:10px 16px}
+.start:hover{box-shadow:var(--shadow)}
+.menu-toggle{display:none;width:44px;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);cursor:pointer;padding:10px}
+.menu-toggle svg{display:block;width:22px;height:22px}
+.menu-scrim{display:none}
+.main{margin-left:var(--rail);padding:36px 40px 0}
+.main-inner{max-width:1192px;margin:0 auto;min-width:0}
+.page-caption{display:flex;justify-content:space-between;gap:16px;align-items:center;margin-bottom:26px;font-size:13px;color:var(--soft)}
+.page-caption>span:first-child{display:flex;align-items:center;gap:8px}
+.page-caption>span:first-child::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--accent)}
 
-/* 첫 화면 */
-.hero{margin-top:20px;background:var(--hero);border:1px solid var(--hero-line);border-radius:20px;padding:40px 32px;display:grid;grid-template-columns:1.15fr 1fr;gap:32px;align-items:center}
-.hero > div{min-width:0}
-.hero h1{font-size:clamp(34px,6vw,54px);font-weight:900;letter-spacing:-.02em}
-.hero h1 .strike{position:relative;color:var(--soft);font-weight:600}
-.hero h1 .strike::after{content:"";position:absolute;left:-2px;right:-2px;top:54%;height:4px;background:var(--accent);border-radius:2px;transform:rotate(-4deg)}
-.hero .lead{font-size:18px;margin-top:16px;max-width:30em}
-.perks{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:10px;max-width:32em}
-.perks li{display:grid;grid-template-columns:22px 1fr;column-gap:10px;font-size:15px;line-height:1.55}
-.perks li::before{content:"✓";grid-row:span 2;width:20px;height:20px;margin-top:2px;border-radius:50%;background:var(--card);border:1px solid var(--hero-line);color:var(--accent);font-size:12px;font-weight:700;display:grid;place-items:center;line-height:1}
-.perks b{font-weight:700}
-.perks span{color:var(--soft)}
-.cta{display:flex;flex-wrap:wrap;gap:10px 16px;margin-top:24px;align-items:center}
-.cta .note{font-size:15px;color:var(--soft)}
+/* 처음 만나는 화면: 같은 내용, 같은 비중의 두 가지 공부 방법. */
+.hero{background:var(--hero);border:1px solid var(--hero-line);border-radius:22px;padding:36px;display:grid;grid-template-columns:1fr 1.08fr;gap:30px;align-items:center}
+.hero-copy{min-width:0}
+.hero h1{font-size:clamp(30px,3.1vw,43px);margin:13px 0 18px;line-height:1.4}
+.hero .lead{font-size:20px;font-weight:700;line-height:1.65;letter-spacing:-.025em}
+.hero .lead span{display:block}
+.hero .description{font-size:14px;color:var(--soft);margin-top:14px;line-height:1.8}
+.hero-note{display:flex;align-items:center;gap:8px;margin-top:24px;font-size:12px;color:var(--soft)}
+.hero-note::before{content:"✓";width:22px;height:22px;display:grid;place-items:center;border-radius:50%;background:var(--card);color:var(--green);font-weight:700;flex:none}
+.learning-demo{min-width:0}
+.demo-caption{text-align:center;font-size:12px;color:var(--soft);margin-bottom:12px}
+.ways{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+.way{min-width:0;display:flex;flex-direction:column}
+.way-label{display:flex;align-items:center;justify-content:center;gap:6px;font-size:13px;font-weight:700;margin-bottom:10px}
+.way-label svg{width:17px;height:17px;flex:none}
+.example{min-height:240px;flex:1;display:flex;flex-direction:column;background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:12px;padding:15px 13px;box-shadow:var(--shadow);font-size:11px;line-height:1.6;min-width:0}
+.example-head{font-size:10px;color:var(--paper-soft);border-bottom:1px solid var(--paper-line);padding-bottom:8px;margin-bottom:10px}
+.example-title{font-weight:700;font-size:12px;margin-bottom:8px}
+.example-question{font-size:11px;margin-bottom:10px}
+.example-answer{padding:5px 8px;margin-bottom:5px;border:1px solid var(--paper-line);border-radius:6px;color:var(--paper-soft)}
+.example-answer.correct{background:var(--ok-bg);border-color:#2c5945;color:#25392f;font-weight:700}
+.paper-example .example-answer{border:0;border-radius:0;padding-inline:0}
+.paper-example .circled{display:inline-block;position:relative;color:var(--paper-ink)}
+.paper-example .circled::after{content:"";position:absolute;inset:-3px -5px;border:2px solid #a5432f;border-radius:50%;transform:rotate(-5deg)}
+.example-foot{margin-top:auto;padding-top:8px;border-top:1px dashed var(--paper-line);font-size:10px;color:var(--paper-soft)}
+.benefits{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.benefit{display:grid;grid-template-columns:38px 1fr;gap:14px;padding:24px}
+.benefit h2{font-size:19px;margin-bottom:8px}
+.benefit p{font-size:14px;color:var(--soft)}
+.benefit-icon{width:38px;height:38px;border-radius:11px;background:var(--hero);display:grid;place-items:center;color:var(--green)}
+.benefit-icon svg{width:22px;height:22px}
+.about-foot{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-top:20px;padding:0 4px;font-size:13px;color:var(--soft)}
+.text-link{display:inline-flex;align-items:center;min-height:44px;color:var(--ink);text-underline-offset:4px;font-weight:500}
 
-/* 학습지 예시 */
-.duo{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:16px;align-items:stretch;min-width:0}
-.way{display:grid;grid-template-rows:auto 1fr;gap:8px;min-width:0}
-.way-label{justify-self:start;background:var(--card);border:1px solid var(--hero-line);border-radius:999px;padding:2px 12px;font-size:13px;font-weight:700;color:var(--ink)}
-.sheet{background:var(--paper);color:var(--paper-ink);border:1px solid var(--paper-line);border-radius:6px;padding:16px 16px 12px;box-shadow:0 14px 30px -18px rgba(0,0,0,.45);font-size:13px;line-height:1.6;min-width:0;display:grid;gap:8px;align-content:start}
-.sheet-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:2px solid var(--paper-ink);padding-bottom:6px;gap:4px 8px;flex-wrap:wrap}
-.sheet-head b{font-family:var(--serif);font-size:15px}
-.tag{display:inline-block;background:var(--k-soc);color:var(--chip-ink);border-radius:4px;padding:0 6px;font-size:11px;font-weight:700;margin-right:6px;font-family:var(--sans)}
-.sheet .opts{display:flex;flex-wrap:wrap;gap:4px 12px;color:var(--paper-soft)}
-.sheet .circled{position:relative;color:var(--paper-ink);padding:0 6px;margin:0 -6px;white-space:nowrap}
-.sheet .circled::before{content:"";position:absolute;inset:-3px 0;border:2px solid var(--pencil);border-radius:50%;transform:rotate(-6deg)}
-.sheet-foot{margin-top:auto;display:flex;justify-content:space-between;gap:8px;font-size:11px;color:var(--paper-soft);border-top:1px dashed var(--paper-line);padding-top:6px}
-.phone{background:var(--bezel);border-radius:24px;padding:10px 8px;box-shadow:0 14px 30px -18px rgba(0,0,0,.45);display:grid;min-width:0}
-.screen{background:var(--paper);color:var(--paper-ink);border-radius:16px;padding:12px 10px;display:grid;gap:6px;align-content:start;font-size:12px;line-height:1.5}
-.screen .q{font-weight:700;font-size:13px}
-.screen .ttl{font-weight:700;color:var(--paper-soft);border-bottom:1px solid var(--paper-line);padding-bottom:4px}
-.screen .opt{border:1px solid var(--paper-line);border-radius:8px;padding:4px 8px;color:var(--paper-soft)}
-.screen .opt.ok{border-color:var(--k-soc);background:var(--ok-bg);color:var(--paper-ink);font-weight:700;display:flex;justify-content:space-between;gap:6px}
-.screen .opt.ok span:last-child{color:var(--k-soc)}
-
-/* 본문 단 */
-section{margin-top:72px}
-.sec-head{display:grid;gap:8px;margin-bottom:24px;max-width:40em}
-.sec-head h2{font-size:clamp(24px,4vw,32px);font-weight:700}
-
-.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin:0;padding:0;list-style:none;counter-reset:s}
-.steps li{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;display:grid;gap:8px;align-content:start;counter-increment:s}
-.steps li::before{content:counter(s);width:30px;height:30px;border-radius:50%;background:var(--accent);color:var(--btn-ink);font-weight:700;font-size:14px;display:grid;place-items:center;font-variant-numeric:tabular-nums}
-.steps h3{font-size:19px}
-
-.points{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px 32px;margin:24px 0 0;padding:0;list-style:none}
-.points li{display:grid;grid-template-columns:22px 1fr;gap:10px;align-items:start}
-.points li::before{content:"✓";width:20px;height:20px;margin-top:3px;border-radius:50%;background:var(--hl);border:1px solid var(--hl-line);color:var(--ink);font-size:12px;font-weight:700;display:grid;place-items:center;line-height:1}
-
-/* 과목 표 */
-.tbl-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--card)}
-table{border-collapse:collapse;width:100%;font-size:15px}
-th,td{padding:12px 14px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
-th:first-child,td:first-child{width:96px;white-space:nowrap}
+/* 공부 방법 */
+.steps{list-style:none;padding:0;margin:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.steps li{display:grid;gap:14px;align-content:start}
+.step-no{display:grid;place-items:center;width:32px;height:32px;border-radius:50%;background:var(--hero);color:var(--green);font-size:13px;font-weight:700}
+.steps p{font-size:14px;color:var(--soft)}
+.study-support{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.study-support h3{font-size:17px;margin-bottom:9px}
+.study-support p{font-size:14px;color:var(--soft)}
+.table-card{border:1px solid var(--line);border-radius:16px;background:var(--card);overflow:hidden}
+table{width:100%;border-collapse:collapse;text-align:left;font-size:14px}
+th,td{padding:16px 20px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:var(--hero);font-size:12px;color:var(--soft);font-weight:500}
+th:first-child,td:first-child{width:120px}
 tr:last-child td{border-bottom:0}
-th{font-size:13px;color:var(--soft);font-weight:700;letter-spacing:.04em}
 .chips{display:flex;flex-wrap:wrap;gap:6px}
-.chip{display:inline-block;color:var(--chip-ink);border-radius:6px;padding:2px 8px;font-size:12px;font-weight:700;white-space:nowrap}
-td .meta{display:block;margin-top:6px}
-.c-kor{background:var(--k-kor)}.c-eng{background:var(--k-eng)}.c-math{background:var(--k-math)}.c-soc{background:var(--k-soc)}.c-sci{background:var(--k-sci)}.c-his{background:var(--k-his)}.c-han{background:var(--k-han)}
+.chip{display:inline-block;background:var(--bg);border:1px solid var(--line);border-radius:6px;padding:2px 8px;font-size:12px;white-space:nowrap;color:var(--ink)}
+.meta{display:block;margin-top:7px;font-size:12px;color:var(--soft)}
 
-/* 요금 */
-.price{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.plan{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:28px;display:grid;gap:10px;align-content:start}
-.plan.best{border:2px solid var(--accent);padding:27px}
-.plan .name{font-weight:700;display:flex;align-items:center;gap:8px}
-.plan .amt{font-family:var(--serif);font-size:40px;font-weight:900;font-variant-numeric:tabular-nums;line-height:1.1}
-.plan .amt small{font-size:16px;font-family:var(--sans);font-weight:500;color:var(--soft)}
-.badge{background:var(--accent);color:var(--btn-ink);font-size:12px;font-weight:700;border-radius:999px;padding:1px 10px}
-.promise{margin-top:20px;display:flex;flex-wrap:wrap;gap:8px 20px;font-size:15px}
-.promise span::before{content:"✓ ";color:var(--accent);font-weight:700}
-.extra{margin-top:20px;display:grid;grid-template-columns:minmax(0,1fr);gap:16px}
-.extra div{border:1px dashed var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:4px;font-size:15px}
+/* 요금과 함께 만드는 방법 */
+.prices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.price-card{padding:30px;position:relative;display:grid;gap:14px;align-content:start}
+.price-card.annual{background:var(--hero);border-color:var(--hero-line)}
+.price-name{display:flex;align-items:center;justify-content:space-between;gap:10px;font-weight:700}
+.badge{display:inline-block;border:1px solid var(--hero-line);background:var(--card);color:var(--green);border-radius:999px;padding:3px 10px;font-size:12px;white-space:nowrap}
+.amount{font-family:var(--serif);font-weight:900;font-size:40px;line-height:1.4;letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+.amount small{font:400 14px var(--sans);color:var(--soft);letter-spacing:0}
+.price-card>p:last-child{font-size:14px;color:var(--soft)}
+.promises{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;list-style:none;padding:0;margin:22px 0}
+.promises li{display:flex;gap:10px;align-items:start;font-size:14px}
+.promises li::before{content:"✓";color:var(--green);font-weight:700}
+.trial{padding:22px 24px;background:var(--card);border:1px dashed var(--hero-line);border-radius:16px;margin-top:20px}
+.trial h2{font-size:19px;margin-bottom:8px}
+.trial p{font-size:14px;color:var(--soft)}
+.invite{margin-top:18px}
+.invite h2{font-size:18px;margin-bottom:8px}
+.invite p{font-size:14px;color:var(--soft)}
+.together-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+.together-grid .card{padding:28px}
+.together-grid .symbol{font-size:28px;font-family:var(--serif);color:var(--accent);margin-bottom:12px}
+.together-grid h2{font-size:23px;margin-bottom:12px}
+.together-grid p{font-size:15px;color:var(--soft)}
+.together-note{background:var(--hero);border-color:var(--hero-line);margin-top:18px}
+.together-note h2{font-size:20px;margin-bottom:8px}
+.together-note p{font-size:15px;color:var(--soft)}
 
-/* 자주 묻는 질문 */
-.faq{display:grid;border-top:1px solid var(--line)}
-.faq details{border-bottom:1px solid var(--line)}
-.faq summary{cursor:pointer;list-style:none;padding:16px 36px 16px 0;font-weight:700;position:relative}
+/* 계획과 질문 */
+.timeline{display:grid;gap:18px}
+.milestone{display:grid;grid-template-columns:190px minmax(0,1fr);gap:30px;padding:30px}
+.milestone:first-child{background:var(--hero);border-color:var(--hero-line)}
+.milestone-date{font-family:var(--serif);font-size:27px;line-height:1.6;font-weight:700;letter-spacing:-.025em}
+.milestone-date span{display:block;font:400 13px var(--sans);color:var(--soft);margin-top:8px}
+.milestone h2{font-size:23px;margin-bottom:10px}
+.milestone p{color:var(--soft);font-size:15px}
+.plan-note{margin-top:22px;font-size:14px;color:var(--soft)}
+.faq{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:0 26px}
+.faq details+details{border-top:1px solid var(--line)}
+.faq summary{padding:22px 30px 22px 0;position:relative;cursor:pointer;list-style:none;font-size:16px;font-weight:700;min-height:64px}
 .faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";position:absolute;right:6px;top:50%;transform:translateY(-50%);font-size:22px;font-weight:400;color:var(--accent);line-height:1}
+.faq summary::after{content:"+";position:absolute;right:0;top:23px;font-size:23px;font-weight:400;color:var(--green);line-height:1}
 .faq details[open] summary::after{content:"−"}
-.faq .ans{padding:0 0 18px;color:var(--soft);max-width:42em}
+.faq .ans{padding:0 0 24px;max-width:760px;color:var(--soft);font-size:15px;line-height:1.9}
+.faq-help{margin-top:18px;font-size:14px;color:var(--soft)}
 
-/* 마지막 버튼 */
-.last{margin-top:72px;background:var(--hero);border:1px solid var(--hero-line);border-radius:20px;padding:36px 32px;display:flex;flex-wrap:wrap;gap:16px 24px;align-items:center;justify-content:space-between}
-.last h2{font-size:clamp(22px,3.4vw,28px)}
-
-/* 바닥글 */
-footer{margin-top:72px;padding-block:28px 40px;border-top:1px solid var(--line);font-size:13px;color:var(--soft);display:grid;gap:16px}
-footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(--ink)}
-.links{display:flex;flex-wrap:wrap;gap:6px 18px}
-.links a{text-decoration:none;color:var(--ink);font-weight:500}
+/* 모든 메뉴 뒤에 같은 사업자 정보가 보인다. */
+footer{margin-top:40px;padding:28px 0 30px;border-top:1px solid var(--line);font-size:12px;color:var(--soft);display:grid;gap:12px}
+footer .brand{font-size:17px;color:var(--ink)}
+.links{display:flex;flex-wrap:wrap;gap:0 20px}
+.links a{display:inline-flex;align-items:center;min-height:44px;text-decoration:none;color:var(--ink);font-weight:500}
 .links a.strong{font-weight:700}
-.biz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 24px;margin:0}
-.biz div{display:grid;grid-template-columns:136px 1fr;gap:8px;min-width:0}
-.biz dt{color:var(--soft)}
-.biz dd{margin:0;color:var(--ink);min-width:0}
-.biz dd.empty{color:var(--soft)}
+.biz{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px 30px;margin:0}
+.biz div{display:grid;grid-template-columns:132px minmax(0,1fr);gap:8px;min-width:0}
+.biz dt{color:var(--soft)}.biz dd{margin:0;color:var(--ink);min-width:0}.biz dd.empty{color:var(--soft)}
+.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:50;width:min(460px,calc(100% - 32px));background:var(--ink);color:var(--btn-ink);border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.5;box-shadow:var(--shadow)}
 
-/* 시안 안내 */
-.toast{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:20;width:min(460px,calc(100% - 32px));background:var(--ink);color:var(--btn-ink);border-radius:12px;padding:12px 16px;font-size:14px;line-height:1.5;box-shadow:0 10px 30px -10px rgba(0,0,0,.5)}
-
-@media (max-width:900px){
-  .hero{grid-template-columns:1fr}
-}
-@media (max-width:760px){
-  .nav{display:none}
-  .top .in{justify-content:space-between}
-  .hero{grid-template-columns:1fr;padding:28px 20px;gap:28px}
-  section{margin-top:56px}
-  .last{margin-top:56px;padding:28px 20px}
-}
-@media (max-width:600px){
-  .steps,.price,.extra,.points{grid-template-columns:1fr}
+@media(max-width:1200px) and (min-width:900px){
+  :root{--rail:224px}.site-header{padding-inline:16px}.brand{font-size:21px;gap:9px}.main{padding:28px 28px 0}
+  .hero{grid-template-columns:1fr;padding:28px;gap:26px}.hero h1{font-size:36px}.learning-demo{max-width:460px;width:100%;justify-self:center}
+  .hero-copy{max-width:600px}.hero-note{margin-top:16px}.benefit{grid-template-columns:1fr}.steps,.study-support{gap:12px}.steps .card,.study-support .card{padding:18px}
   .biz{grid-template-columns:1fr}
 }
-@media (max-width:460px){
-  .duo{grid-template-columns:1fr}
-  .phone{justify-self:center;width:min(100%,260px)}
-  .hero .lead{font-size:17px}
-  .cta .btn{width:100%}
-  th,td{padding:10px}
-  th:first-child,td:first-child{width:64px}
-  .plan{padding:22px}
-  .plan.best{padding:21px}
-  .plan .amt{font-size:34px}
-  .last .btn{width:100%}
+@media(max-width:899px){
+  .site-header{inset:0 0 auto;width:auto;height:calc(var(--bar-height) + env(safe-area-inset-top,0px));padding:env(safe-area-inset-top,0px) 16px 0;border-right:0;border-bottom:1px solid var(--line);background:var(--bar);display:grid;grid-template-columns:minmax(0,1fr) 44px auto;gap:10px;align-items:center}
+  .brand{font-size:21px;gap:9px}.brand svg{width:36px;height:36px}.menu-toggle{display:block}
+  .rail-caption,.rail-bottom p,.desktop-word{display:none}
+  .rail-bottom{margin:0;padding:0}.start{font-size:13px;min-height:44px;padding:8px 14px;border-radius:10px}
+  .menu{display:none;position:fixed;top:calc(var(--bar-height) + env(safe-area-inset-top,0px) + 8px);left:12px;right:12px;max-width:430px;margin-left:auto;max-height:calc(100dvh - var(--bar-height) - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px) - 24px);overflow-y:auto;overscroll-behavior:contain;background:var(--card);border:1px solid var(--line);box-shadow:var(--shadow);padding:12px;border-radius:16px;gap:4px}
+  .menu a{min-height:48px;padding:10px 12px}
+  body[data-menu="open"] .menu{display:grid}
+  body[data-menu="open"] .menu-scrim{display:block;position:fixed;inset:calc(var(--bar-height) + env(safe-area-inset-top,0px)) 0 0;z-index:20;background:rgba(15,30,22,.25)}
+  .main{margin-left:0;padding:calc(var(--bar-height) + env(safe-area-inset-top,0px) + 26px) 24px 0}
+  .page-caption{margin-bottom:20px}.hero{padding:30px;gap:24px}.hero h1{font-size:34px}.hero .lead{font-size:18px}
+  .hero{grid-template-columns:1fr}.learning-demo{max-width:500px;width:100%;justify-self:center}
+  .hero-copy{max-width:600px}.hero-note{margin-top:18px}
+  .milestone{grid-template-columns:170px minmax(0,1fr)}
 }
+@media(max-width:640px){
+  .main{padding:calc(var(--bar-height) + env(safe-area-inset-top,0px) + 18px) 16px 0}
+  .page-caption{margin-bottom:14px}.page-caption>span:last-child{display:none}
+  .hero{padding:24px 20px;border-radius:18px;gap:24px}.hero h1{font-size:30px;margin:12px 0 15px}.hero .lead{font-size:18px;line-height:1.65}
+  .hero .description{font-size:13px;margin-top:12px}.hero-note{font-size:12px;margin-top:16px}
+  .example-head{font-size:10px}.example-title{font-size:12px}
+  .benefits,.steps,.study-support,.together-grid{grid-template-columns:1fr}
+  .benefit{grid-template-columns:34px minmax(0,1fr);gap:12px;padding:20px}.benefit-icon{width:34px;height:34px}
+  .benefit h2{font-size:18px}.about-foot{align-items:flex-start;flex-direction:column;gap:0}
+  .section-heading{margin-top:26px}.section-heading h2{font-size:20px}.section-heading p{display:none}
+  .panel-head{margin-bottom:22px}.panel-head h1{font-size:28px}.panel-head>p:last-child{font-size:14px}
+  .steps li{grid-template-columns:32px minmax(0,1fr);gap:8px 14px;padding:20px}.steps li .step-no{grid-row:span 2}.steps h3{font-size:19px}.steps p{grid-column:2}
+  .study-support{gap:12px}.study-support .card{padding:20px}
+  th,td{padding:14px 12px}th:first-child,td:first-child{width:87px;font-size:13px}
+  .prices{gap:12px}.price-card{padding:22px 18px;gap:12px}.price-name{align-items:flex-start;flex-direction:column;gap:6px}
+  .amount{font-size:30px}.amount small{display:block;font-size:12px;margin-top:2px}.price-card>p:last-child{font-size:13px}
+  .promises{grid-template-columns:1fr;gap:10px}.trial{padding:20px}.invite{padding:20px}
+  .together-grid .card{padding:24px}.milestone{grid-template-columns:1fr;gap:20px;padding:24px}.milestone-date{font-size:25px}.milestone-date span{margin-top:4px}
+  .faq{padding:0 18px}.faq summary{font-size:15px;padding-block:20px}.faq .ans{font-size:14px}
+  footer{margin-top:32px;padding-bottom:calc(28px + env(safe-area-inset-bottom,0px))}.biz{grid-template-columns:1fr}.biz div{grid-template-columns:126px minmax(0,1fr);gap:8px}
+}
+@media(max-width:359px){
+  :root{--bar-height:64px}.site-header{padding-inline:10px;gap:6px;grid-template-columns:minmax(0,1fr) 44px auto}
+  .brand{font-size:18px;gap:6px}.brand svg{width:30px;height:30px}.menu-toggle{padding:10px}.start{padding-inline:10px;font-size:12px}
+  .main{padding-inline:12px;padding-top:calc(var(--bar-height) + env(safe-area-inset-top,0px) + 12px)}
+  .page-caption{font-size:12px;margin-bottom:10px}.hero{padding:18px 16px}.hero h1{font-size:25px;margin:10px 0 12px}.hero .lead{font-size:16px}
+  .ways{gap:10px}.way-label{font-size:12px;gap:4px}.example{padding:12px 9px}
+  .prices{grid-template-columns:1fr}.price-name{flex-direction:row}.amount{font-size:34px}.amount small{display:inline;font-size:13px}
+  .biz div{grid-template-columns:106px minmax(0,1fr)}
+}
+@media(max-width:290px){.brand{font-size:16px;gap:5px}.brand svg{width:26px;height:26px}.site-header{gap:4px;padding-inline:8px}.start{padding-inline:8px}.hero h1{font-size:23px}.hero .lead{font-size:15px}.ways{grid-template-columns:1fr}.way-label{font-size:13px}.card{padding:18px}.benefit{grid-template-columns:1fr}.biz div{grid-template-columns:1fr;gap:0}.biz div+div{margin-top:5px}}
+@media(min-width:900px) and (max-height:600px){.site-header{padding-top:18px;padding-bottom:16px}.rail-caption{margin:10px 4px 16px}.rail-bottom{padding-top:16px}.rail-bottom p{display:none}}
+@media(max-width:899px) and (max-height:500px){.page-caption{display:none}.main{padding-top:calc(var(--bar-height) + env(safe-area-inset-top,0px) + 12px)}.hero{padding-top:18px}.hero h1{font-size:25px;margin:8px 0 12px}.hero .lead{font-size:16px}.hero-copy .eyebrow{font-size:12px}}
+@media(max-width:290px) and (max-height:350px){.hero h1{font-size:21px;line-height:1.35}.hero .lead{font-size:15px}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 </style>
 </head>
 <body>
-
-<header class="top">
-  <div class="in">
-    <a class="logo" href="#top" aria-label="사랑교육 처음으로">사랑교육</a>
-    <nav class="nav" aria-label="바로가기">
-      <a href="#how">이용 방법</a>
-      <a href="#subjects">과목</a>
-      <a href="#price">요금</a>
-      <a href="#faq">자주 묻는 질문</a>
-    </nav>
-    <a class="btn sm js-start" href="/app/">시작하기</a>
+<a class="skip" href="#main">본문으로 바로 가기</a>
+<header class="site-header">
+  <a class="brand" href="#about" aria-label="사랑교육 처음으로"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="19" fill="#2c5945"/><path d="M13 28c7-1 14 1 19 5v20c-5-4-12-6-19-5V28Z" fill="#f3f0df"/><path d="M51 28c-7-1-14 1-19 5v20c5-4 12-6 19-5V28Z" fill="#d7e0c8"/><path d="M32 27c-4-3-10-7-10-12 0-5 7-7 10-2 3-5 10-3 10 2 0 5-6 9-10 12Z" fill="#d2a185"/><path d="M19 34c3 0 6 1 8 2.5M19 40c3 0 6 1 8 2.5M37 36.5c2-1.5 5-2.5 8-2.5M37 42.5c2-1.5 5-2.5 8-2.5" stroke="#2c5945" stroke-width="1.5" stroke-linecap="round" opacity=".45"/></svg><span>사랑교육</span></a>
+  <p class="rail-caption">조금씩 배우고, 사랑은 가득<br>매일 함께 쌓는 작은 배움</p>
+  <button class="menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="menu">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
+  </button>
+  <nav id="menu" class="menu" aria-label="홈페이지 메뉴">
+    <a href="#about" aria-current="page"><span class="nav-index" aria-hidden="true">01</span>사랑교육은?</a>
+    <a href="#how"><span class="nav-index" aria-hidden="true">02</span>이렇게 공부해요</a>
+    <a href="#price"><span class="nav-index" aria-hidden="true">03</span>이용 요금</a>
+    <a href="#together"><span class="nav-index" aria-hidden="true">04</span>함께 만들어요</a>
+    <a href="#plan"><span class="nav-index" aria-hidden="true">05</span>앞으로의 계획</a>
+    <a href="#faq"><span class="nav-index" aria-hidden="true">06</span>자주 묻는 질문</a>
+  </nav>
+  <div class="rail-bottom">
+    <p>우리 아이의 속도로,<br>오늘의 공부를 시작해 보세요.</p>
+    <a class="start js-start" href="/app/"><span class="desktop-word">7일 무료로 </span>시작하기</a>
   </div>
 </header>
+<div class="menu-scrim" aria-hidden="true"></div>
+<main class="main" id="main" tabindex="-1">
+<div class="main-inner">
+  <div class="page-caption"><span>아이와 함께하는 매일의 배움</span><span>유아부터 중3까지, 사랑교육</span></div>
 
-<div class="wrap" id="top">
-
-<div class="hero">
-  <div>
-    <h1><span class="strike">사교육</span> 대신<br>사랑교육</h1>
-    <p class="lead"><mark>스마트 학습과 프린트 학습, <span class="nw">둘 다 돼요.</span></mark><br>PC·휴대폰·태블릿 어디서나 <span class="nw">월 9,900원.</span></p>
-    <ul class="perks">
-      <li><b>어디서 풀어도 이어지는 진도</b><span>PC·태블릿·휴대폰·프린트, 무엇으로 풀든 다음 날은 그다음부터 이어져요.</span></li>
-      <li><b>공부 범위는 자유롭게</b><span>학교 진도대로 따라가도, 부모님이 정한 범위로 공부해도 돼요.</span></li>
-    </ul>
-    <div class="cta">
-      <a class="btn js-start" href="/app/">7일 무료로 시작하기</a>
-      <span class="note">가입일부터 7일 무료 · 약정 없음</span>
-    </div>
-  </div>
-  <div class="duo">
-    <div class="way">
-      <span class="way-label">프린트 학습</span>
-      <div class="sheet" role="img" aria-label="프린트 학습: 뽑은 학습지에 연필로 2번에 동그라미를 친 모습">
-        <div class="sheet-head"><b><span class="tag">사회</span>초4 · 3단원</b><span>이름 ______</span></div>
-        <p style="font-weight:700">도시 문제와 해결 노력</p>
-        <p>2. 교통 혼잡을 줄이는 방법으로 알맞은 것은?</p>
-        <span class="opts"><span>① 자가용 늘리기</span><span class="circled">② 대중교통 이용</span><span>③ 도로 없애기</span><span>④ 가로등 끄기</span></span>
-        <div class="sheet-foot"><span>뽑아서 연필로</span><span>부모님이 채점</span></div>
+  <section class="panel" id="about" aria-labelledby="about-title">
+    <div class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow" data-anchor>사교육 대신 사랑교육</p>
+        <h1 id="about-title" tabindex="-1" data-anchor>매일의 공부를,<br>우리 아이에게 맞게.</h1>
+        <p class="lead" data-anchor>스마트 학습과 프린트 학습,<span>둘 다 돼요.</span></p>
+        <p class="description" data-anchor>바로 풀기와 뽑아서 풀기를 그날그날 골라요.<br>어느 쪽으로 공부해도 같은 진도로 이어져요.</p>
+        <p class="hero-note" data-anchor>가입일부터 7일 무료 체험 · 계정마다 한 번</p>
       </div>
-    </div>
-    <div class="way">
-      <span class="way-label">스마트 학습</span>
-      <div class="phone" role="img" aria-label="스마트 학습: 휴대폰에서 2번을 누르자 바로 정답이 표시된 모습">
-        <div class="screen">
-          <span><span class="tag">사회</span>초4 · 3단원</span>
-          <span class="ttl">도시 문제와 해결 노력</span>
-          <p class="q">교통 혼잡을 줄이는 방법으로 알맞은 것은?</p>
-          <span class="opt">① 자가용 늘리기</span>
-          <span class="opt ok"><span>② 대중교통 이용</span><span>정답</span></span>
-          <span class="opt">③ 도로 없애기</span>
-          <span class="opt">④ 가로등 끄기</span>
+      <div class="learning-demo" data-anchor>
+        <p class="demo-caption">같은 공부, 두 가지 방법 · 학습 화면 예시</p>
+        <div class="ways">
+          <div class="way">
+            <p class="way-label"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><rect x="4" y="2" width="12" height="16" rx="2"/><path d="M8 15h4"/></svg>스마트 학습</p>
+            <div class="example" role="img" aria-label="스마트 학습 예시. 초4 사회 도시의 생활 문제에 대중교통 이용을 고르면 정답이 표시돼요.">
+              <p class="example-head">초4 사회 · 도시의 생활</p><p class="example-title">도시 문제와 해결 노력</p>
+              <p class="example-question">교통 혼잡을 줄이는 방법은?</p>
+              <p class="example-answer">① 자가용 늘리기</p><p class="example-answer correct">② 대중교통 이용 ✓</p><p class="example-answer">③ 도로 없애기</p>
+              <p class="example-foot">화면에서 바로 풀어요</p>
+            </div>
+          </div>
+          <div class="way">
+            <p class="way-label"><svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M5 2h7l3 3v13H5zM12 2v4h3M8 9h4M8 12h4"/></svg>프린트 학습</p>
+            <div class="example paper-example" role="img" aria-label="프린트 학습 예시. 같은 초4 사회 도시의 생활 문제를 뽑아 대중교통 이용에 연필로 동그라미를 쳐요.">
+              <p class="example-head">초4 사회 · 도시의 생활</p><p class="example-title">도시 문제와 해결 노력</p>
+              <p class="example-question">교통 혼잡을 줄이는 방법은?</p>
+              <p class="example-answer">① 자가용 늘리기</p><p class="example-answer"><span class="circled">② 대중교통 이용</span></p><p class="example-answer">③ 도로 없애기</p>
+              <p class="example-foot">종이에 뽑아서 풀어요</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
-
-<section id="how">
-  <div class="sec-head">
-    <p class="eyebrow">이용 방법</p>
-    <h2>처음 한 번만 정해 두면, 매일은 버튼 하나예요</h2>
-  </div>
-  <ol class="steps">
-    <li><h3>학년 고르기</h3><p class="soft">아이 학년을 고르면 배울 과목과 시작할 진도가 정해져요. 아이는 3명까지 따로 관리해요.</p></li>
-    <li><h3>시간표 정하기</h3><p class="soft">요일마다 할 과목을 정해요. 가정 사정에 맞게 언제든 바꿀 수 있어요.</p></li>
-    <li><h3>오늘의 학습 풀기</h3><p class="soft">그날 과목을 '바로 풀기'로 스마트 학습하거나, '뽑아서 풀기'로 프린트 학습해요. 어느 쪽으로 끝내도 내일은 다음 내용으로 넘어가요.</p></li>
-  </ol>
-  <ul class="points">
-    <li><span>부모님은 "오늘은 수학 나눗셈"처럼 아이가 그날 배울 <b>단원과 내용</b>을 이름으로 확인할 수 있어요.</span></li>
-    <li><span>배운 내용은 <b>다음 날</b>과 <b>일주일 뒤</b>에 복습 문제로 다시 나와요. (영어 듣기 제외)</span></li>
-    <li><span>문항마다 아이에게 설명하는 방법을 담은 <b>부모 가이드</b>를 함께 뽑을 수 있어요.</span></li>
-    <li><span><b>스마트 학습</b>과 <b>프린트 학습</b>을 그날그날 골라요. PC·휴대폰·태블릿 어디서나 같은 진도로 이어지고, 스마트 학습으로 푼 문제는 바로 채점돼요.</span></li>
-    <li><span>시험 전에는 객관식 20·30·40문항 <b>모의고사</b>를 골라 풀 수 있어요. (수학·한자 제외)</span></li>
-  </ul>
-</section>
-
-<section id="subjects">
-  <div class="sec-head">
-    <p class="eyebrow">과목</p>
-    <h2>한 앱에 유아부터 중3까지</h2>
-  </div>
-  <div class="tbl-wrap">
-    <table>
-      <thead><tr><th scope="col">학년</th><th scope="col">과목</th></tr></thead>
-      <tbody>
-        <tr><td><b>0~4세</b></td><td><div class="chips"><span class="chip c-kor">놀이 모음</span></div><span class="meta">선긋기·색칠·미로 같은 놀이를 골라 풀어요. 무료예요.</span></td></tr>
-        <tr><td><b>유아 5~7세</b></td><td><div class="chips"><span class="chip c-kor">한글</span><span class="chip c-math">수학</span><span class="chip c-eng">영단어</span><span class="chip c-han">한자</span></div></td></tr>
-        <tr><td><b>초1~2</b></td><td><div class="chips"><span class="chip c-kor">국어</span><span class="chip c-math">수학</span><span class="chip c-eng">영단어·듣기</span><span class="chip c-han">한자</span></div></td></tr>
-        <tr><td><b>초3~6</b></td><td><div class="chips"><span class="chip c-kor">국어</span><span class="chip c-math">수학</span><span class="chip c-eng">영어</span><span class="chip c-soc">사회</span><span class="chip c-sci">과학</span><span class="chip c-his">한국사</span><span class="chip c-han">한자</span></div></td></tr>
-        <tr><td><b>중1~3</b></td><td><div class="chips"><span class="chip c-kor">국어</span><span class="chip c-math">수학</span><span class="chip c-eng">영어</span><span class="chip c-soc">사회</span><span class="chip c-sci">과학</span><span class="chip c-his">한국사</span><span class="chip c-han">한자</span></div><span class="meta">중2는 세계사도 함께 배워요.</span></td></tr>
-      </tbody>
-    </table>
-  </div>
-</section>
-
-<section id="price">
-  <div class="sec-head">
-    <p class="eyebrow">요금</p>
-    <h2>연간이면 월 7,700원꼴, 전 과목에 아이 3명까지</h2>
-    <p class="soft">0~4세 아이는 무료이고, 5세부터 요금을 받아요. 가입한 날부터 7일 동안 무료로 써 보고 정하세요(계정마다 한 번). 표시 가격은 부가세 포함이에요.</p>
-  </div>
-  <div class="price">
-    <div class="plan">
-      <p class="name">월간</p>
-      <p class="amt">9,900원<small> / 월</small></p>
-      <p class="soft">매달 결제하고 언제든 멈출 수 있어요.</p>
+    <div class="section-heading" data-anchor><h2>공부 방법이 달라도, 배움은 이어져요</h2></div>
+    <div class="benefits">
+      <article class="card benefit" data-anchor>
+        <div class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M4 8h13l-3-3M20 16H7l3 3M17 8l-3 3M7 16l3-3"/></svg></div>
+        <div><h2>어디서 풀어도 이어지는 진도</h2><p>PC·태블릿·휴대폰·프린트, 무엇으로 풀든 다음 날은 그다음부터 이어져요.</p></div>
+      </article>
+      <article class="card benefit" data-anchor>
+        <div class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 6h14M5 12h14M5 18h14"/><circle cx="9" cy="6" r="2" fill="var(--hero)"/><circle cx="15" cy="12" r="2" fill="var(--hero)"/><circle cx="10" cy="18" r="2" fill="var(--hero)"/></svg></div>
+        <div><h2>공부 범위는 자유롭게</h2><p>학교 진도대로 따라가도, 부모님이 정한 범위로 공부해도 돼요.</p></div>
+      </article>
     </div>
-    <div class="plan best">
-      <p class="name">연간 <span class="badge">추천</span></p>
-      <p class="amt">92,400원<small> / 년</small></p>
-      <p class="soft">한 달에 7,700원꼴, 월간보다 22% 저렴해요.</p>
-    </div>
-  </div>
-  <div class="promise"><span>0~4세 무료</span><span>약정·위약금 없음</span><span>아이 3명까지 추가 요금 없음</span><span>가입일부터 7일 무료 체험</span></div>
-  <div class="extra">
-    <div><b>초대 코드</b><span class="soft">초대 코드로 가입하면 월간 첫 달 10% 할인. 초대한 분은 인정된 초대 3명마다 1개월 무료예요.</span></div>
-  </div>
-</section>
+    <div class="about-foot" data-anchor><p>처음 한 번 정해 두면, 매일은 버튼 하나예요.</p><a class="text-link" href="#how">공부 방법 알아보기 →</a></div>
+  </section>
 
-<section id="faq">
-  <div class="sec-head">
-    <p class="eyebrow">자주 묻는 질문</p>
-    <h2>시작하기 전에 많이 물어보세요</h2>
-  </div>
-  <div class="faq">
+  <section class="panel" id="how" aria-labelledby="how-title" hidden>
+    <div class="panel-head" data-anchor><p class="eyebrow">이렇게 공부해요</p><h1 id="how-title" tabindex="-1">처음 한 번 정해 두면,<br>매일은 버튼 하나예요</h1><p>아이에게 맞는 학년과 시간표를 고르고, 오늘 배울 내용을 함께 확인해요.</p></div>
+    <ol class="steps">
+      <li class="card" data-anchor><span class="step-no" aria-hidden="true">1</span><h3>학년 고르기</h3><p>아이 학년을 고르면 배울 과목과 시작할 진도가 정해져요. 아이는 3명까지 따로 관리해요.</p></li>
+      <li class="card" data-anchor><span class="step-no" aria-hidden="true">2</span><h3>시간표 정하기</h3><p>요일마다 할 과목을 정해요. 가정 사정에 맞게 언제든 바꿀 수 있어요.</p></li>
+      <li class="card" data-anchor><span class="step-no" aria-hidden="true">3</span><h3>오늘의 학습 풀기</h3><p>스마트 학습은 바로 풀기로, 프린트 학습은 뽑아서 풀기로 공부해요. 어느 쪽으로 끝내도 내일은 다음 내용으로 넘어가요.</p></li>
+    </ol>
+    <div class="study-support">
+      <article class="card" data-anchor><h3>잊기 전에 한 번 더</h3><p>배운 내용은 다음 날과 일주일 뒤에 복습 문제로 다시 나와요. 영어 듣기는 제외돼요.</p></article>
+      <article class="card" data-anchor><h3>설명할 때는 부모 가이드</h3><p>문항마다 아이에게 설명하는 방법을 담은 부모 가이드를 함께 뽑을 수 있어요.</p></article>
+      <article class="card" data-anchor><h3>시험 전에는 모의고사</h3><p>객관식 20·30·40문항 모의고사를 골라 풀 수 있어요. 수학·한자는 제외돼요.</p></article>
+    </div>
+    <div class="section-heading" data-anchor><h2>한 앱에 유아부터 중3까지</h2><p>학년별로 배우는 과목이에요</p></div>
+    <div class="table-card">
+      <table aria-label="학년별 학습 과목"><thead><tr><th scope="col">학년</th><th scope="col">과목</th></tr></thead><tbody>
+        <tr data-anchor><td><b>0~4세</b></td><td><div class="chips"><span class="chip">놀이 모음</span></div><span class="meta">선긋기·색칠·미로 같은 놀이를 골라 풀어요. 무료예요.</span></td></tr>
+        <tr data-anchor><td><b>유아 5~7세</b></td><td><div class="chips"><span class="chip">한글</span><span class="chip">수학</span><span class="chip">영단어</span><span class="chip">한자</span></div></td></tr>
+        <tr data-anchor><td><b>초1~2</b></td><td><div class="chips"><span class="chip">국어</span><span class="chip">수학</span><span class="chip">영단어·듣기</span><span class="chip">한자</span></div></td></tr>
+        <tr data-anchor><td><b>초3~6</b></td><td><div class="chips"><span class="chip">국어</span><span class="chip">수학</span><span class="chip">영어</span><span class="chip">사회</span><span class="chip">과학</span><span class="chip">한국사</span><span class="chip">한자</span></div></td></tr>
+        <tr data-anchor><td><b>중1~3</b></td><td><div class="chips"><span class="chip">국어</span><span class="chip">수학</span><span class="chip">영어</span><span class="chip">사회</span><span class="chip">과학</span><span class="chip">한국사</span><span class="chip">한자</span></div><span class="meta">중2는 세계사도 함께 배워요.</span></td></tr>
+      </tbody></table>
+    </div>
+    <p class="meta" data-anchor>부모님은 “오늘은 수학 나눗셈”처럼 그날 배울 단원과 내용을 이름으로 확인할 수 있어요.</p>
+  </section>
+
+  <section class="panel" id="price" aria-labelledby="price-title" hidden>
+    <div class="panel-head" data-anchor><p class="eyebrow">이용 요금</p><h1 id="price-title" tabindex="-1">전 과목, 아이 3명까지<br>추가 요금 없이 함께해요</h1><p>0~4세 아이는 무료이고, 5세부터 요금을 받아요. 표시 가격은 부가세 포함이에요.</p></div>
+    <div class="prices">
+      <article class="card price-card" data-anchor><p class="price-name">월간</p><p class="amount">9,900원<small> / 월</small></p><p>매달 결제하고 언제든 멈출 수 있어요.</p></article>
+      <article class="card price-card annual" data-anchor><p class="price-name">연간 <span class="badge">월간보다 22% 저렴</span></p><p class="amount">92,400원<small> / 년</small></p><p>한 달에 7,700원꼴이에요.</p></article>
+    </div>
+    <ul class="promises" data-anchor><li>0~4세 무료</li><li>약정·위약금 없음</li><li>아이 3명까지 추가 요금 없음</li><li>전 과목 함께 이용해요</li></ul>
+    <div class="trial" data-anchor><h2>가입일부터 7일, 먼저 써 보고 정하세요</h2><p>가입한 날부터 7일 동안 무료로 체험해요. 무료 체험은 계정마다 한 번이에요.</p></div>
+    <div class="card invite" data-anchor><h2>초대 코드</h2><p>초대 코드로 가입하면 월간 첫 달 10% 할인. 초대한 분은 인정된 초대 3명마다 1개월 무료예요.</p></div>
+  </section>
+
+  <section class="panel" id="together" aria-labelledby="together-title" hidden>
+    <div class="panel-head" data-anchor><p class="eyebrow">함께 만들어요</p><h1 id="together-title" tabindex="-1">함께 나누고,<br>더 좋은 공부를 만들어요</h1><p>부모님의 경험과 작은 제보가 사랑교육을 함께 키워요.</p></div>
+    <div class="together-grid">
+      <article class="card" data-anchor><p class="symbol" aria-hidden="true">＋</p><h2>문제 기부</h2><p>아이와 공부하며 만든 문제를 나눠 주세요. 함께 쓸 공부를 보태 주시는 분께는 보상이 있어요.</p></article>
+      <article class="card" data-anchor><p class="symbol" aria-hidden="true">✓</p><h2>오류 제보</h2><p>공부하다가 잘못된 내용이나 불편한 점을 발견하면 알려 주세요. 더 정확하고 편한 사랑교육을 함께 만들어요.</p></article>
+    </div>
+    <article class="card together-note" data-anchor><h2>초대 코드로 함께 시작해요</h2><p>초대 코드로 가입하면 월간 첫 달 10% 할인. 초대한 분은 인정된 초대 3명마다 1개월 무료예요.</p></article>
+  </section>
+
+  <section class="panel" id="plan" aria-labelledby="plan-title" hidden>
+    <div class="panel-head" data-anchor><p class="eyebrow">앞으로의 계획</p><h1 id="plan-title" tabindex="-1">차근차근 준비해서,<br>함께 시작할게요</h1><p>사랑교육을 만나실 수 있는 예정 일정을 알려 드려요.</p></div>
+    <div class="timeline">
+      <article class="card milestone" data-anchor><p class="milestone-date">2027년 1월 예정<span>먼저 만나 봐요</span></p><div><h2>클로즈 베타</h2><p>선착순 1,000명과 먼저 시작할 예정이에요. 함께 써 보며 더 좋은 사랑교육을 준비해요.</p></div></article>
+      <article class="card milestone" data-anchor><p class="milestone-date">2027년 2월 예정<span>함께 시작해요</span></p><div><h2>정식 출시</h2><p>스마트 학습과 프린트 학습, 두 가지 방법으로 매일의 공부를 함께할 예정이에요.</p></div></article>
+    </div>
+    <p class="plan-note" data-anchor>위 일정은 예정이에요. 준비 상황에 따라 달라질 수 있어요.</p>
+  </section>
+
+  <section class="panel" id="faq" aria-labelledby="faq-title" hidden>
+    <div class="panel-head" data-anchor><p class="eyebrow">자주 묻는 질문</p><h1 id="faq-title" tabindex="-1">시작하기 전에<br>많이 물어보세요</h1></div>
+    <div class="faq">
     <details>
       <summary>프린터가 꼭 있어야 하나요?</summary>
       <p class="ans">없어도 돼요. 사랑교육은 스마트 학습과 프린트 학습을 둘 다 할 수 있어요. 같은 날 같은 문제를 PC·휴대폰·태블릿에서 바로 풀어도, 뽑아서 종이에 풀어도 진도는 똑같이 넘어가요.</p>
@@ -333,14 +393,10 @@ footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(
       <p class="ans">약정이 없어서 언제든 해지할 수 있어요. 결제한 곳(플레이스토어 또는 홈페이지)에서 해지하면 다음 결제부터 멈춰요.</p>
     </details>
   </div>
-</section>
+    <p class="faq-help" data-anchor>더 궁금한 점은 아래 고객 문의로 알려 주세요.</p>
+  </section>
 
-<div class="last">
-  <h2>오늘 공부부터 시작해 보세요</h2>
-  <a class="btn js-start" href="/app/">7일 무료로 시작하기</a>
-</div>
-
-<footer>
+  <footer>
   <span class="brand">사랑교육</span>
   <nav class="links" aria-label="약관과 정책">
     <a href="/terms/">이용약관</a>
@@ -357,30 +413,91 @@ footer .brand{font-family:var(--serif);font-weight:900;font-size:18px;color:var(
   </dl>
   <span>© 우주 Ai Lab · 사랑교육 · lovedu.kr</span>
 </footer>
-
 </div>
-
+</main>
 <div class="toast" id="toast" role="status" hidden></div>
-
 <script>
 (function(){
-  // 폰 회전·폴드 접고 펴기로 폭이 바뀌어도 보던 곳이 그대로 있게 함
-  var blocks=document.querySelectorAll('.hero,section,.last,footer'), saved=null;
-  function head(){return document.querySelector('.top').getBoundingClientRect().bottom;}
-  function remember(){
-    var t=head();
-    for(var i=0;i<blocks.length;i++){var r=blocks[i].getBoundingClientRect();
-      if(r.bottom>t){saved=r.top>=t?{el:blocks[i],off:r.top}:{el:blocks[i],ratio:(t-r.top)/r.height};return;}}
+  'use strict';
+  var panels=Array.from(document.querySelectorAll('.panel'));
+  var keys=panels.map(function(p){return p.id;});
+  var menu=document.getElementById('menu'), toggle=document.querySelector('.menu-toggle');
+  var main=document.getElementById('main'), scrim=document.querySelector('.menu-scrim');
+  var wide=matchMedia('(min-width:900px)'), current='', checkpoint=null, resizing=false, resizeFrame=0, layoutWidth=innerWidth, layoutHeight=innerHeight;
+  function referenceTop(){return wide.matches?24:document.querySelector('.site-header').getBoundingClientRect().bottom+12;}
+  function snapshot(){
+    if(scrollY<2)return {top:true};
+    var line=referenceTop(), blocks=Array.from(document.querySelectorAll('.panel:not([hidden]) [data-anchor],footer [data-anchor]'));
+    for(var i=0;i<blocks.length;i++){
+      var r=blocks[i].getBoundingClientRect();
+      if(r.height>0&&r.bottom>line){
+        var el=blocks[i], preferred=checkpoint&&checkpoint.el;
+        if(preferred&&preferred!==el){var pr=preferred.getBoundingClientRect();if(pr.height>0&&pr.bottom>line&&Math.abs(pr.top-r.top)<2){el=preferred;r=pr;}}
+        return {el:el,offset:r.top>=line?r.top-line:null,ratio:Math.max(0,(line-r.top)/r.height)};
+      }
+    }
+    return {y:scrollY};
   }
-  addEventListener('scroll',remember,{passive:true});
-  addEventListener('resize',function(){
-    if(!saved)return; var s=saved;
-    requestAnimationFrame(function(){
-      var r=s.el.getBoundingClientRect(), want='off' in s?s.off:head()-s.ratio*r.height, d=r.top-want;
-      if(Math.abs(d)>2)scrollBy(0,d);
-    });
+  function restore(s){
+    if(!s||s.top){scrollTo(0,0);return;}
+    if(s.el&&s.el.isConnected){
+      var r=s.el.getBoundingClientRect(), line=referenceTop();
+      var want=s.offset!==null?line+s.offset:line-s.ratio*r.height;
+      scrollTo(0,Math.max(0,scrollY+r.top-want));
+    }else scrollTo(0,s.y||0);
+  }
+  function setMenu(open,focusButton){
+    open=open&&!wide.matches;
+    if(open)document.body.dataset.menu='open';else delete document.body.dataset.menu;
+    toggle.setAttribute('aria-expanded',String(open));toggle.setAttribute('aria-label',open?'메뉴 닫기':'메뉴 열기');
+    document.documentElement.style.overflow=open?'hidden':'';
+    main.inert=open;
+    if(!open&&focusButton)toggle.focus({preventScroll:true});
+  }
+  function selected(){var k=location.hash.slice(1);return keys.indexOf(k)>=0?k:'about';}
+  function activate(k){
+    current=k;
+    panels.forEach(function(p){p.hidden=p.id!==k;});
+    menu.querySelectorAll('a').forEach(function(a){if(a.hash==='#'+k)a.setAttribute('aria-current','page');else a.removeAttribute('aria-current');});
+    document.title='사랑교육 · '+menu.querySelector('a[href="#'+k+'"]').textContent.replace(/^\d+/, '').trim();
+  }
+  function record(){history.replaceState({sarang:true,key:current,y:scrollY},'',location.href);}
+  addEventListener('pagehide',record);
+  function go(k){
+    setMenu(false,false);
+    if(k!==current){record();history.pushState({sarang:true,key:k,y:0},'','#'+k);activate(k);}
+    scrollTo(0,0);document.querySelector('#'+k+' h1').focus({preventScroll:true});checkpoint=snapshot();
+  }
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[href^="#"]');if(!a)return;
+    var k=a.hash.slice(1);if(keys.indexOf(k)<0)return;
+    e.preventDefault();go(k);
   });
-  remember();
+  toggle.addEventListener('click',function(){setMenu(toggle.getAttribute('aria-expanded')!=='true',false);});
+  scrim.addEventListener('click',function(){setMenu(false,true);});
+  document.addEventListener('keydown',function(e){
+    if(toggle.getAttribute('aria-expanded')!=='true')return;
+    if(e.key==='Escape'){e.preventDefault();setMenu(false,true);return;}
+    if(e.key==='Tab'){
+      var controls=Array.from(document.querySelectorAll('.site-header a,.site-header button')).filter(function(el){return el.getClientRects().length>0;});
+      var first=controls[0],last=controls[controls.length-1];
+      if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}
+      else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}
+    }
+  });
+  addEventListener('popstate',function(e){setMenu(false,false);activate(selected());requestAnimationFrame(function(){scrollTo(0,e.state&&e.state.sarang?e.state.y:0);checkpoint=snapshot();});});
+  addEventListener('hashchange',function(){var k=selected();if(k!==current){setMenu(false,false);activate(k);scrollTo(0,0);checkpoint=snapshot();}});
+  addEventListener('scroll',function(){if(!resizing&&innerWidth===layoutWidth&&innerHeight===layoutHeight)checkpoint=snapshot();},{passive:true});
+  addEventListener('resize',function(){
+    var saved=checkpoint;resizing=true;cancelAnimationFrame(resizeFrame);
+    if(wide.matches)setMenu(false,false);
+    resizeFrame=requestAnimationFrame(function(){restore(saved);requestAnimationFrame(function(){layoutWidth=innerWidth;layoutHeight=innerHeight;resizing=false;checkpoint=saved;checkpoint=snapshot();});});
+  });
+  document.querySelectorAll('footer .brand,footer .links,.biz div,footer>span:last-child,.faq details').forEach(function(el){el.setAttribute('data-anchor','');});
+  if('scrollRestoration' in history)history.scrollRestoration='manual';
+  activate(selected());
+  history.replaceState({sarang:true,key:current,y:history.state&&history.state.sarang?history.state.y:0},'',location.href);
+  requestAnimationFrame(function(){scrollTo(0,history.state.y);checkpoint=snapshot();});
 })();
 (function(){
   // 실제 주소(lovedu.kr)에서는 /app/ 으로 이동. 시안 화면에서는 이동하지 않고 안내만 보여 줌.
