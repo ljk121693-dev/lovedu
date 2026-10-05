@@ -1099,7 +1099,9 @@ button.ss-pill:disabled{cursor:default;opacity:1}
 .exam-pick .seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
 .exam-pick .seg button{min-width:0;padding:8px 4px;white-space:nowrap;text-align:center}
 .exam-list{list-style:none;margin:14px 0 0;padding:0;border-top:1px solid var(--line)}
-.exam-list li{display:grid;grid-template-columns:4.6em minmax(0,1fr) auto;gap:2px 10px;align-items:baseline;padding:10px 2px;border-bottom:1px solid var(--line);font-size:13px;line-height:1.55;min-height:44px}
+/* 과목 이름 칸은 가장 긴 이름(예: '한국사 초3')에 맞춤: 4.6em 고정이면 D안 글꼴에서 이름이 단원 범위 위로 겹침 (10-06 대표) */
+@supports (grid-template-columns:subgrid){.exam-list{display:grid;grid-template-columns:max-content minmax(0,1fr) auto}.exam-list li{grid-column:1/-1;grid-template-columns:subgrid!important}}
+.exam-list li{display:grid;grid-template-columns:minmax(4.6em,max-content) minmax(0,1fr) auto;gap:2px 10px;align-items:baseline;padding:10px 2px;border-bottom:1px solid var(--line);font-size:13px;line-height:1.55;min-height:44px}
 .exam-list b{display:flex;align-items:center;gap:6px;font-size:14px;font-weight:700;white-space:nowrap;min-width:0}
 .exam-list b::before{content:'';width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
 .exam-list b small{font-size:11px;font-weight:500;color:var(--sub)}
@@ -1111,7 +1113,8 @@ button.ss-pill:disabled{cursor:default;opacity:1}
 .exam-note[hidden]{display:none}
 .exam-card .actions{margin-top:14px}
 @media (max-width:480px){
-  .exam-list li{grid-template-columns:4.6em minmax(0,1fr)}
+  .exam-list li{grid-template-columns:minmax(4.6em,max-content) minmax(0,1fr)}
+  @supports (grid-template-columns:subgrid){.exam-list{grid-template-columns:max-content minmax(0,1fr)}}
   .exam-list .ex-n{grid-column:2;text-align:left}
 }
 @media (max-width:340px){
@@ -5047,7 +5050,7 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
 </style>
 <style id="sarang-kidmode">/* 아이 폰 연결·자녀 모드·숙제 (src/kidmode.js, 2026-10-04) */
 /* ---------- 자녀 모드: 부모용 칸은 그리기 전부터 숨김 (html.kid-dev 는 src/kids.js 가 <head> 에서 붙임) ---------- */
-html.kid-dev #setBtnHub,html.kid-dev #dnTopBtn,html.kid-dev .dn-hero-row,html.kid-dev #dnFoot,html.kid-dev .dn-foot,html.kid-dev #kidBar,html.kid-dev #paceBtn,
+html.kid-dev #setBtnHub,html.kid-dev #dnTopBtn,html.kid-dev .dn-hero-row,html.kid-dev #dnFoot,html.kid-dev .dn-foot,html.kid-dev #kidBar,html.kid-dev #paceBtn,html.kid-dev #paceSchool,
 html.kid-dev #todayWays,html.kid-dev #todayPaper,html.kid-dev #todayMore,html.kid-dev #tabBar,html.kid-dev .pace-lock-note,
 html.kid-dev .td-go[data-paper],html.kid-dev .td-na-p,html.kid-dev #pwaAsk{display:none!important}
 html.kid-dev #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-bottom,0px))}
@@ -5541,6 +5544,8 @@ label.rp-row{cursor:pointer}
 .db-leave b{color:var(--ink)}
 .db-leave em{font-style:normal;font-weight:800;color:var(--pri)}
 .db-leave small{flex-basis:100%;color:var(--sub);font-size:12.5px}
+
+.db.db-still .db-nav,.db.db-still .db-scrim{transition:none!important}   /* dash.js fitW: 모양이 바뀌는 순간 서랍이 미끄러져 나가지 않게 */
 </style>
 <style id="sarang-pwa">/* PC 바탕화면 앱 바로가기 묻는 창 (src/pwa.js, 2026-10-04) */
 .pwa-ask{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:16px;background:rgba(10,14,22,.45)}
@@ -5801,6 +5806,22 @@ html.kid-dev #app .kd-cal.card{background:none;border:0;border-radius:0;padding:
 @media (max-width:300px){#app .kd-cal-g .kd-d em{width:88%;font-size:0}#app .kd-cal-g .kd-d em span{display:none}}
 /* 넓은 화면(768px 이상): 아래 메뉴는 가운데 칸(예전 자리)으로 — 0~7세 캐릭터가 화면 아래 양옆에서 보이게. 모양은 D안대로 그림자 없이 선 하나 */
 @media (min-width:768px){#app .tabbar{left:50%;right:auto;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(560px,calc(100% - 32px));transform:translateX(-50%);padding:6px 10px;border:1px solid var(--line);border-radius:18px;background:var(--bg)}}
+/* 학습 칸 머리 '학교 진도대로'·'자유 진도설정' 위아래 두 단추, 지금 쓰는 방식은 회색 (2026-10-06 대표) */
+#app #today .td-pills{display:flex;flex-direction:column;align-items:stretch;gap:8px}
+#app #today .td-pills .linkbtn{width:100%;justify-content:center;text-align:center}
+#app #today .td-pills .linkbtn.pace-now{background:var(--muted);color:var(--sub);border-color:transparent;opacity:.75}
+#app #today .td-pills .linkbtn:disabled{cursor:default}
+/* 2026-10-06 대표 '화면이 바뀌면 매끄럽지 않음': D안은 학습 화면 전체가 한 장이라 8px 떠오르며 투명→보임이면 화면 전체가 깜빡이고 출렁임.
+   아래 메뉴 네 칸(학습·현황판·모의시험·부록)과 과목 화면 모두 같은 짧은 옅어짐만 (자리 움직임 없음, 처음부터 반은 보임) */
+@keyframes d-soft{from{opacity:.55}to{opacity:1}}
+@media (prefers-reduced-motion:no-preference){
+  #app .pane:not([hidden])>*,#app #today:not([hidden]),#app #settings:not([hidden]),#app #subj:not([hidden]) button:not([hidden]),#app #exam:not([hidden]),#app #extraPane:not([hidden]),#app .db:not([hidden]){animation:d-soft .16s ease-out backwards;animation-delay:0s}
+}
+/* 학습 관리 '다음: 과목 진도 설정'·'저장' 줄, 놀이 '뽑기' 줄: 일부러 화면 아래에 붙어 따라오는 줄이라 카드와 다른 색 (대표 10-06) */
+#app .db-mg-bar,#app .pl-acts{background:color-mix(in srgb,var(--pri) 20%,var(--bg));border:1px solid color-mix(in srgb,var(--pri) 45%,var(--line));box-shadow:0 6px 22px rgba(0,0,0,.14)}
+#app .db-mg-bar button:not(.pri),#app .pl-acts button:not(.pri){background:var(--card)}
+/* PC·태블릿 떠 있는 아래 메뉴: 바탕과 같은 색이라 구분이 안 됨 (대표 10-06) → 한 톤 진한 바탕 + 그림자 */
+@media (min-width:768px){#app .tabbar{background:color-mix(in srgb,var(--ink) 7%,var(--bg));border-color:color-mix(in srgb,var(--ink) 16%,var(--bg));box-shadow:0 8px 26px rgba(0,0,0,.14)}}
 </style>
 <script>/* ===== D안 "하루 한 장, 작은 공부 수첩" 화면 장식 (src/d-theme.css, 2026-10-05 대표 확정) =====
    기능은 건드리지 않고 시안의 머리말만 넣음: 머리줄 선 책 아이콘, 학습 칸 '오늘의 학습' 아래 한 줄, 손그림 해(현황판·아이 폰이 D_THEME.sun() 으로 씀).
@@ -20083,7 +20104,7 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     const K = KIDS_(); if (!K) return;
     const o = K.read(), many = o.list.length > 1;
     /* 2026-10-03 대표: 아이가 1명이어도 위 카드 줄에 두고 옆에 '+'(누르면 자녀 추가). 2명이면 세 칸(마지막이 '+'), 최대 명수면 '+' 없음 */
-    $('kidBar').hidden = !(!ob && view === 'home' && ['today', 'play', 'pscreen', 'dash'].includes(tab));   // 설정 화면에서는 #app.set-open 이 가림 (kids.css)
+    $('kidBar').hidden = !(!ob && view === 'home' && ['today', 'play', 'pscreen', 'dash', 'exam', 'extra'].includes(tab));   // 모의시험·부록도: 칸을 바꿀 때 아이 줄이 생겼다 없어지며 화면이 위아래로 움직이지 않게 (2026-10-06 대표)   // 설정 화면에서는 #app.set-open 이 가림 (kids.css)
     const cards = o.list.map(k => { const on = k.id === o.cur, g = kidGrade(k.id); return `<button type="button" class="kid-card${on ? ' on' : ''}" data-kid="${k.id}" aria-pressed="${on}"><b>${esc(K.label(k))}</b>${g ? `<small>${esc(g)}</small>` : ''}</button>`; }).join('')
       + (o.list.length < K.MAX ? '<button type="button" class="kid-card kid-plus" data-kplus aria-label="자녀 추가"><b aria-hidden="true">+</b><small>자녀 추가</small></button>' : '');
     if ($('kidCards').innerHTML !== cards) $('kidCards').innerHTML = cards;
@@ -20465,12 +20486,17 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     if (has('hanja') || has('yhan')) keep.push('한자');
     return { out, keep: [...new Set(keep)] };
   }
+  /* '학교 진도대로'·'자유 진도설정' 두 단추를 위아래로, 지금 쓰는 방식 쪽은 회색 (2026-10-06 대표)
+     학교 진도대로 → 맞출지 묻기(맞추기·그대로 두기), 오늘의 학습이면 못 누름. 자유 진도설정 → 현황판 학습 관리(시간표 → 과목 진도), 자유 학습이어도 회색인 채 누를 수 있음 */
+  $('paceBtn').insertAdjacentHTML('beforebegin', '<button type="button" class="linkbtn" id="paceSchool" aria-controls="paceAsk">학교 진도대로</button>');
   function paceUi(){
-    const f = pace() === 'free', t = f ? '자유 학습' : '오늘의 학습', b = '자유 진도설정';   // 2026-10-04 대표: 진도·시간표를 바꾸는 길은 학습 관리 하나 → 어느 방식이든 같은 단추 ('학교 진도대로'는 학습 관리 2단계 안으로)
+    const f = pace() === 'free', t = f ? '자유 학습' : '오늘의 학습';
     if ($('todayTitle') && $('todayTitle').textContent !== t) $('todayTitle').textContent = t;
-    if ($('paceBtn').textContent !== b) $('paceBtn').textContent = b;
+    if ($('paceBtn').textContent !== '자유 진도설정') $('paceBtn').textContent = '자유 진도설정';
     if (!f && !$('paceAsk').hidden) $('paceAsk').hidden = true;
-    $('paceBtn').setAttribute('aria-expanded', String(!$('paceAsk').hidden));
+    [['paceSchool', !f], ['paceBtn', f]].forEach(([id, on]) => { const e = $(id); e.classList.toggle('pace-now', on); e.setAttribute('aria-pressed', String(on)); });
+    $('paceSchool').disabled = !f;   // 오늘의 학습이면 '학교 진도대로'는 할 일이 없어 못 누름. '자유 진도설정'은 자유 학습이어도 회색인 채 누르면 학습 관리로 (10-06 대표)
+    $('paceSchool').setAttribute('aria-expanded', String(!$('paceAsk').hidden));
     if (lockReady) lockUi();   // 아래 '진도 막기'를 준비한 뒤부터
   }
   var lockReady = false;
@@ -20488,10 +20514,10 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   }
   $('paceBtn').addEventListener('click', () => {   // 2026-10-04 대표: 현황판 '학습 관리' ① 시간표 → ② 과목 진도 (저장해야 자유 학습)
     if (window.SARANG_DASH && SARANG_DASH.manage) { SARANG_DASH.manage('week'); return; }
-    if (pace() === 'school') { setPace('free'); setTab('subj'); say('자유 학습으로 바꿨어요. 과목을 눌러 진도를 정해 주세요.'); return; }
-    paceAsk($('paceAsk').hidden);
+    if (pace() === 'school') { setPace('free'); setTab('subj'); say('자유 학습으로 바꿨어요. 과목을 눌러 진도를 정해 주세요.'); }
   });
-  $('paceNo').addEventListener('click', () => { paceAsk(false); $('paceBtn').focus({ preventScroll: true }); });
+  $('paceSchool').addEventListener('click', () => { if (pace() === 'free') paceAsk($('paceAsk').hidden); });
+  $('paceNo').addEventListener('click', () => { paceAsk(false); $('paceSchool').focus({ preventScroll: true }); });
   function toSchoolAll(){
     const { out } = schoolSubs();
     if (out.length && HUB_TODAY.ssh && HUB_TODAY.ssh.toSchool) HUB_TODAY.ssh.toSchool(out);
@@ -20507,7 +20533,7 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     return { ok: out.length > 0, t: '모든 과목 진도를 학교 진도에 맞출까요? 지금 진도는 바뀌고, 오늘의 학습(학교 진도대로)으로 바뀌어요.',
       n: keep.length ? `${keep.join('·')}${(keep[keep.length - 1].charCodeAt(keep[keep.length - 1].length - 1) - 0xAC00) % 28 ? '은' : '는'} 학교 진도가 없어 지금 진도 그대로예요.` : '', go: '맞추기' };
   }
-  $('paceGo').addEventListener('click', () => { toSchoolAll(); $('paceBtn').focus({ preventScroll: true }); });
+  $('paceGo').addEventListener('click', () => { toSchoolAll(); $('paceBtn').focus({ preventScroll: true }); });   // 맞춘 뒤 '학교 진도대로'는 회색이라 옆 단추로
   /* 진도가 옮겨졌는지: 과목마다 지금 Day 글(학습지 묶음을 읽는 중 표시는 뺌) */
   const PKEYS = ['kor', 'eng', 'phon', 'math', 'ymath', 'hanja', 'yhan', 'soc', 'sci', 'his', 'wh'];
   const progress = () => PKEYS.map(k => { try { const m = (window.HUB_TODAY || {})[k]; return m && m.info ? String(m.info(false)).replace(/ \((불러오는 중|불러오지 못함|내용 준비 중)\)$/, '') : ''; } catch (e) { return ''; } }).join('|');
@@ -20641,8 +20667,9 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   const vis = e => !!e && (e.offsetParent !== null || (!e.hidden && getComputedStyle(e).position === 'fixed'));   // 아래 메뉴(붙은 칸)는 offsetParent 가 없음
   /* 스마트(과목 줄)·뽑아서 풀기는 같은 무게로 소개 (2026-09-29 주인, 큰 '바로 풀기'는 2026-10-02 없앰). '다른 과목 더 하기'는 보일 때만 */
   const TOUR = [
-    { el: () => [$('paceBtn')], t: '시간표 · 진도', d: () => (pace() === 'free' ? "지금은 부모님이 정한 진도부터 가는 '자유 학습'이에요. " : "지금은 학교 진도에 맞춰 가는 '오늘의 학습'이에요. ")
-      + "'자유 진도설정'을 누르면 현황판의 학습 관리에서 ① 요일마다 할 과목(시간표) ② 과목마다 시작할 곳(진도)을 차례로 정해요." },   // 2026-10-04 대표: 시간표·진도 바꾸는 길은 학습 관리 하나
+    { el: () => [$('paceSchool'), $('paceBtn')], t: '시간표 · 진도', d: () => (pace() === 'free' ? "지금은 부모님이 정한 진도부터 가는 '자유 학습'이에요. " : "지금은 학교 진도에 맞춰 가는 '오늘의 학습'이에요. ")
+      + '지금 쓰는 방식의 단추는 회색이에요. ' + (pace() === 'free' ? "'학교 진도대로'를 누르면 모든 과목을 학교 진도에 맞춰요. '자유 진도설정'을 누르면 학습 관리에서 시간표·진도를 다시 정해요."
+        : "'자유 진도설정'을 누르면 현황판의 학습 관리에서 ① 요일마다 할 과목(시간표) ② 과목마다 시작할 곳(진도)을 차례로 정해요.") },   // 2026-10-04 대표: 시간표·진도 바꾸는 길은 학습 관리 하나
     { el: () => [$('todayList')], t: '오늘의 학습', d: () => '시간표대로 오늘 할 과목과 배울 내용이 모여 있어요. 과목 줄을 누르면 그 과목의 진도·미리보기·교과 과정을 보고, 다 하면 ✓ 표시가 붙어요.' },
     { el: () => [$('todayWays')], t: '스마트 · 전체 뽑아서 풀기', d: () => "스마트 학습도, 프린트 학습도 좋아요. 과목 줄의 '스마트'는 그 과목을 화면에서 풀고 바로 채점해요. '전체 뽑아서 풀기'는 오늘 과목을 PDF 한 파일로 받아 인쇄해요." + (vis($('hubGuideRow')) ? " 옆의 '가이드 PDF 함께 출력'을 켜면 정답과 해설이 든 부모님용 가이드도 한 파일 더 받아요." : '') },
     { el: () => [$('todayPaper')], t: '프린트 출력 가이드', d: () => "프린터가 있을 때와 없을 때 뽑는 방법을 여기서 펴 보세요." },   // 2026-10-03 대표: '프린트 학습할 때' 제목 지우고 이름을 '프린트 출력 가이드'로
@@ -21986,8 +22013,8 @@ function open(ctx){
     <div class="sv-note" data-svnote hidden>이 기기에서는 소리를 낼 수 없어요. 부모님이 읽어 주세요.</div>
     <section class="card sv-card"><div class="sv-h"><b>1. 단어 익히기</b><button type="button" class="sv-all" data-svall>${SPK}<span>전체 듣기</span></button></div>
       <div class="sv-seg" role="group" aria-label="가리기"><button type="button" data-svhide="" aria-pressed="true">모두 보기</button><button type="button" data-svhide="m" aria-pressed="false">뜻 가리기</button><button type="button" data-svhide="w" aria-pressed="false">단어 가리기</button></div>
-      <div class="sv-list">${words.map((w, i) => `<div class="sv-row" data-i="${i}">${spk(w.w)}<button type="button" class="sv-word" data-svpeek="w"><b lang="en">${esc(w.w)}</b><small>${esc(w.p)}</small></button><button type="button" class="sv-mean" data-svpeek="m">${esc(w.m)}</button></div>`).join('')}</div>
-      <div class="info">가린 칸을 누르면 그 칸만 보여요.</div></section>
+      <div class="sv-list">${words.map((w, i) => `<div class="sv-row" data-i="${i}">${spk(w.w)}<button type="button" class="sv-word" data-svpeek="w" aria-pressed="false" aria-label="${esc(w.w)} 단어 칸, 누르면 가리거나 보이기"><b lang="en">${esc(w.w)}</b><small>${esc(w.p)}</small></button><button type="button" class="sv-mean" data-svpeek="m" aria-pressed="false" aria-label="${esc(w.m)} 뜻 칸, 누르면 가리거나 보이기">${esc(w.m)}</button></div>`).join('')}</div>
+      <div class="info">단어나 뜻을 누르면 그 칸만 가려져요. 가린 칸을 다시 누르면 보여요.</div></section>
     ${PEN ? `<section class="card sv-card"><div class="sv-h"><b>2. 따라 쓰기</b><small>흐린 글자 위에 손가락이나 펜으로</small></div>
       <div class="sv-pnav"><button type="button" data-svpen="-1" aria-label="이전 단어">‹</button><div class="sv-pw"><b lang="en" data-svpw></b><small data-svpm></small></div>${spk(first, '이 단어').replace('data-svsay', 'data-svpensay data-svsay')}<button type="button" data-svpen="1" aria-label="다음 단어">›</button></div>
       <div class="sv-pad" data-svpad></div><div class="sv-pcount" data-svpc></div></section>` : ''}
@@ -22065,8 +22092,9 @@ function open(ctx){
     const b = e.target.closest('button'); if (!b) return;
     if (b.dataset.svsay != null) { const row = b.closest('.sv-row'); say(b.dataset.svsay); if (row) { $$('.sv-row.on').forEach(r => r.classList.remove('on')); row.classList.add('on'); } return; }
     if (b.hasAttribute('data-svall')) { if (!T) return; const rows = $$('.sv-row'); T.toggle('svall', words.map(w => ({ t: w.w, pause: 900 })), i => rows.forEach((r, k) => r.classList.toggle('on', k === i))); return; }
-    if (b.dataset.svhide != null) { st.hide = b.dataset.svhide; $$('[data-svhide]').forEach(x => x.setAttribute('aria-pressed', x === b)); $$('.sv-row').forEach(r => { r.querySelector('.sv-word').classList.toggle('hid', st.hide === 'w'); r.querySelector('.sv-mean').classList.toggle('hid', st.hide === 'm'); }); return; }
-    if (b.dataset.svpeek) { b.classList.remove('hid'); if (b.dataset.svpeek === 'w') say(words[+b.closest('.sv-row').dataset.i].w); return; }
+    if (b.dataset.svhide != null) { st.hide = b.dataset.svhide; $$('[data-svhide]').forEach(x => x.setAttribute('aria-pressed', x === b)); $$('.sv-row').forEach(r => { [['.sv-word', 'w'], ['.sv-mean', 'm']].forEach(([s, k]) => { const c = r.querySelector(s); c.classList.toggle('hid', st.hide === k); c.setAttribute('aria-pressed', String(st.hide === k)); }); }); return; }
+    /* 단어·뜻 칸을 누르면 그 칸만 가리거나 다시 보임 (2026-10-06 대표: 위 '뜻 가리기·단어 가리기'와 함께 하나씩도). 단어를 다시 보이면 소리도 */
+    if (b.dataset.svpeek) { const h = !b.classList.contains('hid'); b.classList.toggle('hid', h); b.setAttribute('aria-pressed', String(h)); if (!h && b.dataset.svpeek === 'w') say(words[+b.closest('.sv-row').dataset.i].w); return; }
     if (b.dataset.svpen) { st.pen = Math.max(0, Math.min(words.length - 1, st.pen + +b.dataset.svpen)); pen(); return; }
     if (b.dataset.svk != null) { const q = Q[+b.dataset.svq]; if (st.graded || q.done === false) return; st.warned = false; q.pick = +b.dataset.svk; mark(); return; }
     if (b.hasAttribute('data-svgrade')) return grade();
@@ -27319,7 +27347,10 @@ window.DONATE_CORE = (function(){
   /* 칸 너비 → 왼쪽 메뉴 모양 (dash.css .w-rail 아이콘 줄 · .w-phone 서랍) */
   function fitW(){
     const w = root.clientWidth; if (!w) return;
+    const was = root.className;
     root.classList.toggle('w-phone', w <= 560); root.classList.toggle('w-rail', w > 560 && w <= 960);
+    /* 모양이 바뀌는 그 순간에는 서랍 움직임(transition)을 끔: 처음 열 때·접고 펼 때 옆 메뉴가 화면을 가로질러 나갔다 사라지는 번쩍임 (2026-10-06 대표 '화면 바뀔 때 매끄럽지 않음') */
+    if (root.className !== was) { root.classList.add('db-still'); requestAnimationFrame(() => requestAnimationFrame(() => root.classList.remove('db-still'))); }
     if (w > 560 && drawer) setDrawer(false);
   }
   function setDrawer(o){
