@@ -1162,6 +1162,11 @@ button.ss-pill:disabled{cursor:default;opacity:1}
 .week-ends{display:grid;gap:7px;border-top:1px solid var(--line);padding-top:12px;margin-top:2px;font-size:12px;line-height:1.55;color:var(--sub)}
 .week-ends p{display:grid;grid-template-columns:52px 1fr;gap:10px;align-items:start;margin:0;word-break:keep-all;overflow-wrap:anywhere}
 .week-ends b{border-radius:5px;background:var(--soft);color:var(--pri);font-size:11px;padding:2px 4px;text-align:center;font-weight:600}
+.week-ends .we-short span{color:var(--warn-ink)}   /* 1년치를 못 끝내는 과목 (2026-10-05 최소 횟수) */
+.week-ends .we-short b{background:var(--warn-bg,#fdf0e6);color:var(--warn-ink)}
+.we-fill{display:flex;align-items:center;justify-content:center;width:100%;min-height:44px;margin-top:6px;border:1px solid var(--warn-ink);border-radius:10px;background:var(--card);color:var(--warn-ink);font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
+.we-fill:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+.week-ends .we-load{display:block;color:var(--warn-ink)}
 /* 수학 화면: 초4~중3 학년 과정을 볼 때는 1~3학년 단원 칸을 숨김 */
 #pane-math.em-on>.card:not(#math-mode){display:none}
 /* 오늘 공부 알림 (평일 9시·1시, 홈 맨 위 한 줄): '바로 풀기'·'뽑아서 풀기' 같은 모양, 닫기는 오른쪽 위 ✕ */
@@ -1658,6 +1663,7 @@ input{accent-color:var(--pri)}
 .scr-root h4{margin:14px 0 6px;font-size:15px}
 .scr-root p{margin:0 0 10px}
 .scr-root ul,.scr-root ol{margin:0 0 10px;padding-left:22px}
+.hx-root ol.scr-qs{padding-left:0}   /* 숙제 모의시험(ssh-module examRun): 문제 칸을 화면 폭대로 */
 .scr-dh{margin:0 0 14px}
 .scr-dh p{color:var(--sub);font-size:13px}
 .scr-tag{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--c);color:#fff;font-size:12px;font-weight:800}
@@ -5138,6 +5144,20 @@ html.kd-lock{overflow:hidden}
 #hwMsg{box-sizing:border-box;width:100%;min-height:46px;margin:0 0 8px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;font-size:15px}
 #hwMsg:focus{outline:none;border-color:var(--pri)}
 @media (max-width:480px){.kd-subs{grid-template-columns:minmax(0,1fr)}}
+.kd-sub.off{cursor:default;opacity:.62}
+.kd-hx{display:grid;gap:10px}
+.kd-hx-seg{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.kd-fs0{flex:none;min-width:92px;color:var(--sub);font-size:13px;font-weight:700}
+.kd-items li .kd-wr{flex-basis:100%;justify-content:flex-start;min-height:40px;padding:0;border:0;background:none;color:var(--pri);font:inherit;font-size:13px;font-weight:700;text-align:left;cursor:pointer}
+.kd-wrl{flex-basis:100%;display:grid;gap:8px;margin:0;padding:10px 12px 10px 30px;border-radius:10px;background:color-mix(in srgb,var(--pri) 5%,var(--card));font-size:13.5px;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
+div.kd-wrl{padding-left:12px}
+.kd-items li:has(>.kd-wr){flex-wrap:wrap}
+.kd-wrl li{display:block;min-height:0;padding:0;border:0}
+.kd-wrl li span{display:block;margin-top:2px;color:var(--ink);font-weight:700;font-size:13px}
+.kd-wrl li span.kd-wp{font-weight:500;color:#b23b30}
+:root[data-theme="dark"] .kd-wrl li span.kd-wp{color:#ff8f80}
+.kd-wrl li small{display:block;margin-top:2px;color:var(--sub);font-size:12.5px}
+.kd-wrl .kd-p{margin:0}
 
 /* ---------- 현황판 맨 위 '아이 폰' 줄 (2026-10-05 대표: 설정에서 옮김) ---------- */
 .db-top{display:grid;gap:12px}
@@ -5159,6 +5179,32 @@ html.kd-lock{overflow:hidden}
 :root[data-theme="dark"] .kd-line .linkbtn.kd-cut{border-color:#ff8f80;color:#ff8f80}
 @media (max-width:420px){.kd-line .linkbtn,.kd-line .kd-ask-btns{margin-left:34px}}
 .kd-later{font-size:13px;margin-top:-4px}
+
+/* ---------- 아이 폰 아래 '연속 공부' 달력 (2026-10-05 대표) ---------- */
+.kd-cal{--stamp:#d6453a}
+:root[data-theme="dark"] .kd-cal{--stamp:#ff7a6e}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .kd-cal{--stamp:#ff7a6e}}
+.kd-cal-h{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.kd-cal-h h3{margin:0;font-size:17px;color:var(--ink)}
+.kd-cal-n{margin:0;color:var(--sub);font-size:14px;font-weight:700;white-space:nowrap}
+.kd-cal-n b{color:var(--stamp);font-size:24px;margin-right:2px}
+.kd-cal-s{margin:4px 0 10px;color:var(--sub);font-size:13.5px;line-height:1.45;word-break:keep-all}
+.kd-cal-m{display:flex;align-items:center;justify-content:space-between;gap:8px;max-width:460px;margin:0 auto 6px}
+.kd-cal-m b{font-size:15px;color:var(--ink)}
+.kd-cal-b{width:44px;height:40px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;font-size:20px;line-height:1;cursor:pointer}
+.kd-cal-b:disabled{opacity:.35;cursor:default}
+.kd-cal-g{display:grid;gap:3px;max-width:460px;margin:0 auto}
+.kd-cal-r{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:3px}
+.kd-cal-w span{text-align:center;color:var(--sub);font-size:12px;font-weight:700;padding:2px 0}
+.kd-cal-w span:first-child{color:var(--stamp)}
+.kd-d{position:relative;aspect-ratio:1;display:grid;place-items:center;border-radius:10px;background:color-mix(in srgb,var(--ink) 4%,var(--card));container-type:inline-size}
+.kd-d.out{background:none}
+.kd-d.fut{opacity:.45}
+.kd-d i{font-style:normal;font-size:14px;font-weight:700;color:var(--ink)}
+.kd-d.today{box-shadow:inset 0 0 0 2px var(--pri)}
+.kd-d.stamp i{position:absolute;top:2px;left:4px;font-size:10px;line-height:1.1;color:var(--sub)}
+.kd-d em{position:absolute;right:5%;bottom:5%;display:grid;place-items:center;width:76%;aspect-ratio:1;box-sizing:border-box;padding:0 6%;border:2px solid var(--stamp);border-radius:50%;color:var(--stamp);font-style:normal;font-weight:800;font-size:9px;font-size:max(7.5px,20cqw);line-height:1.05;text-align:center;letter-spacing:-.05em;transform:rotate(-14deg);word-break:keep-all;background:color-mix(in srgb,var(--stamp) 9%,var(--card))}
+@media (max-width:300px){.kd-cal-r,.kd-cal-g{gap:2px}.kd-d{border-radius:7px}.kd-d.stamp i{display:none}.kd-d em{right:auto;bottom:auto;position:static;width:84%;padding:0;font-size:0}.kd-d em::before{content:'✓';font-size:14px;line-height:1}}   /* 플립 겉화면처럼 칸이 아주 작으면 글 대신 ✓ 도장 (읽는 글은 칸의 aria-label) */
 </style>
 <style id="sarang-dash">/* ===== 현황판 (src/dash.js, 2026-10-03 대표). 색·글꼴은 앱 값 그대로(--pri·--soft·--card·--line·--sub·--ok-*·--warn-*, 나이 단계 테마·어두운 화면을 따라감),
    칸은 앱 .card (둥글기 15·안쪽 23·그림자). 아래 메뉴 세 칸(오늘 · 모의시험 · 현황판) ===== */
@@ -15885,6 +15931,76 @@ function examInfo(term, kind){
     ids: x.qs.map(q => q.id), answers: x.qs.map(q => q.a) })) };
 }
 
+/* ---------- 숙제로 보내는 모의시험 (2026-10-05 대표 "숙제 기능 수정 과목별 모의고사 생성 발송 …") ----------
+   부모 폰(현황판 '숙제')이 과목마다 PDF 와 같은 방법으로 문제를 골라 그 id 를 숙제에 넣어 보내고, 아이 폰은 같은 id 의 문제를 화면에서 풂 (src/kidmode.js).
+   화면 모양·채점은 스마트 학습(scrItemHtml)과 같음. 진도는 넘기지 않음. 내용이 바뀌어 id 가 하나도 안 맞으면 아이 폰에서 같은 범위로 다시 고름 */
+const HW_EXAM_MIN = 10;
+const HW_HUB = { ekor: 'kor', eng: 'eng', emath: 'math', e3math: 'math', soc: 'soc', sci: 'sci', his: 'his', wh: 'wh' };
+async function examHwLoad(){ await Promise.all(examSubjects().filter(subj => subj !== 'e3math').map(subj => loadPack(pg(subj), true))); }
+function examHwList(term, kind, n){
+  const sel = examSel(); term = EXAM_TERM[term] ? term : sel.term; kind = EXAM_KIND[kind] ? kind : sel.kind;
+  return { term, kind, title: `${EXAM_TERM[term]} ${EXAM_KIND[kind]}`, subs: examSubjects().map(subj => {
+    const r = examRange(subj, term, kind), pool = examPool(subj, r), ps = subj === 'e3math' ? 'ok' : packState(pg(subj)), ok = pool.length >= HW_EXAM_MIN;
+    const qs = ok ? examPick(pool, n) : [];
+    return { subj, hub: HW_HUB[subj], name: SUBJ[subj].name, grade: subj === 'e3math' ? 'e3' : G(subj), ok, ps, pool: pool.length, n: qs.length, units: unitSpan(r) || '', ids: qs.map(q => q.id) };
+  }) };
+}
+async function examRun(ctx, it){
+  const subj = EXAM_ORDER.includes(it.es) || it.es === 'e3math' ? it.es : null, s = subj && SUBJ[subj], root = document.createElement('div');
+  root.className = 'scr-root hx-root'; if (s) root.style.setProperty('--c', s.color);
+  root.innerHTML = '<p class="scr-wait">시험 문제를 불러오는 중이에요…</p>';
+  ctx.el.append(root);
+  if (!s || !EXAM_TERM[it.term] || !EXAM_KIND[it.ek]) { root.innerHTML = '<p class="scr-wait">이 시험은 열 수 없어요. 부모님께 다시 보내 달라고 해 주세요.</p>'; return { close(){ root.remove(); } }; }
+  try { if (subj !== 'e3math') await loadPack(pg(subj), true); } catch (e) {}
+  const pool = examPool(subj, examRange(subj, it.term, it.ek)), by = new Map(pool.map(q => [q.id, q]));
+  let qs = (Array.isArray(it.ids) ? it.ids : []).map(id => by.get(id)).filter(Boolean);
+  if (!qs.length && pool.length >= HW_EXAM_MIN) qs = examPick(pool, Math.min(40, Math.max(HW_EXAM_MIN, +it.n || 20)));
+  if (!qs.length) { root.innerHTML = '<p class="scr-wait">시험 문제를 불러오지 못했어요. 인터넷을 확인하고 닫았다가 다시 열어 주세요.</p>'; return { close(){ root.remove(); } }; }
+  const items = qs.map((q, i) => ({ id: 'x' + i, kind: 'q', src: q, q: { type: 'choice', q: q.q, choices: q.choices, fig: q.fig }, a: { a: NUM[q.a], explain: q.explain + (q.title ? `\n(${q.title})` : '') } }));
+  const pick = {};
+  let graded = false, warned = false;
+  root.innerHTML = `<section class="scr-qsec hx-head"><h3>${esc(EXAM_TERM[it.term] + ' ' + EXAM_KIND[it.ek])} · ${esc(s.name)}</h3><p class="scr-note">${it.units ? `시험 범위: ${esc(it.units)} · ` : ''}${items.length}문제. 문제마다 알맞은 답을 하나 골라요. 다 풀면 아래 '다 풀었어요'를 눌러요.</p>`
+    + `<ol class="scr-qs">${items.map((x, i) => scrItemHtml(x, i + 1)).join('')}</ol></section>`
+    + '<div class="scr-end"><button type="button" class="scr-grade">다 풀었어요</button><button type="button" class="scr-next" hidden>숙제 끝</button><p class="scr-msg" role="status"></p></div>';
+  const li = id => root.querySelector(`.scr-q[data-id="${id}"]`);
+  root.querySelectorAll('[data-fig]').forEach(el => { const x = items.find(y => y.id === el.dataset.fig); try { if (x && x.q.fig) scrFig(el, x.q.fig); } catch (e) {} });
+  const msg = t => { root.querySelector('.scr-msg').textContent = t; };
+  function grade(btn){
+    const miss = items.filter(x => pick[x.id] == null).length;
+    if (miss && !warned) { warned = true; msg(`아직 안 푼 문제가 ${miss}개 있어요. 그대로 채점하려면 한 번 더 눌러 주세요.`); return; }
+    const y0 = btn.getBoundingClientRect().top;
+    items.forEach(x => {
+      x.r = pick[x.id] != null && +pick[x.id] === x.src.a; const el = li(x.id);
+      el.classList.add('graded', x.r ? 'ok' : 'ng');
+      el.querySelectorAll('.scr-opts button').forEach(b => { b.disabled = true; b.classList.toggle('right', +b.dataset.v === x.src.a); });
+    });
+    graded = true; btn.hidden = true;
+    const ok = items.filter(x => x.r).length, nx = root.querySelector('.scr-next');
+    nx.hidden = false;
+    msg(`${items.length}문제 중 ${ok}문제 맞았어요.` + (ok < items.length ? ' 틀린 문제는 정답과 해설을 읽어 보세요.' : ' 모두 맞았어요!'));
+    window.scrollBy(0, nx.getBoundingClientRect().top - y0);   // 누른 자리에 다음 버튼 (위에 정답이 늘어도 화면이 튀지 않게)
+  }
+  function onClick(e){
+    const b = e.target.closest('button'); if (!b || b.disabled || !root.contains(b)) return;
+    const q = b.closest('.scr-q');
+    if (q && b.dataset.v != null && !graded) { pick[q.dataset.id] = b.dataset.v; q.querySelectorAll('.scr-opts button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); return; }
+    if (b.classList.contains('scr-grade')) return grade(b);
+    if (b.classList.contains('scr-next')) {
+      b.disabled = true; b.textContent = '숙제를 마쳤어요';
+      const ok = items.filter(x => x.r).length, wrong = items.map((x, i) => x.r ? null : { n: i + 1, p: pick[x.id] == null ? -1 : +pick[x.id] }).filter(Boolean);
+      ctx.done({ score: ok, total: items.length, wrong });
+    }
+  }
+  root.addEventListener('click', onClick);
+  return { close(){ root.removeEventListener('click', onClick); root.remove(); } };
+}
+/* 부모 화면의 '틀린 문제 보기': 보낸 id 와 아이가 고른 번호로 문제·정답·해설 */
+function examHwWrong(it){
+  const subj = it.es; if (!SUBJ[subj] || !EXAM_TERM[it.term] || !EXAM_KIND[it.ek]) return [];
+  const by = new Map(examPool(subj, examRange(subj, it.term, it.ek)).map(q => [q.id, q]));
+  return (Array.isArray(it.wrong) ? it.wrong : []).map(w => { const q = by.get((it.ids || [])[w.n - 1]); return q ? { n: w.n, q: q.q, choices: q.choices, a: q.a, p: w.p, explain: q.explain, title: q.title } : null; }).filter(Boolean);
+}
+
 /* 화면 만들기 (국어 ekor는 국어 화면 안의 칸이 생긴 뒤 또박또박 모듈이 부름) */
 function mountPane(subj){
   const pane = $('pane-' + subj); if (!pane || pane.dataset.mounted) return;
@@ -15982,15 +16098,69 @@ function pace(code, D, lo){   // lo: 한 번에 가장 적게 (옛 수학은 2)
   return { n, k: Math.min(PACE_MAX, Math.max(lo, q)), need, short: q > PACE_MAX, end };
 }
 const paceLeft = s => { const m = HUB_TODAY[s]; return m && m.left && (!m.available || m.available()) ? m.left() : null; }, paceLo = s => HUB_TODAY[s].minK || 1;
+/* 1년치를 끝내려면 주 몇 회 (2026-10-05 대표 카드 '최소 횟수 지키기'): 남은 날이 많은 요일부터 하루 4개씩 셈. 0 = 이미 넉넉함 */
+function needOf(code, D){
+  const cnt = [0, 0, 0, 0, 0, 0, 0];
+  for (let d = SCH.parse(todayYmd()); SCH.ymd(d) <= PACE_END; d.setDate(d.getDate() + 1)) cnt[d.getDay()]++;
+  const top = cnt.slice().sort((x, y) => y - x);
+  for (let m = 1; m <= 7; m++) if (PACE_MAX * top.slice(0, m).reduce((x, y) => x + y, 0) >= D) return m;
+  return 7;
+}
+/* 시간표 칸에 있는 과목(#week 단추) 가운데 이대로면 학년 끝까지 못 끝내는 과목: [{ s, n, need }] — 시간표에 없는 과목(주 0회)도 넣음 */
+const weekCodes = () => [...new Set([...document.querySelectorAll('#week [data-sub]')].map(b => b.dataset.sub))];
+function shortList(list){
+  return (list || weekCodes()).map(s => { const D = paceLeft(s); if (!D) return null; const p = pace(s, D, paceLo(s)); return p.n && !p.short ? null : { s, n: p.n, need: Math.max(p.need || 0, needOf(s, D)) }; }).filter(Boolean);
+}
+/* 모자란 과목을 요일에 더함: 그 과목이 없는 평일 가운데 과목이 적은 날부터, 모자라면 주말. 시간표 단추를 누르는 것과 같은 길(저장·다시 그림) */
+function fillWeek(s){
+  const x = shortList().find(o => o.s === s); if (!x) return 0;
+  const week = HUB_TODAY.week ? HUB_TODAY.week() : {}, has = w => (week[w] || []).includes(s);
+  const order = [1, 2, 3, 4, 5, 6, 0].filter(w => !has(w)).sort((a, b) => ((a % 6 === 0) - (b % 6 === 0)) || ((week[a] || []).length - (week[b] || []).length) || a - b);
+  let added = 0;
+  for (const w of order) {
+    if (!shortList().some(o => o.s === s)) break;
+    const btn = document.querySelector(`#week [data-wd="${w}"][data-sub="${s}"]`); if (!btn) continue;
+    btn.click(); added++;
+  }
+  return added;
+}
+/* 요일마다 하루 학습지 수 (과목마다 오늘 묶음 k를 더함) — 너무 많은 요일은 시간표 칸에 한 줄 */
+const LOAD_MAX = 8;
+function dayLoads(list){
+  const week = HUB_TODAY.week ? HUB_TODAY.week() : {}, out = {};
+  (list || weekCodes()).forEach(s => { const D = paceLeft(s); if (!D) return; const k = pace(s, D, paceLo(s)).k; [0, 1, 2, 3, 4, 5, 6].forEach(w => { if ((week[w] || []).includes(s)) out[w] = (out[w] || 0) + k; }); });
+  return out;
+}
+const WDN = ['일', '월', '화', '수', '목', '금', '토'];
 window.HUB_PACE = {
   k: (code, D, lo) => pace(code, D, lo).k,
+  shortList, fill: fillWeek, dayLoads,
   /* 오늘의 학습 과목 칸 아래 한 줄 */
   warn: s => { const D = paceLeft(s), p = D ? pace(s, D, paceLo(s)) : {}; return p.n && p.short ? `주 ${p.n}회로는 학년 끝까지 다 못 해요.` + (p.need ? ` 주 ${p.need}회 이상이면 끝나요.` : '') : ''; },
-  /* 시간표 설정: 과목마다 끝나는 달 */
-  weekHtml: (list, name) => { const rows = list.map(s => { const D = paceLeft(s); if (!D) return ''; const p = pace(s, D, paceLo(s));
-    return `<p><b>${name[s]}</b><span>${p.n ? `주 ${p.n}회 · 이대로면 ${+p.end.slice(5, 7)}월에 끝나요${p.end > PACE_END ? ' (학년이 끝난 뒤)' : ''}` : '시간표에 없어요'}</span></p>`; }).join('');
-    return rows ? `<div class="week-ends">${rows}</div>` : ''; }
+  /* 시간표 설정: 과목마다 끝나는 달, 못 끝내는 과목은 '주 ○회로 채우기' (2026-10-05) */
+  weekHtml: (list, name) => {
+    const sh = {}; shortList(list).forEach(o => { sh[o.s] = o; });
+    const rows = list.map(s => { const D = paceLeft(s); if (!D) return ''; const p = pace(s, D, paceLo(s)), x = sh[s];
+      if (x) return `<p class="we-short"><b>${name[s]}</b><span>${x.n ? `주 ${x.n}회로는` : '시간표에 없어서'} 1년치를 다 못 끝내요. 주 ${x.need}회 이상이면 끝나요.<button type="button" class="we-fill" data-pfill="${s}">주 ${x.need}회로 채우기</button></span></p>`;
+      return `<p><b>${name[s]}</b><span>주 ${p.n}회 · 이대로면 ${+p.end.slice(5, 7)}월에 끝나요</span></p>`; }).join('');
+    const ld = dayLoads(list), heavy = [1, 2, 3, 4, 5, 6, 0].filter(w => ld[w] > LOAD_MAX);
+    const lw = heavy.length ? `<p class="we-load">${heavy.map(w => `${WDN[w]}요일`).join('·')}은 하루 학습지가 ${LOAD_MAX}장보다 많아요(${heavy.map(w => ld[w] + '장').join('·')}). 과목을 다른 요일로 나누면 하루 양이 줄어요.</p>` : '';
+    return rows || lw ? `<div class="week-ends">${rows}${lw}</div>` : ''; }
 };
+document.addEventListener('click', e => {
+  const b = e.target.closest && e.target.closest('[data-pfill]'); if (!b) return;
+  const s = b.dataset.pfill, y = (document.getElementById('week') || b).getBoundingClientRect().top;
+  /* 채운 뒤 아래 안내 줄이 짧아져 쪽 끝에서 화면이 끌려 올라가지 않게: 아래에 빈칸을 잠깐 두고, 위로 올리는 만큼 줄임 (keepFold 와 같은 방법) */
+  if (!foldSp) { foldSp = document.createElement('div'); foldSp.setAttribute('aria-hidden', 'true'); document.body.append(foldSp); }
+  const sp = foldSp; sp.style.height = (sp.offsetHeight + innerHeight) + 'px';
+  const n = fillWeek(s);
+  const wk = document.getElementById('week'); if (wk) window.scrollBy(0, wk.getBoundingClientRect().top - y);   // 위 칸이 바뀌어도 시간표는 제자리
+  const fit = () => { const need = Math.max(0, Math.round(scrollY + innerHeight - (document.documentElement.scrollHeight - sp.offsetHeight))); sp.style.height = need ? need + 'px' : ''; if (!need) removeEventListener('scroll', fit); };
+  fit(); addEventListener('scroll', fit, { passive: true });
+  const m = document.getElementById('wkMsg') || document.getElementById('todayMsg');
+  const nm = (document.querySelector(`#week [data-sub="${s}"]`) || {}).textContent || '';
+  if (m) m.textContent = n ? `${nm}${josa(nm, '을', '를')} 시간표에 ${n}번 더 넣었어요. 이제 1년치를 끝낼 수 있어요.` : '';
+});
 
 /* ---------- '오늘의 학습'에서 쓰는 연결 (t: 오늘의 학습이면 주 횟수에 맞춘 묶음, 아니면 지금 Day 하나) ---------- */
 window.HUB_TODAY = window.HUB_TODAY || {};
@@ -16245,7 +16415,7 @@ function toSchool(list){ (list || []).forEach(subj => { if (IDS.includes(subj) &
 function stopSound(){ if (ETTS.busy) { ETTS.stop(); renderEngSay(); } }
 /* upos·dayCount·dayTitle: 점검용 — 화면에 Day 번호가 없어(2026-10-01) 검사가 속 Day 와 단원 안 진도를 여기서 봄 */
 HUB_TODAY.ssh = { pagesFor, keepFold, termFrac, schoolDay, upos, recap: subj => recapOf(subj, spanStart(subj)).map(x => ({ k: x.k, title: x.r.lesson.title })),   // recap: 현황판(src/dash.js)가 보는 오늘 학습지의 어제·일주일 전 복습
-   dayCount: subj => dayList(subj).length, dayTitle: (subj, n) => { const r = resolve(subj, n); return r && r.lesson ? r.lesson.title : ''; }, toSchool, screen: screenOpen, screenOk: scrOk, scrCheck, scrNorm, ids: IDS, guideOn: () => st.guide, setGuide, setGrade, setKorGrade, setEngGrade, setMathGrade, stopSound, mountPane, renderPane, hasKor, hasEng, hasMath, hisMode, toPdf, examInfo, renderExam, examOk: () => examSubjects().length > 0, fontsReady };   // examOk: 아이 학년·과목에 모의시험을 만들 교과가 있는지 (없으면 아래 메뉴에서 모의시험을 숨김, 2026-10-01 대표)
+   dayCount: subj => dayList(subj).length, dayTitle: (subj, n) => { const r = resolve(subj, n); return r && r.lesson ? r.lesson.title : ''; }, toSchool, screen: screenOpen, screenOk: scrOk, scrCheck, scrNorm, ids: IDS, guideOn: () => st.guide, setGuide, setGrade, setKorGrade, setEngGrade, setMathGrade, stopSound, mountPane, renderPane, hasKor, hasEng, hasMath, hisMode, toPdf, examInfo, renderExam, hwExam: { load: examHwLoad, list: examHwList, run: examRun, wrong: examHwWrong, sel: examSel, terms: EXAM_TERM, kinds: EXAM_KIND, loading: () => examSubjects().some(subj => subj !== 'e3math' && packState(pg(subj)) === 'loading') }, examOk: () => examSubjects().length > 0, fontsReady };   // examOk: 아이 학년·과목에 모의시험을 만들 교과가 있는지 (없으면 아래 메뉴에서 모의시험을 숨김, 2026-10-01 대표)
 document.addEventListener('hub:child', renderExam);
 })();
 
@@ -20684,6 +20854,15 @@ window.SARANG_SCREEN = (function(){
   }
   async function finish(c, r){
     if (c.fin || c !== cur) return; c.fin = true;
+    if (c.task) {   // 숙제 풀이: 진도·오늘 기록은 그대로, 받은 곳(kidmode)에만 알림
+      run(c, true);
+      try { if (c.task.done) c.task.done(r && typeof r === 'object' ? r : {}); } catch (e) {}
+      const box = document.createElement('div');
+      box.className = 'scr-fin'; box.setAttribute('role', 'status');
+      box.innerHTML = `<b>${esc(c.task.fin || '숙제를 마쳤어요.')}</b><span>부모님께 알렸어요.</span><div class="scr-fin-btns"><button type="button" class="scr-back2">처음 화면으로</button></div>`;
+      $('scrBody').append(box);
+      return;
+    }
     const m = T()[c.hub];
     let dn = null, dt = '';   // 끝낸 Day (진도를 넘기기 전): 아이 폰이 부모 쪽에 알릴 때 (src/kidmode.js)
     try { if (m && m.prepare) await m.prepare(); try { dn = m && m.days ? m.days(c.from === 'today')[0] : null; dt = task(c.hub); } catch (e) {} if (m && m.done) m.done(c.from === 'today'); } catch (e) {}
@@ -20784,14 +20963,24 @@ window.SARANG_SCREEN = (function(){
     mount();
     const t = target(s, from === 'pane');   // 'pane': 중2 한국사 화면이 세계사면 세계사, 'list': 그 과목 그대로
     if (!t) return false;
+    return show(t, from);
+  }
+  /* 숙제로 받은 모의시험처럼 진도와 상관없는 풀이 (src/kidmode.js, 2026-10-05): 같은 틀·공부 시간·나가기 물음, 마치면 진도를 넘기지 않고 o.done(r) 만.
+     o = { hub: 공부 시간을 적을 과목 키, title, open(ctx), done(r), fin: 마친 뒤 글 } */
+  function openTask(o){
+    if (!o || typeof o.open !== 'function') return false;
+    mount();
+    return show({ def: { label: o.title, open: o.open }, key: o.hub, hub: o.hub, task: o }, 'task');
+  }
+  function show(t, from){
     const prev = cur, chain = !!(prev && prev.pushed && history.state && history.state.sarangScreen);   // '다음 과목'으로 이어 열기: 뒤로 가기 한 칸·돌아갈 자리는 처음 것
     if (prev) shut(chain);
     if (T().ssh && T().ssh.stopSound) T().ssh.stopSound();
-    const c = cur = { s: t.hub, key: t.key, hub: t.hub, from: from === 'today' ? 'today' : 'pane', y: chain ? prev.y : window.scrollY, par: false, api: null };
+    const c = cur = { s: t.hub, key: t.key, hub: t.hub, from: from === 'today' ? 'today' : 'pane', y: chain ? prev.y : window.scrollY, par: false, api: null, task: t.task || null };
     clockStart(t.hub);
     $('app').classList.add('scr-on');
     $('screenView').hidden = false;
-    $('scrTitle').textContent = `${NAME[t.hub] || t.def.label || ''} · 스마트 학습`;
+    $('scrTitle').textContent = t.task ? t.task.title : `${NAME[t.hub] || t.def.label || ''} · 스마트 학습`;
     $('scrPar').checked = false; $('scrParRow').hidden = true;
     const body = $('scrBody'); body.innerHTML = '';
     const el = document.createElement('div'); el.className = 'scr-mod'; body.append(el);
@@ -20907,7 +21096,7 @@ window.SARANG_SCREEN = (function(){
   };
   return {
     register(k, def){ REG[k] = def; },
-    open, close, can: s => can(s, false), refresh, list: () => Object.keys(REG), isOpen: () => !!cur,
+    open, openTask, close, can: s => can(s, false), refresh, list: () => Object.keys(REG), isOpen: () => !!cur,
     clock: { start: s => { if (!cur) clockStart(s); }, stop: () => { if (!cur) clockStop(); } },   // 유아 화면 놀이(play-module.js)도 같은 방식으로 시간을 잼 ('play')
     get current(){ return cur && { s: cur.s, key: cur.key, from: cur.from }; }
   };
@@ -23767,6 +23956,7 @@ if (window.SARANG_SCREEN) reg(); else document.addEventListener('DOMContentLoade
       $('vqEndS').textContent = `외웠어요 ${c.mem}단어 · 익히는 중 ${c.mid}단어` + (S.got.fail ? ` · 내일 다시 ${S.got.fail}단어` : '') + (S.got.learned ? '. 오늘 익힌 단어는 내일 다시 확인해요.' : '');
       $('vqN').textContent = '';
       $('vqDone').focus({ preventScroll: true });
+      if (!S.told) { S.told = true; document.dispatchEvent(new CustomEvent('vocab:quiz-end', { detail: { total: S.total, fail: S.got.fail, mem: S.got.mem, learned: S.got.learned } })); }   // 숙제로 받은 영단어 퀴즈 (src/kidmode.js)
       return;
     }
     const q = S.q, w = q.w;
@@ -26127,6 +26317,12 @@ window.DONATE_CORE = (function(){
 
   /* ---------- 현황판 '숙제' (부모) ---------- */
   let hwEl = null, hwStop = null, hwKid = null, hwList = null, hwFrom = '엄마', hwMsg = '', hwPick = null, hwBusy = false, hwErr = '', hwDrop = null;
+  /* 숙제 종류 (2026-10-05 대표 "과목별 모의고사 생성 발송 또는 영단어 퀴즈 등 … 문제풀이·암기를 할 수 있는 것으로"):
+     day = 오늘 학습(지금 Day, 스마트 학습) · exam = 과목별 모의시험(부모 폰이 문제를 골라 보냄, 화면에서 풂) · vocab = 영단어 '외웠는지 확인'.
+     한 번 보내면 숙제 하나(종류 하나). 서버 규칙은 그대로: 과목 키 안에 kind 를 적음 (exam 은 그 교과 키, vocab 은 eng) */
+  let hwType = 'day', hxTerm = null, hxKind = null, hxN = 10, hxPick = null, hxLoad = null, hwOpenW = null;
+  const HX = () => H().ssh && H().ssh.hwExam;
+  const vqOk = () => !!(window.SARANG_VQUIZ && window.HUB_NAV && HUB_NAV.has('vocab'));
   try { hwFrom = sessionStorage.getItem('sarang_hwfrom') || '엄마'; } catch (e) {}
   const H = () => window.HUB_TODAY || {};
   function hwSubjects(){   // 오늘 시간표 과목(먼저, 골라 둠) + 이번 주 다른 과목 가운데 스마트 학습이 되는 것
@@ -26154,15 +26350,38 @@ window.DONATE_CORE = (function(){
       if (hwKid !== cid) { hwKid = cid; hwList = null; hwPick = null; if (hwStop) hwStop(); hwStop = A().homework.watch(cid, ymd(), l => { hwList = l; if (hwEl && !hwEl.hidden) paintHw(hwEl); }, e => { console.warn('숙제 읽기 실패', e && e.code); hwErr = '숙제를 불러오지 못했어요.'; paintHw(hwEl); }); }
       const subs = hwSubjects();
       if (!hwPick) hwPick = new Set(subs.filter(x => x.on).map(x => x.s));
-      const rows = subs.map(x => `<label class="kd-sub"><input type="checkbox" data-hwsub="${x.s}"${hwPick.has(x.s) ? ' checked' : ''}><span><b>${NAME[x.s] || x.s}</b><small>${esc(x.info || '지금 배우는 곳')}</small></span></label>`).join('');
+      const exOk = !!(HX() && H().ssh.examOk && H().ssh.examOk()), voOk = vqOk();
+      if ((hwType === 'exam' && !exOk) || (hwType === 'vocab' && !voOk)) hwType = 'day';
+      const types = [['day', '오늘 학습'], ...(exOk ? [['exam', '모의시험']] : []), ...(voOk ? [['vocab', '영단어 퀴즈']] : [])];
+      const typeRow = types.length > 1 ? `<div class="kd-f"><span class="kd-fl">숙제 종류</span><div class="kd-chips" role="radiogroup" aria-label="숙제 종류">${types.map(([k, t]) => `<button type="button" role="radio" class="kd-chip${k === hwType ? ' on' : ''}" aria-checked="${k === hwType}" data-hwtype="${k}">${t}</button>`).join('')}</div></div>` : '';
+      let body = '', count = 0, unit = '과목', label = '숙제 보내기';
+      if (hwType === 'day') {
+        const rows = subs.map(x => `<label class="kd-sub"><input type="checkbox" data-hwsub="${x.s}"${hwPick.has(x.s) ? ' checked' : ''}><span><b>${NAME[x.s] || x.s}</b><small>${esc(x.info || '지금 배우는 곳')}</small></span></label>`).join('');
+        body = `<div class="kd-f"><span class="kd-fl">과목 <small>지금 배우는 Day를 스마트 학습으로 풀어요</small></span>${rows ? `<div class="kd-subs">${rows}</div>` : '<p class="kd-p">스마트 학습으로 풀 수 있는 과목이 아직 없어요.</p>'}</div>`;
+        count = hwPick.size;
+      } else if (hwType === 'exam') {
+        const X = HX(), sel = X.sel(); if (!hxTerm) { hxTerm = sel.term; hxKind = sel.kind; }
+        if (!hxLoad) { hxLoad = X.load().catch(() => {}).then(() => { hxLoad = 'done'; if (hwEl && !hwEl.hidden) paintHw(hwEl); }); }
+        const L = hxLoad === 'done' ? X.list(hxTerm, hxKind, hxN) : null;
+        if (L && !hxPick) hxPick = new Set(L.subs.filter(x => x.ok).map(x => x.subj));
+        const seg = (cap, key, opts, cur) => `<div class="kd-hx-seg"><span class="kd-fs0">${cap}</span><div class="kd-chips" role="radiogroup" aria-label="${cap}">${opts.map(([v, t]) => `<button type="button" role="radio" class="kd-chip${String(v) === String(cur) ? ' on' : ''}" aria-checked="${String(v) === String(cur)}" data-${key}="${v}">${t}</button>`).join('')}</div></div>`;
+        const rows = L ? L.subs.map(x => `<label class="kd-sub${x.ok ? '' : ' off'}"><input type="checkbox" data-hxsub="${x.subj}"${x.ok && hxPick.has(x.subj) ? ' checked' : ''}${x.ok ? '' : ' disabled'}><span><b>${esc(x.name)}</b><small>${x.ok ? `${esc(x.units || '시험 범위')} · ${x.n}문제` : x.ps === 'fail' ? '문제를 불러오지 못했어요' : `문제가 아직 모자라요 (${x.pool}문제)`}</small></span></label>`).join('') : '';
+        body = `<div class="kd-f kd-hx">${seg('학기', 'hxterm', Object.entries(X.terms), hxTerm)}${seg('시험', 'hxkind', Object.entries(X.kinds), hxKind)}${seg('과목당 문제 수', 'hxn', [[10, '10문제'], [20, '20문제']], hxN)}</div>
+        <div class="kd-f"><span class="kd-fl">과목 <small>교과 시험 범위에서 골라 아이 폰 화면으로 풀어요</small></span>${!L ? '<p class="kd-p">시험 문제를 불러오는 중이에요…</p>' : rows ? `<div class="kd-subs">${rows}</div>` : '<p class="kd-p">모의시험을 낼 수 있는 과목이 아직 없어요.</p>'}</div>`;
+        count = L ? L.subs.filter(x => x.ok && hxPick.has(x.subj)).length : 0; label = '모의시험 보내기';
+      } else {
+        const n = SARANG_VQUIZ.todo ? SARANG_VQUIZ.todo() : 0;
+        body = `<div class="kd-f"><span class="kd-fl">영단어 퀴즈</span><p class="kd-p">${n ? `영단어 부록의 '외웠는지 확인'을 아이 폰에서 풀어요. 오늘 확인할 단어와 지금 익히는 단어 ${n}개예요.` : '오늘 확인할 영단어가 없어요. 영단어 부록에서 새 단어를 익히면 보낼 수 있어요.'}</p></div>`;
+        count = n ? 1 : 0; unit = ''; label = '영단어 퀴즈 보내기';
+      }
       const form = `<section class="card db-box kd-hw-box"><h3 class="db-h">${esc(n)}에게 숙제 내기</h3>
         <div class="kd-f"><span class="kd-fl">보내는 사람</span><div class="kd-chips" role="radiogroup" aria-label="보내는 사람">${FROM.map(f => `<button type="button" role="radio" class="kd-chip${f === hwFrom ? ' on' : ''}" aria-checked="${f === hwFrom}" data-hwfrom="${f}">${f}</button>`).join('')}</div>
           <small class="kd-fs">아이 폰에 '${esc(hwFrom)}${josa(hwFrom, '이', '가')} 보낸 숙제'로 보여요.</small></div>
-        <div class="kd-f"><span class="kd-fl">과목 <small>지금 배우는 Day를 스마트 학습으로 풀어요</small></span>${rows ? `<div class="kd-subs">${rows}</div>` : '<p class="kd-p">스마트 학습으로 풀 수 있는 과목이 아직 없어요.</p>'}</div>
+        ${typeRow}${body}
         <div class="kd-f"><label class="kd-fl" for="hwMsg">한마디 <small>(30자까지, 비워도 돼요)</small></label><input type="text" id="hwMsg" maxlength="30" autocomplete="off" value="${esc(hwMsg)}" placeholder="예: 오늘도 화이팅!">
           <div class="kd-chips">${QUICK.map(q => `<button type="button" class="kd-chip q" data-hwq="${esc(q)}">${esc(q)}</button>`).join('')}</div></div>
         <p class="kd-err" role="alert">${esc(hwErr)}</p>
-        <div class="kd-btns l"><button type="button" class="kd-b pri" data-hwsend${hwBusy || !hwPick.size ? ' disabled' : ''}>${hwBusy ? '보내는 중…' : `숙제 보내기${hwPick.size ? ` (${hwPick.size}과목)` : ''}`}</button></div></section>`;
+        <div class="kd-btns l"><button type="button" class="kd-b pri" data-hwsend${hwBusy || !count ? ' disabled' : ''}>${hwBusy ? '보내는 중…' : `${label}${count && unit ? ` (${count}${unit})` : ''}`}</button></div></section>`;
       h = form + hwSent(n);
     }
     if (el.dataset.h !== h) {
@@ -26170,7 +26389,18 @@ window.DONATE_CORE = (function(){
       el.dataset.h = h; el.innerHTML = h;
       if (keep && $('hwMsg')) { $('hwMsg').focus({ preventScroll: true }); try { $('hwMsg').setSelectionRange(keep[0], keep[1]); } catch (e) {} }
     }
-    if (!el.onclick) { el.onclick = hwClick; el.oninput = e => { if (e.target.id === 'hwMsg') hwMsg = e.target.value.slice(0, 30); }; el.onchange = e => { const c = e.target.closest('[data-hwsub]'); if (c) { if (c.checked) hwPick.add(c.dataset.hwsub); else hwPick.delete(c.dataset.hwsub); paintHw(el); } }; }
+    if (!el.onclick) { el.onclick = hwClick; el.oninput = e => { if (e.target.id === 'hwMsg') hwMsg = e.target.value.slice(0, 30); }; el.onchange = e => { const c = e.target.closest('[data-hwsub]'), x = e.target.closest('[data-hxsub]'); if (c) { if (c.checked) hwPick.add(c.dataset.hwsub); else hwPick.delete(c.dataset.hwsub); paintHw(el); } if (x && hxPick) { if (x.checked) hxPick.add(x.dataset.hxsub); else hxPick.delete(x.dataset.hxsub); paintHw(el); } }; }
+  }
+  let hwWrong = null;
+  /* 숙제 한 칸의 이름: 오늘 학습은 과목, 모의시험은 '국어 모의시험', 영단어 퀴즈 */
+  const itemName = (k, x) => x.kind === 'vocab' ? '영단어 퀴즈' : x.kind === 'exam' ? `${NAME[x.app] || NAME[k] || k} 모의시험` : NAME[x.app] || NAME[k] || k;
+  const NUMS = ['①', '②', '③', '④', '⑤'];
+  function wrongHtml(x){
+    const X = HX(); if (!X) return '';
+    if (hxLoad !== 'done') { if (!hxLoad) hxLoad = X.load().catch(() => {}).then(() => { hxLoad = 'done'; if (hwEl && !hwEl.hidden) paintHw(hwEl); }); return '<div class="kd-wrl"><p class="kd-p">문제를 불러오는 중이에요…</p></div>'; }
+    const L = X.wrong(x);
+    if (!L.length) return '<div class="kd-wrl"><p class="kd-p">문제를 찾지 못했어요. 학습지 내용이 바뀌었을 수 있어요.</p></div>';
+    return `<ol class="kd-wrl">${L.map(q => `<li><b>${q.n}번</b> ${esc(q.q)}<span>정답 ${NUMS[q.a] || ''} ${esc(q.choices[q.a])}</span><span class="kd-wp">${q.p >= 0 && q.choices[q.p] != null ? `고른 답 ${NUMS[q.p] || ''} ${esc(q.choices[q.p])}` : '안 풀었어요'}</span>${q.explain ? `<small>${esc(q.explain)}</small>` : ''}</li>`).join('')}</ol>`;
   }
   function hwSent(n){
     if (hwList === null) return '<section class="card db-box kd-hw-box"><p class="kd-p">오늘 보낸 숙제를 불러오는 중이에요…</p></section>';
@@ -26179,17 +26409,17 @@ window.DONATE_CORE = (function(){
       const it = Object.entries(w.items || {}).sort((a, b) => (a[1].order || 0) - (b[1].order || 0));
       const done = it.filter(([, x]) => x.state === 'done').length, all = done === it.length;
       const li = it.map(([k, x]) => {
-        const nm = NAME[x.app] || NAME[k] || k;
-        const st = x.state === 'done' ? `<em class="kd-st done">다 했어요${x.doneAt ? ' ' + hm(x.doneAt) : ''}</em>${x.score && x.score.total ? `<small class="kd-sc">${x.score.total}문제 중 ${x.score.right}개 맞았어요</small>` : ''}`
+        const nm = itemName(k, x), wk = `${w.id}|${k}`, wr = x.kind === 'exam' && x.state === 'done' && Array.isArray(x.wrong) && x.wrong.length;
+        const st = x.state === 'done' ? `<em class="kd-st done">다 했어요${x.doneAt ? ' ' + hm(x.doneAt) : ''}</em>${x.score && x.score.total ? `<small class="kd-sc">${x.score.total}${x.kind === 'vocab' ? '단어' : '문제'} 중 ${x.score.right}개 맞았어요</small>` : ''}`
           : x.state === 'seen' ? `<em class="kd-st seen">아이가 봄${x.seenAt ? ' ' + hm(x.seenAt) : ''}</em>` : '<em class="kd-st">보냄</em>';
-        return `<li><span><b>${esc(nm)}</b><small>${esc(x.day || '')}</small></span><span class="kd-sts">${st}</span></li>`;
+        return `<li><span><b>${esc(nm)}</b><small>${esc(x.day || '')}</small></span><span class="kd-sts">${st}</span>${wr ? `<button type="button" class="linkbtn kd-wr" data-hwwrong="${esc(wk)}" aria-expanded="${hwWrong === wk}">틀린 문제 ${x.wrong.length}개 ${hwWrong === wk ? '접기' : '보기'}</button>${hwWrong === wk ? wrongHtml(x) : ''}` : ''}</li>`;
       }).join('');
       const head = `${esc(w.from || '')}${josa(w.from, '이', '가')} 보낸 숙제 · ${ms(w.createdAt) ? hm(ms(w.createdAt)) : '방금'}`;
       const drop = all ? '' : hwDrop === w.id ? `<div class="kd-btns l"><button type="button" class="kd-b" data-hwkeep>그대로 두기</button><button type="button" class="kd-b warn" data-hwdel="${w.id}">숙제 거두기</button></div>`
         : `<div class="kd-btns l"><button type="button" class="linkbtn" data-hwask="${w.id}">숙제 거두기</button></div>`;
       return `<section class="card db-box kd-hw-box kd-sent"><h3 class="db-h">${head}</h3>${w.message ? `<p class="kd-say">“${esc(w.message)}”</p>` : ''}
-        <div class="kd-prog" role="img" aria-label="${it.length}과목 중 ${done}과목 다 했어요"><i style="width:${it.length ? Math.round(done / it.length * 100) : 0}%"></i></div>
-        <p class="kd-ps">${all ? `${esc(n)}${josa(n, '이', '가')} 숙제를 다 했어요.` : `${it.length}과목 중 ${done}과목 다 했어요.`}</p><ul class="kd-items">${li}</ul>${drop}</section>`;
+        <div class="kd-prog" role="img" aria-label="${it.length}개 중 ${done}개 다 했어요"><i style="width:${it.length ? Math.round(done / it.length * 100) : 0}%"></i></div>
+        <p class="kd-ps">${all ? `${esc(n)}${josa(n, '이', '가')} 숙제를 다 했어요.` : it.length > 1 ? `${it.length}개 중 ${done}개 다 했어요.` : '아직 하는 중이에요.'}</p><ul class="kd-items">${li}</ul>${drop}</section>`;
     }).join('');
   }
   async function hwClick(e){
@@ -26197,22 +26427,38 @@ window.DONATE_CORE = (function(){
     if (b.dataset.hwset !== undefined) { const s = $('settings'), g = $('setBtnHub'); if (s && s.hidden && g) g.click(); setTimeout(() => { const x = $('kdSetL'); if (x) x.scrollIntoView({ block: 'start' }); }, 60); return; }
     if (b.dataset.hwfrom) { hwFrom = b.dataset.hwfrom; try { sessionStorage.setItem('sarang_hwfrom', hwFrom); } catch (er) {} return paintHw(hwEl); }
     if (b.dataset.hwq) { hwMsg = b.dataset.hwq; return paintHw(hwEl); }
+    if (b.dataset.hwtype) { hwType = b.dataset.hwtype; hwErr = ''; return paintHw(hwEl); }
+    if (b.dataset.hxterm) { hxTerm = b.dataset.hxterm; hxPick = null; return paintHw(hwEl); }
+    if (b.dataset.hxkind) { hxKind = b.dataset.hxkind; hxPick = null; return paintHw(hwEl); }
+    if (b.dataset.hxn) { hxN = +b.dataset.hxn === 20 ? 20 : 10; return paintHw(hwEl); }
+    if (b.dataset.hwwrong) { hwWrong = hwWrong === b.dataset.hwwrong ? null : b.dataset.hwwrong; return paintHw(hwEl); }
     if (b.dataset.hwask) { hwDrop = b.dataset.hwask; return paintHw(hwEl); }
     if (b.dataset.hwkeep !== undefined) { hwDrop = null; return paintHw(hwEl); }
     if (b.dataset.hwdel) { b.disabled = true; hwDrop = null; A().homework.remove(b.dataset.hwdel).catch(() => toast('숙제를 거두지 못했어요. 인터넷을 확인해 주세요.')); return; }
     if (b.dataset.hwsend !== undefined) {
-      if (hwBusy || !hwPick || !hwPick.size) return;
-      const subs = hwSubjects().filter(x => hwPick.has(x.s)), items = {};
-      subs.forEach((x, i) => { items[SERVER[x.s]] = { app: x.s, day: x.info.slice(0, 80), order: i, state: 'sent' }; });
+      if (hwBusy) return;
+      const items = {};
+      if (hwType === 'exam') {
+        const X = HX(); if (!X || hxLoad !== 'done' || !hxPick) return;
+        const L = X.list(hxTerm, hxKind, hxN);
+        L.subs.filter(x => x.ok && hxPick.has(x.subj) && SERVER[x.hub]).forEach((x, i) => { items[SERVER[x.hub]] = { app: x.hub, kind: 'exam', es: x.subj, term: L.term, ek: L.kind, n: x.n, ids: x.ids, units: x.units.slice(0, 40), day: `${L.title} · ${x.n}문제`, order: i, state: 'sent' }; });
+      } else if (hwType === 'vocab') {
+        const n = vqOk() && SARANG_VQUIZ.todo ? SARANG_VQUIZ.todo() : 0; if (!n) return;
+        items.eng = { app: 'vocab', kind: 'vocab', day: `외웠는지 확인 · ${n}단어`, order: 0, state: 'sent' };
+      } else {
+        if (!hwPick || !hwPick.size) return;
+        hwSubjects().filter(x => hwPick.has(x.s)).forEach((x, i) => { items[SERVER[x.s]] = { app: x.s, day: x.info.slice(0, 80), order: i, state: 'sent' }; });
+      }
+      if (!Object.keys(items).length) return;
       hwBusy = true; hwErr = ''; paintHw(hwEl);
       try {
         await A().homework.send(K().cur(), { from: hwFrom, message: hwMsg.trim(), dateKey: ymd(), items });
-        hwMsg = ''; hwPick = null; toast('숙제를 보냈어요. 아이 폰에서 열면 여기에 바로 떠요.');
+        hwMsg = ''; hwPick = null; hxPick = null; toast('숙제를 보냈어요. 아이 폰에서 열면 여기에 바로 떠요.');
       } catch (er) { console.warn('숙제 보내기 실패', er && er.code); hwErr = '숙제를 보내지 못했어요. 인터넷을 확인하고 다시 눌러 주세요.'; }
       hwBusy = false; paintHw(hwEl);
     }
   }
-  document.addEventListener('hub:child', () => { hwKid = null; hwList = null; hwPick = null; if (hwStop) { hwStop(); hwStop = null; } });
+  document.addEventListener('hub:child', () => { hwKid = null; hwList = null; hwPick = null; hxPick = null; hxLoad = null; hwWrong = null; if (hwStop) { hwStop(); hwStop = null; } });
   window.SARANG_HW = { paint: paintHw };
 
   /* ==================== 아이 폰 ==================== */
@@ -26276,7 +26522,10 @@ window.DONATE_CORE = (function(){
     kidNick = k.nick || (K() && K().name()) || '우리 아이';
     if (!$('kdBanner') && $('today')) {
       $('today').insertAdjacentHTML('afterbegin', `<div class="kd-banner" id="kdBanner"><b>${esc(kidNick)} 공부 폰</b><span>부모님이 정한 공부를 바로 풀기로 해요.</span></div><div class="kd-khw" id="kdKidHw" hidden></div>`);
-      $('kdKidHw').addEventListener('click', e => { const b = e.target.closest('[data-khw]'); if (b && window.SARANG_SCREEN) SARANG_SCREEN.open(b.dataset.khw, 'today'); });
+      $('kdKidHw').addEventListener('click', e => {
+        const b = e.target.closest('[data-khw]'); if (b && window.SARANG_SCREEN) SARANG_SCREEN.open(b.dataset.khw, 'today');
+        const x = e.target.closest('[data-khx]'); if (x) kidTask(x.dataset.khx);
+      });
     }
     /* 과목 줄을 눌러 과목 화면(진도·PDF)으로 가지 않게: '스마트' 단추만 */
     const stop = e => { const t = e.target; if (!t.closest || !t.closest('#todayList li, #todayOther li') || t.closest('[data-scr]')) return; if (e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ') return; e.stopPropagation(); e.preventDefault(); };
@@ -26287,28 +26536,121 @@ window.DONATE_CORE = (function(){
   }
   function kidWatch(){
     const a = A(), k = kidDev(); if (!a || !k || kidHwStop || !(L().user && L().user.child)) return;
-    kidHwStop = a.homework.watch(k.childId, ymd(), l => { kidHw = l; kidPaint(); }, e => console.warn('숙제 읽기 실패', e && e.code));
+    kidHwStop = a.homework.watch(k.childId, ymd(), l => { kidHw = l; kidPaint(); }, e => { console.warn('숙제 읽기 실패', e && e.code); if (kidHw === null) { kidHw = []; kidPaint(); } });   // 못 읽으면 숙제 없이 도장 판단
   }
   function kidPaint(){
     const box = $('kdKidHw'); if (!box) return;
     const list = (kidHw || []).filter(w => Object.keys(w.items || {}).length);
-    if (!list.length) { box.hidden = true; box.innerHTML = ''; return; }
+    if (!list.length) { box.hidden = true; box.innerHTML = ''; stampCheck(); return; }
     const S = window.SARANG_SCREEN;
     const h = list.map(w => {
       const it = Object.entries(w.items).sort((a, b) => (a[1].order || 0) - (b[1].order || 0));
       const done = it.filter(([, x]) => x.state === 'done').length, all = done === it.length;
       it.forEach(([key, x]) => { if (x.state === 'sent') A().homework.setItem(w.id, key, { state: 'seen', seenAt: Date.now() }).catch(() => {}); });   // 아이가 봄
       const li = it.map(([key, x]) => {
-        const s = x.app || key, nm = NAME[s] || NAME[key] || key, can = S && S.can(s);
-        const r = x.state === 'done' ? '<span class="kd-stk" role="img" aria-label="다 했어요">다 했어요</span>' : can ? `<button type="button" class="kd-b pri" data-khw="${esc(s)}">바로 풀기</button>` : '<span class="kd-na">준비 중</span>';
+        const s = x.app || key, nm = itemName(key, x), wk = `${w.id}|${key}`;
+        const can = x.kind === 'exam' ? !!(S && S.openTask && HX()) : x.kind === 'vocab' ? vqOk() : S && S.can(s);
+        const go = x.kind ? `<button type="button" class="kd-b pri" data-khx="${esc(wk)}">${x.kind === 'exam' ? '시험 보기' : '퀴즈 풀기'}</button>` : `<button type="button" class="kd-b pri" data-khw="${esc(s)}">바로 풀기</button>`;
+        const r = x.state === 'done' ? '<span class="kd-stk" role="img" aria-label="다 했어요">다 했어요</span>' : can ? go : '<span class="kd-na">준비 중</span>';
         return `<li><span><b>${esc(nm)}</b><small>${esc(x.day || '')}</small></span>${r}</li>`;
       }).join('');
       return `<section class="kd-khw-c${all ? ' all' : ''}"><h3>${esc(w.from || '')}${josa(w.from, '이', '가')} 보낸 숙제</h3>${w.message ? `<p class="kd-say">“${esc(w.message)}”</p>` : ''}
-        ${all ? `<p class="kd-cheer">숙제를 다 했어요! ${esc(w.from || '')}에게 알렸어요.</p>` : `<p class="kd-ps">${it.length}과목 중 ${done}과목 했어요.</p>`}<ul class="kd-items">${li}</ul></section>`;
+        ${all ? `<p class="kd-cheer">숙제를 다 했어요! ${esc(w.from || '')}에게 알렸어요.</p>` : it.length > 1 ? `<p class="kd-ps">${it.length}개 중 ${done}개 했어요.</p>` : ''}<ul class="kd-items">${li}</ul></section>`;
     }).join('');
     if (box.dataset.h !== h) { box.dataset.h = h; box.innerHTML = h; }
     box.hidden = false;
+    stampCheck();
   }
+  /* ---------- 아이 폰 아래 '연속 공부' 달력 (2026-10-05 대표 "아이 폰 하단에, 연속 공부 캘린더를 두고, 과업을 마친날엔 다했어요 도장") ----------
+     그날 할 일 = 오늘 시간표 과목 + 오늘 받은 숙제. 둘 다 끝나면(스마트·프린트 어느 쪽이든) 그날에 '다 했어요' 도장 (hub_stamp { 'YYYY-MM-DD': 1 }, 기록과 함께 올라감).
+     한 번 찍은 도장은 지우지 않음. 연속 일수 = 오늘(아직 안 끝났으면 어제)부터 거꾸로 도장이 이어진 날 수. 지금 시간표에 과목이 없는 요일(쉬는 날)은 끊지 않고 건너뜀 */
+  const STAMP = 'hub_stamp';
+  const stamps = () => { try { const m = JSON.parse(localStorage.getItem(STAMP)); return m && typeof m === 'object' ? m : {}; } catch (e) { return {}; } };
+  let calMonth = 0;   // 0 = 이번 달, -1 = 지난달 …
+  function restDay(d){
+    const w = H().week ? H().week() : null, N = window.HUB_NAV;
+    if (!w) return false;
+    return !(w[d.getDay()] || []).some(s => !N || !N.inWeek || N.inWeek(s));
+  }
+  function dayDone(){
+    const T = window.SARANG_TODAY; if (!T) return false;
+    let td = []; try { td = H().todays ? H().todays() : []; } catch (e) {}
+    const hw = (kidHw || []).flatMap(w => Object.values(w.items || {}));
+    if (!td.length && !hw.length) return false;
+    return td.every(s => T.ways(s).length) && hw.every(x => x.state === 'done');
+  }
+  function stampCheck(){
+    if (!isKid() || kidHw === null) return;   // 숙제를 읽기 전에는 판단하지 않음
+    const k = ymd(), m = stamps();
+    if (!m[k] && dayDone()) {
+      m[k] = 1;
+      Object.keys(m).sort().slice(0, -400).forEach(x => delete m[x]);
+      try { localStorage.setItem(STAMP, JSON.stringify(m)); } catch (e) {}
+    }
+    calPaint();
+  }
+  function streak(m){
+    const d = new Date(); d.setHours(12, 0, 0, 0);
+    if (!m[ymd(d)]) d.setDate(d.getDate() - 1);
+    let n = 0;
+    for (let i = 0; i < 400; i++, d.setDate(d.getDate() - 1)) {
+      if (m[ymd(d)]) n++;
+      else if (!restDay(d)) break;
+    }
+    return n;
+  }
+  function calPaint(){
+    if (!isKid() || !$('today')) return;
+    let box = $('kdCal');
+    if (!box) {
+      box = document.createElement('section'); box.className = 'card kd-cal'; box.id = 'kdCal'; box.setAttribute('aria-labelledby', 'kdCalT');
+      $('today').after(box);
+      box.addEventListener('click', e => { const b = e.target.closest('[data-calm]'); if (!b || b.disabled) return; calMonth = Math.min(0, Math.max(-12, calMonth + +b.dataset.calm)); calPaint(); });
+    }
+    const m = stamps(), now = new Date(), n = streak(m), today = !!m[ymd(now)];
+    const first = new Date(now.getFullYear(), now.getMonth() + calMonth, 1), y = first.getFullYear(), mo = first.getMonth(), last = new Date(y, mo + 1, 0).getDate();
+    const cells = [];
+    for (let i = 0; i < first.getDay(); i++) cells.push('<span class="kd-d out" aria-hidden="true"></span>');
+    for (let d = 1; d <= last; d++) {
+      const dt = new Date(y, mo, d), k = ymd(dt), st = !!m[k], isT = k === ymd(now), fut = dt > now && !isT;
+      cells.push(`<span class="kd-d${st ? ' stamp' : ''}${isT ? ' today' : ''}${fut ? ' fut' : ''}" role="gridcell" aria-label="${mo + 1}월 ${d}일${st ? ' 다 했어요' : ''}${isT ? ' (오늘)' : ''}"><i aria-hidden="true">${d}</i>${st ? '<em aria-hidden="true">다 했어요</em>' : ''}</span>`);
+    }
+    while (cells.length < 42) cells.push('<span class="kd-d out" aria-hidden="true"></span>');   // 늘 6줄: 달을 넘겨도 높이가 같아 화면이 튀지 않게
+    const rows = []; for (let r = 0; r < 6; r++) rows.push(`<div class="kd-cal-r" role="row">${cells.slice(r * 7, r * 7 + 7).join('')}</div>`);
+    const h = `<div class="kd-cal-h"><h3 id="kdCalT">연속 공부</h3><p class="kd-cal-n">${n ? `<b>${n}</b>일째` : '<b>0</b>일'}</p></div>
+      <p class="kd-cal-s">${today ? '오늘 할 일을 다 했어요! 내일도 이어 가요.' : n ? '오늘 할 일을 다 하면 도장을 찍고 이어져요.' : '오늘 할 일을 다 하면 \'다 했어요\' 도장을 찍어 줘요.'}</p>
+      <div class="kd-cal-m"><button type="button" class="kd-cal-b" data-calm="-1" aria-label="지난달"${calMonth <= -12 ? ' disabled' : ''}>‹</button><b aria-live="polite">${y}년 ${mo + 1}월</b><button type="button" class="kd-cal-b" data-calm="1" aria-label="다음 달"${calMonth >= 0 ? ' disabled' : ''}>›</button></div>
+      <div class="kd-cal-g" role="grid" aria-label="${y}년 ${mo + 1}월 공부 도장"><div class="kd-cal-r kd-cal-w" role="row">${['일', '월', '화', '수', '목', '금', '토'].map(w => `<span role="columnheader">${w}</span>`).join('')}</div>${rows.join('')}</div>`;
+    if (box.dataset.h !== h) {
+      const f = document.activeElement && box.contains(document.activeElement) ? document.activeElement.dataset.calm : null;
+      box.dataset.h = h; box.innerHTML = h;
+      if (f) { const b = box.querySelector(`[data-calm="${f}"]`); if (b && !b.disabled) b.focus({ preventScroll: true }); }
+    }
+  }
+  document.addEventListener('hub:refresh', () => setTimeout(stampCheck, 0));
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') stampCheck(); });   // 날이 바뀐 뒤 다시 열 때
+
+  /* 숙제로 받은 모의시험·영단어 퀴즈 열기 (진도는 넘기지 않음) */
+  function kidTask(wk){
+    const [id, key] = String(wk).split('|'), w = (kidHw || []).find(v => v.id === id), x = w && w.items && w.items[key];
+    if (!x || x.state === 'done') return;
+    const fin = r => {
+      const right = typeof r.score === 'number' ? r.score : null, total = typeof r.total === 'number' ? r.total : null;
+      const patch = Object.assign({ state: 'done', doneAt: Date.now(), via: 'screen' }, right != null && total ? { score: { right, total } } : {}, Array.isArray(r.wrong) ? { wrong: r.wrong.slice(0, 40) } : {});
+      A().homework.setItem(id, key, patch).catch(er => console.warn('숙제 기록 실패', er && er.code));
+    };
+    if (x.kind === 'exam') {
+      const X = HX(); if (!X || !window.SARANG_SCREEN || !SARANG_SCREEN.openTask) return;
+      SARANG_SCREEN.openTask({ hub: x.app || key, title: `${NAME[x.app] || NAME[key] || ''} 모의시험`, fin: '모의시험 숙제를 마쳤어요.', open: ctx => X.run(ctx, x), done: fin });
+    } else if (x.kind === 'vocab' && vqOk()) {
+      hwOpenW = { fin }; SARANG_VQUIZ.open();
+    }
+  }
+  document.addEventListener('vocab:quiz-end', e => {
+    const o = hwOpenW; hwOpenW = null; if (!o || !isKid()) return;
+    const d = e.detail || {}, total = +d.total || 0;
+    o.fin(total ? { score: Math.max(0, total - (+d.fail || 0)), total } : {});
+  });
   /* 아이 폰에서 스마트 학습을 마치면: 그 과목 숙제 '다 했어요'(점수는 부모 화면에만), 복습 근거(seen), 풀이 기록 */
   document.addEventListener('sarang:screen-done', e => {
     if (!isKid()) return;
@@ -26318,7 +26660,7 @@ window.DONATE_CORE = (function(){
     a.recordSolve(k.childId, subj, Number.isInteger(x.day) ? x.day : (x.task || null), Object.assign({ via: 'kid' }, total != null && right != null ? { score: right, total } : {})).catch(er => console.warn('풀이 기록 실패', er && er.code));
     (kidHw || []).forEach(w => {
       const it = w.items && w.items[subj];
-      if (it && it.state !== 'done' && (!it.app || it.app === x.s)) {
+      if (it && it.state !== 'done' && !it.kind && (!it.app || it.app === x.s)) {   // 모의시험·영단어 퀴즈 숙제는 그 화면에서만
         a.homework.setItem(w.id, subj, Object.assign({ state: 'done', doneAt: Date.now(), via: 'screen' }, total != null && right != null ? { score: { right, total } } : {})).catch(er => console.warn('숙제 기록 실패', er && er.code));
       }
     });
@@ -26330,7 +26672,7 @@ window.DONATE_CORE = (function(){
   /* ---------- 시작 ---------- */
   document.addEventListener('sarang:login', () => { if (isKid()) kidWatch(); else syncLogin(); });
   function start(){
-    if (isKid()) { kidMount(); kidWatch(); return; }
+    if (isKid()) { kidMount(); kidWatch(); calPaint(); return; }
     mountSet();
     /* 끊긴 아이 폰: 첫 화면에 한 번 알림 */
     let cut = null; try { cut = localStorage.getItem('sarang_kidcut'); } catch (e) {}
@@ -26589,6 +26931,7 @@ window.DONATE_CORE = (function(){
           </div>
           <div class="db-mg-s" id="dbMgS1" role="tabpanel" aria-labelledby="dbMgT1"><p class="db-mg-lead">요일마다 할 과목을 눌러 넣거나 빼요. 누르면 바로 바뀌고, 과목마다 끝나는 달도 바로 알려 줘요.</p>
             <section class="card db-mg-week" id="dbWeekBox"></section><p class="wk-msg" id="wkMsg" role="status" aria-live="polite"></p>
+            <div class="db-mg-sch-ask" id="dbMgFill" hidden><p id="dbMgFillT"></p><small>1년치를 끝내려면 과목마다 이만큼은 시간표에 있어야 해요. 채우면 그 과목이 없는 요일 가운데 과목이 적은 날에 넣어요.</small><div class="db-mg-sch-btns"><button type="button" id="dbMgFillNo">직접 고치기</button><button type="button" class="pri" id="dbMgFillGo">채우고 다음</button></div></div>
             <div class="db-mg-bar one"><button type="button" class="pri" id="dbMgNext">다음: 과목 진도 설정 ›</button></div></div>
           <div class="db-mg-s" id="dbMgS2" role="tabpanel" aria-labelledby="dbMgT2" hidden><p class="db-mg-lead" id="dbMgLead"></p><div class="db-mg-list" id="dbMgList"></div>
             <div class="db-mg-school" id="dbMgSchool"><button type="button" class="db-more" id="dbMgSch">모든 과목을 학교 진도에 맞추기</button>
@@ -26610,8 +26953,10 @@ window.DONATE_CORE = (function(){
         if (view !== 'stat' && guard(go)) return; go(); return; }
       if (b.dataset.dbnav === 'stat' || b.dataset.dbnav === 'rep' || b.dataset.dbnav === 'mgmt' || b.dataset.dbnav === 'hw') { const v = b.dataset.dbnav; setDrawer(false); if (v !== 'mgmt' && guard(() => setView(v))) return; if (v === 'mgmt') { if (view === 'mgmt') return; step = 'week'; } setView(v); return; }
       if (b.dataset.mg) { if (!mgRead()) mgStart(); const N = NAV(); if (N && N.openFrom) N.openFrom(b.dataset.mg, 'dash'); return; }
-      if (b.dataset.mgst) return mgStep(b.dataset.mgst, true);
-      if (b.id === 'dbMgNext') return mgStep('subj', true);
+      if (b.dataset.mgst) { const P = window.HUB_PACE, L = b.dataset.mgst === 'subj' && P && P.shortList ? P.shortList() : []; if (L.length) { mgStep('week', true); return fillAsk(L); } return mgStep(b.dataset.mgst, true); }
+      if (b.id === 'dbMgNext') { const P = window.HUB_PACE, L = P && P.shortList ? P.shortList() : []; if (L.length) return fillAsk(L); return mgStep('subj', true); }   // 1년치를 못 끝내는 과목이 있으면 먼저 채우기 (2026-10-05 대표 '최소 횟수 지키기')
+      if (b.id === 'dbMgFillNo') { $('dbMgFill').hidden = true; const w = $('dbWeekBox'); if (w) w.scrollIntoView({ block: 'start', behavior: 'smooth' }); return; }
+      if (b.id === 'dbMgFillGo') { const P = window.HUB_PACE; (P ? P.shortList() : []).forEach(o => P.fill(o.s)); $('dbMgFill').hidden = true; if (P && P.shortList().length) return fillAsk(P.shortList()); return mgStep('subj', true); }
       if (b.id === 'dbMgSch') return schAsk($('dbMgSchAsk').hidden);
       if (b.id === 'dbMgSchNo') return schAsk(false, true);
       if (b.id === 'dbMgSchGo') { schAsk(false); const N = NAV(); mgWrite(null); if (N && N.toSchoolAll) N.toSchoolAll(); paintMgmt(); return; }   // 학교 진도로: 정하던 것은 버리고 바로 맞춤 (저장 필요 없음)
@@ -27064,6 +27409,18 @@ window.DONATE_CORE = (function(){
     if (!root) return;
     if (view === 'mgmt') paintMgmt();
     if (user) { const t = root.querySelector('.db-mg-steps'); if (t) window.scrollTo(0, Math.min(window.scrollY, Math.max(0, Math.round(t.getBoundingClientRect().top + window.scrollY - 12)))); }   // 아래에서 단계를 바꾸면 위 단계 칸이 보이게
+  }
+  document.addEventListener('click', e => {   // 시간표를 고치면 묻는 칸도 다시 (다 채우면 닫힘)
+    if (!e.target.closest || !e.target.closest('#week [data-wd], [data-pfill]') || !$('dbMgFill') || $('dbMgFill').hidden) return;
+    setTimeout(() => { const P = window.HUB_PACE, L = P ? P.shortList() : []; if (L.length) fillAsk(L, true); else $('dbMgFill').hidden = true; }, 0);
+  });
+  function fillAsk(L, quiet){
+    const nm = s => (document.querySelector(`#week [data-sub="${s}"]`) || {}).textContent || s;
+    $('dbMgFillT').textContent = L.map(o => `${nm(o.s)} 주 ${o.need}회`).join(', ') + ' 이상이어야 1년치를 끝낼 수 있어요.';
+    $('dbMgFill').hidden = false; padOff(); if (quiet) return;
+    const r = $('dbMgFill').getBoundingClientRect(), bar = $('dbMgNext').closest('.db-mg-bar').getBoundingClientRect(), lim = Math.min(innerHeight, bar.top) - 10;   // 아래 붙은 '다음' 줄에 단추가 가리지 않게
+    if (r.bottom > lim) window.scrollBy(0, r.bottom - lim);
+    $('dbMgFillGo').focus({ preventScroll: true });
   }
   function schAsk(on, keep){
     const N = NAV(), r = on && N && N.schoolInfo ? N.schoolInfo() : null, b = $('dbMgSch'), t0 = keep ? b.getBoundingClientRect().top : 0;
