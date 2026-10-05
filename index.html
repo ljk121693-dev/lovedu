@@ -497,7 +497,12 @@ footer .brand{font-size:17px;color:var(--ink)}
   if('scrollRestoration' in history)history.scrollRestoration='manual';
   activate(selected());
   history.replaceState({sarang:true,key:current,y:history.state&&history.state.sarang?history.state.y:0},'',location.href);
-  requestAnimationFrame(function(){scrollTo(0,history.state.y);checkpoint=snapshot();});
+  // 주소에 #메뉴가 붙어 열리면 브라우저가 그 칸으로 내려가 제목이 위쪽 바에 가려지므로, 다 읽힌 뒤 한 번 더 맞춤.
+  var initY=history.state.y, userMoved=false;
+  function initScroll(){if(!userMoved){scrollTo(0,initY);checkpoint=snapshot();}}
+  ['wheel','touchstart','keydown'].forEach(function(t){addEventListener(t,function(){userMoved=true;},{once:true,passive:true});});
+  requestAnimationFrame(initScroll);
+  if(document.readyState==='complete')setTimeout(initScroll,0);else addEventListener('load',function(){setTimeout(initScroll,0);},{once:true});
 })();
 (function(){
   // 실제 주소(lovedu.kr)에서는 /app/ 으로 이동. 시안 화면에서는 이동하지 않고 안내만 보여 줌.
