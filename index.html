@@ -111,6 +111,31 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
 .hero-note{font-size:15px;padding:14px 20px}
 @media(max-width:640px){.hero-note{font-size:14px;padding:0}}
 @media(max-width:290px){.hero-note{font-size:12px}}
+/* 앱 둘러보기 (10-05 대표 "앱 기능 소개(섹터별)"): 메뉴마다 글 + 폰 화면. 좁으면 글 아래 화면, 넓으면(칸 640px 이상) 반반 */
+.tour{container-type:inline-size}
+.tour-item{display:grid;gap:26px;padding:40px 0;border-top:1px solid var(--line)}
+.tour-item:first-child{padding-top:4px;border-top:0}
+.tour-tab{display:flex;align-items:center;gap:8px;color:var(--green);font-size:13px;font-weight:700}
+.tour-tab svg{width:20px;height:20px;flex:none}
+.tour-copy h2{margin:12px 0 10px}
+.tour-desc{color:var(--soft);font-size:15px}
+.tour-points{display:grid;gap:12px;margin:22px 0 0;padding:20px 0 0;border-top:1px solid var(--line)}
+.tour-points div{display:grid;grid-template-columns:5.6em minmax(0,1fr);gap:12px;font-size:14px;line-height:1.75}
+.tour-points dt{font-weight:700}
+.tour-points dd{margin:0;color:var(--soft)}
+.tour-shot{justify-self:center;width:min(280px,100%);margin:0;padding:9px;background:var(--card);border:1px solid var(--line);border-radius:36px}
+.tour-shot picture,.tour-shot img{display:block}
+.tour-shot img{width:100%;height:auto;border-radius:27px;background:var(--bg)}
+@container (min-width:640px){
+  .tour-item{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;align-items:center;padding:48px 0}
+  .tour-item:first-child{padding-top:8px}
+  .tour-shot{width:min(300px,100%)}
+}
+.how-foot{margin-top:32px}
+@media(max-width:640px){.tour-desc{font-size:14px}.tour-copy h2{font-size:22px}.tour-item{padding:34px 0}.how-foot{margin-top:28px}}
+@media(max-width:290px){.tour-points div{grid-template-columns:1fr;gap:2px}.tour-shot{padding:7px;border-radius:30px}.tour-shot img{border-radius:23px}}
+/* 메뉴가 일곱 칸이 되어, 낮은 PC 화면(높이 820px 이하)에서도 메뉴가 다 보이게 칸 사이를 줄임 */
+@media(min-width:900px) and (min-height:651px) and (max-height:820px){.rail-caption{margin:16px 3px 24px}.menu{gap:4px}.menu a{min-height:48px}.rail-bottom{padding-top:22px}}
 </style>
 </head>
 <body>
@@ -124,10 +149,11 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
   <nav id="menu" class="menu" aria-label="홈페이지 메뉴">
     <a href="#about" aria-current="page"><span class="nav-index" aria-hidden="true">01</span>사랑교육은?</a>
     <a href="#how"><span class="nav-index" aria-hidden="true">02</span>이렇게 공부해요</a>
-    <a href="#price"><span class="nav-index" aria-hidden="true">03</span>이용 요금</a>
-    <a href="#together"><span class="nav-index" aria-hidden="true">04</span>함께 만들어요</a>
-    <a href="#plan"><span class="nav-index" aria-hidden="true">05</span>앞으로의 계획</a>
-    <a href="#faq"><span class="nav-index" aria-hidden="true">06</span>자주 묻는 질문</a>
+    <a href="#tour"><span class="nav-index" aria-hidden="true">03</span>앱 둘러보기</a>
+    <a href="#price"><span class="nav-index" aria-hidden="true">04</span>이용 요금</a>
+    <a href="#together"><span class="nav-index" aria-hidden="true">05</span>함께 만들어요</a>
+    <a href="#plan"><span class="nav-index" aria-hidden="true">06</span>앞으로의 계획</a>
+    <a href="#faq"><span class="nav-index" aria-hidden="true">07</span>자주 묻는 질문</a>
   </nav>
   <div class="rail-bottom">
     <p>우리 아이의 속도로,<br>오늘의 공부를 시작해 보세요.</p>
@@ -193,11 +219,6 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
       <li class="card" data-anchor><span class="step-no" aria-hidden="true">02</span><h3>시간표 정하기</h3><p>요일마다 할 과목을 정해요. 가정 사정에 맞게 언제든 바꿀 수 있어요.</p></li>
       <li class="card" data-anchor><span class="step-no" aria-hidden="true">03</span><h3>오늘의 학습 풀기</h3><p>스마트 학습은 바로 풀기로, 프린트 학습은 뽑아서 풀기로 공부해요. 어느 쪽으로 끝내도 내일은 다음 내용으로 넘어가요.</p></li>
     </ol>
-    <div class="study-support">
-      <article class="card" data-anchor><h3>잊기 전에 한 번 더</h3><p>배운 내용은 다음 날과 일주일 뒤에 복습 문제로 다시 나와요. 영어 듣기는 제외돼요.</p></article>
-      <article class="card" data-anchor><h3>설명할 때는 부모 가이드</h3><p>문항마다 아이에게 설명하는 방법을 담은 부모 가이드를 함께 뽑을 수 있어요.</p></article>
-      <article class="card" data-anchor><h3>시험 전에는 모의고사</h3><p>객관식 20·30·40문항 모의고사를 골라 풀 수 있어요. 수학·한자는 제외돼요.</p></article>
-    </div>
     <div class="section-heading" data-anchor><h2>한 앱에 영아부터 중3까지</h2><p>학년별로 배우는 과목이에요</p></div>
     <div class="table-card">
       <table aria-label="학년별 학습 과목"><thead><tr><th scope="col">학년</th><th scope="col">과목</th></tr></thead><tbody>
@@ -209,6 +230,67 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
       </tbody></table>
     </div>
     <p class="meta" data-anchor>부모님은 “오늘은 수학 나눗셈”처럼 그날 배울 단원과 내용을 이름으로 확인할 수 있어요.</p>
+    <div class="about-foot how-foot" data-anchor><p>메뉴마다 어떤 화면인지 궁금하다면,</p><a class="text-link" href="#tour">앱 둘러보기 →</a></div>
+  </section>
+
+  <section class="panel" id="tour" aria-labelledby="tour-title" hidden>
+    <div class="panel-head" data-anchor><p class="eyebrow">앱 둘러보기</p><h1 id="tour-title" tabindex="-1">메뉴마다 하는 일을,<br>화면으로 보여 드려요</h1><p>앱 아래 메뉴는 현황판·학습·모의시험·부록이에요. 아이 나이에 따라 조금씩 달라요. 화면은 실제 앱이고, 아이 이름과 기록 숫자는 예시예요.</p></div>
+    <div class="tour">
+      <article class="tour-item" aria-labelledby="tour-dash">
+        <div class="tour-copy" data-anchor>
+          <p class="tour-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/></svg>현황판</p>
+          <h2 id="tour-dash">아이 공부를 한눈에 봐요</h2>
+          <p class="tour-desc">이번 주 공부한 날, 연속 공부, 공부 시간을 숫자와 그래프로 보여 줘요.</p>
+          <dl class="tour-points"><div><dt>교육 성과</dt><dd>스마트 학습을 끝까지 한 비율, 학교 진도보다 늦은 과목, 많이 틀린 단원을 알려 줘요.</dd></div><div><dt>학습 관리</dt><dd>요일별 시간표와 과목 진도를 여기서 정해요. 과목마다 언제 끝나는지도 알려 줘요.</dd></div><div><dt>리포트</dt><dd>지난 한 주와 지난달 공부를 정리해 보여 줘요.</dd></div></dl>
+        </div>
+        <figure class="tour-shot" data-anchor><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour/dash-dark.webp"><img src="img/tour/dash-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="현황판 화면 예시. 이번 주 공부한 날, 연속 공부 날수, 이번 주 공부 시간이 보여요."></picture></figure>
+      </article>
+      <article class="tour-item" aria-labelledby="tour-study">
+        <div class="tour-copy" data-anchor>
+          <p class="tour-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 11h16"/></svg>학습</p>
+          <h2 id="tour-study">오늘 할 공부가 차례대로 나와요</h2>
+          <p class="tour-desc">시간표에 맞춰 오늘 할 과목과 단원이 나와요. 과목마다 스마트와 프린트 가운데 골라 풀어요.</p>
+          <dl class="tour-points"><div><dt>스마트</dt><dd>화면에서 바로 풀고 바로 채점해요.</dd></div><div><dt>프린트</dt><dd>학습지를 PDF로 뽑아 종이에 풀어요. 오늘 과목을 한 파일로 모아 뽑을 수 있어요.</dd></div><div><dt>부모 가이드</dt><dd>국어·영어·사회·과학 같은 교과 과목은 오늘 배울 내용, 아이에게 물어볼 질문, 정답과 해설을 담은 가이드를 학습지와 함께 뽑을 수 있어요.</dd></div><div><dt>복습</dt><dd>대부분의 과목에서 배운 내용이 다음 날과 일주일 뒤에 복습 문제로 다시 나와요.</dd></div><div><dt>진도</dt><dd>‘학교&nbsp;진도대로’는 학교 진도가 있는 과목을 학교 진도에 맞추고, ‘자유&nbsp;진도설정’은 부모님이 과목마다 진도를 정해요. 지금 쓰는 쪽은 회색이에요.</dd></div></dl>
+        </div>
+        <figure class="tour-shot" data-anchor><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour/study-dark.webp"><img src="img/tour/study-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="학습 화면 예시. 위에 학교 진도대로와 자유 진도설정 단추가 있고, 오늘 할 과목이 차례대로 있어요. 끝낸 과목에는 다 했어요가, 남은 과목에는 스마트와 프린트 단추가 보여요."></picture></figure>
+      </article>
+      <article class="tour-item" aria-labelledby="tour-exam">
+        <div class="tour-copy" data-anchor>
+          <p class="tour-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8l4 4v14H4V3h4"/><path d="M8 3v3h8V3M8 12l2 2 4-4M8 18h8"/></svg>모의시험</p>
+          <h2 id="tour-exam">시험 전에는 모의시험을 뽑아요</h2>
+          <p class="tour-desc">학기와 중간·기말고사를 고르면, 시험 범위 단원에서 객관식 문제를 골라 PDF 한 파일로 만들어요.</p>
+          <dl class="tour-points"><div><dt>문제 수</dt><dd>과목당 20·30·40문제 가운데 골라요.</dd></div><div><dt>정답과 해설</dt><dd>맨 뒤에 모아 두어 채점하기 쉬워요.</dd></div><div><dt>과목</dt><dd>초1~2는 국어, 초3부터는 고른 과목 가운데 한자를 뺀 과목이 들어가요.</dd></div></dl>
+        </div>
+        <figure class="tour-shot" data-anchor><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour/exam-dark.webp"><img src="img/tour/exam-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="모의시험 화면 예시. 학기, 중간고사와 기말고사, 과목당 문제 수를 고르고 과목별 시험 범위가 보여요."></picture></figure>
+      </article>
+      <article class="tour-item" aria-labelledby="tour-extra">
+        <div class="tour-copy" data-anchor>
+          <p class="tour-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3M9 7h6M9 10.5h4"/></svg>부록</p>
+          <h2 id="tour-extra">진도와 상관없이 언제든 골라 써요</h2>
+          <p class="tour-desc">날마다 하는 진도와 따로, 필요할 때 골라 쓰는 학습 자료예요. 영어를 고르면 영단어와 영어 듣기가 나와요.</p>
+          <dl class="tour-points"><div><dt>영단어</dt><dd>단계별 단어 학습지와 플래시카드로 익히고, 외웠는지 확인해요.</dd></div><div><dt>영어 듣기</dt><dd>오늘 배운 영단어를 다시 들어요.</dd></div><div><dt>파닉스</dt><dd>초3~6은 영어 소리와 글자를 여기서 익혀요. 시간표에 넣으면 오늘의 학습에 나와요.</dd></div></dl>
+        </div>
+        <figure class="tour-shot" data-anchor><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour/extra-dark.webp"><img src="img/tour/extra-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="부록 화면 예시. 영단어, 영어 듣기, 파닉스가 있어요."></picture></figure>
+      </article>
+      <article class="tour-item" aria-labelledby="tour-kid">
+        <div class="tour-copy" data-anchor>
+          <p class="tour-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>아이 폰</p>
+          <h2 id="tour-kid">아이 폰에는 공부만 나와요</h2>
+          <p class="tour-desc">부모 폰 설정에서 받은 연결 번호를 아이 폰에 넣으면, 로그인 없이 그 아이 전용 공부 폰이 돼요.</p>
+          <dl class="tour-points"><div><dt>오늘의 학습</dt><dd>부모님이 정한 공부를 아이 폰에서 스마트로 풀어요. 프린트와 설정, 현황판은 부모 폰에서 해요.</dd></div><div><dt>숙제</dt><dd>현황판의 ‘숙제’에서 오늘 학습, 과목별 모의시험, 영단어 ‘외웠는지 확인’을 보내요. 점수는 부모 화면에만 보여요.</dd></div><div><dt>연속 공부</dt><dd>그날 할 일을 다 하면 달력에 ‘다 했어요’ 도장이 찍혀요.</dd></div></dl>
+        </div>
+        <figure class="tour-shot" data-anchor><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour/kid-dark.webp"><img src="img/tour/kid-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="아이 폰 화면 예시. 숙제 목록 아래쪽과, 다 했어요 도장이 찍힌 연속 공부 달력이 보여요."></picture></figure>
+      </article>
+      <article class="tour-item" aria-labelledby="tour-play">
+        <div class="tour-copy" data-anchor>
+          <p class="tour-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><circle cx="10.5" cy="12" r="1.6"/><path d="M9 17c1.8-1.6 4.2-1.6 6 0"/></svg>놀이 모음 · 화면 놀이</p>
+          <h2 id="tour-play">영아기 2~4세는 놀이로 시작해요</h2>
+          <p class="tour-desc">영아기 아이에게는 아래 메뉴가 현황판, 놀이 모음, 화면 놀이로 바뀌어요.</p>
+          <dl class="tour-points"><div><dt>놀이 모음</dt><dd>선 긋기, 색칠놀이, 미로 같은 놀이를 골라 담아 한 번에 뽑아요.</dd></div><div><dt>화면 놀이</dt><dd>같은 놀이를 화면에서 손가락으로 해요.</dd></div><div><dt>현황판</dt><dd>논 날, 연속 놀이, 놀이 시간을 보여 줘요.</dd></div></dl>
+        </div>
+        <figure class="tour-shot" data-anchor><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour/play-dark.webp"><img src="img/tour/play-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="놀이 모음 화면 예시. 선 긋기, 같은 그림 찾기, 색칠놀이 같은 놀이 카드가 있어요."></picture></figure>
+      </article>
+    </div>
   </section>
 
   <section class="panel" id="price" aria-labelledby="price-title" hidden>
@@ -296,23 +378,32 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
   function snapshot(){
     if(scrollY<2)return {top:true};
     var line=referenceTop(), blocks=Array.from(document.querySelectorAll('.panel:not([hidden]) [data-anchor],footer [data-anchor]'));
+    // 맨 위 칸이 끝자락만 조금 보이면, 그 아래 제대로 보이는 칸을 기준으로 삼음 (화면을 돌린 뒤 보던 곳이 덜 밀리게)
+    var min=Math.min(80,innerHeight*0.2), el=null, r=null;
+    function enough(b){return b.height>0&&b.top<innerHeight&&(b.bottom-line>=min||b.bottom>=innerHeight);}
     for(var i=0;i<blocks.length;i++){
-      var r=blocks[i].getBoundingClientRect();
-      if(r.height>0&&r.bottom>line){
-        var el=blocks[i], preferred=checkpoint&&checkpoint.el;
-        if(preferred&&preferred!==el){var pr=preferred.getBoundingClientRect();if(pr.height>0&&pr.bottom>line&&Math.abs(pr.top-r.top)<2){el=preferred;r=pr;}}
-        return {el:el,offset:r.top>=line?r.top-line:null,ratio:Math.max(0,(line-r.top)/r.height)};
-      }
+      var b=blocks[i].getBoundingClientRect();
+      if(!(b.height>0&&b.bottom>line))continue;
+      if(el&&b.top>=innerHeight)break;
+      if(!el){el=blocks[i];r=b;}
+      if(enough(b)){el=blocks[i];r=b;break;}
     }
-    return {y:scrollY};
+    if(!el)return {y:scrollY};
+    // 나란히 놓인 칸(글과 화면 사진 등)이면 앞서 기준으로 삼던 칸을 그대로 씀 (돌렸다 되돌려도 같은 자리)
+    var preferred=checkpoint&&checkpoint.el;
+    if(preferred&&preferred!==el){var pr=preferred.getBoundingClientRect();if(pr.height>0&&pr.bottom>line&&(Math.abs(pr.top-r.top)<2||(enough(pr)&&pr.top<r.bottom&&pr.bottom>r.top))){el=preferred;r=pr;}}
+    return {el:el,offset:r.top>=line?r.top-line:null,ratio:Math.max(0,(line-r.top)/r.height)};
   }
+  // 돌아간 자리가 원하던 자리인지 알려 줌 (페이지 끝이라 더 못 내려가면 false)
   function restore(s){
-    if(!s||s.top){scrollTo(0,0);return;}
+    if(!s||s.top){scrollTo(0,0);return true;}
     if(s.el&&s.el.isConnected){
       var r=s.el.getBoundingClientRect(), line=referenceTop();
-      var want=s.offset!==null?line+s.offset:line-s.ratio*r.height;
-      scrollTo(0,Math.max(0,scrollY+r.top-want));
-    }else scrollTo(0,s.y||0);
+      var want=s.offset!==null?line+s.offset:line-s.ratio*r.height, y=scrollY+r.top-want;
+      scrollTo(0,Math.max(0,y));
+      return Math.abs(scrollY-y)<1;
+    }
+    scrollTo(0,s.y||0);return true;
   }
   function setMenu(open,focusButton){
     open=open&&!wide.matches;
@@ -359,7 +450,8 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
   addEventListener('resize',function(){
     var saved=checkpoint;resizing=true;cancelAnimationFrame(resizeFrame);
     if(wide.matches)setMenu(false,false);
-    resizeFrame=requestAnimationFrame(function(){restore(saved);requestAnimationFrame(function(){layoutWidth=innerWidth;layoutHeight=innerHeight;resizing=false;checkpoint=saved;checkpoint=snapshot();});});
+    // 페이지 끝이라 보던 칸을 제자리에 못 두었으면, 손대기 전까지는 처음 기준을 그대로 둠 (돌렸다 되돌려도 같은 자리)
+    resizeFrame=requestAnimationFrame(function(){var reached=restore(saved);requestAnimationFrame(function(){layoutWidth=innerWidth;layoutHeight=innerHeight;resizing=false;checkpoint=saved;if(reached)checkpoint=snapshot();});});
   });
   document.querySelectorAll('footer .brand,footer .links,.biz div,footer>span:last-child,.faq details').forEach(function(el){el.setAttribute('data-anchor','');});
   if('scrollRestoration' in history)history.scrollRestoration='manual';
