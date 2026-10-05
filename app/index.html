@@ -6,6 +6,7 @@
 <meta name="theme-color" content="#2c5945">
 <meta name="description" content="사랑교육 - 부모가 매일 가르치는 사랑 학습지. 학교 교과 학습과 영어·한자 학습지를 PDF로 출력해 아이와 함께 공부하세요.">
 <title>사랑교육 · 부모가 매일 가르치는 사랑 학습지</title>
+<script>window.SARANG_STAGE={"t": "영아", "k": "유아"}</script>
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2219%22%20fill%3D%22%232c5945%22/%3E%3Cpath%20d%3D%22M13%2028c7-1%2014%201%2019%205v20c-5-4-12-6-19-5V28Z%22%20fill%3D%22%23f3f0df%22/%3E%3Cpath%20d%3D%22M51%2028c-7-1-14%201-19%205v20c5-4%2012-6%2019-5V28Z%22%20fill%3D%22%23d7e0c8%22/%3E%3Cpath%20d%3D%22M32%2027c-4-3-10-7-10-12%200-5%207-7%2010-2%203-5%2010-3%2010%202%200%205-6%209-10%2012Z%22%20fill%3D%22%23d2a185%22/%3E%3Cpath%20d%3D%22M19%2034c3%200%206%201%208%202.5M19%2040c3%200%206%201%208%202.5M37%2036.5c2-1.5%205-2.5%208-2.5M37%2042.5c2-1.5%205-2.5%208-2.5%22%20stroke%3D%22%232c5945%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.45%22/%3E%3C/svg%3E">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("sarang_theme")==="dark"?"dark":"light";}catch(e){}</script>
 <style id="sarang-fonts">/* Embedded font subsets: Noto Sans KR / Noto Serif KR.
@@ -1783,6 +1784,11 @@ textarea.scr-in{resize:vertical}
 .scr-ask-btns button{flex:1 1 120px;min-height:44px;padding:6px 16px;border-radius:10px;font-size:15px;font-weight:700;cursor:pointer}
 .scr-ask-btns .linkbtn{border:1px solid var(--line);background:var(--card);color:var(--ink)}
 .scr-ask-btns .pri{border:0;background:var(--pri);color:var(--pri-ink)}
+/* '가상 자료' 상자 (src/vdata.js, 2026-10-05): 문제 글 속 자료를 떼어 회색 상자에 이름표와 함께 */
+.vd-t{margin:0}
+.vd-box{margin:8px 0;padding:10px 12px;border-radius:12px;background:var(--muted,#f1f0ec);background:color-mix(in srgb,var(--ink) 7%,var(--card));color:var(--ink);max-width:100%;box-sizing:border-box}
+.vd-box p{margin:0;overflow-wrap:anywhere;line-height:1.6}
+.vd-lbl{display:block;font-size:12px;font-weight:800;color:var(--sub);margin-bottom:4px;letter-spacing:.02em}
 /* ===== 공용 펜 (src/screen/pen.js) ===== */
 .sp-pen{--pen-bg:var(--card,#fff);--pen-ink:var(--ink,#1d2330);--pen-grid:var(--sub,#8a8f99);--pen-model:var(--sub,#8a8f99);max-width:100%}
 .sp-pen.sp-paper{--pen-bg:#fff;--pen-ink:#2b2b2b;--pen-grid:#9a9a9a;--pen-model:#9a9a9a}
@@ -3035,7 +3041,7 @@ function pageSvg(pg, label, withText, px){
 function frame(pg, sh){
   const c = CAT[sh.cat], [ln, age] = LEVEL[sh.lv], cw = 6 + c.name.length * 4.3, lt = c.lvText || `${ln} · ${age}부터`, lw = est(lt, 3.4) + 8;
   pg.s('<rect width="210" height="297" fill="#fff"/>');
-  pg.t(14, 14, '사랑교육 · 영아 놀이 모음', 3.3, { fill: SUB, w: 700 }).t(196, 14, '이름 __________', 3.3, { fill: SUB, w: 700, anchor: 'end' });
+  pg.t(14, 14, '사랑교육 · ' + ((window.SARANG_STAGE || {}).t || '영아') + ' 놀이 모음', 3.3, { fill: SUB, w: 700 }).t(196, 14, '이름 __________', 3.3, { fill: SUB, w: 700, anchor: 'end' });
   pg.s('<path d="M14 18H196" stroke="#d9dde3" stroke-width="0.35"/>');
   pg.s(`<rect x="14" y="24" width="${f2(cw)}" height="8" rx="4" fill="${c.tint}"/>`).t(14 + cw / 2, 29.6, c.name, 3.9, { fill: c.color, w: 800, anchor: 'middle' });
   pg.s(`<rect x="${f2(17 + cw)}" y="24" width="${f2(lw)}" height="8" rx="4" fill="#f1f3f5"/>`).t(21 + cw, 29.6, lt, 3.4, { fill: SUB, w: 700 });
@@ -3869,7 +3875,7 @@ W.PLAY_UI = {
 const W = window, P = W.PLAY;
 if (!P || typeof P.extend !== 'function' || !P.kit) return;
 const K = P.kit, f2 = K.f2, esc = K.esc;
-const C = { cat: 'jamo', name: '한글 자음·모음', color: '#1E88A8', tint: '#E7F5FA', lvText: '영아 4세', grades: ['k4'],
+const C = { cat: 'jamo', name: '한글 자음·모음', color: '#1E88A8', tint: '#E7F5FA', lvText: ((window.SARANG_STAGE || {}).t || '영아') + ' 4세', grades: ['k4'],
   tileText: '자음 14 · 모음 10 · 합치기 6',
   sub: ['ㄱ부터 차례대로 해요. 장을 눌러 담고, 담은 장을 한 번에 뽑아요.', 'ㄱ부터 차례대로 해요. 장을 누르면 손가락으로 따라 써요.'] };
 
@@ -5604,6 +5610,300 @@ html,body{overscroll-behavior-y:contain}
 .bgm-cred p{margin:0;line-height:1.5;font-size:12px;overflow-wrap:anywhere}
 .bgm-part[hidden]{display:none!important}
 </style>
+<style id="sarang-d">/* ===== D안 "하루 한 장, 작은 공부 수첩" (2026-10-05 대표 확정, design 묶음 사랑교육_D안_확정묶음_1005.zip) =====
+   기준: D안_색상값.csv · D안_모양값.csv · 시안D.html · PNG 18장. 맨 마지막에 넣어 앞 파일들의 색·모양을 덮음 (build.py).
+   - 색: 나이 단계마다 수첩 색 (0~4세 분홍·복숭아 / 5~7세 라벤더·민트 / 초등 크림 종이·초록). 중학은 같은 원칙으로 남색 (묶음에 없음, 앱 판단).
+     가입 전(단계 없음)은 초등 색. 밝게·어둡게 둘 다.
+   - 모양: 그림자 없음, 종이 바탕 위 선·여백으로 묶음. 알림 모서리 4 24 24 24, 아이 학습 묶음 6 26 26 26, 주요 단추 18, 스마트·프린트 12, 아이 바로 풀기 14.
+   - 앱 색 변수(--bg·--card·--pri …)만 바꾸면 대부분 화면이 따라옴. 현황판·학습·아이 폰은 시안 배치에 맞춰 따로 꾸밈 (src/d-theme.js 가 머리말·해 그림을 넣음). */
+
+/* ---------- 1. 수첩 색 (D안_색상값.csv) ---------- */
+:root,:root[data-age="ele"]{--d-cs:light;--d-bg:#fff9ed;--d-card:#fffdf6;--d-ink:#263442;--d-sub:#5b676b;--d-muted:#f5f0e4;--d-line:#dedccf;--d-green:#236b59;--d-green-ink:#fffdf6;--d-wash:#e8f0e3;--d-sky:#e7edf1;--d-amber:#f1cd89;--d-red:#b4312f;--d-dot:#ca6044}
+:root[data-age="tod"]{--d-cs:light;--d-bg:#fff7f0;--d-card:#fffcf8;--d-ink:#3d3440;--d-sub:#6c5b63;--d-muted:#f6ece6;--d-line:#e0d4ce;--d-green:#944453;--d-green-ink:#fffcf8;--d-wash:#f5e3e1;--d-sky:#f5e6e5;--d-amber:#efcbb4;--d-red:#b4312f;--d-dot:#a84c55}
+:root[data-age="kid"]{--d-cs:light;--d-bg:#faf8f1;--d-card:#fffdf9;--d-ink:#343349;--d-sub:#625e70;--d-muted:#f1eeec;--d-line:#ddd8e2;--d-green:#5d507e;--d-green-ink:#fffdf9;--d-wash:#e9e3f3;--d-sky:#e5eee7;--d-amber:#e8dbef;--d-red:#b4312f;--d-dot:#756293}
+:root[data-age="mid"]{--d-cs:light;--d-bg:#f8f7f2;--d-card:#fefdf9;--d-ink:#1f2a37;--d-sub:#56606b;--d-muted:#efeee8;--d-line:#dbdad2;--d-green:#2b4f6e;--d-green-ink:#fefdf9;--d-wash:#e3eaf1;--d-sky:#e6edf0;--d-amber:#e8d5a8;--d-red:#b4312f;--d-dot:#b4613e}
+@media (prefers-color-scheme:dark){
+ :root:not([data-theme="light"]),:root[data-age="ele"]:not([data-theme="light"]){--d-cs:dark;--d-bg:#171e26;--d-card:#232d38;--d-ink:#f6efdd;--d-sub:#b9c3c8;--d-muted:#232a33;--d-line:#3e4750;--d-green:#aed2af;--d-green-ink:#17251c;--d-wash:#2c3a32;--d-sky:#273540;--d-amber:#4c4030;--d-red:#ff8a7d;--d-dot:#eead78}
+ :root[data-age="tod"]:not([data-theme="light"]){--d-cs:dark;--d-bg:#251d24;--d-card:#352a32;--d-ink:#fff0e7;--d-sub:#d0bcc5;--d-muted:#332930;--d-line:#54444d;--d-green:#e9b5c2;--d-green-ink:#38202a;--d-wash:#42313a;--d-sky:#3b2e37;--d-amber:#503b32;--d-red:#ff8a7d;--d-dot:#f2b4a2}
+ :root[data-age="kid"]:not([data-theme="light"]){--d-cs:dark;--d-bg:#211f2a;--d-card:#2e2a39;--d-ink:#f7efff;--d-sub:#c9c0d6;--d-muted:#2e2b38;--d-line:#4c465a;--d-green:#c9bce5;--d-green-ink:#29223a;--d-wash:#393245;--d-sky:#2d3c37;--d-amber:#42364a;--d-red:#ff8a7d;--d-dot:#d0bcf0}
+ :root[data-age="mid"]:not([data-theme="light"]){--d-cs:dark;--d-bg:#161c24;--d-card:#222b36;--d-ink:#eef1f4;--d-sub:#b6c0ca;--d-muted:#212932;--d-line:#3b4653;--d-green:#a9c7e2;--d-green-ink:#13202d;--d-wash:#283646;--d-sky:#243240;--d-amber:#463d2e;--d-red:#ff8a7d;--d-dot:#e6a77c}
+}
+:root[data-theme="dark"],:root[data-age="ele"][data-theme="dark"]{--d-cs:dark;--d-bg:#171e26;--d-card:#232d38;--d-ink:#f6efdd;--d-sub:#b9c3c8;--d-muted:#232a33;--d-line:#3e4750;--d-green:#aed2af;--d-green-ink:#17251c;--d-wash:#2c3a32;--d-sky:#273540;--d-amber:#4c4030;--d-red:#ff8a7d;--d-dot:#eead78}
+:root[data-age="tod"][data-theme="dark"]{--d-cs:dark;--d-bg:#251d24;--d-card:#352a32;--d-ink:#fff0e7;--d-sub:#d0bcc5;--d-muted:#332930;--d-line:#54444d;--d-green:#e9b5c2;--d-green-ink:#38202a;--d-wash:#42313a;--d-sky:#3b2e37;--d-amber:#503b32;--d-red:#ff8a7d;--d-dot:#f2b4a2}
+:root[data-age="kid"][data-theme="dark"]{--d-cs:dark;--d-bg:#211f2a;--d-card:#2e2a39;--d-ink:#f7efff;--d-sub:#c9c0d6;--d-muted:#2e2b38;--d-line:#4c465a;--d-green:#c9bce5;--d-green-ink:#29223a;--d-wash:#393245;--d-sky:#2d3c37;--d-amber:#42364a;--d-red:#ff8a7d;--d-dot:#d0bcf0}
+:root[data-age="mid"][data-theme="dark"]{--d-cs:dark;--d-bg:#161c24;--d-card:#222b36;--d-ink:#eef1f4;--d-sub:#b6c0ca;--d-muted:#212932;--d-line:#3b4653;--d-green:#a9c7e2;--d-green-ink:#13202d;--d-wash:#283646;--d-sky:#243240;--d-amber:#463d2e;--d-red:#ff8a7d;--d-dot:#e6a77c}
+/* 앱 색 변수에 이어 붙임. ':root' 를 네 번 겹친 것은 앞 파일의 단계·밝기 규칙(:root[data-age][data-theme] 등)보다 늘 이기게 하려는 것 */
+:root:root:root:root{color-scheme:var(--d-cs);
+ --bg:var(--d-bg);--card:var(--d-card);--ink:var(--d-ink);--sub:var(--d-sub);--line:var(--d-line);
+ --pri:var(--d-green);--pri-ink:var(--d-green-ink);--soft:var(--d-wash);--muted:var(--d-muted);
+ --hero-bg:var(--d-sky);--hero-line:var(--d-line);--accent:var(--d-dot);--mark:var(--d-green);--shadow:none;
+ --hl:var(--d-amber);--hl-line:transparent}
+
+/* ---------- 2. 바탕·글꼴·공통 모양 ---------- */
+body{letter-spacing:-.02em}
+.tod-layer{background:none!important}   /* 0~7세 무늬 바탕은 빼고 종이 바탕. 엿보는 캐릭터(대표 2026-09-29)는 그대로 */
+#app .card{border:1px solid var(--line);border-radius:20px;box-shadow:none}
+#app .card:hover{box-shadow:none}
+#app button.pri,#app .pri{box-shadow:none}
+.sarang-footer{color:var(--sub)}
+
+/* ---------- 3. 머리줄: 선 책 아이콘 + 사랑교육, 문제 기부, 어둡게, 설정 ---------- */
+#app>.hub-top{min-height:56px;margin:0 0 6px;padding:2px 0 6px;border-bottom:0;gap:3px}
+#app>.hub-top .sarang-brand{gap:7px}
+#app>.hub-top .sarang-mark{width:30px;height:30px;flex:none;display:grid;place-items:center;color:var(--pri);background:none;border-radius:0;box-shadow:none}
+#app>.hub-top .sarang-mark svg{width:27px;height:27px}
+#app>.hub-top .sarang-brand h1{font-family:inherit;font-size:17px;font-weight:800;letter-spacing:-.05em;color:var(--ink)}
+#app>.hub-top .dn-top{border:0;border-radius:12px;padding:8px;background:none;color:var(--ink)}
+#app>.hub-top .dn-top small{display:none}
+#app>.hub-top .dn-top b{font-size:12.5px;font-weight:700}
+#app>.hub-top .dn-top:hover{background:var(--soft)}
+#app>.hub-top .sarang-theme,#app>.hub-top .hub-gear{width:44px;height:44px;border:0;border-radius:12px;background:none;color:var(--ink)}
+#app>.hub-top .sarang-theme svg,#app>.hub-top .hub-gear svg{width:22px;height:22px}
+
+/* ---------- 4. 자녀 줄: ● 이름 학년 ……… + 자녀 추가 (밑줄 하나) ---------- */
+#app .kid-bar{margin:0 0 16px;padding:0 0 7px;border-bottom:1px solid var(--line)}
+#app .kid-cards{display:flex;flex-wrap:wrap;align-items:center;gap:2px 14px}
+#app .kid-card{flex:0 1 auto;flex-direction:row;align-items:center;gap:6px;min-height:44px;padding:5px 4px 5px 0;border:0;border-radius:10px;background:none;box-shadow:none;color:var(--sub)}
+#app .kid-card b{font-size:14px;font-weight:600;color:inherit}
+#app .kid-card small{font-size:12px;font-weight:400;color:var(--sub)}
+#app .kid-card.on{background:none;box-shadow:none;color:var(--ink)}
+#app .kid-card.on b{color:var(--ink);font-weight:800}
+#app .kid-card.on::before{content:"";width:8px;height:8px;flex:none;border-radius:50%;background:var(--pri)}
+#app .kid-card.kid-plus{margin-left:auto;padding:5px 0 5px 4px;border:0;color:var(--sub);flex-direction:row;gap:4px}
+#app .kid-card.kid-plus b{font-size:13px;font-weight:500;line-height:1;color:var(--sub)}
+#app .kid-card.kid-plus small{font-size:12px;font-weight:500;color:var(--sub)}
+#app .kid-card:not(.on):not(.kid-plus):hover{color:var(--ink)}
+
+/* ---------- 5. 오늘 공부 알림: 접힌 모서리 메모 (4 24 24 24, 그림자 없음) ---------- */
+#app .notify-bar{border:0;border-radius:4px 24px 24px 24px;background:var(--d-amber);padding:16px 50px 16px 17px;gap:0;row-gap:0}
+#app .notify-bar::before{content:"";position:absolute;top:0;left:0;width:16px;height:16px;border-right:1px solid color-mix(in srgb,var(--ink) 16%,transparent);border-bottom:1px solid color-mix(in srgb,var(--ink) 16%,transparent);border-bottom-right-radius:5px;pointer-events:none}
+#app .notify-bar>svg{display:none}
+#app .notify-bar p{flex-basis:100%;padding-left:2px}
+#app .notify-bar b{font-size:15px;font-weight:700;line-height:1.55}
+#app .notify-bar p span{display:block;margin-top:5px;font-size:12px;color:var(--ink)}
+#app .notify-bar .nb-btns{margin-top:12px}
+#app .notify-bar .nb-btns .pri{min-height:48px;border-radius:18px;font-size:14px;padding:11px 14px}
+#app .notify-bar .nb-x{top:8px;right:6px;color:var(--ink)}
+
+/* ---------- 6. 학습 칸: 큰 제목 + 번호 붙은 과목 줄 + 스마트·프린트 (시안 02) ---------- */
+#app #sarangHero{display:none!important}   /* 학습 칸 머리는 '오늘의 학습' 큰 제목이 대신함 */
+#app #today.card{background:none;border:0;border-radius:0;padding:0;box-shadow:none}
+#app #today .today-head{align-items:flex-end;padding:0 0 12px;border-bottom:1px solid var(--line)}
+#app #today .td-titles{display:flex;flex-direction:column;gap:4px}
+#app #today .td-titles .today-date{order:-1}
+#app #today .td-titles .d-lead{order:1}
+#app #today .today-head .label{gap:0;font-size:28px;line-height:1.35;font-weight:800;letter-spacing:-.055em;color:var(--ink)}
+#app #today .today-head .label svg{display:none}
+#app #today .today-date{margin:0;padding:0;font-family:inherit;font-size:11.5px;line-height:1.5;letter-spacing:0;color:var(--sub);font-weight:400}
+#app #today .d-lead{margin:2px 0 0;font-size:12.5px;color:var(--sub)}
+#app #today .td-pills .linkbtn{border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:12px}
+#app #today .today-list{counter-reset:dtd}
+#app #today .today-list li[data-s]{counter-increment:dtd;grid-template-columns:26px auto minmax(0,1fr);grid-template-rows:auto auto auto;column-gap:10px;row-gap:6px;padding:13px 0 12px;border-bottom:0;border-top:1px solid var(--line)}
+#app #today .today-list li[data-s]:first-child{border-top:0}
+#app #today .today-list li[data-s]::before{content:counter(dtd,decimal-leading-zero);grid-column:1;grid-row:1/span 3;align-self:start;font-size:17px;font-weight:700;line-height:1.4;letter-spacing:-.07em;color:var(--pri);font-variant-numeric:tabular-nums}
+#app #today .today-list li[data-s]>span{grid-column:2/-1;grid-row:1;align-self:start}
+#app #today .today-list li[data-s]>b{grid-column:2;grid-row:2;align-self:center;justify-self:start;margin:0;padding:0;border:0;background:none;color:var(--sub);font-size:12px;font-weight:600}
+#app #today .today-list li[data-s]>.td-day{grid-column:3;grid-row:2;align-self:center;justify-self:start;margin:0;border:0;background:none;padding:2px 0;color:var(--ink);font-size:12px;font-weight:700}
+#app #today .today-list li[data-s]>.td-act{grid-column:2/-1;grid-row:3;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:2px 0 0}
+#app #today .today-list li[data-s]>:not(span):not(b):not(.td-day):not(.td-act){grid-column:2/-1}
+#app #today .td-name{font-size:14.5px;font-weight:700;line-height:1.45;color:var(--ink)}
+#app #today .td-ctx{font-size:11.5px;color:var(--sub)}
+#app #today .td-go{min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font-size:12.5px;font-weight:700}
+#app #today .td-go svg{color:var(--ink)}
+#app #today .td-go:hover:not(:disabled){border-color:var(--pri);background:var(--soft)}
+html.kid-dev #app #today .today-list li[data-s]>.td-act{grid-template-columns:minmax(0,1fr)}
+/* 전체 뽑아서 풀기: 옅은 색 큰 단추 (모서리 18) + 아래 작은 글. 옆 '부모 가이드 함께' 칸은 같은 높이 */
+#app #today .td-ways{margin-top:14px}
+#app #today .td-ways .td-way{min-height:56px;flex-direction:row;flex-wrap:wrap;column-gap:7px;row-gap:0;border:1px solid var(--line);border-radius:18px;background:var(--soft);color:var(--ink)}
+#app #today .td-ways .td-way small{flex-basis:100%;text-align:center;font-size:11px;color:var(--sub);opacity:1}
+#app #today .td-ways .td-way .td-way-icon,#app #today .td-ways .td-way svg{color:var(--ink)}
+#app #today .td-ways #hubGuideRow{min-height:56px;border:1px solid var(--line);border-radius:18px;background:var(--card)}
+#app #today .td-more>summary,#app #today .print-guide>summary{border-radius:12px}
+
+/* ---------- 7. 현황판 (시안 01): 날짜 + "○○의 하루, 차근차근." + 해, 그림자 없는 숫자 ---------- */
+#app .db-intro{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:2px 0 0}
+#app .db-intro[hidden]{display:none}
+#app .db-intro time{display:block;margin-bottom:5px;font-size:11.5px;color:var(--sub)}
+#app .db-intro h2{margin:0;font-size:31px;line-height:1.35;font-weight:800;letter-spacing:-.065em;color:var(--ink);word-break:keep-all}
+#app .db-intro h2 em{position:relative;z-index:0;display:inline-block;font-style:normal}
+#app .db-intro h2 em::after{content:"";position:absolute;left:-2px;right:-2px;bottom:3px;height:10px;z-index:-1;border-radius:50%;background:var(--d-amber);transform:rotate(-3deg)}
+#app .d-sun{flex:none;width:62px;height:64px;margin-right:4px;color:var(--d-dot);transform:rotate(9deg)}
+#app .d-sun svg{width:62px;height:62px;fill:none;stroke:currentColor;stroke-width:1.2;stroke-linecap:round;stroke-linejoin:round}
+#app .db.has-intro .db-date{display:none}
+#app .db-title{font-size:16px;font-weight:800}
+#app .db-tile.card{background:none;border:0;border-radius:0;padding:4px 2px 2px}
+#app .db-tiles.n2>.db-tile+.db-tile{border-left:1px solid var(--line);padding-left:20px}
+#app .db-tiles{padding-bottom:16px;border-bottom:1px solid var(--line)}
+#app .db-tile .db-k{font-size:12px;color:var(--sub);font-weight:400}
+#app .db-tile .db-v{font-size:32px;line-height:1.3;font-weight:800;letter-spacing:-.06em;font-variant-numeric:tabular-nums}
+#app .db-tile .db-v small{font-size:12px;letter-spacing:0;font-weight:500;color:var(--sub);margin-left:4px}
+#app .db-tile .db-d{font-size:11px;color:var(--sub)}
+#app .db-box.card{background:var(--card)}
+#app .db-nav{box-shadow:none}
+
+/* ---------- 8. 아래 메뉴: 종이 바탕 줄, 지금 칸은 진한 글자 + 작은 밑줄 ---------- */
+#app .tabbar{left:0;right:0;bottom:0;width:auto;transform:none;border:0;border-top:1px solid var(--line);border-radius:0;box-shadow:none;background:var(--bg);
+  padding:7px max(12px,calc(50% - 280px),env(safe-area-inset-right)) max(12px,env(safe-area-inset-bottom)) max(12px,calc(50% - 280px),env(safe-area-inset-left));gap:4px}
+#app .tabbar button{position:relative;gap:3px;min-height:52px;border-radius:12px;background:none!important;color:var(--sub);font-size:11px;font-weight:500}
+#app .tabbar button svg{width:21px;height:21px;stroke-width:1.7}
+#app .tabbar button[aria-current="page"]{color:var(--ink);font-weight:800}
+#app .tabbar button[aria-current="page"] svg{stroke-width:1.7}
+#app .tabbar button[aria-current="page"]::after{content:"";position:absolute;bottom:0;left:50%;width:18px;height:3px;margin-left:-9px;border-radius:3px;background:var(--d-dot)}
+
+/* ---------- 9. 아이 폰 (시안 03): "○○아, 오늘도 해 볼까?" + 하늘색 학습 묶음 + 숙제 + 연속 공부 ---------- */
+html.kid-dev #app .kd-greet{display:flex;align-items:center;justify-content:space-between;gap:10px;margin:8px 0 18px}
+html.kid-dev #app .kd-greet p{margin:0 0 7px;font-size:12px;color:var(--sub)}
+html.kid-dev #app .kd-greet h2{margin:0;font-size:30px;line-height:1.3;font-weight:800;letter-spacing:-.06em;color:var(--ink);word-break:keep-all}
+html.kid-dev #app .kd-greet .d-sun{width:54px;height:56px}
+html.kid-dev #app .kd-greet .d-sun svg{width:54px;height:54px}
+html.kid-dev #app .kd-banner{display:none}
+html.kid-dev #app #today.card{background:var(--d-sky);border-radius:6px 26px 26px 26px;padding:18px}
+html.kid-dev #app #today .today-head{border-bottom:0;padding-bottom:6px;align-items:center}
+html.kid-dev #app #today .td-titles{flex-direction:row;align-items:baseline;gap:8px;width:100%}
+html.kid-dev #app #today .td-titles .d-cnt{order:2;margin-left:auto}
+html.kid-dev #app #today .today-head .label{font-size:16px;line-height:1.5;letter-spacing:-.03em}
+html.kid-dev #app #today .today-date,html.kid-dev #app #today .d-lead{display:none}
+html.kid-dev #app #today .d-cnt{font-size:12px;color:var(--sub);font-weight:500;white-space:nowrap}
+html.kid-dev #app #today .today-list li[data-s]{grid-template-columns:minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:8px;row-gap:2px;padding:7px 0;border-top:0}
+html.kid-dev #app #today .today-list li[data-s]::before{display:none}
+html.kid-dev #app #today .today-list li[data-s]>span{grid-column:1;grid-row:1}
+html.kid-dev #app #today .today-list li[data-s]>b{grid-column:1;grid-row:2;font-size:11px;font-weight:400}
+html.kid-dev #app #today .today-list li[data-s]>.td-day{display:none}
+html.kid-dev #app #today .today-list li[data-s]>.td-act{grid-column:2;grid-row:1/span 2;align-self:center;margin:0}
+html.kid-dev #app #today .today-list li[data-s]>:not(span):not(b):not(.td-day):not(.td-act){grid-column:1/-1}
+html.kid-dev #app #today .td-name{font-size:13.5px}
+html.kid-dev #app #today .td-ctx{display:none}
+html.kid-dev #app #today .td-go[data-scr]{min-width:84px;min-height:44px;border:0;border-radius:14px;background:var(--pri);color:var(--pri-ink);padding:10px 12px}
+html.kid-dev #app #today .td-go[data-scr] svg{display:none}
+html.kid-dev #app #today .td-go[data-scr]::after{content:"바로 풀기"}
+/* 숙제 */
+html.kid-dev #app .kd-khw{margin:18px 0 0;padding:0 2px 17px;border-bottom:1px solid var(--line)}
+html.kid-dev #app .kd-khw-c{padding:0;border:0;border-radius:0;background:none}
+html.kid-dev #app .kd-khw-c h3{display:flex;align-items:center;gap:6px;font-size:13.5px;font-weight:700}
+html.kid-dev #app .kd-khw-c .kd-b.pri{min-width:65px;min-height:44px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--ink);font-size:12.5px;font-weight:700}
+/* 연속 공부 달력: 칸 바탕 없이 숫자, 오늘은 테두리 네모, 다 한 날은 빨간 둥근 도장 */
+html.kid-dev #app .kd-cal.card{background:none;border:0;border-radius:0;padding:0 2px;margin-top:18px}
+#app .kd-cal{--stamp:var(--d-red)}
+#app .kd-cal-h h3{font-size:16px;font-weight:800}
+#app .kd-cal-n{color:var(--sub);font-size:12px;font-weight:500}
+#app .kd-cal-n b{color:var(--ink);font-size:22px;font-weight:800}
+#app .kd-cal-s{font-size:11.5px}
+#app .kd-cal-b{border:1px solid var(--line);background:var(--card);border-radius:12px}
+#app .kd-cal-g .kd-d{background:none;border:0;border-radius:10px;box-shadow:none}
+#app .kd-cal-g .kd-d.today{box-shadow:inset 0 0 0 1.5px var(--pri);background:var(--card)}
+#app .kd-cal-g .kd-d.today i{color:var(--ink);font-weight:700}
+#app .kd-cal-g .kd-cal-w span{font-size:11px;color:var(--sub);font-weight:500}
+#app .kd-cal-g .kd-cal-w span:first-child,#app .kd-cal-g .kd-cal-w span:last-child{color:var(--sub)}
+#app .kd-cal-g,#app .kd-cal-r{gap:4px}
+#app .kd-cal-g .kd-d.stamp i{display:none}
+#app .kd-cal-g .kd-d em{position:static;display:flex;flex-direction:column;align-items:center;justify-content:center;width:92%;padding:0;border:1.5px solid var(--stamp);border-radius:50%;background:none;color:var(--stamp);font-size:max(7px,min(11px,21cqw));font-weight:800;line-height:1.1;letter-spacing:-.04em;transform:rotate(-5deg)}
+#app .kd-cal-g .kd-d em span{display:block;white-space:nowrap}
+@media (max-width:300px){#app .kd-cal-g .kd-d em{width:88%;font-size:0}#app .kd-cal-g .kd-d em span{display:none}}
+/* 넓은 화면(768px 이상): 아래 메뉴는 가운데 칸(예전 자리)으로 — 0~7세 캐릭터가 화면 아래 양옆에서 보이게. 모양은 D안대로 그림자 없이 선 하나 */
+@media (min-width:768px){#app .tabbar{left:50%;right:auto;bottom:calc(12px + env(safe-area-inset-bottom,0px));width:min(560px,calc(100% - 32px));transform:translateX(-50%);padding:6px 10px;border:1px solid var(--line);border-radius:18px;background:var(--bg)}}
+</style>
+<script>/* ===== D안 "하루 한 장, 작은 공부 수첩" 화면 장식 (src/d-theme.css, 2026-10-05 대표 확정) =====
+   기능은 건드리지 않고 시안의 머리말만 넣음: 머리줄 선 책 아이콘, 학습 칸 '오늘의 학습' 아래 한 줄, 손그림 해(현황판·아이 폰이 D_THEME.sun() 으로 씀).
+   <head> 에서 읽혀 현황판(src/dash.js)·아이 폰(src/kidmode.js)보다 먼저 있음 */
+(function(){
+  const SUN = '<span class="d-sun" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M31 5v6M31 52v7M5 31h6M52 31h7M12 12l5 5M46 46l5 5M11 51l5-5M46 17l5-5"/><path d="M44 20c5 4 7 10 4 17-3 8-11 13-19 10-8-2-13-10-10-18 3-8 11-13 18-11 3 0 5 1 7 2Z"/><path d="M26 28v2M38 28v2M26 36c4 4 8 4 12 0"/></svg></span>';
+  const BOOK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6c3-1 6 0 9 2v12c-3-2-6-3-9-2V6Z"/><path d="M21 6c-3-1-6 0-9 2v12c3-2 6-3 9-2V6Z"/></svg>';
+  const age = () => document.documentElement.dataset.age || '';
+  const lead = () => age() === 'tod' ? '부모님과 함께, 하나씩 해 봐요.' : age() === 'kid' ? '하나씩, 즐겁게 해 봐요.' : '하나씩, 차근차근.';
+  function paint(){
+    const mk = document.querySelector('#app>.hub-top .sarang-mark');
+    if (mk && !mk.dataset.d) { mk.dataset.d = '1'; mk.innerHTML = BOOK; }
+    const tt = document.querySelector('#today .td-titles');
+    if (tt) {
+      let p = tt.querySelector('.d-lead');
+      if (!p) { p = document.createElement('p'); p.className = 'd-lead'; tt.append(p); }
+      const t = lead(); if (p.textContent !== t) p.textContent = t;
+    }
+  }
+  window.D_THEME = { sun: () => SUN, paint };
+  document.addEventListener('DOMContentLoaded', paint);
+  document.addEventListener('hub:refresh', () => setTimeout(paint, 0));
+  document.addEventListener('hub:kids', () => setTimeout(paint, 0));
+})();
+</script>
+<script>/* '가상 자료' 상자 (2026-10-05 대표 승인 "네 말대로 문제없이 해줘"): 문제 글 안에 적힌 '(가상 자료) …' 부분을 떼어 회색 자료 상자로 보여 줌.
+   문항 글은 그대로 두고 보여 주는 모양만 바꿈. 화면(src/ssh-screen.js)·PDF(src/ssh-module.js question) 가 함께 씀.
+   나누는 규칙
+   - 여러 줄: 꼬리표가 있는 줄부터(그 줄이 문장으로 끝나면 다음 줄부터) 마지막 줄 앞까지가 자료. 마지막 줄이 문장(. ? !)이 아니면 그 줄까지 자료
+   - 한 줄: 문장으로 나눠, 꼬리표가 든 문장부터 마지막 문장(물음) 앞까지가 자료. '(가상 자료: …)' 는 괄호 안이 자료
+   - '위 가상 자료에서' 처럼 다른 곳의 자료를 가리키거나 나눌 곳이 없으면 그대로 (null)
+   결과 { pre, label, box, post } — pre·post 는 상자 앞뒤 글('' 일 수 있음), box 는 자료 글(줄바꿈 \n), label 은 '가상 자료' (+ ', 어림값' 같은 덧말) */
+(function(){
+  const TAG = /\(\s*가상 자료\s*(?:[,·]\s*([^):]*?))?\s*(?::\s*([^)]*))?\)/;
+  const ASK = /([?？]|세요\.|시오\.|봐요\.)\s*$/;   // 물음·시키는 말로 끝남
+  const END = /[.?!。？！]["'’”」』)]*\s*$/;   // 문장으로 끝남
+  const tidy = s => s.replace(/[ \t]{2,}/g, ' ').replace(/\s+([.,?!])/g, '$1').trim().replace(/^(['‘“"「])\s+/, '$1');
+  function sentences(t){   // 따옴표 안은 나누지 않음 (낱말 속 ' 는 따옴표가 아님: Don't). 문장이 따옴표로 끝나면('…했다.' 다음) 거기서 나눔
+    const out = []; let cur = '', depth = 0;
+    const cut = n => { if (!depth && /\s/.test(n)) { out.push(cur.trim()); cur = ''; } };
+    for (let i = 0; i < t.length; i++) {
+      const c = t[i], p = t[i - 1] || ' ', n = t[i + 1] || ' '; cur += c;
+      if ('‘“「『'.includes(c)) depth++;
+      else if ('’”」』'.includes(c)) { if (depth) { depth--; if (/[.?!]/.test(p)) cut(n); } }
+      else if (c === "'" || c === '"') { if (depth && !/\s/.test(p)) { depth--; if (/[.?!]/.test(p)) cut(n); } else if (/[\s(]/.test(p) && !/\s/.test(n)) depth++; }
+      else if (/[.?!]/.test(c)) cut(n);
+    }
+    if (cur.trim()) out.push(cur.trim());
+    return out;
+  }
+  /* 자료 속 보기 줄 (가)·(나)… ㉠·㉡… ①·②… 가 둘 이상이면 줄을 나눠 보여 줌 (글자는 그대로) */
+  const MK = /\s((?:\([가-하]\)|[㉠-㉭㉮-㉻①-⑩])\s)/g;
+  const rows = t => {   // 첫 보기가 줄 맨 앞이거나 '.'·':'·'–' 뒤에 올 때만 (글 속 '㉮ 고을과 ㉯ 고을 사이'는 그대로)
+    const m = t.match(MK), f = t.search(/(?:\([가-하]\)|[㉠-㉭㉮-㉻①-⑩])\s/);
+    if (!m || m.length < (f === 0 ? 1 : 2) || (f > 0 && !/[.:–\-]\s*$/.test(t.slice(0, f)))) return t;
+    return t.replace(MK, '\n$1').replace(/[ \t]+$/gm, '');
+  };
+  function split(q){ const r = cut(q); if (r) r.box = r.box.split('\n').map(rows).join('\n'); return r; }
+  function cut(q){
+    q = String(q == null ? '' : q);
+    const m = TAG.exec(q);
+    if (!m) {   // '다음은 … 꾸며 쓴 가상 자료이다. …?' 뒤 줄에 자료 ('위 가상 자료에서'는 다른 곳을 가리킴 → 그대로)
+      const ls = q.split('\n');
+      if (ls.length > 1 && /가상 자료/.test(ls[0]) && !/위\s*가상 자료/.test(ls[0]) && ls.slice(1).every(l => !/가상 자료/.test(l))) {
+        const box = ls.slice(1).map(tidy).filter(Boolean).join('\n');
+        if (box) return { pre: tidy(ls[0]), label: '가상 자료', box, post: '' };
+      }
+      return null;
+    }
+    const label = '가상 자료' + (m[1] ? ', ' + m[1].trim() : '');
+    if (m[2] && m[2].trim()) {   // (가상 자료: 폭염일 8일 → 12일 → 18일)
+      return { pre: tidy(q.slice(0, m.index)), label: '가상 자료', box: m[2].trim(), post: tidy(q.slice(m.index + m[0].length)) };
+    }
+    const lines = q.split('\n'), t = lines.findIndex(l => TAG.test(l));
+    if (lines.length > 1) {
+      const rest = tidy(lines[t].replace(TAG, ''));
+      let s = (rest && !END.test(rest)) || (t > 0 && !/[?？]\s*$/.test(rest)) ? t : t + 1;   // 둘째 줄 이하에 붙은 꼬리표는 그 줄이 자료
+      const L = lines.length - 1;
+      let e = L;
+      if (L > s && END.test(lines[L]) && !/^['"‘“「]/.test(lines[L].trim()) && !(s === t + 1 && ASK.test(rest))) e = L - 1;   // 꼬리표 줄이 물음이면 아래 줄은 모두 자료
+      if (s <= e) {
+        const pre = lines.slice(0, s).map(l => tidy(l.replace(TAG, ''))).filter(Boolean).join('\n');
+        const box = lines.slice(s, e + 1).map(l => tidy(l.replace(TAG, ''))).filter(Boolean).join('\n');
+        const post = lines.slice(e + 1).map(l => tidy(l.replace(TAG, ''))).filter(Boolean).join('\n');
+        if (box) return { pre, label, box, post };
+      }
+      if (t !== 0 || s !== 1) return null;   // 꼬리표 줄이 문장뿐이고 아래 자료가 없음 → 그 줄만 문장으로 나눠 봄
+    }
+    const line = lines[t], ss = sentences(line), k = ss.findIndex(x => TAG.test(x));
+    let qi = -1; ss.forEach((x, i) => { if (i > k && ASK.test(x)) qi = i; });   // 물음 문장: 꼬리표 뒤 마지막 물음 (뒤에 붙은 '(…는 생각하지 않는다.)'·(가)~(라) 보기는 물음 뒤 글로)
+    if (qi < 0) qi = ss.length - 1;
+    if (k < 0 || qi <= k) return null;   // 꼬리표가 마지막(물음) 문장에 있음 → 나눌 곳 없음
+    const pre = ss.slice(0, k).join(' '), box = tidy(ss.slice(k, qi).join(' ').replace(TAG, ''));
+    const post = [ss.slice(qi).join(' ')].concat(lines.slice(t + 1)).join('\n');
+    const before = lines.slice(0, t).join('\n');
+    if (!box || (/[?？]\s*$/.test(box) && !/[㉠-㉭①-⑩]|\([가-하]\)/.test(box))) return null;   // 자료 없이 물음만 둘 ('…어긋날까요? 까닭까지 고르세요.')
+    return { pre: [before, pre].filter(Boolean).join('\n'), label, box, post: tidy(post) };
+  }
+  const api = { split };
+  if (typeof window !== 'undefined') window.SARANG_VDATA = api;
+  if (typeof module !== 'undefined') module.exports = api;
+})();
+</script>
 </head>
 <body>
 <div class="sarang-splash" id="sarangSplash" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="19" fill="#2c5945"/><path d="M13 28c7-1 14 1 19 5v20c-5-4-12-6-19-5V28Z" fill="#f3f0df"/><path d="M51 28c-7-1-14 1-19 5v20c5-4 12-6 19-5V28Z" fill="#d7e0c8"/><path d="M32 27c-4-3-10-7-10-12 0-5 7-7 10-2 3-5 10-3 10 2 0 5-6 9-10 12Z" fill="#d2a185"/><path d="M19 34c3 0 6 1 8 2.5M19 40c3 0 6 1 8 2.5M37 36.5c2-1.5 5-2.5 8-2.5M37 42.5c2-1.5 5-2.5 8-2.5" stroke="#2c5945" stroke-width="1.5" stroke-linecap="round" opacity=".45"/></svg><b>사랑교육</b></div>
@@ -14035,13 +14335,17 @@ function question(q, i, s, o){
   const ex = !!(o && o.exam);
   const QX = 10 * PX, HELP = ex ? 0 : 16 * PX, w = PW - QX - HELP, pt = 11, lh = pt * PT * 1.5;
   const src = ex ? String(q.q).replace(/\(\s*\)/g, '(________)') : q.q;   // 빈칸: 줄바꿈이 띄어쓰기를 하나로 줄이므로 밑줄로
-  let qText = src, box = [];
-  const br = ex ? src.indexOf('\n') : -1;
-  if (br > 0) { qText = src.slice(0, br); box = wrap(src.slice(br + 1), w - 8 * PX, 10.5, 400); }
-  const qLines = wrap(qText, w, pt, 400);
-  const parts = [], blh = 10.5 * PT * 1.5, BP = 2.6 * PX;
-  let h = qLines.length * lh, boxY = 0;
-  if (box.length) { h += 1.2 * PX; boxY = h; h += box.length * blh + BP * 2 + 1.8 * PX; }
+  let qText = src, box = [], post = [];
+  /* '가상 자료' (src/vdata.js, 2026-10-05 대표 승인): 자료를 물음과 떼어 회색 상자에 이름표와 함께 (모의시험·학습지 같은 모양) */
+  const vd = typeof window !== 'undefined' && window.SARANG_VDATA ? SARANG_VDATA.split(src) : null;
+  const br = ex && !vd ? src.indexOf('\n') : -1;
+  if (vd) { qText = vd.pre; box = wrap(vd.box, w - 8 * PX, 10.5, 400); post = vd.post ? wrap(vd.post, w, pt, 400) : []; }
+  else if (br > 0) { qText = src.slice(0, br); box = wrap(src.slice(br + 1), w - 8 * PX, 10.5, 400); }
+  const qLines = qText ? wrap(qText, w, pt, 400) : [];
+  const parts = [], blh = 10.5 * PT * 1.5, BP = 2.6 * PX, LBH = vd ? 8 * PT * 1.5 : 0;
+  let h = qLines.length * lh, boxY = 0, postY = 0;
+  if (box.length) { if (qLines.length) h += 1.2 * PX; boxY = h; h += LBH + box.length * blh + BP * 2 + 1.8 * PX; }
+  if (post.length) { postY = h; h += post.length * lh; }
   const fg = q.fig && typeof q.fig === 'object' ? figItem(q.fig, w) : null, figY = h + 1 * PX;   // 수학 그림: 물음 글 아래
   if (fg) h += fg.h + 2 * PX;
   const ah = h;
@@ -14064,11 +14368,15 @@ function question(q, i, s, o){
       font(ctx, 400, pt); ctx.fillStyle = INK;
       qLines.forEach((l, k) => ctx.fillText(l, MG + QX, y + k * lh + lh * 0.72));
       if (box.length) {
-        const by = y + boxY, bh = box.length * blh + BP * 2;
-        ctx.strokeStyle = '#9aa1ad'; ctx.lineWidth = 0.25 * PX; ctx.strokeRect(MG + QX, by, w, bh);
+        const by = y + boxY, bh = LBH + box.length * blh + BP * 2;
+        if (vd) {   // 회색 자료 상자 + 이름표
+          ctx.fillStyle = '#efefec'; ctx.beginPath(); if (ctx.roundRect) ctx.roundRect(MG + QX, by, w, bh, 1.6 * PX); else ctx.rect(MG + QX, by, w, bh); ctx.fill();
+          font(ctx, 800, 8); ctx.fillStyle = SUB; ctx.fillText(vd.label, MG + QX + 4 * PX, by + BP + LBH * 0.72);
+        } else { ctx.strokeStyle = '#9aa1ad'; ctx.lineWidth = 0.25 * PX; ctx.strokeRect(MG + QX, by, w, bh); }
         font(ctx, 400, 10.5); ctx.fillStyle = INK;
-        box.forEach((l, k) => ctx.fillText(l, MG + QX + 4 * PX, by + BP + k * blh + blh * 0.72));
+        box.forEach((l, k) => ctx.fillText(l, MG + QX + 4 * PX, by + BP + LBH + k * blh + blh * 0.72));
       }
+      if (post.length) { font(ctx, 400, pt); ctx.fillStyle = INK; post.forEach((l, k) => ctx.fillText(l, MG + QX, y + postY + k * lh + lh * 0.72)); }
       if (fg) fg.draw(ctx, MG + QX, y + figY);
       const ay = y + ah;
       if (q.type === 'choice') {
@@ -16234,6 +16542,8 @@ function scrCheck(subj, q, a, input, acc){
 }
 /* 화면 글: 윗첨자(x^2)만 바꿈, 빈칸 ( ) 는 칸으로, 줄바꿈 */
 const scrTx = s => mups(String(s == null ? '' : s)).map(k => k.up ? `<sup>${esc(k.t)}</sup>` : esc(k.t)).join('').replace(/\(\s*\)/g, '<span class="scr-blank">(　　)</span>').replace(/\n/g, '<br>');
+/* '가상 자료' (src/vdata.js, 2026-10-05 대표 승인): 문제 글 속 자료를 회색 상자로 떼어 보여 줌 (글은 그대로) */
+const scrQ = s => { const v = window.SARANG_VDATA && SARANG_VDATA.split(s); return v ? (v.pre ? `<p class="vd-t">${scrTx(v.pre)}</p>` : '') + `<div class="vd-box"><b class="vd-lbl">${esc(v.label)}</b><p>${scrTx(v.box)}</p></div>` + (v.post ? `<p class="vd-t">${scrTx(v.post)}</p>` : '') : scrTx(s); };
 const scrAns = (q, a) => { if (!a) return ''; const k = q && q.type === 'choice' ? scrChoice(q, a) : -1; return k >= 0 ? `${NUM[k]} ${q.choices[k]}` : String(a.a); };
 function scrChoice(q, a){ const t = String(a.a), n = NUM.indexOf(t.trim()[0]); return n >= 0 ? n : (q.choices || []).indexOf(t); }
 const scrOk = subj => inUse(subj);
@@ -16303,7 +16613,7 @@ function scrItemHtml(it, n){
     : t === 'think' ? '<textarea class="scr-in" rows="3" placeholder="생각을 써 보세요 (안 써도 돼요)"></textarea>'
     : `<input class="scr-in" type="text" autocomplete="off" autocapitalize="off" spellcheck="false" aria-label="${n}번 답" placeholder="답을 써 보세요">`;
   const ex = it.a && it.a.explain ? `<p>${scrTx(it.a.explain)}</p>` : '';
-  return `<li class="scr-q" data-id="${it.id}"><div class="scr-qt"><b class="scr-no">${n}</b><div>${scrTx(q.q)}</div></div>${q.fig ? `<div class="scr-fig" data-fig="${it.id}"></div>` : ''}${body}`
+  return `<li class="scr-q" data-id="${it.id}"><div class="scr-qt"><b class="scr-no">${n}</b><div>${scrQ(q.q)}</div></div>${q.fig ? `<div class="scr-fig" data-fig="${it.id}"></div>` : ''}${body}`
     + `<div class="scr-ans"><b>${open ? '예시 답' : '정답'}</b> ${scrTx(scrAns(q, it.a))}${ex}</div>`
     + `<div class="scr-judge" hidden><span>${open ? '예시 답과 비교해 보세요.' : '정답과 같은 뜻인지 보고 골라 주세요.'}</span>${open ? '<button type="button" data-j="s">확인했어요</button>' : '<button type="button" data-j="1">맞았어요</button><button type="button" data-j="0">틀렸어요</button>'}</div></li>`;
 }
@@ -19651,7 +19961,8 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   const KIDS = ['k5', 'k6', 'k7'], SCHOOL = ['e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'm1', 'm2', 'm3'];
   const TOD = ['k2', 'k3', 'k4'], isTod = g => TOD.includes(g);   // 유아 놀이 모음(한국 나이 2~4세, docs/유아놀이_설계.md): 과목·시간표 없음
   const GNAME = { k2: '2세', k3: '3세', k4: '4세', k5: '5세', k6: '6세', k7: '7세', e1: '초1', e2: '초2', e3: '초3', e4: '초4', e5: '초5', e6: '초6', m1: '중1', m2: '중2', m3: '중3' };
-  const LONG = { k2: '영아 2세', k3: '영아 3세', k4: '영아 4세', k5: '유아 5세', k6: '유아 6세', k7: '유아 7세', e1: '초등 1학년', e2: '초등 2학년', e3: '초등 3학년', e4: '초등 4학년', e5: '초등 5학년', e6: '초등 6학년', m1: '중학 1학년', m2: '중학 2학년', m3: '중학 3학년' };
+  const SN = window.SARANG_STAGE || { t: '영아', k: '유아' };   // 나이 단계 이름은 build.py STAGE_NAME 한 곳에서
+  const LONG = { k2: SN.t + ' 2세', k3: SN.t + ' 3세', k4: SN.t + ' 4세', k5: SN.k + ' 5세', k6: SN.k + ' 6세', k7: SN.k + ' 7세', e1: '초등 1학년', e2: '초등 2학년', e3: '초등 3학년', e4: '초등 4학년', e5: '초등 5학년', e6: '초등 6학년', m1: '중학 1학년', m2: '중학 2학년', m3: '중학 3학년' };
   const PICK = ['kor', 'math', 'eng', 'phon', 'hanja'];
   const PNAME = { kor: '국어(한글)', math: '수학', eng: '영어', hanja: '한자', soc: '사회', sci: '과학', his: '한국사', phon: '파닉스' };
   /* 파닉스 (판 60, 2026-10-04 대표): 6세~초2는 과목으로 고름(초1·2는 처음에 켜 둠), 초3~6은 부록에서 '시간표에 넣기'. 5세·중학생은 없음 */
@@ -19842,7 +20153,7 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   let ob = null;   // { step, grade, subs, pre, again }
   const chip = (attr, v, label, on) => `<button type="button" ${attr}="${v}" class="${on ? 'on' : ''}" aria-pressed="${on}">${label}</button>`;
   /* 가입 1단계: 유아 / 초등학생 / 중학생 을 먼저 고르면 그 아래에 나이·학년 칩이 나옴 */
-  const LEVEL = { t: ['<b>영아기</b> <small>2~4세</small>', '나이', TOD], k: ['<b>유아기</b> <small>5~7세</small>', '나이', KIDS], e: ['<b>초등학생</b> <small>8~13세</small>', '학년', SCHOOL.slice(0, 6)], m: ['<b>중학생</b> <small>14~16세</small>', '학년', SCHOOL.slice(6)] };   // 2026-09-29 주인 요청: 네 단계
+  const LEVEL = { t: [`<b>${SN.t}기</b> <small>2~4세</small>`, '나이', TOD], k: [`<b>${SN.k}기</b> <small>5~7세</small>`, '나이', KIDS], e: ['<b>초등학생</b> <small>8~13세</small>', '학년', SCHOOL.slice(0, 6)], m: ['<b>중학생</b> <small>14~16세</small>', '학년', SCHOOL.slice(6)] };   // 2026-09-29 주인 요청: 네 단계
   const levelOf = g => g ? (isTod(g) ? 't' : g[0]) : null;   // k3→t, k5→k, e4→e, m2→m
   let obShown = 0;   // 단계가 바뀔 때만 떠오르는 효과(칩 누를 때는 깜빡이지 않게)
   /* 시간표 칸(#week, 오늘의 학습 카드 맨 아래)은 가입 3단계에서만 가입 칸 안으로 옮겨 씀 */
@@ -20413,7 +20724,7 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   bar.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9M10.3 21a1.9 1.9 0 0 0 3.4 0"/></svg><p><b id="notifyT"></b><span>스마트 학습도, 프린트 학습도 좋아요.</span></p><div class="nb-btns"><button type="button" class="pri" data-nb="scr">바로 풀기</button></div><button type="button" class="nb-x" data-nb="x" aria-label="알림 닫기">✕</button>';
   const barAt = $('sarangHero') || $('today'); barAt.before(bar);
   let shown = 0;
-  function notify(){
+  function notify(byX){
     const r = view === 'home' && !ob && !tour ? due() : 0;
     if (r && r !== shown && window.SARANG_NOTIFY.onDue) try { SARANG_NOTIFY.onDue({ round: r, text: NB[r] + ' · 오늘 공부를 아직 시작하지 않았어요' }); } catch (e) {}
     shown = r; if (r) $('notifyT').textContent = NB[r] + '예요. 오늘 공부를 아직 시작하지 않았어요';
@@ -20423,14 +20734,14 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     else if (bar.nextElementSibling !== barAt) barAt.before(bar);
     if (bar.hidden === !r) return;
     const a = top ? (top.nextElementSibling || top) : $('today'), y = a.getBoundingClientRect().top, st = document.documentElement.style;   // 위에 끼우거나 빼도 보던 자리는 그대로
-    const seen = !bar.hidden && bar.getBoundingClientRect().bottom > 0;   // 보이는 알림을 닫을 때(닫기)는 위쪽을 그대로 두고 아래가 올라옴 — 맞추려 스크롤하면 짧은 페이지에서 화면 전체가 튐 (2026-10-03, 가로 폰)
+    const seen = !bar.hidden && bar.getBoundingClientRect().bottom > 0;   // 보이는 알림을 '닫기'로 닫을 때는 위쪽을 그대로 두고 아래가 올라옴 — 맞추려 스크롤하면 짧은 페이지에서 화면 전체가 튐 (2026-10-03, 가로 폰). 뽑기·시작으로 저절로 사라질 때는 보던 오늘 카드 자리를 그대로 (2026-10-05 D안: 머리 그림이 없어 알림이 보이는 채로 뽑으면 카드가 튐)
     st.overflowAnchor = 'none'; bar.hidden = !r;
-    if (scrollY > 0 && !(seen && !r)) window.scrollBy(0, a.getBoundingClientRect().top - y);
+    if (scrollY > 0 && a.offsetParent && !(seen && !r && byX === true)) window.scrollBy(0, a.getBoundingClientRect().top - y);
     st.overflowAnchor = '';
   }
   bar.addEventListener('click', e => {
     const b = e.target.closest('[data-nb]'); if (!b) return;
-    if (b.dataset.nb === 'x') { store('hub_notify_x', ymd() + '/' + shown); notify(); return; }
+    if (b.dataset.nb === 'x') { store('hub_notify_x', ymd() + '/' + shown); notify(true); return; }
     if (view !== 'home' || tab !== 'today') setTab('today');
     if (b.dataset.nb === 'scr' && window.SARANG_TODAY) SARANG_TODAY.start();
   });
@@ -26531,7 +26842,11 @@ window.DONATE_CORE = (function(){
     const k = kidDev(); if (!k) return;
     kidNick = k.nick || (K() && K().name()) || '우리 아이';
     if (!$('kdBanner') && $('today')) {
-      $('today').insertAdjacentHTML('afterbegin', `<div class="kd-banner" id="kdBanner"><b>${esc(kidNick)} 공부 폰</b><span>부모님이 정한 공부를 바로 풀기로 해요.</span></div><div class="kd-khw" id="kdKidHw" hidden></div>`);
+      $('today').insertAdjacentHTML('afterbegin', `<div class="kd-banner" id="kdBanner"><b>${esc(kidNick)} 공부 폰</b><span>부모님이 정한 공부를 바로 풀기로 해요.</span></div>`);
+      /* D안 (2026-10-05 대표 확정): 맨 위 "○○아, 오늘도 해 볼까?" 인사 + 해 그림, 숙제는 오늘 학습 묶음 아래 따로 (src/d-theme.css) */
+      const tod = document.documentElement.dataset.age === 'tod';
+      ($('notifyBar') || $('sarangHero') || $('today')).insertAdjacentHTML('beforebegin', `<div class="kd-greet" id="kdGreet"><div><p>${tod ? '부모님과 함께 해요' : '부모님이 보낸 공부예요'}</p><h2>${esc(kidNick)}${josa(kidNick, '아', '야')},<br>${tod ? '같이' : '오늘도'} 해 볼까?</h2></div>${window.D_THEME ? D_THEME.sun() : ''}</div>`);
+      $('today').insertAdjacentHTML('afterend', '<div class="kd-khw" id="kdKidHw" hidden></div>');
       $('kdKidHw').addEventListener('click', e => {
         const b = e.target.closest('[data-khw]'); if (b && window.SARANG_SCREEN) SARANG_SCREEN.open(b.dataset.khw, 'today');
         const x = e.target.closest('[data-khx]'); if (x) kidTask(x.dataset.khx);
@@ -26589,7 +26904,19 @@ window.DONATE_CORE = (function(){
     if (!td.length && !hw.length) return false;
     return td.every(s => T.ways(s).length) && hw.every(x => x.state === 'done');
   }
+  /* D안 아이 폰: 묶음 머리 '오늘의 스마트 학습  0/3' (시간표 과목 중 오늘 한 과목 수) */
+  function cntPaint(){
+    const t = $('todayTitle'), box = t && t.closest('.td-titles'); if (!box) return;
+    if (t.textContent !== '오늘의 스마트 학습') t.textContent = '오늘의 스마트 학습';
+    let td = []; try { td = H().todays ? H().todays() : []; } catch (e) {}
+    const T = window.SARANG_TODAY, done = T ? td.filter(s => T.ways(s).length).length : 0;
+    let c = $('kdCnt'); if (!c) { c = document.createElement('span'); c.className = 'd-cnt'; c.id = 'kdCnt'; box.prepend(c); }
+    const v = td.length ? `${done}/${td.length}` : '';
+    if (c.textContent !== v) c.textContent = v;
+    c.setAttribute('aria-label', td.length ? `${td.length}과목 중 ${done}과목 했어요` : '');
+  }
   function stampCheck(){
+    if (isKid()) cntPaint();
     if (!isKid() || kidHw === null) return;   // 숙제를 읽기 전에는 판단하지 않음
     const k = ymd(), m = stamps();
     if (!m[k] && dayDone()) {
@@ -26614,23 +26941,23 @@ window.DONATE_CORE = (function(){
     let box = $('kdCal');
     if (!box) {
       box = document.createElement('section'); box.className = 'card kd-cal'; box.id = 'kdCal'; box.setAttribute('aria-labelledby', 'kdCalT');
-      $('today').after(box);
+      ($('kdKidHw') || $('today')).after(box);   // D안: 오늘 학습 → 숙제 → 연속 공부
       box.addEventListener('click', e => { const b = e.target.closest('[data-calm]'); if (!b || b.disabled) return; calMonth = Math.min(0, Math.max(-12, calMonth + +b.dataset.calm)); calPaint(); });
     }
     const m = stamps(), now = new Date(), n = streak(m), today = !!m[ymd(now)];
     const first = new Date(now.getFullYear(), now.getMonth() + calMonth, 1), y = first.getFullYear(), mo = first.getMonth(), last = new Date(y, mo + 1, 0).getDate();
     const cells = [];
-    for (let i = 0; i < first.getDay(); i++) cells.push('<span class="kd-d out" aria-hidden="true"></span>');
+    for (let i = 0; i < (first.getDay() + 6) % 7; i++) cells.push('<span class="kd-d out" aria-hidden="true"></span>');
     for (let d = 1; d <= last; d++) {
       const dt = new Date(y, mo, d), k = ymd(dt), st = !!m[k], isT = k === ymd(now), fut = dt > now && !isT;
-      cells.push(`<span class="kd-d${st ? ' stamp' : ''}${isT ? ' today' : ''}${fut ? ' fut' : ''}" role="gridcell" aria-label="${mo + 1}월 ${d}일${st ? ' 다 했어요' : ''}${isT ? ' (오늘)' : ''}"><i aria-hidden="true">${d}</i>${st ? '<em aria-hidden="true">다 했어요</em>' : ''}</span>`);
+      cells.push(`<span class="kd-d${st ? ' stamp' : ''}${isT ? ' today' : ''}${fut ? ' fut' : ''}" role="gridcell" aria-label="${mo + 1}월 ${d}일${st ? ' 다 했어요' : ''}${isT ? ' (오늘)' : ''}"><i aria-hidden="true">${d}</i>${st ? '<em aria-hidden="true"><span>다</span><span>했어요</span></em>' : ''}</span>`);
     }
     while (cells.length < 42) cells.push('<span class="kd-d out" aria-hidden="true"></span>');   // 늘 6줄: 달을 넘겨도 높이가 같아 화면이 튀지 않게
     const rows = []; for (let r = 0; r < 6; r++) rows.push(`<div class="kd-cal-r" role="row">${cells.slice(r * 7, r * 7 + 7).join('')}</div>`);
     const h = `<div class="kd-cal-h"><h3 id="kdCalT">연속 공부</h3><p class="kd-cal-n">${n ? `<b>${n}</b>일째` : '<b>0</b>일'}</p></div>
       <p class="kd-cal-s">${today ? '오늘 할 일을 다 했어요! 내일도 이어 가요.' : n ? '오늘 할 일을 다 하면 도장을 찍고 이어져요.' : '오늘 할 일을 다 하면 \'다 했어요\' 도장을 찍어 줘요.'}</p>
       <div class="kd-cal-m"><button type="button" class="kd-cal-b" data-calm="-1" aria-label="지난달"${calMonth <= -12 ? ' disabled' : ''}>‹</button><b aria-live="polite">${y}년 ${mo + 1}월</b><button type="button" class="kd-cal-b" data-calm="1" aria-label="다음 달"${calMonth >= 0 ? ' disabled' : ''}>›</button></div>
-      <div class="kd-cal-g" role="grid" aria-label="${y}년 ${mo + 1}월 공부 도장"><div class="kd-cal-r kd-cal-w" role="row">${['일', '월', '화', '수', '목', '금', '토'].map(w => `<span role="columnheader">${w}</span>`).join('')}</div>${rows.join('')}</div>`;
+      <div class="kd-cal-g" role="grid" aria-label="${y}년 ${mo + 1}월 공부 도장"><div class="kd-cal-r kd-cal-w" role="row">${['월', '화', '수', '목', '금', '토', '일'].map(w => `<span role="columnheader">${w}</span>`).join('')}</div>${rows.join('')}</div>`;
     if (box.dataset.h !== h) {
       const f = document.activeElement && box.contains(document.activeElement) ? document.activeElement.dataset.calm : null;
       box.dataset.h = h; box.innerHTML = h;
@@ -26902,6 +27229,7 @@ window.DONATE_CORE = (function(){
       </nav>
       <div class="db-main" id="dbMain">
         <div class="db-head"><button type="button" class="db-hamb" id="dbHamb" aria-label="현황판 메뉴 열기" aria-expanded="false" aria-controls="dbNav">${svg(ICON.menu)}</button><h2 class="db-title" id="dbTitle">학습 현황</h2><span class="db-date" id="dbDate"></span></div>
+        <div class="db-intro" id="dbIntro" hidden></div>
         <div class="db-top" id="dbTop"></div>
         <div class="db-view" id="dbStat">
         <div class="db-tiles" id="dbTiles"></div>
@@ -27016,7 +27344,7 @@ window.DONATE_CORE = (function(){
     if (v !== 'mgmt') { weekOff(); padOff(); }
     view = v;
     root.querySelectorAll('[data-dbnav]').forEach(b => { const o = b.dataset.dbnav === v; b.classList.toggle('on', o); if (o) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
-    $('dbStat').hidden = v !== 'stat'; $('dbRep').hidden = v !== 'rep'; $('dbMgmt').hidden = v !== 'mgmt'; $('dbHw').hidden = v !== 'hw';
+    $('dbStat').hidden = v !== 'stat'; if ($('dbIntro').innerHTML) { $('dbIntro').hidden = v !== 'stat'; root.classList.toggle('has-intro', v === 'stat'); } $('dbRep').hidden = v !== 'rep'; $('dbMgmt').hidden = v !== 'mgmt'; $('dbHw').hidden = v !== 'hw';
     $('dbTitle').textContent = v === 'rep' ? '리포트' : v === 'mgmt' ? '학습 관리' : v === 'hw' ? '숙제' : statTitle();
     paintSub();
     if (v === 'stat') render(); else if (v === 'mgmt') paintMgmt(); else if (v === 'hw') { if (window.SARANG_HW) SARANG_HW.paint($('dbHw')); } else paintRep();   // 숙제 화면은 src/kidmode.js
@@ -27047,6 +27375,11 @@ window.DONATE_CORE = (function(){
     if (!root) return;
     const now = new Date(), today = day0(now), rec = studied(), subs = subjects();
     $('dbDate').textContent = `${now.getMonth() + 1}월 ${now.getDate()}일 ${WD[now.getDay()]}요일`;
+    /* D안 (2026-10-05 대표 확정): 학습 현황 맨 위 날짜 + "○○의 하루, 차근차근." + 손그림 해 (날짜는 머리줄 대신 여기) */
+    { const K = window.SARANG_KIDS, nm = K ? K.label(K.now()) : '우리 아이', d = window.D_THEME;
+      const h = d ? `<div><time>${$('dbDate').textContent}</time><h2>${esc(nm)}의 하루,<br><em>차근차근.</em></h2></div>${d.sun()}` : '';
+      if ($('dbIntro').dataset.h !== h) { $('dbIntro').dataset.h = h; $('dbIntro').innerHTML = h; }
+      $('dbIntro').hidden = !h || view !== 'stat'; root.classList.toggle('has-intro', !$('dbIntro').hidden); }
     /* 위 숫자 4개 */
     const mon = monday(today), past = Math.round((today - mon) / 864e5) + 1;
     let week = 0; for (let i = 0; i < past; i++) { const r = rec[key(addD(mon, i))]; if (r && r.p.length + r.s.length) week++; }
@@ -27441,7 +27774,7 @@ window.DONATE_CORE = (function(){
       const d = Math.round(b.getBoundingClientRect().top - t0);
       if (d > 1) { let sp = $('dbMgPad'); if (!sp) { sp = document.createElement('div'); sp.id = 'dbMgPad'; sp.setAttribute('aria-hidden', 'true'); document.body.append(sp); }   // 쪽 맨 끝 빈칸 (현황판 칸 배치와 상관없이 쪽 길이를 늘림)
         const to = window.scrollY + d; sp.style.height = d + 'px';
-        const short = to - (document.documentElement.scrollHeight - innerHeight); if (short > 0) sp.style.height = d + short + 'px';   // 접힌 뒤 쪽이 화면보다 짧아졌으면 그만큼 더
+        for (let k = 0, short; k < 4 && (short = to - (document.documentElement.scrollHeight - innerHeight)) > 0; k++) sp.style.height = parseFloat(sp.style.height) + short + 'px';   // 접힌 뒤 쪽이 화면보다 짧아졌으면 그만큼 더 (쪽 높이는 화면 높이 밑으로 안 내려가 한 번에 모자랄 수 있음 → 맞을 때까지, 2026-10-05 태블릿)
         window.scrollTo(0, to); }
     }
   }
