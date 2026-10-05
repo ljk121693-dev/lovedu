@@ -103,11 +103,14 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
   .example-question{font-size:12px}
   .example-answer{font-size:11px}
 }
-/* 카드 맞춤 (10-05): 일정 두 개와 요금 카드 두 개를 같은 모양·같은 색으로 */
+/* 카드 맞춤 (10-05): 일정 두 개를 같은 모양·같은 색으로 (요금 카드는 월간·연간 색을 다르게 둠) */
 .timeline .milestone{padding:28px;background:var(--hero);border:0;border-radius:6px 26px 26px 26px}
-.prices .price-card{background:var(--hero);border-color:var(--hero-line)}
 @media(max-width:1260px) and (min-width:900px){.timeline .milestone{padding:25px}}
 @media(max-width:640px){.timeline .milestone{padding:24px 22px}}
+/* 체험 안내 글씨 키움 (10-05 대표 "크기가 너무 작음") */
+.hero-note{font-size:15px;padding:14px 20px}
+@media(max-width:640px){.hero-note{font-size:14px;padding:0}}
+@media(max-width:290px){.hero-note{font-size:12px}}
 </style>
 </head>
 <body>
