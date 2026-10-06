@@ -88,11 +88,9 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important}}
 
 
-/* 휴대폰 손질 (10-05): 위쪽 작은 안내 줄 숨김, 체험 안내를 단추처럼 보이지 않게, 요금 카드는 한 줄에 하나 */
+/* 휴대폰 손질 (10-05): 위쪽 작은 안내 줄 숨김, 요금 카드는 한 줄에 하나 */
 @media(max-width:640px){
   .page-caption{display:none}
-  .hero-note{background:none;padding:0;border-radius:0;font-size:13px;color:var(--soft);display:flex;align-items:center;gap:8px}
-  .hero-note::before{position:static;content:"✓";width:auto;height:auto;border:0;color:var(--green);font-weight:800}
   .prices{grid-template-columns:1fr}
   .amount small{display:inline;font-size:13px;margin-left:4px}
   .together-grid .card{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px;align-items:center}
@@ -109,8 +107,14 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
 @media(max-width:640px){.timeline .milestone{padding:24px 22px}}
 /* 체험 안내 글씨 키움 (10-05 대표 "크기가 너무 작음") */
 .hero-note{font-size:15px;padding:14px 20px}
-@media(max-width:640px){.hero-note{font-size:14px;padding:0}}
-@media(max-width:290px){.hero-note{font-size:12px}}
+/* 폰 첫 화면 체험 안내 (10-06 대표 "뭔가 허전해진것같다"): D안 시안의 알림처럼 폭을 채운 노란 칸(왼쪽 위 작은 모서리)에 굵은 글 한 줄과 작은 글 한 줄 */
+@media(max-width:640px){
+  .hero-note{width:auto;margin-top:22px;padding:16px 20px 15px;border-radius:4px 24px 24px 24px;line-height:1.55}
+  .note-main{display:block;font-size:16px;font-weight:800;letter-spacing:-.03em}
+  .note-sep{display:none}
+  .note-sub{display:block;margin-top:2px;font-size:14px}
+}
+@media(max-width:290px){.hero-note{padding:14px 16px 13px}.note-main{font-size:15px}.note-sub{font-size:13px}}
 /* 앱 둘러보기 (10-05 대표 "앱 기능 소개(섹터별)"): 메뉴마다 글 + 폰 화면. 좁으면 글 아래 화면, 넓으면(칸 640px 이상) 반반 */
 .tour{container-type:inline-size}
 .tour-item{display:grid;gap:26px;padding:40px 0;border-top:1px solid var(--line)}
@@ -172,7 +176,7 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
         <h1 id="about-title" tabindex="-1" data-anchor>매일의 공부를,<br><em>우리 아이에게 맞게.</em></h1>
         <p class="lead" data-anchor>스마트 학습과 프린트 학습,<span>둘 다 돼요.</span></p>
         <p class="description" data-anchor>바로 풀기와 뽑아서 풀기를 그날그날 골라요.<br>어느 쪽으로 공부해도 같은 진도로 이어져요.</p>
-        <p class="hero-note" data-anchor>가입일부터 7일 무료 체험 · 계정마다 한 번</p>
+        <p class="hero-note" data-anchor><span class="note-main">가입일부터 7일 무료 체험</span><span class="note-sep"> · </span><span class="note-sub">계정마다 한 번</span></p>
       </div>
       <div class="learning-demo" data-anchor>
         <p class="demo-caption">같은 공부, 두 가지 방법 · 학습 화면 예시</p>
