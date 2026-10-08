@@ -3,11 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#2c5945">
+<meta name="theme-color" content="#236b59">
 <meta name="description" content="사랑교육 - 부모가 매일 가르치는 사랑 학습지. 학교 교과 학습과 영어·한자 학습지를 PDF로 출력해 아이와 함께 공부하세요.">
 <title>사랑교육 · 부모가 매일 가르치는 사랑 학습지</title>
 <script>window.SARANG_STAGE={"t": "영아", "k": "유아"}</script>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%2064%2064%22%20fill%3D%22none%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2219%22%20fill%3D%22%232c5945%22/%3E%3Cpath%20d%3D%22M13%2028c7-1%2014%201%2019%205v20c-5-4-12-6-19-5V28Z%22%20fill%3D%22%23f3f0df%22/%3E%3Cpath%20d%3D%22M51%2028c-7-1-14%201-19%205v20c5-4%2012-6%2019-5V28Z%22%20fill%3D%22%23d7e0c8%22/%3E%3Cpath%20d%3D%22M32%2027c-4-3-10-7-10-12%200-5%207-7%2010-2%203-5%2010-3%2010%202%200%205-6%209-10%2012Z%22%20fill%3D%22%23d2a185%22/%3E%3Cpath%20d%3D%22M19%2034c3%200%206%201%208%202.5M19%2040c3%200%206%201%208%202.5M37%2036.5c2-1.5%205-2.5%208-2.5M37%2042.5c2-1.5%205-2.5%208-2.5%22%20stroke%3D%22%232c5945%22%20stroke-width%3D%221.5%22%20stroke-linecap%3D%22round%22%20opacity%3D%22.45%22/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%221024%22%20height=%221024%22%20viewBox=%220%200%201024%201024%22%3E%3Crect%20width=%221024%22%20height=%221024%22%20rx=%22224%22%20fill=%22%23fff9ed%22/%3E%3Cg%20transform=%22translate%28112%20112%29%20scale%2812.5%29%22%3E%3Cg%20fill=%22none%22%20stroke=%22%23236b59%22%20stroke-width=%223.8%22%20stroke-linecap=%22round%22%20stroke-linejoin=%22round%22%3E%3Cpath%20d=%22M8%2024C17%2021.8%2025%2024.1%2032%2029.2C39%2024.1%2047%2021.8%2056%2024V49.3C47%2047.5%2039%2049.6%2032%2054.4C25%2049.6%2017%2047.5%208%2049.3Z%22/%3E%3Cpath%20d=%22M32%2029.2V54.4%22/%3E%3C/g%3E%3Cpath%20fill=%22%23ca6044%22%20d=%22M32%2025.5C29.8%2023.5%2021%2017.6%2021%2011.7C21%208.4%2023.3%206.3%2026.4%206.3C28.8%206.3%2030.7%207.6%2032%209.5C33.3%207.6%2035.2%206.3%2037.6%206.3C40.7%206.3%2043%208.4%2043%2011.7C43%2017.6%2034.2%2023.5%2032%2025.5Z%22/%3E%3C/g%3E%3C/svg%3E"><link rel="apple-touch-icon" href="icon-192.png">
 <script>try{document.documentElement.dataset.theme=localStorage.getItem("sarang_theme")==="dark"?"dark":"light";}catch(e){}</script>
 <style id="sarang-fonts">/* Embedded font subsets: Noto Sans KR / Noto Serif KR.
 Google Inc.
@@ -1016,7 +1016,7 @@ button.ss-pill:disabled{cursor:default;opacity:1}
 .ss-legend .ss-dot{margin-left:0}
 .ss-term{border-top:1px solid var(--line)}
 .ss-term>summary{cursor:pointer;padding:11px 0;font-weight:700;font-size:15px}
-.ss-unit{font-size:13px;font-weight:700;color:var(--pri);margin:10px 0 4px}
+.ss-unit{font-size:13px;font-weight:700;color:var(--pri);margin:10px 0 4px;word-break:keep-all;overflow-wrap:anywhere}   /* 단원 이름이 낱말 가운데서 갈리지 않게 (창구 판 69·B1 중2 영어 344px "스|포츠", 2026-10-08) */
 .ss-row{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;width:100%;text-align:left;border:0;background:none;color:var(--ink);font:inherit;font-size:14px;padding:7px 8px;border-radius:8px;cursor:pointer;line-height:1.4}
 .ss-row:hover{background:var(--soft)}
 .ss-row.now{background:var(--ss-now);color:var(--ss-now-ink)}
@@ -5836,7 +5836,9 @@ html.kid-dev #app .kd-cal.card{background:none;border:0;border-radius:0;padding:
    <head> 에서 읽혀 현황판(src/dash.js)·아이 폰(src/kidmode.js)보다 먼저 있음 */
 (function(){
   const SUN = '<span class="d-sun" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M31 5v6M31 52v7M5 31h6M52 31h7M12 12l5 5M46 46l5 5M11 51l5-5M46 17l5-5"/><path d="M44 20c5 4 7 10 4 17-3 8-11 13-19 10-8-2-13-10-10-18 3-8 11-13 18-11 3 0 5 1 7 2Z"/><path d="M26 28v2M38 28v2M26 36c4 4 8 4 12 0"/></svg></span>';
-  const BOOK = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 6c3-1 6 0 9 2v12c-3-2-6-3-9-2V6Z"/><path d="M21 6c-3-1-6 0-9 2v12c3-2 6-3 9-2V6Z"/></svg>';
+  /* 머리줄 로고: 하트+책 (2026-10-08 대표, src/brand/logo-green.svg·logo-dark.svg 와 같은 모양). 책 선은 currentColor(밝게 #236b59·어둡게 #aed2af, src/b-theme.css), 하트는 늘 채운 #ca6044.
+     공통 svg 규칙(fill:none·stroke:currentColor)에 하트가 비지 않게 style 로 직접 줌 */
+  const BOOK = '<svg viewBox="0 0 64 64" aria-hidden="true"><g style="fill:none;stroke:currentColor;stroke-width:3.8;stroke-linecap:round;stroke-linejoin:round"><path d="M8 24C17 21.8 25 24.1 32 29.2C39 24.1 47 21.8 56 24V49.3C47 47.5 39 49.6 32 54.4C25 49.6 17 47.5 8 49.3Z"/><path d="M32 29.2V54.4"/></g><path style="fill:#ca6044;stroke:none" d="M32 25.5C29.8 23.5 21 17.6 21 11.7C21 8.4 23.3 6.3 26.4 6.3C28.8 6.3 30.7 7.6 32 9.5C33.3 7.6 35.2 6.3 37.6 6.3C40.7 6.3 43 8.4 43 11.7C43 17.6 34.2 23.5 32 25.5Z"/></svg>';
   const age = () => document.documentElement.dataset.age || '';
   const lead = () => age() === 'tod' ? '부모님과 함께, 하나씩 해 봐요.' : age() === 'kid' ? '하나씩, 즐겁게 해 봐요.' : '하나씩, 차근차근.';
   function paint(){
@@ -5933,9 +5935,153 @@ html.kid-dev #app .kd-cal.card{background:none;border:0;border-radius:0;padding:
   if (typeof module !== 'undefined') module.exports = api;
 })();
 </script>
+<script>if(location.protocol!=='file:')document.write("<link rel=\"preload\" href=\"fonts/NanumSquareRoundR.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"fonts/NanumSquareRoundB.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><link rel=\"preload\" href=\"fonts/NanumSquareRoundEB.woff2\" as=\"font\" type=\"font/woff2\" crossorigin><style id=\"sarang-b-font\">@font-face{font-family:SarangUI;src:url(fonts/NanumSquareRoundR.woff2) format(\"woff2\");font-weight:100 500;font-display:block}@font-face{font-family:SarangUI;src:url(fonts/NanumSquareRoundB.woff2) format(\"woff2\");font-weight:600 700;font-display:block}@font-face{font-family:SarangUI;src:url(fonts/NanumSquareRoundEB.woff2) format(\"woff2\");font-weight:800 900;font-display:block}</style>")</script>
+<style id="sarang-b">/* ===== B안 "작은 공부 수첩" (2026-10-08 대표 확정, 사랑교육_B안_클로드_적용요청_1008.zip) =====
+   D안(src/d-theme.css) 색·배치 위에 덮음 (build.py 가 d-theme 바로 뒤에 넣음). 기능·문구·단추 수는 그대로, 모양만.
+   - 글꼴: 나눔스퀘어라운드 R·B·EB (family SarangUI). @font-face 는 build.py 가 <head> 스크립트로 넣음: 웹에서는 앱 옆 fonts/,
+     내려받은 파일을 그냥 열면(file://) 브라우저가 옆 파일 글꼴을 막으므로 src/ssh-module.js 안 글꼴 묶음으로 넣음. 출처·OFL 은 fonts/README.txt·OFL.txt
+   - 종이 두께: 옅은 테두리 + 아래 3px 띠 그림자 (--b-shadow). 과목 줄·현황판 숫자·모의시험 과목·부록 항목을 둥근 카드로
+   - 단추: 스마트·프린트는 옅은 초록 알약, 머리줄 문제 기부·어둡게·설정은 테두리 있는 둥근 칸, 지금 아이는 알약
+   - 아래 메뉴: 위쪽 선 + 옅은 그림자, 지금 칸은 초록을 채운 알약 (밑줄 없음)
+   색: 초등(기본) 단계는 B안 값 그대로. 0~4세·5~7세·중학은 그 단계 색에서 같은 비율로 만듦 (단계 색은 D안 그대로). */
+
+
+/* ---------- 1. 보조색 ---------- */
+:root:root:root:root{
+ --b-line:color-mix(in srgb,var(--d-green) 10%,var(--d-line));
+ --b-gline:color-mix(in srgb,var(--d-green) 26%,var(--d-card));
+ --b-wash:color-mix(in srgb,var(--d-green) 8%,var(--d-card));
+ --b-shadow:0 3px 0 color-mix(in srgb,var(--d-line) 70%,var(--d-bg)),0 6px 14px color-mix(in srgb,var(--d-ink) 3%,transparent);
+ --b-memo-line:color-mix(in srgb,var(--d-amber) 78%,var(--d-ink));
+ --b-memo-shadow:color-mix(in srgb,var(--d-amber) 88%,var(--d-ink));
+ --line:var(--b-line)}
+/* 초등(기본): B안 값 */
+:root:root:root:root:not([data-age]),:root:root:root:root[data-age="ele"]{--b-line:#d2d8c9;--b-gline:#bfd3c3;--b-wash:#edf4e9;--b-shadow:0 3px 0 #e4e7da,0 6px 14px #26344207;--b-memo-line:#dab575;--b-memo-shadow:#e8c584}
+@media (prefers-color-scheme:dark){
+ :root:root:root:root:not([data-theme="light"]){--b-shadow:0 3px 0 color-mix(in srgb,var(--d-bg) 70%,#000),0 6px 16px #00000026;--b-memo-line:color-mix(in srgb,var(--d-amber) 70%,#fff);--b-memo-shadow:color-mix(in srgb,var(--d-amber) 60%,#000)}
+ :root:root:root:root:not([data-age]):not([data-theme="light"]),:root:root:root:root[data-age="ele"]:not([data-theme="light"]){--b-line:#435449;--b-gline:#526b56;--b-wash:#2d3d35;--b-shadow:0 3px 0 #121b22,0 6px 16px #00000026}
+}
+:root:root:root:root[data-theme="dark"]{--b-shadow:0 3px 0 color-mix(in srgb,var(--d-bg) 70%,#000),0 6px 16px #00000026;--b-memo-line:color-mix(in srgb,var(--d-amber) 70%,#fff);--b-memo-shadow:color-mix(in srgb,var(--d-amber) 60%,#000)}
+:root:root:root:root:not([data-age])[data-theme="dark"],:root:root:root:root[data-age="ele"][data-theme="dark"]{--b-line:#435449;--b-gline:#526b56;--b-wash:#2d3d35;--b-shadow:0 3px 0 #121b22,0 6px 16px #00000026}
+
+/* ---------- 2. 글꼴 (부모가 읽기 편하게: 제목 800 · 이름 700 · 설명 400) ---------- */
+body,#app,button,input,select,textarea{font-family:SarangUI,"Apple SD Gothic Neo","Malgun Gothic","Noto Sans KR",sans-serif}
+body{letter-spacing:-.025em;font-synthesis:none}
+
+/* ---------- 3. 카드 공통: 테두리 + 종이 두께 ---------- */
+#app .card{box-shadow:var(--b-shadow);border-radius:22px}
+#app #today.card,#app .db-tile.card,html.kid-dev #app .kd-cal.card{box-shadow:none}
+
+/* ---------- 4. 머리줄: 문제 기부·어둡게·설정은 테두리 있는 둥근 칸 ---------- */
+#app>.hub-top .sarang-utility{gap:7px}
+#app>.hub-top .dn-top{min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 2px 4px color-mix(in srgb,var(--ink) 2%,transparent)}
+#app>.hub-top .dn-top b{font-size:13px;font-weight:800;white-space:nowrap}
+#app>.hub-top .sarang-theme,#app>.hub-top .hub-gear{width:44px;height:44px;border:1px solid var(--line);border-radius:16px;background:var(--card);box-shadow:0 2px 4px color-mix(in srgb,var(--ink) 2%,transparent)}
+#app>.hub-top .dn-top:hover,#app>.hub-top .sarang-theme:hover,#app>.hub-top .hub-gear:hover{border-color:var(--b-gline);background:var(--b-wash)}
+
+/* ---------- 5. 자녀 줄: 지금 아이는 알약 칸 ---------- */
+#app .kid-cards{gap:6px 10px}
+#app .kid-card.on{padding:5px 14px 5px 12px;border:1px solid var(--b-gline);border-radius:999px;background:var(--b-wash);gap:8px}
+#app .kid-card.on b{font-size:15px}
+#app .kid-card:not(.on):not(.kid-plus){padding:5px 12px;border:1px solid transparent;border-radius:999px}
+
+/* ---------- 6. 오늘 공부 알림: 메모 테두리 + 아래 띠 ---------- */
+#app .notify-bar{border:1px solid var(--b-memo-line);border-radius:7px 25px 25px 25px;box-shadow:0 3px 0 var(--b-memo-shadow)}
+#app .notify-bar b{font-size:16px;font-weight:800;line-height:1.45;word-break:keep-all;text-wrap:balance}
+#app .notify-bar p span{font-size:13px;margin-top:8px}
+#app .notify-bar .nb-btns .pri{border-radius:16px;font-size:16px;font-weight:800}
+
+/* ---------- 7. 학습: 진도 단추 + 과목 한 줄 = 둥근 카드 (아이 폰은 D안 그대로) ---------- */
+#app #today .td-pills .linkbtn{min-height:44px;border-radius:16px;font-size:13px;font-weight:800}
+#app #today .td-pills .linkbtn.pace-now{border:1px solid var(--b-gline);background:var(--b-wash);color:var(--sub)}
+#app #today .td-pills .linkbtn.pace-now::before{background:color-mix(in srgb,var(--pri) 18%,var(--card));color:var(--ink)}
+html:not(.kid-dev) #app #today .today-head{border-bottom:0;padding-bottom:14px}
+html:not(.kid-dev) #app #today .today-list li[data-s]{grid-template-columns:32px auto minmax(0,1fr);column-gap:10px;row-gap:6px;margin:0 0 12px;padding:14px 13px 14px 10px;border:1px solid var(--b-gline);border-radius:20px;background:var(--card);box-shadow:var(--b-shadow)}
+html:not(.kid-dev) #app #today .today-list li[data-s]:first-child{border-top:1px solid var(--b-gline)}
+html:not(.kid-dev) #app #today .today-list li[data-s]::before{display:grid;place-items:center;width:32px;height:32px;box-sizing:border-box;border:1px solid var(--b-gline);border-radius:11px;background:var(--b-wash);font-size:15px;font-weight:800;line-height:1;letter-spacing:-.04em}
+html:not(.kid-dev) #app #today .td-name{font-size:16px;font-weight:800;line-height:1.4;letter-spacing:-.04em;word-break:keep-all;text-wrap:pretty}
+html:not(.kid-dev) #app #today .td-ctx{font-size:12px;line-height:1.5}
+html:not(.kid-dev) #app #today .today-list li[data-s]>b{font-size:13px;font-weight:700}
+html:not(.kid-dev) #app #today .today-list li[data-s]>.td-day{font-size:13px;font-weight:800}
+#app #today .td-go{min-height:44px;border:1px solid var(--b-gline);border-radius:999px;background:var(--b-wash);color:var(--pri);font-size:14px;font-weight:800}
+#app #today .td-go svg{color:var(--pri)}
+#app #today .td-go:hover:not(:disabled){border-color:var(--pri);background:color-mix(in srgb,var(--pri) 14%,var(--card))}
+html.kid-dev #app #today .td-go[data-scr]{border:0;background:var(--pri);color:var(--pri-ink)}
+/* 과목 줄 아래 '전체 뽑아서 풀기'·'가이드 함께'·접는 칸: 같은 둥근 모양 */
+#app #today .td-ways .td-way{border-color:var(--b-gline);border-radius:20px;background:var(--b-wash);box-shadow:var(--b-shadow)}
+#app #today .td-ways #hubGuideRow{border-radius:20px;box-shadow:var(--b-shadow)}
+
+/* ---------- 8. 현황판: 메뉴 단추 + 숫자 두 칸을 카드로 ---------- */
+#app .db.w-phone .db-hamb{margin:0 4px 0 0;border:1px solid var(--line);border-radius:13px;background:var(--card)}
+#app .db-tiles{gap:12px;padding-bottom:0;border-bottom:0}
+#app .db-tile.card{position:relative;min-width:0;padding:14px 12px 11px;border:1px solid var(--b-gline);border-radius:20px;background:var(--card);box-shadow:var(--b-shadow)}
+#app .db-tiles.n2>.db-tile+.db-tile{border-left:1px solid var(--b-gline);padding-left:12px}
+#app .db-tile.card::before{content:"";display:block;width:23px;height:3px;margin-bottom:8px;border-radius:10px;background:var(--pri);opacity:.45}
+#app .db-tile .db-v{color:var(--pri);font-size:34px;letter-spacing:-.055em}
+#app .db-tile .db-k{font-size:12px}
+#app .db-tile .db-d{font-size:11px;word-break:keep-all}
+#app .db-box.card{border-radius:24px}
+
+/* ---------- 9. 모의시험: 고르기 단추 + 과목마다 둥근 카드 (이름·범위·문제 수 한 줄) ---------- */
+#app #exam.card{border-radius:24px}
+#app #exam .seg{gap:6px;background:none;border:0;padding:0}
+#app #exam .seg button{min-height:44px;border:1px solid var(--b-gline);border-radius:11px;background:var(--b-wash);color:var(--ink);font-size:13px;font-weight:700;box-shadow:none}
+#app #exam .seg button.on,#app #exam .seg button[aria-pressed="true"]{border-color:var(--pri);background:var(--pri);color:var(--pri-ink);box-shadow:0 3px 6px color-mix(in srgb,var(--pri) 7%,transparent)}
+#app #exam .exam-list{border-top:0;margin-top:14px}
+#app #exam .exam-list{display:block}
+#app #exam .exam-list li{display:flex;flex-wrap:wrap;align-items:center;gap:4px 10px;margin:0 0 9px;padding:11px 12px;border:1px solid var(--line);border-radius:16px;background:var(--bg)}
+#app #exam .exam-list .ex-range{flex:1 1 0;min-width:4em}
+#app #exam .exam-list .ex-n{margin-left:auto;text-align:right}
+#app #exam .exam-list li.short .ex-n,#app #exam .exam-list li.wait .ex-n{flex:1 1 100%;text-align:left}
+#app #exam .exam-list b{font-size:15px;font-weight:800}
+#app #exam .exam-list b::before{width:5px;height:17px;border-radius:4px;background:var(--pri);opacity:.65}
+#app #exam .exam-list .ex-range{font-size:13px}
+#app #exam .exam-list .ex-n{font-size:14px;font-weight:800}
+
+/* ---------- 10. 부록: 항목 카드 ---------- */
+#app #extraPane.card{border-radius:22px}
+#app .ex-item{border-color:var(--b-gline);border-radius:20px;box-shadow:var(--b-shadow)}
+#app .ex-ic{border:1px solid var(--b-gline);border-radius:15px;background:var(--b-wash)}
+#app .ex-t b{font-weight:800}
+#app .ex-t small{word-break:keep-all;text-wrap:balance}
+
+/* ---------- 11. 아래 메뉴: 위쪽 선 + 옅은 그림자, 지금 칸은 초록 알약 ---------- */
+#app .tabbar{border-top:1px solid var(--line);box-shadow:0 -4px 14px color-mix(in srgb,var(--ink) 3%,transparent);gap:5px}
+#app .tabbar button{min-height:52px;border:1px solid transparent;border-radius:17px;font-size:12px}
+#app .tabbar button[aria-current="page"]{background:var(--pri)!important;border-color:var(--pri);color:var(--pri-ink);font-weight:800;box-shadow:0 2px 0 color-mix(in srgb,var(--pri) 6%,transparent)}
+#app .tabbar button[aria-current="page"]::after{display:none}
+@media (min-width:768px){#app .tabbar{border:1px solid var(--line)}}
+
+/* ---------- 12. 좁은 폰(340~389px): B안처럼 '오늘의 학습' 옆에 진도 단추 두 개 (폭 고정이라 글이 바뀌어도 자리 그대로) ---------- */
+@media (min-width:340px) and (max-width:389px){
+ html:not(.kid-dev) #app #today .today-head{flex-wrap:nowrap;gap:7px}
+ html:not(.kid-dev) #app #today .today-head .td-pills{flex:0 0 134px;flex-basis:134px}
+ html:not(.kid-dev) #app #today .today-head .label{font-size:25px}
+ html:not(.kid-dev) #app #today .td-pills .linkbtn{font-size:12px;padding-inline:6px}
+ html:not(.kid-dev) #app #today .td-pills .linkbtn.pace-now::before{margin-right:5px;padding:0 6px;font-size:11px}
+}
+
+/* ---------- 13. 어두운 화면 알림(초등): B안처럼 노란 메모 그대로 ---------- */
+:root[data-theme="dark"]:not([data-age]) #app .notify-bar,:root[data-theme="dark"][data-age="ele"] #app .notify-bar{background:#f1cd89;color:#263442;border-color:#dab575;box-shadow:none}
+:root[data-theme="dark"]:not([data-age]) #app .notify-bar b,:root[data-theme="dark"][data-age="ele"] #app .notify-bar b,:root[data-theme="dark"]:not([data-age]) #app .notify-bar p span,:root[data-theme="dark"][data-age="ele"] #app .notify-bar p span,:root[data-theme="dark"]:not([data-age]) #app .notify-bar .nb-x,:root[data-theme="dark"][data-age="ele"] #app .notify-bar .nb-x{color:#263442}
+:root[data-theme="dark"]:not([data-age]) #app .notify-bar::before,:root[data-theme="dark"][data-age="ele"] #app .notify-bar::before{border-color:#26344226}
+
+/* ---------- 14. 머리줄 로고: 하트+책 (2026-10-08 대표). 나이 단계와 상관없이 사랑교육 색 (책 #236b59 / 어둡게 #aed2af, 하트 #ca6044) ---------- */
+#app>.hub-top .sarang-mark{width:30px;height:30px;color:#236b59}
+#app>.hub-top .sarang-mark svg{width:28px;height:28px;overflow:visible}
+:root[data-theme="dark"] #app>.hub-top .sarang-mark{color:#aed2af}
+@media (prefers-color-scheme:dark){:root:not([data-theme]) #app>.hub-top .sarang-mark{color:#aed2af}}
+.sarang-splash svg{color:#236b59;border-radius:0;box-shadow:none}
+:root[data-theme="dark"] .sarang-splash svg{color:#aed2af}
+.sarang-splash b{font-family:SarangUI,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;font-weight:800;color:#236b59}
+:root[data-theme="dark"] .sarang-splash b{color:#aed2af}
+
+/* ---------- 15. 입력 칸 높이: 나눔스퀘어라운드는 글꼴 줄 높이가 조금 낮아 글자 18px 입력 칸·영단어 '다 풀었어요' 단추가 43px로 줄어듦 → 44px 지킴 (창구 B2 대조 [중], 2026-10-08) ---------- */
+.sv-in,.sv-btns button{min-height:44px;box-sizing:border-box}
+</style>
 </head>
 <body>
-<div class="sarang-splash" id="sarangSplash" aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="19" fill="#2c5945"/><path d="M13 28c7-1 14 1 19 5v20c-5-4-12-6-19-5V28Z" fill="#f3f0df"/><path d="M51 28c-7-1-14 1-19 5v20c5-4 12-6 19-5V28Z" fill="#d7e0c8"/><path d="M32 27c-4-3-10-7-10-12 0-5 7-7 10-2 3-5 10-3 10 2 0 5-6 9-10 12Z" fill="#d2a185"/><path d="M19 34c3 0 6 1 8 2.5M19 40c3 0 6 1 8 2.5M37 36.5c2-1.5 5-2.5 8-2.5M37 42.5c2-1.5 5-2.5 8-2.5" stroke="#2c5945" stroke-width="1.5" stroke-linecap="round" opacity=".45"/></svg><b>사랑교육</b></div>
+<div class="sarang-splash" id="sarangSplash" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g style="fill:none;stroke:currentColor" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 24C17 21.8 25 24.1 32 29.2C39 24.1 47 21.8 56 24V49.3C47 47.5 39 49.6 32 54.4C25 49.6 17 47.5 8 49.3Z"/><path d="M32 29.2V54.4"/></g><path style="fill:#ca6044;stroke:none" d="M32 25.5C29.8 23.5 21 17.6 21 11.7C21 8.4 23.3 6.3 26.4 6.3C28.8 6.3 30.7 7.6 32 9.5C33.3 7.6 35.2 6.3 37.6 6.3C40.7 6.3 43 8.4 43 11.7C43 17.6 34.2 23.5 32 25.5Z"/></svg><b>사랑교육</b></div>
 <script>(function(){var s=document.getElementById("sarangSplash"),t0=Date.now(),seen=0;try{seen=sessionStorage.getItem("sarang_splash");sessionStorage.setItem("sarang_splash","1")}catch(e){}
  if(seen)return s.remove();
  var go=function(){if(s.classList.contains("out"))return;s.classList.add("out");setTimeout(function(){s.remove()},320)},
@@ -14084,6 +14230,9 @@ const G = subj => subj === 'ekor' ? st.kgrade : subj === 'wh' ? WGRADES[0] : sub
 /* 고를 수 있는 학년: 영어를 빼고 아이 학년 ±2 (2026-10-02 대표 '선행·후행도 2년 넘게 하는 아이가 학습지를 할까'). 학년을 모르면 다.
    그 범위에 그 과목 학년이 하나도 없으면 가장 가까운 학년 하나 */
 const GORD = ['k5', 'k6', 'k7', ...KGRADES];
+/* 예습: 이 과목 학년이 아이 학년보다 높음 (초1~2 선행 사회·과학·한국사, 학년을 올려 고른 과목). 그 학년의 학교 진도는 아이와 상관없으니 처음(Day 1)부터 시작하고,
+   '학교 진도에 맞추기'로 옮기지 않음 (2026-10-08 대표 "내년도 과목 예습 선택 시 그 과목의 내용이 교과 과정 진척사항을 따라 선택이 되네") */
+const ahead = subj => { const i = GORD.indexOf(childGrade()), j = GORD.indexOf(G(subj)); return i >= 0 && j > i; };
 const gGap = (a, b) => Math.abs(GORD.indexOf(a) - GORD.indexOf(b));
 function GRN(subj){
   const all = GR(subj), c = childGrade();
@@ -14149,7 +14298,7 @@ function termFrac(){
 function curDay(subj){
   const L = dayList(subj); if (!L.length) return 0;
   let d = st.pos[pkey(subj)];
-  if (!d) d = schoolDay(subj);   // 처음에는 학교 진도에서 시작
+  if (!d) d = ahead(subj) ? 1 : schoolDay(subj);   // 처음에는 학교 진도에서 시작, 예습 과목은 처음부터
   const last = st.last[pkey(subj)];
   if (last && last.day === d && last.ymd !== todayYmd()) d++;   // 출력한 날이 지나면 다음 Day
   return Math.min(Math.max(d, 1), L.length);
@@ -15585,6 +15734,11 @@ function fontsReady(){
     return ff.load().then(f => { document.fonts.add(f); }, () => {});
   })).then(() => {}, () => {}));
 }
+/* 앱 화면 글꼴(B안, src/b-theme.css 는 앱 옆 fonts/ 를 읽음): 내려받은 파일을 그냥 연 때(file://)는 브라우저가 옆 파일 글꼴을 막으므로 이 묶음으로 같은 글꼴을 넣음 */
+if (SSH_FONTS && typeof FontFace !== 'undefined' && document.fonts && location.protocol === 'file:') {
+  const RANGE = { 400: '100 500', 700: '600 700', 800: '800 900' };
+  Object.entries(SSH_FONTS).forEach(([w, b64]) => { try { new FontFace('SarangUI', Uint8Array.from(atob(b64), c => c.charCodeAt(0)), { weight: RANGE[w] || w }).load().then(f => document.fonts.add(f), () => {}); } catch (e) {} });
+}
 
 /* ---------- JPEG 이미지 PDF (기존 과목과 같은 방식) ---------- */
 function* pdfBuild(canvases){
@@ -15711,8 +15865,9 @@ function renderPane(subj){
   $(p + '-prev').disabled = n <= 1; $(p + '-next').disabled = n >= L.length;
   const sd = schoolDay(subj), gapN = n - sd;
   const sdi = L[Math.min(sd, L.length) - 1];
-  $(p + '-schooltxt').textContent = !L.length ? '' : `학교는 오늘 ‘${sdi ? sdi.title : ''}’ 차시쯤이에요. ` + (gapN === 0 ? '학교와 같은 진도예요.' : gapN > 0 ? `학습지 ${gapN}개만큼 앞서 있어요.` : `학습지 ${-gapN}개만큼 뒤에 있어요.`);
-  $(p + '-sync').hidden = !L.length || gapN === 0;
+  const pre = ahead(subj);
+  $(p + '-schooltxt').textContent = !L.length ? '' : pre ? `${SHORT[G(subj)] || ''} 과정을 미리 공부해요. 학교 진도와 상관없이 처음부터 차례대로 해요.` : `학교는 오늘 ‘${sdi ? sdi.title : ''}’ 차시쯤이에요. ` + (gapN === 0 ? '학교와 같은 진도예요.' : gapN > 0 ? `학습지 ${gapN}개만큼 앞서 있어요.` : `학습지 ${-gapN}개만큼 뒤에 있어요.`);
+  $(p + '-sync').hidden = !L.length || gapN === 0 || pre;
   $(p + '-school').hidden = $(p + '-sync').hidden;   // 맞추기 단추가 없으면 빈 줄도 없앰
   const rc = recapOf(subj, n);
   const btn = $(p + '-print');
@@ -16802,11 +16957,11 @@ function setKorGrade(g){ if (KGRADES.includes(g)) { st.kgrade = g; save(); rende
 function setEngGrade(g){ if (EGRADES.includes(g)) { st.egrade = g; save(); renderAll(); } }
 function setMathGrade(g){ if (MGRADES.includes(g)) { st.mgrade = g; save(); renderAll(); } }
 /* '학교 진도대로'(src/hub-ui.js, 2026-09-29): 받은 과목마다 과목 화면의 '학교 진도에 맞추기'와 같게 학교 진도 Day로 */
-function toSchool(list){ (list || []).forEach(subj => { if (IDS.includes(subj) && dayList(subj).length) setDay(subj, schoolDay(subj)); }); renderAll(); }
+function toSchool(list){ (list || []).forEach(subj => { if (IDS.includes(subj) && dayList(subj).length && !ahead(subj)) setDay(subj, schoolDay(subj)); }); renderAll(); }
 /* 다른 화면으로 가면 영어 소리를 멈춤 */
 function stopSound(){ if (ETTS.busy) { ETTS.stop(); renderEngSay(); } }
 /* upos·dayCount·dayTitle: 점검용 — 화면에 Day 번호가 없어(2026-10-01) 검사가 속 Day 와 단원 안 진도를 여기서 봄 */
-HUB_TODAY.ssh = { pagesFor, keepFold, termFrac, schoolDay, upos, recap: subj => recapOf(subj, spanStart(subj)).map(x => ({ k: x.k, title: x.r.lesson.title })),   // recap: 현황판(src/dash.js)가 보는 오늘 학습지의 어제·일주일 전 복습
+HUB_TODAY.ssh = { pagesFor, keepFold, termFrac, schoolDay, ahead, upos, recap: subj => recapOf(subj, spanStart(subj)).map(x => ({ k: x.k, title: x.r.lesson.title })),   // recap: 현황판(src/dash.js)가 보는 오늘 학습지의 어제·일주일 전 복습
    dayCount: subj => dayList(subj).length, dayTitle: (subj, n) => { const r = resolve(subj, n); return r && r.lesson ? r.lesson.title : ''; }, toSchool, screen: screenOpen, screenOk: scrOk, scrCheck, scrNorm, ids: IDS, guideOn: () => st.guide, setGuide, setGrade, setKorGrade, setEngGrade, setMathGrade, stopSound, mountPane, renderPane, hasKor, hasEng, hasMath, hisMode, toPdf, examInfo, renderExam, hwExam: { load: examHwLoad, list: examHwList, run: examRun, wrong: examHwWrong, sel: examSel, terms: EXAM_TERM, kinds: EXAM_KIND, loading: () => examSubjects().some(subj => subj !== 'e3math' && packState(pg(subj)) === 'loading') }, examOk: () => examSubjects().length > 0, fontsReady };   // examOk: 아이 학년·과목에 모의시험을 만들 교과가 있는지 (없으면 아래 메뉴에서 모의시험을 숨김, 2026-10-01 대표)
 document.addEventListener('hub:child', renderExam);
 })();
@@ -20532,10 +20687,11 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   function schoolSubs(){
     const H = window.HUB_TODAY || {}, out = [], keep = [];
     const g = f => { try { return !!f(); } catch (e) { return false; } };
-    if (has('kor')) (g(() => H.kor.hasGuide()) ? out.push('ekor') : keep.push('국어'));
-    if (has('math')) (g(() => H.math.hasGuide()) ? out.push('emath') : g(() => H.math.school()) ? out.push('math') : keep.push('수학'));   // 초2·3 원래 앱 수학도 학교 진도 자리로 (2026-10-01)
+    const pre = x => g(() => H.ssh.ahead(x));   // 예습 과목(아이 학년보다 높은 학년)은 학교 진도가 없어 지금 진도 그대로 (2026-10-08)
+    if (has('kor')) (g(() => H.kor.hasGuide()) && !pre('ekor') ? out.push('ekor') : keep.push('국어'));
+    if (has('math')) (g(() => H.math.hasGuide()) ? (pre('emath') ? keep.push('수학') : out.push('emath')) : g(() => H.math.school()) ? out.push('math') : keep.push('수학'));   // 초2·3 원래 앱 수학도 학교 진도 자리로 (2026-10-01)
     if (has('ymath')) keep.push('수학');
-    ['eng', 'soc', 'sci', 'his', 'wh'].forEach(x => { if (has(x)) out.push(x); });
+    ['eng', 'soc', 'sci', 'his', 'wh'].forEach(x => { if (has(x)) (pre(x) ? keep.push(NAME[x]) : out.push(x)); });
     if (has('hanja') || has('yhan')) keep.push('한자');
     return { out, keep: [...new Set(keep)] };
   }
@@ -27194,12 +27350,13 @@ window.DONATE_CORE = (function(){
       const cnt = S.dayCount(id);
       if (cnt && n) {
         out.pct = Math.round((n - 1) / cnt * 100);
-        if (NAV().pace() !== 'school') { out.gap = n - S.schoolDay(id); out.st = out.gap === 0 ? 'same' : out.gap > 0 ? 'ahead' : 'late'; }
+        if (S.ahead && S.ahead(id)) out.st = 'pre';   // 예습 과목(아이 학년보다 높은 학년)은 학교 진도와 견주지 않음 (2026-10-08)
+        else if (NAV().pace() !== 'school') { out.gap = n - S.schoolDay(id); out.st = out.gap === 0 ? 'same' : out.gap > 0 ? 'ahead' : 'late'; }
       }
     }
     return out;
   }
-  const PILL = { school: ['ok', '학교 진도대로'], same: ['ok', '학교와 같음'], ahead: ['ahead', g => `${g}개 앞섬`], late: ['late', g => `${-g}개 늦음`], free: ['free', '자유 진도'] };
+  const PILL = { school: ['ok', '학교 진도대로'], same: ['ok', '학교와 같음'], ahead: ['ahead', g => `${g}개 앞섬`], late: ['late', g => `${-g}개 늦음`], free: ['free', '자유 진도'], pre: ['free', '예습'] };
   function pill(r){ const p = PILL[r.st], t = typeof p[1] === 'function' ? p[1](r.gap) : p[1]; return `<span class="db-pill ${p[0]}"${r.st === 'ahead' || r.st === 'late' ? ` title="학교 진도보다 학습지 ${Math.abs(r.gap)}개 ${r.st === 'late' ? '뒤' : '앞'}"` : ''}>${t}</span>`; }
 
   /* 날짜별 한 공부: { 'YYYY-M-D': { p: [과목], s: [과목] } } */
