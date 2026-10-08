@@ -20123,7 +20123,8 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   }
   $('extraList').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; backTo = 'extra'; backY = Math.round(scrollY); open(b.dataset.ex); });
   $('sarangDashboard').insertAdjacentHTML('beforeend', '<section class="card exam-none" id="examNone"><div class="label">모의시험</div><div class="info">아이 학년에는 아직 모의시험을 만들 교과(국어·수학·사회·과학·한국사 등 시험 범위가 있는 과목)가 없어요.</div></section>');
-  function setTab(t){ if (t === 'screen') t = 'today'; if (!tabsNow().some(x => x[0] === t) && !(t === 'subj' && !tod())) return; tab = t; setOpen(false); show('home'); window.scrollTo(0, 0); }
+  /* 아이 기기(html.kid-dev): 현황판·놀이 모음·모의시험·부록 칸으로 가지 않음 (2026-10-08 대표 PC 사진: 같은 탭에서 부모가 보던 현황판이 아이 기기에 남음) */
+  function setTab(t){ if (t === 'screen') t = 'today'; if (document.documentElement.classList.contains('kid-dev') && t !== 'today' && t !== 'pscreen') t = tod() ? 'pscreen' : 'today'; if (!tabsNow().some(x => x[0] === t) && !(t === 'subj' && !tod())) return; tab = t; setOpen(false); show('home'); window.scrollTo(0, 0); }
   tabBar.addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return;
     const D = window.SARANG_DASH; if (D && D.mgActive && D.mgActive() && b.dataset.tab !== 'dash' && D.guard(() => setTab(b.dataset.tab))) return;   // 학습 관리에서 바꾼 진도를 저장하지 않고 나가면 물음 (src/dash.js)
     setTab(b.dataset.tab); });
@@ -20406,7 +20407,8 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     }
     $('onboard').hidden = true; $('setBtnHub').hidden = false; parkWeek();
     const T = tod();   // 유아 놀이: 과목 화면 없이 놀이 모음·화면 놀이만. 형제 프로필로 학년이 바뀌면 메뉴도 바뀜
-    if (T) { s = 'home'; if (tab !== 'play' && tab !== 'pscreen' && tab !== 'dash') tab = 'play'; } else if (tab === 'play' || tab === 'pscreen') tab = 'today';
+    /* 아이 기기(2~4세): 놀이 모음(프린트)·현황판 없이 화면 놀이만 (2026-10-08 대표 'PC에 아이 연결하니 학습 내용이 안 뜸') */
+    if (T) { s = 'home'; if (document.documentElement.classList.contains('kid-dev')) tab = 'pscreen'; else if (tab !== 'play' && tab !== 'pscreen' && tab !== 'dash') tab = 'play'; } else if (tab === 'play' || tab === 'pscreen') tab = 'today';
     drawTabs();
     if (tab === 'exam' && !examOk()) tab = 'today';   // 학년·과목을 바꿔 모의시험이 없어지면 오늘로
     if (tab === 'extra' && !extras().length) tab = 'today';   // 영어를 빼서 부록에 보일 것이 없으면
@@ -26940,7 +26942,7 @@ window.DONATE_CORE = (function(){
     document.addEventListener('click', stop, true); document.addEventListener('keydown', stop, true);
     const brand = document.querySelector('#app>.hub-top .sarang-brand'); if (brand) { brand.addEventListener('click', e => { e.stopImmediatePropagation(); e.preventDefault(); }, true); brand.removeAttribute('role'); brand.removeAttribute('tabindex'); brand.removeAttribute('aria-label'); }
     const nb = $('notifyT') && $('notifyT').nextElementSibling; if (nb && /프린트/.test(nb.textContent)) nb.textContent = '바로 풀기로 오늘 공부를 시작해요.';   // 공부 알림 줄: 아이 폰에는 프린트가 없음
-    const N = window.HUB_NAV; if (N && N.tabNow && N.tabNow !== 'today' && N.tab) N.tab('today');
+    const N = window.HUB_NAV, go = document.documentElement.dataset.age === 'tod' || (N && N.tabNow === 'play') ? 'pscreen' : 'today'; if (N && N.tabNow && N.tabNow !== go && N.tab) N.tab(go);   // 2~4세는 화면 놀이 (src/hub-ui.js show)
   }
   function kidWatch(){
     const a = A(), k = kidDev(); if (!a || !k || kidHwStop || !(L().user && L().user.child)) return;
@@ -27027,6 +27029,7 @@ window.DONATE_CORE = (function(){
       ($('kdKidHw') || $('today')).after(box);   // D안: 오늘 학습 → 숙제 → 연속 공부
       box.addEventListener('click', e => { const b = e.target.closest('[data-calm]'); if (!b || b.disabled) return; calMonth = Math.min(0, Math.max(-12, calMonth + +b.dataset.calm)); calPaint(); });
     }
+    { const p = document.documentElement.dataset.age === 'tod' && $('play'); if (p && p.nextElementSibling !== box) p.after(box); }   // 2~4세: 화면 놀이 → 연속 공부 (놀이 칸은 늦게 생김)
     const m = stamps(), now = new Date(), n = streak(m), today = !!m[ymd(now)];
     const first = new Date(now.getFullYear(), now.getMonth() + calMonth, 1), y = first.getFullYear(), mo = first.getMonth(), last = new Date(y, mo + 1, 0).getDate();
     const cells = [];
@@ -27902,6 +27905,7 @@ window.DONATE_CORE = (function(){
   /* 아이를 바꾸면 앱이 새로 켜짐: 현황판에서 바꿨으면 다시 현황판으로 */
   document.addEventListener('DOMContentLoaded', () => setTimeout(() => {
     let k = null; try { k = sessionStorage.getItem(KEEP); } catch (e) {}
+    if (k && document.documentElement.classList.contains('kid-dev')) { try { sessionStorage.removeItem(KEEP); } catch (e) {} return; }   // 아이 기기: 부모가 보던 현황판으로 돌아가지 않음
     const N = NAV(); if (k && N && N.tabNow !== 'dash') N.tab('dash');
   }, 0));
   document.addEventListener('DOMContentLoaded', () => { setTimeout(() => { try { notePct(); } catch (e) {} }, 4000); });   // 현황판을 안 열어도 이 달 진도를 적어 둠 (과목 학습지를 읽은 뒤)
