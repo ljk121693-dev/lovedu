@@ -5926,6 +5926,14 @@ html.kid-dev #app .kd-cal.card{background:none;border:0;border-radius:0;padding:
 @media (prefers-reduced-motion:no-preference){
   #app .pane:not([hidden])>*,#app #today:not([hidden]),#app #settings:not([hidden]),#app #subj:not([hidden]) button:not([hidden]),#app #exam:not([hidden]),#app #extraPane:not([hidden]),#app .db:not([hidden]){animation:d-soft .16s ease-out backwards;animation-delay:0s}
 }
+/* 2026-10-09 대표 "화면간 전환시 약간 뚝뚝 끊김": 아래 메뉴·과목 화면 열고 닫기는 src/hub-ui.js smooth() 가 브라우저 화면 전환으로 옛 화면과 새 화면을 0.22초 겹쳐 바꿈.
+   아래 메뉴 줄은 따로 떼어 깜빡이지 않게 (불 들어온 칸만 바뀜) */
+@media (prefers-reduced-motion:no-preference){
+  ::view-transition-old(root),::view-transition-new(root){animation-duration:.22s;animation-timing-function:cubic-bezier(.2,.7,.3,1)}
+  #app .tabbar{view-transition-name:sarang-tabbar}
+  ::view-transition-group(sarang-tabbar){animation-duration:.22s}
+  ::view-transition{pointer-events:none}   /* 전환 0.22초 동안에도 누름이 새 화면 단추에 닿게 (겹친 사진이 누름을 먹지 않게) */
+}
 /* 학습 관리 '다음: 과목 진도 설정'·'저장' 줄, 놀이 '뽑기' 줄: 일부러 화면 아래에 붙어 따라오는 줄이라 카드와 다른 색 (대표 10-06) */
 #app .db-mg-bar,#app .pl-acts{background:color-mix(in srgb,var(--pri) 20%,var(--bg));border:1px solid color-mix(in srgb,var(--pri) 45%,var(--line));box-shadow:0 6px 22px rgba(0,0,0,.14)}
 #app .db-mg-bar button:not(.pri),#app .pl-acts button:not(.pri){background:var(--card)}
@@ -6122,6 +6130,18 @@ html.kid-dev #app #today .td-go[data-scr]{border:0;background:var(--pri);color:v
 #app .db-tile .db-k{font-size:12px}
 #app .db-tile .db-d{font-size:11px;word-break:keep-all}
 #app .db-box.card{border-radius:24px}
+/* 공부 시간 카드 (2026-10-09 대표 사진 "경계가 없어 되게 복잡하게 느껴짐"): 숫자 넷을 각각 옅은 테두리 칸으로, 나간 횟수 칸·그래프 사이를 띄우고 그래프 위에 선 */
+#app .db-tnums{gap:8px;margin-bottom:14px}
+#app .db-tn{min-width:0;padding:10px 12px 9px;border:1px solid var(--b-line);border-radius:14px;background:var(--card)}
+#app .db-tn .db-k{font-size:12.5px}
+#app .db-tn .db-d{font-size:11.5px;word-break:keep-all}
+#app .db-tmain>.db-leave{margin:0 0 4px}
+#app .db-tmain>.db-legend{margin-top:16px;padding-top:14px;border-top:1px solid var(--b-line)}
+@container dbm (min-width:820px) and (max-width:1099px){#app .db-tnums{grid-template-columns:repeat(2,minmax(0,1fr))}}   /* 옆에 과목별 시간이 있는 넓은 화면: 네 칸 한 줄은 칸 이름이 두 줄로 꺾여 숫자 높이가 어긋남 → 두 칸씩 */
+@container dbm (min-width:820px){#app .db-time .db-tsub{padding-left:24px;border-left:1px solid var(--b-line)}}
+@container dbm (max-width:819px){#app .db-time .db-tsub{padding-top:14px;border-top:1px solid var(--b-line)}}
+/* 학습 관리 ① '다음: 과목 진도 설정'·② '취소·저장' 줄 (2026-10-09 대표 "스크롤 따라오지 않고 그냥 고정", ② 줄도 "고정"): 화면 아래에 붙어 따라오지 않고 목록 끝 제자리 */
+#app .db-mg-bar{position:static;padding:0;border:0;background:none;box-shadow:none}
 
 /* ---------- 9. 모의시험: 고르기 단추 + 과목마다 둥근 카드 (이름·범위·문제 수 한 줄) ---------- */
 #app #exam.card{border-radius:24px}
@@ -20683,13 +20703,13 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   }
   /* ---------- 아래 메뉴 줄: 오늘 / 모의시험 (2026-09-29 주인: '화면 공부'는 오늘 카드로, '과목 자료'는 오늘 과목 줄·진도 설정으로 옮기고 없앰).
      'subj'(진도 설정 칸: 과목 카드)은 메뉴에 없는 칸으로 남김 — '자유 진도설정'·HUB_NAV.tab('subj')로 엶. 'screen'은 '오늘'로 ---------- */
-  /* 2026-10-04 12:56 KST 대표: 순서 현황판 · 학습 · 모의시험 (이름 '오늘'→'학습', '모의고사'→'모의시험'). 앱을 열면 처음 칸은 그대로 '학습' */
-  const TABS = [['dash', '현황판', '<rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/>'],
-    ['today', '학습', '<rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 11h16"/>'],
+  /* 2026-10-04 12:56 KST 대표: 이름 '오늘'→'학습', '모의고사'→'모의시험'. 2026-10-09 대표 "학습이 1번, 현황판이 2번으로 바뀌고 학습이 홈으로": 순서 학습 · 현황판 · 모의시험 · 부록, 앱을 열면 처음 칸 '학습' */
+  const TABS = [['today', '학습', '<rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 11h16"/>'],
+    ['dash', '현황판', '<rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/>'],
     ['exam', '모의시험', '<path d="M8 3h8l4 4v14H4V3h4"/><path d="M8 3v3h8V3M8 12l2 2 4-4M8 18h8"/>'],
     ['extra', '부록', '<path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3M9 7h6M9 10.5h4"/>']];   // 2026-10-04 13:27 KST 대표: 아래 메뉴에 '부록' (영단어·영어 듣기를 영어 과목에서 꺼내 옮김, 앞으로 학습 도움 기능을 더 넣을 자리)   // 현황판 (src/dash.js, 2026-10-03 대표: 아이 학습 현황, 모든 기기 · 폰은 줄인 판)
-  /* 유아 놀이(k2~k4): 아래 메뉴는 현황판 / 놀이 모음 / 화면 놀이 셋 (10-04 12:56 현황판을 맨 앞으로) (2026-10-04 대표: 0~4세에도 현황판. 설정은 위 톱니바퀴 그대로) */
-  const TABS_T = [TABS.find(x => x[0] === 'dash'), ['play', '놀이 모음', '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><circle cx="10.5" cy="12" r="1.6"/><path d="M9 17c1.8-1.6 4.2-1.6 6 0"/>'], ['pscreen', '화면 놀이', '<rect x="3" y="5" width="18" height="13" rx="2.5"/><path d="M9 21h6M12 18v3"/><path d="M8 12.5c1.5-3 3-3 4 0s2.5 3 4 0"/>']];
+  /* 유아 놀이(k2~k4): 아래 메뉴는 놀이 모음 / 현황판 / 화면 놀이 셋 (10-09 대표 '현황판 2번': 학습 칸 자리인 놀이 모음이 1번) (2026-10-04 대표: 0~4세에도 현황판. 설정은 위 톱니바퀴 그대로) */
+  const TABS_T = [['play', '놀이 모음', '<path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><circle cx="10.5" cy="12" r="1.6"/><path d="M9 17c1.8-1.6 4.2-1.6 6 0"/>'], TABS.find(x => x[0] === 'dash'), ['pscreen', '화면 놀이', '<rect x="3" y="5" width="18" height="13" rx="2.5"/><path d="M9 21h6M12 18v3"/><path d="M8 12.5c1.5-3 3-3 4 0s2.5 3 4 0"/>']];
   let tab = 'today', tabKind = '', backTo = 'subj', backY = 0;
   let subjPop = false;   // 과목 화면을 '‹'로 닫으며 넣어 둔 기록을 되돌리는 중 (subjHist)
   try { if (history.state && history.state.sarangSubj) { const s0 = Object.assign({}, history.state); delete s0.sarangSubj; history.replaceState(s0, ''); } } catch (e) {}   // 새로 고침: 지난번 과목 화면 기록 표시가 남아 있으면 지움 (안 지우면 뒤로 가기가 한 번 헛돎)
@@ -20716,26 +20736,39 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     const html = extras().map(x => `<button type="button" class="ex-item" data-ex="${x.k}"><span class="ex-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${x.ic}</svg></span><span class="ex-t"><b>${x.t}</b><small>${x.d}</small></span><i class="ex-go" aria-hidden="true">›</i></button>`).join('');
     if ($('extraList').innerHTML !== html) $('extraList').innerHTML = html;
   }
-  $('extraList').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; backTo = 'extra'; backY = Math.round(scrollY); open(b.dataset.ex); });
+  $('extraList').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; backTo = 'extra'; backY = Math.round(scrollY); smooth(() => open(b.dataset.ex)); });
   $('sarangDashboard').insertAdjacentHTML('beforeend', '<section class="card exam-none" id="examNone"><div class="label">모의시험</div><div class="info">아이 학년에는 아직 모의시험을 만들 교과(국어·수학·사회·과학·한국사 등 시험 범위가 있는 과목)가 없어요.</div></section>');
   /* 아이 기기(html.kid-dev): 현황판·놀이 모음·모의시험·부록 칸으로 가지 않음 (2026-10-08 대표 PC 사진: 같은 탭에서 부모가 보던 현황판이 아이 기기에 남음) */
   function setTab(t){ if (t === 'screen') t = 'today'; if (document.documentElement.classList.contains('kid-dev') && t !== 'today' && t !== 'pscreen') t = tod() ? 'pscreen' : 'today'; if (!tabsNow().some(x => x[0] === t) && !(t === 'subj' && !tod())) return; tab = t; setOpen(false); show('home'); window.scrollTo(0, 0); }
+  /* 화면 바꿈을 부드럽게 (2026-10-09 대표 "화면간 전환시 약간 뚝뚝 끊김"): 누른 칸으로 바꿀 때 브라우저 화면 전환(View Transitions)으로 옛 화면이 옅어지며 새 화면이 겹쳐 나타남.
+     바꾸는 일은 다음 틀에 한 번 돌고(그 사이 옛 화면 사진을 보여 줌) 자리·스크롤은 그대로. 못 쓰는 브라우저·움직임 줄이기·전환 중에 또 누름은 바로 바꿈 (src/d-theme.css 'vt-on') */
+  let vtFn = null, vtN = 0;   // 전환이 옛 화면 사진을 찍는 동안(다음 틀까지) 기다리는 바꿈: 그 사이 또 누르면 마지막 것만 함
+  function smooth(fn){
+    const H = document.documentElement;
+    if (vtFn) { vtFn = fn; return; }
+    if (!document.startViewTransition || document.hidden || H.classList.contains('vt-on') || matchMedia('(prefers-reduced-motion: reduce)').matches) return fn();
+    const n = ++vtN, run = () => { if (n !== vtN) return; const f = vtFn; vtFn = null; if (f) f(); };
+    let v; vtFn = fn; H.classList.add('vt-on');
+    try { v = document.startViewTransition(run); } catch (e) { H.classList.remove('vt-on'); return run(); }
+    setTimeout(run, 1000);   // 어떤 까닭으로 전환이 바꿈을 부르지 않아도 누른 것은 꼭 함
+    v.finished.catch(() => {}).then(() => H.classList.remove('vt-on'));
+  }
   tabBar.addEventListener('click', e => { const b = e.target.closest('[data-tab]'); if (!b) return;
-    const D = window.SARANG_DASH; if (D && D.mgActive && D.mgActive() && b.dataset.tab !== 'dash' && D.guard(() => setTab(b.dataset.tab))) return;   // 학습 관리에서 바꾼 진도를 저장하지 않고 나가면 물음 (src/dash.js)
-    setTab(b.dataset.tab); });
-  /* 머리줄 로고·'사랑교육'을 누르면 현황판으로 (2026-10-04 대표 "상단의 아이콘을 눌러도 현황판으로 돌아오도록"). 아래 메뉴 '현황판'을 누른 것과 같은 길 */
+    const D = window.SARANG_DASH; if (D && D.mgActive && D.mgActive() && b.dataset.tab !== 'dash' && D.guard(() => smooth(() => setTab(b.dataset.tab)))) return;   // 학습 관리에서 바꾼 진도를 저장하지 않고 나가면 물음 (src/dash.js)
+    smooth(() => setTab(b.dataset.tab)); });
+  /* 머리줄 로고·'사랑교육'을 누르면 홈(학습, 0~4세는 놀이 모음)으로 (2026-10-09 대표 "학습이 홈으로", 그 전 10-04 에는 현황판). 아래 메뉴 첫 칸을 누른 것과 같은 길 */
   const brand = document.querySelector('#app>.hub-top .sarang-brand');
   if (brand) {
-    brand.setAttribute('role', 'button'); brand.tabIndex = 0; brand.setAttribute('aria-label', '사랑교육, 현황판으로 가기');
-    /* 가입 중에는 그대로. 설정·과목 화면에서도 setTab 이 닫고 현황판 첫 화면('현황')으로. 학습 관리에서 바꾼 진도가 있으면 먼저 물음 (src/dash.js guard) */
-    const toDash = () => {
-      if (!$('onboard').hidden || !tabsNow().some(x => x[0] === 'dash')) return;
-      const D = window.SARANG_DASH, go = () => { setTab('dash'); if (D && D.viewNow !== 'stat') D.view('stat'); };
+    brand.setAttribute('role', 'button'); brand.tabIndex = 0; brand.setAttribute('aria-label', '사랑교육, 홈으로 가기');
+    /* 가입 중에는 그대로. 설정·과목 화면에서도 setTab 이 닫고 홈으로. 학습 관리에서 바꾼 진도가 있으면 먼저 물음 (src/dash.js guard) */
+    const toHome = () => {
+      if (!$('onboard').hidden) return;
+      const D = window.SARANG_DASH, go = () => smooth(() => setTab(tabsNow()[0][0]));
       if (D && D.mgActive && D.mgActive() && D.guard(go)) return;
       go();
     };
-    brand.addEventListener('click', toDash);
-    brand.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toDash(); } });
+    brand.addEventListener('click', toHome);
+    brand.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toHome(); } });
   }
   /* ---------- 자녀 (src/kids.js, 2026-10-02 대표): 둘 이상이면 화면 맨 위(머리줄 아래) 카드로 바꿔 보기, 설정 '자녀' 칸에서 별명·번호·추가 ---------- */
   ($('sarangHero') || $('today')).insertAdjacentHTML('beforebegin', '<div class="kid-bar" id="kidBar" hidden><div class="kid-cards" id="kidCards" role="group" aria-label="자녀 바꾸기"></div></div>');
@@ -20989,6 +21022,7 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     if ($('todayWays')) $('todayWays').classList.toggle('has-guide', row.parentNode === $('todayWays') && !row.hidden);   // 가이드가 없으면 뽑아서 풀기 한 칸
   }
   function show(s){
+    vtFn = null;   // 누른 칸이 전환을 기다리는 사이 다른 길(HUB_NAV 등)로 화면을 바꾸면 나중 것이 이김: 기다리던 바꿈은 버림 (smooth)
     const m = mode();
     if (!ob && (!m || !child())) startOnboardSilently();
     if (window.TOD_THEME && !ob) TOD_THEME.set(TOD_THEME.stage((child() || {}).grade));   // 아이 단계 테마: 영아기·유아기 파스텔+캐릭터, 초등·중학 색 (src/tod-theme.js)
@@ -21089,19 +21123,19 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     setOpen(false);
     show(s); window.scrollTo(0, 0);
   }
-  $('subj').addEventListener('click', e => { const b = e.target.closest('button[data-s]'); if (b) open(b.dataset.s); });
+  $('subj').addEventListener('click', e => { const b = e.target.closest('button[data-s]'); if (b) smooth(() => open(b.dataset.s)); });
   addEventListener('resize', () => { if (view === 'home' && !ob) renderHome(); });
   document.addEventListener('hub:refresh', () => { if (view === 'home' && !ob) renderHome(); });   // 학습지 묶음을 읽은 뒤 과목 카드 정보 다시
   /* 과목 화면 '‹': 오늘 줄에서 열었으면 오늘(보던 자리), 진도 설정에서 열었으면 진도 설정 */
-  $('homeBtn').addEventListener('click', () => { const t = backTo, y = t === 'today' || t === 'dash' || t === 'extra' ? backY : 0; backTo = 'subj'; tab = t; show('home'); window.scrollTo(0, y);
+  $('homeBtn').addEventListener('click', () => smooth(() => { const t = backTo, y = t === 'today' || t === 'dash' || t === 'extra' ? backY : 0; backTo = 'subj'; tab = t; show('home'); window.scrollTo(0, y);
     /* 오늘 칸은 다음 틀에 다시 그려져 높이가 늦게 참 → 그 자리가 생길 때까지 몇 틀 더 (보던 줄로 돌아오게) */
     let n = 0; const again = () => { if (view !== 'home' || Math.abs(scrollY - y) <= 1 || ++n > 20) return; if (document.documentElement.scrollHeight - innerHeight >= y) window.scrollTo(0, y); requestAnimationFrame(again); };
-    if (y) requestAnimationFrame(again); });
+    if (y) requestAnimationFrame(again); }));
   $('subjBack').addEventListener('click', () => setTab('today'));
   /* 오늘 과목 줄·다른 과목 줄: 줄(과목·Day·설명)을 누르면 그 과목 화면 (단추 '스마트'·'프린트'는 그 일만) */
   const PANE = { wh: 'his' };
   function openRow(li){ backTo = 'today'; backY = Math.round(scrollY); tab = 'today'; open(PANE[li.dataset.s] || li.dataset.s); }
-  $('today').addEventListener('click', e => { const li = e.target.closest('#todayList li[data-s], #todayOther li[data-s]'); if (li && !e.target.closest('button, a, input')) openRow(li); });
+  $('today').addEventListener('click', e => { const li = e.target.closest('#todayList li[data-s], #todayOther li[data-s]'); if (li && !e.target.closest('button, a, input')) smooth(() => openRow(li)); });
   $('today').addEventListener('keydown', e => { const li = e.target.closest && e.target.closest('li[data-s]'); if (li && e.target === li && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openRow(li); } });
   $('engSw').addEventListener('click', e => { const b = e.target.closest('button[data-s]'); if (b) { show(b.dataset.s); } });
   $('setBtnHub').addEventListener('click', () => { renderHome(); setOpen($('settings').hidden); });
@@ -27211,20 +27245,9 @@ window.DONATE_CORE = (function(){
     renderSet();
   }
   let lastKey = '';
-  /* 자녀 모드 부모 폰: 처음 열면 현황판 (2026-10-04 1시간 규칙으로 추천안 적용, 대표가 바꿀 수 있음).
-     목록은 로그인 뒤 늦게 오므로, 그 사이 부모가 아무것도 누르지 않았고 학습 첫 화면 그대로일 때만 한 번 옮김 */
-  let firstDone = false, touched = false;
-  ['pointerdown', 'keydown'].forEach(t => document.addEventListener(t, () => { touched = true; }, { capture: true, once: true }));
-  function firstDash(){
-    if (firstDone || devs == null) return; firstDone = true;
-    const N = window.HUB_NAV, S = window.SARANG_SCREEN;
-    if (touched || !N || !window.SARANG_KIDLINK.linkedNow() || N.tabNow !== 'today') return;
-    if (!$('onboard') || !$('onboard').hidden || !$('settings') || !$('settings').hidden || (S && S.isOpen && S.isOpen())) return;
-    if (document.querySelector('.kd-dlg:not([hidden])')) return;
-    N.tab('dash');
-  }
+  /* 자녀 모드 부모 폰도 처음 열면 학습 (2026-10-09 대표 "학습이 홈으로". 그 전 10-04 에는 현황판으로 옮겼음) */
   function changed(){
-    renderSet(); inviteDone(); if (hwEl && !hwEl.hidden) paintHw(hwEl); firstDash();
+    renderSet(); inviteDone(); if (hwEl && !hwEl.hidden) paintHw(hwEl);
     const k = JSON.stringify((devs || []).map(d => d.childId).sort());
     if (k !== lastKey) { lastKey = k; document.dispatchEvent(new CustomEvent('hub:refresh')); }   // 오늘 줄의 '스마트' ↔ '아이 폰'
   }
@@ -28518,7 +28541,7 @@ window.DONATE_CORE = (function(){
     if (keep) {   // '그대로 두기': 맨 아래까지 내려 둔 채 묻는 칸이 접히면 화면 끝에 걸려 위 칸이 내려옴(튐) → 접힌 만큼 아래를 비워 단추 자리 그대로
       const d = Math.round(b.getBoundingClientRect().top - t0);
       if (d > 1) { let sp = $('dbMgPad'); if (!sp) { sp = document.createElement('div'); sp.id = 'dbMgPad'; sp.setAttribute('aria-hidden', 'true'); document.body.append(sp); }   // 쪽 맨 끝 빈칸 (현황판 칸 배치와 상관없이 쪽 길이를 늘림)
-        const to = window.scrollY + d; sp.style.height = d + 'px';
+        const to = window.scrollY + d; sp.style.height = Math.max(d, Math.ceil(to + innerHeight - (sp.getBoundingClientRect().top + window.scrollY))) + 'px';   // 빈칸 위까지 쪽 길이로 모자란 만큼 한 번에 (쪽이 화면보다 짧으면 21px씩만 늘어 4번에 못 맞춤, 2026-10-09 창구 834x1194)
         for (let k = 0, short; k < 4 && (short = to - (document.documentElement.scrollHeight - innerHeight)) > 0; k++) sp.style.height = parseFloat(sp.style.height) + short + 'px';   // 접힌 뒤 쪽이 화면보다 짧아졌으면 그만큼 더 (쪽 높이는 화면 높이 밑으로 안 내려가 한 번에 모자랄 수 있음 → 맞을 때까지, 2026-10-05 태블릿)
         window.scrollTo(0, to); }
     }
