@@ -5040,6 +5040,47 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
 #settings .set-child .lg-ins .linkbtn{flex:1 1 0;min-width:0;padding:0 10px}
 @media (max-width:339px){.lg-ins{flex-direction:column}}
 </style>
+<style id="sarang-acct">/* 회원 탈퇴·접수 번호·알림·응원 (src/acct.js). 창 틀은 가입 마무리 창(.lg-join, login.css)을 같이 씀 */
+.ac-box:empty{display:none}
+.ac-box .ac-row span{font-weight:400;font-size:13.5px;color:var(--sub);line-height:1.5;overflow-wrap:anywhere}
+.ac-box .ac-row b{display:block;font-weight:700;font-size:14.5px;color:var(--ink)}
+.ac-box .ac-row small{display:block;margin-top:2px;font-size:12px}
+.ac-out{display:flex;justify-content:flex-end;margin-top:6px}
+.ac-link{min-height:44px;padding:0 6px;border:0;background:none;color:var(--sub);font:inherit;font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.ac-link:focus-visible{outline:2px solid var(--pri);outline-offset:2px;border-radius:6px}
+.ac-gate{margin-top:6px;text-align:center}
+.ac-dlg .ac-body>p{margin:0 0 10px;font-size:14px;line-height:1.55;color:var(--ink);word-break:keep-all;overflow-wrap:anywhere}
+.ac-dlg .ac-body .ac-big{font-size:15.5px;font-weight:700}
+.ac-dlg .ac-body .ac-note{font-size:12.5px;color:var(--sub)}
+.ac-dlg .ac-wait{color:var(--sub)}
+.ac-facts{margin:0 0 14px;padding:0 0 0 18px;font-size:14px;line-height:1.6;color:var(--ink);word-break:keep-all;overflow-wrap:anywhere}
+.ac-facts li+li{margin-top:4px}
+.ac-k{display:block;margin:0 0 6px;font-size:13px;font-weight:700;color:var(--ink)}
+.ac-code{display:flex;align-items:center;gap:8px;margin:0 0 8px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;background:var(--soft)}
+.ac-code-t{flex:1 1 auto;min-width:0;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px;font-weight:700;letter-spacing:.04em;color:var(--ink);overflow-wrap:anywhere;user-select:all}
+.ac-copy{flex:none;min-width:72px;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
+.ac-in{box-sizing:border-box;width:100%;min-height:48px;margin:0 0 10px;padding:0 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:16px}
+.ac-in:focus{outline:2px solid var(--pri);outline-offset:1px}
+.ac-res{min-height:1.5em;margin:0 0 6px}
+.ac-res p{margin:0 0 6px;font-size:14px;line-height:1.55;color:var(--ink);word-break:keep-all;overflow-wrap:anywhere}
+.ac-res .ac-big{font-weight:700}
+.ac-res .ac-note,.ac-res .ac-wait{font-size:12.5px;color:var(--sub)}
+.ac-res .ac-bad{color:var(--warn-ink,var(--sub))}
+.lg-join-go.ac-danger{border-color:#b3261e;background:#b3261e;color:#fff}
+:root[data-theme="dark"] .lg-join-go.ac-danger{border-color:#ff8f80;background:#ff8f80;color:#2a0b08}
+.ac-dlg .lg-join-no:disabled{opacity:.45;cursor:default}
+.ac-res .ac-again{width:100%;min-height:48px;margin:2px 0 6px;border-radius:12px;font:inherit;font-size:15px;font-weight:700;cursor:pointer}
+/* 응원 한마디·응원 알림 받기 (아이 폰 첫 화면 위 한 줄) */
+.ac-cheer{display:flex;align-items:center;gap:12px;margin:0 0 12px;padding:12px 14px}
+.ac-cheer p{flex:1 1 auto;min-width:0;margin:0;font-size:14px;line-height:1.55;color:var(--ink);word-break:keep-all;overflow-wrap:anywhere}
+.ac-cheer p b{display:block;margin-bottom:2px;font-size:12.5px;color:var(--pri)}
+.ac-cheer .linkbtn{flex:none;min-height:44px}
+@media (max-width:359px){.ac-cheer{flex-wrap:wrap}.ac-cheer .linkbtn{flex:1 1 100%}}
+.kd-cheerln{color:var(--pri)!important}
+@media print{.ac-dlg,.ac-cheer{display:none!important}}
+/* 알림 글(.lg-toast)이 아래 메뉴를 가리지 않게 메뉴 위로 (아래 메뉴가 보일 때만: 자녀 모드·첫 화면·설정·틀린 문제 모음은 메뉴 없음) */
+html:not(.kid-dev):not(.lg-gated):has(#app.has-tabs:not(.set-open):not(.wr-on)) .lg-toast{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+</style>
 <style id="sarang-vlvdesc">.v-lvdesc{display:grid;gap:3px;margin:10px 0 0;padding:10px 12px;border-radius:12px;background:var(--soft);color:var(--ink);font-size:14px;line-height:1.55;word-break:keep-all;overflow-wrap:anywhere}.v-lvdesc:empty{display:none}.v-lvdesc b{font-size:14.5px;color:var(--pri)}.v-lvdesc small{color:var(--sub);font-size:12.5px}</style>
 <style id="sarang-listen">/* 영어 듣기 = 오늘 배운 영단어 다시 듣기 (src/listen-today.js, 2026-10-04) */
 .hear-card .hear-sub{margin:4px 0 12px;color:var(--sub);font-size:14px;line-height:1.55;word-break:keep-all}
@@ -5253,6 +5294,109 @@ div.kd-wrl{padding-left:12px}
 .kd-sheet .kd-hw-box + .kd-hw-box{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
 @media (min-width:600px){.kd-dlg.kd-sheet{align-items:center;padding:16px}.kd-dlg.kd-sheet .kd-card{border-radius:16px}}
 </style>
+<style id="sarang-school">/* 우리 아이 학교생활 (src/school.js, 판 76 후보). 색·모양은 B안 그대로 (테두리 --line, 바탕 --card, 노란 메모 = 오늘 공부 알림 띠와 같은 모양) */
+#app .db-sc{gap:12px}
+#app .db-sc .sc-card{display:flex;flex-direction:column;gap:8px;min-width:0;margin:0;padding:16px}
+.sc-h{display:flex;align-items:baseline;gap:8px;margin:0;font-size:15px;font-weight:700;color:var(--ink)}
+.sc-h small{margin-left:auto;font-size:12px;font-weight:600;color:var(--sub);text-align:right}
+.sc-p{margin:0;font-size:14px;line-height:1.6;color:var(--ink);word-break:keep-all;overflow-wrap:anywhere}
+.sc-dim{color:var(--sub)}
+.sc-note{margin:0;font-size:12.5px;line-height:1.55;color:var(--sub);word-break:keep-all;overflow-wrap:anywhere}
+.sc-fail{display:flex;align-items:center;min-height:52px;margin:0;padding:0 16px;border:1px dashed var(--line);border-radius:16px;font-size:14px;color:var(--sub)}
+.sc-btn{flex:none;min-height:44px;padding:0 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:13.5px;font-weight:700;white-space:nowrap;cursor:pointer}
+.sc-btn.sc-wide{align-self:stretch;width:100%}   /* 시안처럼 카드 폭 가득 (2026-10-09 창구 F1 [하] ②) */
+.sc-pri{min-height:48px;width:100%;border:0;border-radius:14px;background:var(--pri);color:var(--pri-ink,#fff);font:inherit;font-size:15px;font-weight:800;cursor:pointer}
+.sc-pri:disabled{opacity:.6;cursor:progress}
+.sc-link{align-self:center;min-height:44px;padding:0 6px;border:0;background:none;color:var(--sub);font:inherit;font-size:13px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.sc-dangerl{color:var(--d-dot,#ca6044)}
+.sc-btn:focus-visible,.sc-pri:focus-visible,.sc-link:focus-visible,.sc-res:focus-visible,.sc-back:focus-visible,.sc-inp:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+/* 학교 카드 */
+#app .db-sc .sc-school{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+.sc-school>div{min-width:0}
+.sc-school b{display:block;font-size:16px;font-weight:800;color:var(--ink);overflow-wrap:anywhere}
+.sc-school small{display:block;margin-top:2px;font-size:13px;color:var(--sub)}
+/* 노란 메모 띠: 글이 바뀌어도 높이 그대로 (제목 2줄·설명 2줄 자리) */
+.sc-memo{position:relative;display:flex;flex-direction:column;gap:6px;padding:14px 16px;border:1px solid var(--b-memo-line,#dab575);border-radius:7px 25px 25px 25px;background:var(--d-amber,#f1cd89);color:#263442;box-shadow:0 3px 0 var(--b-memo-shadow,#e8c584)}
+.sc-mrow{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:2.9em}
+.sc-mrow b{font-size:16px;font-weight:800;line-height:1.45;word-break:keep-all}
+.sc-msub{margin:0;min-height:3em;font-size:13.5px;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}
+:root[data-theme="dark"] .sc-memo{background:#f1cd89;border-color:#dab575;box-shadow:none;color:#263442}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .sc-memo{background:#f1cd89;border-color:#dab575;box-shadow:none;color:#263442}}
+/* 스위치 (설정 화면 스위치와 같은 크기) */
+.sc-sw{position:relative;flex:none;width:52px;height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.sc-sw input{position:absolute;inset:0;z-index:1;width:100%;height:100%;margin:0;opacity:0;cursor:pointer}
+.sc-sw span{pointer-events:none;position:relative;width:48px;height:28px;border-radius:999px;background:var(--line);box-shadow:inset 0 0 0 1px rgba(0,0,0,.14);transition:background .15s}
+.sc-sw span::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:transform .15s}
+.sc-sw input:checked+span{background:var(--pri)}
+.sc-memo .sc-sw input:checked+span{background:#236b59}
+.sc-sw input:checked+span::after{transform:translateX(20px)}
+.sc-sw input:disabled{cursor:default}
+.sc-sw input:disabled+span{opacity:.45}
+.sc-sw input:focus-visible+span{outline:2px solid var(--pri);outline-offset:3px}
+@media (prefers-reduced-motion:reduce){.sc-sw span,.sc-sw span::after{transition:none}}
+/* 시간표·급식·일정 */
+.sc-tt{display:grid;grid-template-columns:3.4em minmax(0,1fr);gap:4px 10px;font-size:14px;font-variant-numeric:tabular-nums;color:var(--ink)}
+.sc-p2{color:var(--sub)}
+.sc-meal{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0;padding:0;list-style:none;font-size:14px;color:var(--ink)}
+.sc-meal sup{margin-left:2px;font-size:10.5px;color:var(--sub)}
+.sc-week{display:grid;gap:10px;padding-top:4px;border-top:1px solid var(--line)}
+.sc-wd b{display:block;margin:6px 0 4px;font-size:13px;color:var(--sub)}
+.sc-ev{display:flex;flex-direction:column;gap:6px;margin:0;padding:0;list-style:none;font-size:14px;color:var(--ink)}
+.sc-ev li{display:grid;grid-template-columns:5.6em minmax(0,1fr);gap:8px}
+.sc-ev time{color:var(--sub);font-variant-numeric:tabular-nums}
+.sc-tag{display:inline-block;margin-left:6px;padding:1px 7px;border-radius:999px;background:var(--b-wash,var(--soft));color:var(--pri);font-size:11.5px;font-weight:700;vertical-align:1px}
+/* 학교폭력 칸 */
+.sc-line{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:8px;border-top:1px dashed var(--line)}
+.sc-help .sc-h+.sc-line{border-top:0;padding-top:0}
+.sc-line>div{min-width:0}
+.sc-num{font-size:17px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;user-select:all}
+.sc-line small{display:block;font-size:12.5px;color:var(--sub)}
+.sc-stat{min-height:1.5em;margin:0;font-size:13px;line-height:1.5;font-weight:700;color:var(--pri)}
+.sc-stat.bad{color:var(--d-dot,#ca6044)}
+/* 학교 설정 */
+.sc-sethead{display:flex;align-items:center;gap:10px;min-width:0}
+.sc-sethead b{min-width:0;font-size:15px;font-weight:800;color:var(--ink);overflow-wrap:anywhere}
+.sc-back{flex:none;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:13.5px;font-weight:700;cursor:pointer}
+.sc-lab{font-size:14px;font-weight:800;color:var(--ink)}
+.sc-find{display:flex;gap:8px}
+.sc-inp{box-sizing:border-box;width:100%;min-width:0;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg,var(--card));color:var(--ink);font:inherit;font-size:16px}
+.sc-inp[readonly]{color:var(--sub)}
+.sc-sel{min-height:1.6em;margin:0;font-size:13px;color:var(--sub);overflow-wrap:anywhere}
+.sc-sel b{color:var(--ink)}
+.sc-results{display:flex;flex-direction:column;gap:6px;min-height:150px}
+.sc-res{min-height:48px;padding:6px 12px;border:1px solid var(--line);border-radius:12px;background:var(--bg,var(--card));color:var(--ink);font:inherit;font-size:14.5px;font-weight:700;text-align:left;cursor:pointer}
+.sc-res small{display:block;font-size:12px;font-weight:400;color:var(--sub);overflow-wrap:anywhere}
+.sc-res[aria-pressed="true"]{border-color:var(--pri);background:var(--b-wash,var(--soft))}
+.sc-two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px}
+.sc-field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.sc-field small{font-size:12px;color:var(--sub)}
+.sc-days{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:8px}
+.sc-day{display:grid;grid-template-columns:2.2em minmax(0,1fr);align-items:center;gap:6px;font-size:14px;font-weight:800;color:var(--ink)}
+.sc-day input{box-sizing:border-box;width:100%;min-width:0;min-height:44px;padding:0 8px;border:1px solid var(--line);border-radius:10px;background:var(--bg,var(--card));color:var(--ink);font:inherit;font-size:15px}
+.sc-start{grid-template-columns:4.6em minmax(0,9em) auto;justify-content:start}
+.sc-start small{font-size:12px;font-weight:400;color:var(--sub)}
+.sc-tog{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.sc-tog+.sc-tog{padding-top:8px;border-top:1px solid var(--line)}
+.sc-tog>div{min-width:0}
+.sc-tog b{display:block;font-size:14.5px;color:var(--ink)}
+.sc-tog small{display:block;font-size:12.5px;line-height:1.5;color:var(--sub);min-height:1.5em}
+.sc-consent{display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:14px;background:var(--b-wash,var(--soft));font-size:13.5px;line-height:1.55;color:var(--ink);word-break:keep-all;overflow-wrap:anywhere;cursor:pointer}
+.sc-consent input{flex:none;width:22px;height:22px;margin:1px 0 0;accent-color:var(--pri)}
+.sc-ask{display:grid;gap:8px;padding:12px 14px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.sc-ask p{margin:0;font-size:14px;line-height:1.55;color:var(--ink);word-break:keep-all}
+.sc-askb{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.sc-danger{border-color:#b3261e;color:#b3261e}
+:root[data-theme="dark"] .sc-danger{border-color:#ff8f80;color:#ff8f80}
+@media (max-width:359px){.sc-two{grid-template-columns:minmax(0,1fr)}.sc-start{grid-template-columns:4.6em minmax(0,1fr)}.sc-start small{grid-column:2}}
+/* 학년 바뀜 확인 */
+#app .db-sc .sc-moved{border-color:var(--d-dot,#ca6044)}
+/* 아이 기기: 학습 화면 맨 아래 오늘 급식 카드 (메뉴 이름만, 연속 공부 칸 아래) */
+.sc-kidmeal{display:flex;flex-direction:column;gap:8px;font-size:15px;color:var(--ink)}
+.sc-kidmeal h3{margin:0;font-size:17px;color:var(--ink)}
+.sc-kidmeal ul{display:flex;flex-wrap:wrap;gap:4px 14px;margin:0;padding:0;list-style:none;overflow-wrap:anywhere}
+@media print{.db-sc,.sc-kidmeal{display:none!important}}
+#scMsg{min-height:3em}
+</style>
 <style id="sarang-dash">/* ===== 현황판 (src/dash.js, 2026-10-03 대표). 색·글꼴은 앱 값 그대로(--pri·--soft·--card·--line·--sub·--ok-*·--warn-*, 나이 단계 테마·어두운 화면을 따라감),
    칸은 앱 .card (둥글기 15·안쪽 23·그림자). 아래 메뉴 세 칸(오늘 · 모의시험 · 현황판) ===== */
 .tabbar.tb3{grid-template-columns:repeat(3,minmax(0,1fr))}
@@ -5446,6 +5590,8 @@ label.rp-row{cursor:pointer}
 .db.w-phone .db-hamb{display:inline-flex}
 .db.w-phone .db-nav{position:fixed;top:0;bottom:0;left:0;z-index:61;width:min(270px,84vw);border-radius:0 18px 18px 0;padding:calc(16px + env(safe-area-inset-top,0px)) 12px 16px calc(12px + env(safe-area-inset-left,0px));transform:translateX(-105%);visibility:hidden;transition:transform .2s ease,visibility .2s}
 .db.w-phone.drawer .db-nav{transform:none;visibility:visible}
+.db.w-phone .db-nav{overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+html.db-lock,html.db-lock body{overflow:hidden}
 .db.w-phone .db-nav-t{display:block;font-size:13px}
 .db.w-phone .db-nav-i{flex-direction:row;gap:10px;padding:10px;font-size:15px;text-align:left}
 .db.w-phone .db-nav-i em{margin-left:auto;font-size:11px;padding:2px 7px}
@@ -26568,7 +26714,7 @@ window.DONATE_CORE = (function(){
   const HOSTS = ['lovedu.kr', 'www.lovedu.kr', 'localhost', '127.0.0.1', 'lovedu-dev.web.app', 'lovedu-dev.firebaseapp.com'];
   const HOST_OK = HOSTS.includes(location.hostname);
   const EMU = HOST_OK && /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && /[?&]emu=1(&|$)/.test(location.search);   // 검사: Firebase 에뮬레이터
-  const FILES = {"auth": "./packs/sarang-auth.js?v=5471a026e7", "sdk": "./packs/sarang-auth-sdk.js?v=7373fd5a94"};
+  const FILES = {"auth": "./packs/sarang-auth.js?v=3a1ce14b35", "sdk": "./packs/sarang-auth-sdk.js?v=94c6591f5c"};
   const META = 'sarang_sync';
   /* 아이 폰 (자녀 모드, 2026-10-04 대표 결정): 부모가 준 6자리 번호·링크로 연결한 폰. 로그인 없이 함수가 준 아이 전용 토큰으로 들어옴.
      sarang_kiddev = { owner, childId, deviceId, nick } (기기 것, 서버에 안 올림). 이 폰은 그 아이의 '기기 하나'로 학습 기록(app·과목 묶음)을 주고받고,
@@ -26578,7 +26724,7 @@ window.DONATE_CORE = (function(){
   const kid = () => { const d = kidDev(); return d ? d.childId : (window.SARANG_KIDS ? SARANG_KIDS.cur() : 'c1'); };   // 지금 보고 있는 아이 (src/kids.js, 2026-10-02 자녀 여럿)
   /* 동의받는 약관·방침의 판 (두 문서는 아직 게시 전 초안: 게시할 때 판 이름을 바꿈) */
   const TERMS_V = 'terms-draft-v1', PRIVACY_V = 'privacy-draft-v2', TERMS_URL = 'https://lovedu.kr/terms', PRIVACY_URL = 'https://lovedu.kr/privacy';
-  const DENY = [/^sarang_(theme|splash|sync|kiddev|kidcut)/, /^sarang_session_/, /^firebase/, /^donate_/, /^hub_printer$/, /^scr_rate$/, /^el-settings$/];   // 기기마다 다른 것(화면 밝기·프린터·목소리)과 로그인 자체
+  const DENY = [/^sarang_(theme|splash|sync|kiddev|kidcut|push|cheerseen|cheerfrom)/, /^lovedu_delete_receipt$/, /^sarang_session_/, /^firebase/, /^donate_/, /^hub_printer$/, /^scr_rate$/, /^el-settings$/];   // 기기마다 다른 것(화면 밝기·프린터·목소리)과 로그인 자체
   const GROUP = [['kor', /^hub_ttobak$|^kor_|^hangul/], ['math', /^math_|^ymath/], ['eng', /^vocab_|^hub_eng$|^hub_phon$|^el-mine$|^listen/], ['hanja', /^hanja/]];
   const SERVER_SUBJ = { phon: 'eng', kor: 'kor', eng: 'eng', math: 'math', soc: 'soc', sci: 'sci', his: 'his', wh: 'wh', hanja: 'hanja', ttobak: 'kor', ymath: 'math', vocab: 'eng', listen: 'eng' };
   const LS = window.localStorage, SP = Storage.prototype, rawSet = SP.setItem, rawRemove = SP.removeItem, rawClear = SP.clear;
@@ -26676,12 +26822,17 @@ window.DONATE_CORE = (function(){
           snap = group(M);
         }
       }
-      await Promise.all(GROUP.map(([g]) => A.progress.save(id, g, { data: JSON.stringify(snap[g] || {}) })));
-      if (user.child) await A.children.save(id, { app: JSON.stringify(snap.app), rev, at });   // 아이 폰: 학습 기록만 (별명·학년은 부모 것)
-      else {
-        const prev = await A.children.list().then(l => l.find(c => c.id === id)).catch(() => null);
-        await A.children.save(id, Object.assign(kidMeta(id, prev), childInfo(), { app: JSON.stringify(snap.app), rev, at }));
+      /* 아이 문서를 먼저 (서버 배포 직후 판, handoff/모음7_서버반영_앱안내_1005.md 1절): 새 아이·첫 가입이라 아이 문서가 없으면 별명·학년만으로 먼저 만들고
+         과목 기록은 그 뒤. 판(rev)은 지금처럼 맨 끝에 적음 — 다른 기기는 rev 가 바뀐 것을 보고 받으므로 과목 기록이 다 올라간 뒤여야 함 */
+      const study = studyMeta(snap);
+      let prev = null;
+      if (!user.child) {
+        prev = await A.children.list().then(l => l.find(c => c.id === id)).catch(() => null);
+        if (!prev) await A.children.save(id, Object.assign(kidMeta(id, null), childInfo()));
       }
+      await Promise.all(GROUP.map(([g]) => A.progress.save(id, g, { data: JSON.stringify(snap[g] || {}) })));
+      if (user.child) await A.children.save(id, Object.assign(study.last ? { lastStudyDate: study.last } : {}, { app: JSON.stringify(snap.app), rev, at }));   // 아이 폰: 학습 기록과 마지막 공부한 날만 (별명·학년·쉬는 요일은 부모 것)
+      else await A.children.save(id, Object.assign(kidMeta(id, prev), childInfo(), study.last ? { lastStudyDate: study.last } : {}, study.rest ? { restDays: study.rest } : {}, { app: JSON.stringify(snap.app), rev, at }));
       setMeta(Object.assign(meta() || m, { uid: ownerUid(), rev, dirty: false, pending: false }));
       setBase(flat(snap));
       ui.err = ''; paint('계정에 저장했어요.');
@@ -26706,6 +26857,19 @@ window.DONATE_CORE = (function(){
   function kidMeta(id, prev){
     const K = window.SARANG_KIDS, k = K && K.list().find(x => x.id === id);
     return { nickname: (k && k.name) || (prev && prev.nickname) || '우리 아이', phone: '' };
+  }
+  /* 응원 한마디(서버 cheerDaily)가 보는 두 칸 (handoff/응원푸시_서버요청_1005.md, 모음7 앱안내 4절)
+     - lastStudyDate: 이 아이 기록에서 학습지를 '다 했어요' 하거나 바로 풀기를 마친 마지막 날 (YYYY-MM-DD). 0~4세 놀이는 아이 폰이 없어 셈하지 않음
+     - restDays: 시간표(hub_week)에 과목이 없는 요일 0(일)~6(토). 일곱 요일이 모두 비면(시간표 전) 보내지 않음 (규칙: 6개까지) */
+  function studyMeta(snap){
+    const d = flat(snap), J = k => { try { const o = JSON.parse(d[k] || '{}'); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } };
+    let last = '';
+    ['hub_paper_done', 'hub_screen_done'].forEach(k => Object.entries(J(k)).forEach(([day, v]) => {
+      const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(day); if (!m || !v || !Object.keys(v).length) return;
+      const t = `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`; if (t > last) last = t;
+    }));
+    const w = J('hub_week'), rest = [0, 1, 2, 3, 4, 5, 6].filter(i => !(Array.isArray(w[i]) && w[i].length));
+    return { last: last || null, rest: 'hub_week' in d && rest.length <= 6 ? rest : null };
   }
   async function cloud(id){
     id = id || kid();
@@ -26737,11 +26901,15 @@ window.DONATE_CORE = (function(){
   /* ---------- 아이 폰 (자녀 모드) ----------
      연결 직후(sarang_kiddev 없음): 이 폰의 예전 기록을 지우고 그 아이 기록을 받아 엶. 다시 켤 때: 다른 기기(부모 폰)가 바꿨으면 받고, 이 폰에서 푼 것은 올림.
      부모가 '연결 끊기'를 하면(childDevices.revoked) 이 폰 기록을 지우고 첫 화면으로 (다시 연결하려면 새 번호) */
-  let kidStop = null;
+  let kidStop = null, kidPull = false;
   async function kidAfter(){
     const c = user.child;
     agreed = true;
-    if (!kidDev() || kidDev().deviceId !== c.deviceId) {
+    /* 막 연결한 폰(fresh): 기록을 지운 뒤 받는 사이에 화면(가입 1/5단계 등)이 기록 칸을 써도 '이 폰에서 바꿈'으로 치지 않고, 받으면 늘 그 아이 기록으로 새로 엶.
+       전에는 그 쓰기 때문에 dirty 가 켜져 새로 열지 않고 멈춰, 15초 뒤 '새로 열기' 창이 뜨던 경합 (판 77부터, 2026-10-10 창구) */
+    const fresh = !kidDev() || kidDev().deviceId !== c.deviceId;
+    if (fresh) {
+      kidPull = true; clearTimeout(timer);
       applying = true;
       try {
         wipeLocal();
@@ -26755,10 +26923,14 @@ window.DONATE_CORE = (function(){
     if (kidStop) kidStop();
     kidStop = A.kidDevice.watchSelf(cut => { if (cut) kidCut(); });
     let cl = null;
-    try { cl = await cloud(c.childId); } catch (e) { console.warn('아이 기록 받기 실패', e && (e.code || e.message)); if (e && e.code === 'permission-denied') return kidCut(); ui.err = '기록을 받지 못했어요. 인터넷을 확인해 주세요.'; paint(); return; }
+    /* 막 연결한 폰에서 기록 받기가 8초 넘게 안 끝나면(서버 연결이 막힌 채 멈춤) 스스로 새로 엶: 새로 열면 이 폰은 이미 그 아이 폰이라 다시 받아 자녀 모드로 (창구: [새로 열기]를 누르면 0.5초 만에 풀림) */
+    const kick = fresh ? setTimeout(() => { if (kidPull) location.reload(); }, 8000) : 0;
+    try { cl = await cloud(c.childId); } catch (e) { clearTimeout(kick); kidPull = false; console.warn('아이 기록 받기 실패', e && (e.code || e.message)); if (e && e.code === 'permission-denied') return kidCut(); ui.err = '기록을 받지 못했어요. 인터넷을 확인해 주세요.'; paint(); return; }
+    clearTimeout(kick); kidPull = false;
     const m = meta() || {};
+    if (fresh) { clearTimeout(timer); return apply(cl || { rev: null, data: {} }); }   // 기록이 없으면(부모가 아직 학년·진도를 안 정함) 그사이 쓴 칸만 지우고 새로 엶 → 자녀 모드 화면에 그 안내
     if (!cl) { if (!hasLocal()) document.dispatchEvent(new CustomEvent('sarang:kid-empty')); return; }   // 부모 폰에서 아직 학년·진도를 안 정함
-    if (cl.rev && cl.rev !== m.rev && !m.dirty) return apply(cl);   // 이 폰에서 안 바꿈 → 받기만
+    if (cl.rev && (!m.rev || (cl.rev !== m.rev && !m.dirty))) return apply(cl);   // 이 폰에서 안 바꿈 → 받기만. 아직 한 번도 못 받은 폰(m.rev 없음: 받다가 새로 엶)도 받기만
     if (m.dirty) upload();   // 이 폰에서 푼 것 + 부모 폰이 바꾼 것 → 합쳐서 올림 (upload 가 합침)
     document.dispatchEvent(new CustomEvent('sarang:kid-ready'));
   }
@@ -26788,15 +26960,28 @@ window.DONATE_CORE = (function(){
     setMeta(Object.assign(m, { rev: rev || null, dirty: !rev, dirtyAt: Date.now(), pending: false, choose: false }));
     clearTimeout(timer);
   }
+  /* 아이 빼기 = 서버 함수 removeChild (부품 v1.3): 그 아이 기록·숙제·아이 폰 연결을 서버가 한꺼번에 지움 (전에는 앱이 아이 폰 연결을 먼저 끊었음).
+     unavailable('아이 폰 연결을 다 지우지 못했어요…')·aborted('아이 빼기를 이미 진행하고 있어요…')는 서버 문구 그대로 — 같은 단추를 다시 누르면 서버가 이어서 마침 */
   async function kidRemove(id){
     if (!signedIn()) return null;
-    try {
-      /* 그 아이 폰이 연결돼 있으면 먼저 끊음 → 아이 폰은 첫 화면으로 (서버 removeChild 배포 전에도 뺀 아이가 아이 폰에 남지 않게, 2026-10-05 대표) */
-      const KL = window.SARANG_KIDLINK, dl = (KL && KL.devices || []).filter(d => d.childId === id);
-      for (const d of dl) await A.kidDevice.unlink(d.id);
-      await A.children.remove(id); return true;
-    }
-    catch (e) { console.warn('아이 지우기 실패', e && (e.code || e.message)); toast('인터넷이 이어지지 않아 지우지 못했어요. 잠시 뒤 다시 해 주세요.'); return false; }
+    try { await A.children.remove(id); return true; }
+    catch (e) { console.warn('아이 지우기 실패', e && (e.code || e.message)); if (gone(e)) return false; toast(srvMsg(e, /unavailable|aborted|failed-precondition/) || '인터넷이 이어지지 않아 지우지 못했어요. 잠시 뒤 다시 해 주세요.'); return false; }
+  }
+  /* 서버 함수가 준 우리말 문구 (codes 에 맞는 오류만). 없으면 '' */
+  function srvMsg(e, codes){ const c = String(e && e.code || '').replace(/^functions\//, ''), m = String(e && e.message || '').replace(/^FirebaseError:\s*/, ''); return codes.test(c) && /[가-힣]/.test(m) ? m.slice(0, 120) : ''; }
+  /* 탈퇴를 요청했거나 끝난 계정 (서버 모음40·68): 부모 함수가 failed-precondition '탈퇴를 처리하고 있어요…'·'탈퇴한 계정이에요. 다시 로그인해 주세요.' →
+     더 올리지 않고 이 기기 기록을 지운 뒤 로그아웃, 첫 화면에 서버 문구. 처리했으면 true */
+  function gone(e){
+    const c = String(e && e.code || ''), m = srvMsg(e, /failed-precondition/);
+    if (!/failed-precondition/.test(c) || !/탈퇴/.test(m) || stopped) return false;
+    bye(m); return true;
+  }
+  async function bye(m){
+    stopped = true; clearTimeout(timer);
+    applying = true; try { wipeLocal(); rawRemove.call(LS, META); } finally { applying = false; }
+    try { sessionStorage.setItem('sarang_bye', m); } catch (e) {}
+    try { if (A) await A.signOut(); } catch (e) {}
+    location.reload();
   }
   /* 별명·번호를 고치면 그 아이 문서에 바로 (지금 아이가 아니어도) */
   function kidSaved(id){
@@ -26804,7 +26989,7 @@ window.DONATE_CORE = (function(){
     A.children.save(id, kidMeta(id, null)).catch(e => console.warn('별명 저장 실패', e && (e.code || e.message)));
   }
   function touch(){
-    if (applying || stopped) return;
+    if (applying || stopped || kidPull) return;
     const m = meta(); if (!m || !m.uid) return;   // 로그인한 기기만
     if (!m.dirty) setMeta(Object.assign(m, { dirty: true, dirtyAt: Date.now() }));
     if (user && agreed) schedule(4000);
@@ -26915,7 +27100,7 @@ window.DONATE_CORE = (function(){
       A.onChange(s => {
         const was = user; user = s.user;
         if (s.kicked) { const o = meta(); if (o && o.uid) { o.last = o.uid; delete o.uid; delete o.choose; setMeta(o); } else if (!(o && o.last)) setMeta(null); ui = { msg: '', ask: false, err: '' }; agreed = null; joinShut(); toast('다른 기기에서 같은 계정으로 로그인해서 이 기기는 로그아웃됐어요.'); }
-        if (s.error) ui.err = '로그인하지 못했어요. 다시 해 주세요.';
+        if (s.error) ui.err = /탈퇴/.test(s.error) && /[가-힣]/.test(s.error) ? String(s.error).replace(/^FirebaseError:\s*/, '').slice(0, 120) : '로그인하지 못했어요. 다시 해 주세요.';   // registerDevice: '탈퇴를 처리하고 있어요…'·'탈퇴한 계정이에요…' (부품이 이미 로그아웃함)
         if (user && !was && user.child) kidAfter();   // 아이 폰
         else if (user && !was) {
           const m = meta();
@@ -27064,6 +27249,7 @@ window.DONATE_CORE = (function(){
 
   function mount(){
     const s = $('settings'); if (!s || $('lgBox')) return;
+    try { const b = sessionStorage.getItem('sarang_bye'); if (b) { sessionStorage.removeItem('sarang_bye'); ui.err = b; } } catch (e) {}   // 탈퇴 계정으로 밀려난 뒤 첫 화면에 서버 문구 (위 gone)
     s.insertAdjacentHTML('afterbegin', '<div class="label">계정</div><div id="lgBox" class="lg-box"></div>');
     mountOb(); paint(); hookPaper();
     const m = meta();
@@ -27086,7 +27272,7 @@ window.DONATE_CORE = (function(){
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', mount); else mount();
 
   window.SARANG_LOGIN = {
-    hostOk: HOST_OK, load, upload, snapshot, groupOf, gated, kidSwitch, kidDone, kidRemove, kidSaved, kidDev, kidCut,
+    hostOk: HOST_OK, load, upload, snapshot, groupOf, gated, kidSwitch, kidDone, kidRemove, kidSaved, kidDev, kidCut, gone, srvMsg, toast, emu: EMU, bye,
     get user(){ return user; }, get auth(){ return A; }, get agreed(){ return agreed; },
     /* 검사용 (에뮬레이터): 가짜 구글 토큰으로 로그인 */
     async _emuSignIn(sub, email){
@@ -27096,6 +27282,366 @@ window.DONATE_CORE = (function(){
       return S.signInWithCredential(A._auth, S.GoogleAuthProvider.credential(JSON.stringify({ sub, email, email_verified: true, name: '시험 ' + sub })));
     }
   };
+})();
+</script>
+<script>/* ==================== 회원 탈퇴·접수 번호·웹 푸시·응원 (서버 배포 직후 앱 판, 판 76 후보) ====================
+   기준: handoff/앱_탈퇴접수번호_요청서_1008.md (be2cd5ef, 모음71 반영판. 탈퇴는 이 요청서가 우선), 팀 메모 app-server-follow-build, handoff/웹푸시_서버답_1005.md,
+   handoff/모음7_서버반영_앱안내_1005.md, 응원 문구 = qa/검수창구/요청_부모할일_응원문구_1005/02_아이응원_문구.csv + 결과_받은것/모음7/결과_17 고친 문구.
+   - 탈퇴: 설정 '계정' 칸 맨 아래 '회원 탈퇴' (부모 기기만, 아이 폰에는 없음). 확인 창에 들어올 때 접수 번호(20자)를 만들어 보여 주고 이 기기에 둠
+     (lovedu_delete_receipt = { code, firstSentAt, doneSeenAt }, 계정 기록과 따로라 로그아웃·탈퇴로 지우지 않음 — src/login.js DENY).
+     '탈퇴하기' → deleteAccount({ confirm, receipt }) → 서버 답마다 요청서 4절대로. 새 번호는 already-exists·invalid-argument 때만.
+   - 로그인 없이 번호로 보기: 첫 화면(로그인) 아래 '탈퇴 처리 확인' → deletionReceipt. 설정에도 이 기기에 번호가 있으면 같은 단추.
+   - 웹 푸시: 설정 '알림' (부모) · 아이 폰 첫 화면 '응원 알림 받기'. VAPID 공개키(SARANG_VAPID)는 서버 배포 승인 때 대표님 콘솔 작업으로 생김 →
+     빌드 때 넣음. 키가 없거나 브라우저가 못 하면 단추를 보이지 않음. 알림 글은 sw.js 가 고정 문구로 띄움(서버는 글을 안 보냄) —
+     sw.js 가 아이 별명·보낸 사람을 알 수 있게 이 기기 캐시(sarang-push)에 작은 설정을 둠.
+   - 응원(웹 푸시를 못 받는 기기도): 아이 폰을 열 때 아이 문서 cheer.lastId → cheers/{id} 하나를 읽어 처음 보는 응원이면 첫 화면 위 한 줄.
+     부모: 현황판 맨 위 아이 폰 줄 아래 '오늘 ○○에게 응원을 보냈어요' (src/kidmode.js 가 SARANG_ACCT.cheerLine 을 부름). */
+(function(){
+  const L = () => window.SARANG_LOGIN, $ = id => document.getElementById(id);
+  const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const REGION = 'asia-northeast3', DAY = 864e5;
+  const VAPID = "BHs2gUCW7YAQxBcmeValDPzUFiwW7nMScOCtZ_xJ4r619eK-Vpn8Pq87YVR4EfYsqCSYV-tmaclHanikJ6wgPhw";
+  const RK = 'lovedu_delete_receipt';
+  const LS = window.localStorage;
+
+  /* ---------- 서버 함수 (부품이 만든 Firebase 앱 그대로: App Check·에뮬레이터 연결이 같이 감) ---------- */
+  async function fn(name, data){
+    const A = await L().load(), sdk = L()._sdk;
+    const r = await sdk.httpsCallable(sdk.getFunctions(A.firebaseApp, REGION), name, { timeout: 70000 })(data || {});
+    return r.data;
+  }
+  const code = e => String(e && e.code || '').replace(/^functions\//, '');
+  const msgOf = e => { const m = String(e && e.message || '').replace(/^FirebaseError:\s*/, ''); return /[가-힣]/.test(m) ? m.slice(0, 160) : ''; };
+  const det = e => (e && e.details && typeof e.details === 'object') ? e.details : {};
+
+  /* ---------- 접수 번호 (요청서 2·3절) ---------- */
+  function newCode(){
+    const b = crypto.getRandomValues(new Uint8Array(15));
+    return btoa(String.fromCharCode(...b)).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');   // 20자
+  }
+  const rec = () => { try { const o = JSON.parse(LS.getItem(RK)); return o && typeof o.code === 'string' ? o : null; } catch (e) { return null; } };
+  const setRec = o => { try { o ? LS.setItem(RK, JSON.stringify(o)) : LS.removeItem(RK); } catch (e) {} };
+  const show = c => String(c || '').replace(/(.{4})(?=.)/g, '$1 ');   // 보일 때만 4자씩 띄움 (보낼 때·복사할 때는 원래 20자)
+  /* 끝난 결과를 보여 준 뒤 30일이 지나면 지움 */
+  (function tidy(){ const r = rec(); if (r && r.doneSeenAt && Date.now() - r.doneSeenAt > 30 * DAY) setRec(null); })();
+  async function copy(t, btn){
+    let ok = false;
+    try { await navigator.clipboard.writeText(t); ok = true; } catch (e) {
+      try { const x = document.createElement('textarea'); x.value = t; x.setAttribute('readonly', ''); x.style.cssText = 'position:fixed;top:0;left:0;opacity:0'; document.body.appendChild(x); x.select(); ok = document.execCommand('copy'); x.remove(); } catch (er) {}
+    }
+    if (btn) { btn.textContent = ok ? '복사했어요' : '복사하지 못했어요'; clearTimeout(btn._t); btn._t = setTimeout(() => { btn.textContent = '복사'; }, 2500); }
+  }
+  const codeBox = (c, id) => `<div class="ac-code"><span class="ac-code-t" id="${id}" aria-label="접수 번호 ${esc(c.split('').join(' '))}">${esc(show(c))}</span><button type="button" class="ac-copy" data-accopy="${esc(c)}">복사</button></div>`;
+  const KEEP_NOTE = '<p class="ac-note">이 번호로 탈퇴 처리 상태와 결과를 확인해요. 대소문자를 그대로 적어 두거나 복사해 두세요.</p>';
+
+  /* ---------- 창 (가입 마무리 창과 같은 모양 .lg-join) ---------- */
+  let DLG = null;
+  function open(id, title){
+    shut();
+    const box = document.createElement('div');
+    box.className = 'lg-join ac-dlg'; box.id = id;
+    box.innerHTML = `<div class="lg-join-card" role="dialog" aria-modal="true" aria-labelledby="${id}T"><h2 id="${id}T">${esc(title)}</h2><div class="ac-body"></div></div>`;
+    document.body.appendChild(box);
+    DLG = { box, opener: document.activeElement, body: box.querySelector('.ac-body') };
+    box.addEventListener('click', e => { const c = e.target.closest('[data-accopy]'); if (c) copy(c.dataset.accopy, c); });
+    box.addEventListener('keydown', e => {
+      if (e.key === 'Escape' && !box.dataset.busy) { e.preventDefault(); shut(); return; }
+      if (e.key !== 'Tab') return;
+      const f = [...box.querySelectorAll('input,a,button:not([disabled])')]; if (!f.length) return;
+      const i = f.indexOf(document.activeElement); if (e.shiftKey ? i <= 0 : i === f.length - 1) { e.preventDefault(); f[e.shiftKey ? f.length - 1 : 0].focus({ preventScroll: true }); }
+    });
+    return DLG;
+  }
+  function shut(){
+    if (!DLG) return;
+    const o = DLG.opener; DLG.box.remove(); DLG = null;
+    if (o && o.isConnected && o.focus) try { o.focus({ preventScroll: true }); } catch (e) {}
+  }
+  function fill(h, focus){
+    if (!DLG) return;
+    DLG.body.innerHTML = h;
+    const f = focus && DLG.body.querySelector(focus); if (f) f.focus({ preventScroll: true });
+  }
+
+  /* ---------- 회원 탈퇴 (요청서 1·4절, 팀 메모 app-server-follow-build) ---------- */
+  const REAUTH = 'sarang_reauth_del';
+  async function freshLogin(){   // 서버는 로그인 5분 안에만 받음. 4분 30초 넘었으면 먼저 다시 로그인
+    try { const A = L().auth, t = await A._auth.currentUser.getIdTokenResult(); return Date.now() - Number(t.claims.auth_time || 0) * 1000 < 270000; } catch (e) { return true; }   // 모르면 서버 답으로
+  }
+  async function openDelete(){
+    open('acDel', '회원 탈퇴');
+    fill('<p class="ac-wait" role="status">확인하는 중이에요…</p>');
+    if (!(await freshLogin())) return reauthStep('');
+    confirmStep('');
+  }
+  function reauthStep(m){
+    fill(`<p>${esc(m || '안전을 위해 다시 로그인한 뒤 탈퇴할 수 있어요.')}</p>
+      <p class="ac-note">'로그아웃하고 다시 로그인'을 누르면 이 기기 기록을 계정에 저장한 뒤 로그아웃해요. 다시 로그인하면 이 창이 바로 열려요.</p>
+      <div class="lg-join-btns"><button type="button" class="lg-join-no" data-acx>닫기</button><button type="button" class="lg-join-go" data-acre>로그아웃하고 다시 로그인</button></div>`, '[data-acre]');
+    DLG.body.querySelector('[data-acx]').onclick = shut;
+    DLG.body.querySelector('[data-acre]').onclick = () => { try { sessionStorage.setItem(REAUTH, String(Date.now())); } catch (e) {} shut(); const o = $('lgOut'); if (o) o.click(); };
+  }
+  function confirmStep(err){
+    let r = rec();
+    if (!r || r.doneSeenAt) { r = { code: newCode() }; setRec(r); }   // 처음 들어올 때 만듦. 아직 보내지 않았거나 답을 못 받은 번호면 같은 번호
+    fill(`<ul class="ac-facts">
+        <li>탈퇴를 요청하면 아이 학습 기록은 바로 지워져요.</li>
+        <li>무료 체험 기록은 탈퇴 요청 때부터 1년 남아요.</li>
+        <li>플레이스토어에서 구독했다면 서버가 해지하지 못할 때 플레이스토어에서 직접 해지해야 할 수 있어요. 그때는 안내해 드려요.</li>
+      </ul>
+      <p class="ac-k">접수 번호</p>${codeBox(r.code, 'acCode')}${KEEP_NOTE}
+      <p class="lg-join-err" role="alert">${esc(err || '')}</p>
+      <div class="lg-join-btns"><button type="button" class="lg-join-no" data-acx>취소</button><button type="button" class="lg-join-go ac-danger" data-acgo>탈퇴하기</button></div>`, '[data-acx]');
+    DLG.body.querySelector('[data-acx]').onclick = shut;
+    DLG.body.querySelector('[data-acgo]').onclick = send;
+  }
+  async function send(){
+    const r = rec(); if (!r || !DLG) return;
+    const go = DLG.body.querySelector('[data-acgo]'), no = DLG.body.querySelector('[data-acx]');
+    go.disabled = true; no.disabled = true; go.textContent = '보내는 중…'; DLG.box.dataset.busy = '1';
+    const resent = !!r.firstSentAt;   // 전에 보냈는데 답을 못 받았을 수 있음
+    if (!r.firstSentAt) { r.firstSentAt = Date.now(); setRec(r); }
+    let res = null, err = null;
+    try { res = await fn('deleteAccount', { confirm: true, receipt: r.code }); } catch (e) { err = e; }
+    if (DLG) delete DLG.box.dataset.busy;
+    if (res && res.ok) return finished(res.receipt === r.code ? r.code : null);
+    const c = code(err), d = det(err), m = msgOf(err);
+    console.warn('탈퇴 요청', c, d);
+    if (c === 'not-found') return leave('이미 탈퇴한 계정이에요.', null, m);
+    if (c === 'aborted' && d.done === true) return endedElsewhere(r.code);   // 앞 실행이 이미 끝냄: 번호 조회로 확인 (요청서 4절 aborted done, 모음71 12-15 15번)
+    if (d.requested === true) return accepted(m, d.receipt === r.code ? r.code : null, d.needs === 'play');
+    if (c === 'aborted') return unsure(m || '탈퇴를 이미 진행하고 있어요. 잠시 뒤에 확인해 주세요.');   // details 가 비면 판단 못 함 → 번호로 확인
+    if (c === 'already-exists' || c === 'invalid-argument') { setRec({ code: newCode() }); return confirmStep((m || '접수 번호를 새로 만들어 다시 해 주세요.') + ' 새 번호를 만들었어요. 다시 눌러 주세요.'); }
+    if (c === 'failed-precondition' && !Object.keys(d).length) return /로그인/.test(m) ? reauthStep(m) : confirmStep(m || '탈퇴하지 못했어요.');
+    if (c === 'unavailable' && d.requested === false || c === 'failed-precondition' || c === 'resource-exhausted') {
+      if (resent) return check(r.code, m || '탈퇴를 접수하지 못했어요. 잠시 뒤에 다시 해 주세요.');   // 앞 호출이 저장했을 수 있음 → 번호로 한 번 확인
+      return confirmStep(m || '탈퇴를 접수하지 못했어요. 잠시 뒤에 다시 해 주세요.');
+    }
+    return unsure('확인하지 못했어요. 이 번호로 잠시 뒤 확인해 주세요.');   // 연결 끊김·시간 초과(deadline-exceeded)·그 밖: 저장됐는지 모름, 번호 유지
+  }
+  /* 같은 번호를 다시 보냈는데 '접수 안 됨'이 옴: 앞 호출이 이미 받았는지 번호로 확인 */
+  async function check(c, failMsg){
+    let st = null; try { st = await fn('deletionReceipt', { receipt: c }); } catch (e) {}
+    if (st && (st.stage === 'requested' || st.stage === 'final')) return accepted('', c, st.needs === 'play');
+    if (st && st.stage === 'done') return finished(c);
+    confirmStep(failMsg);
+  }
+  async function endedElsewhere(c){
+    let st = null; try { st = await fn('deletionReceipt', { receipt: c }); } catch (e) {}
+    if (st && st.stage === 'done') return finished(c);
+    setRec(null);   // 이 번호는 이 계정 것으로 남지 않았음 (다른 번호로 접수됨)
+    leave('탈퇴는 끝났어요. 이 번호로는 결과를 확인할 수 없어요(다른 번호로 접수됐을 수 있어요).', null, '');
+  }
+  function finished(c){
+    const r = rec();
+    if (c && r && r.code === c) { r.doneSeenAt = Date.now(); setRec(r); } else setRec(null);
+    leave('탈퇴가 끝났어요. 이용해 주셔서 고마워요.', c, c ? '' : '처리 상태는 다시 로그인해 볼 수 있어요(마지막 단계 전까지).');
+  }
+  function accepted(m, c, play){
+    if (!c) { const r = rec(); if (r && r.firstSentAt && !r.doneSeenAt) { /* 다른 번호로 이미 접수됨: 이 번호는 저장 안 됨 */ setRec(null); } }
+    leave(play ? '탈퇴 요청을 받았어요. 플레이스토어 > 구독에서 사랑교육 구독을 해지해 주세요.' : '접수됐어요. 처리를 이어서 하고 있어요.', c,
+      (m && !/^접수됐어요/.test(m) ? m + ' ' : '') + (c ? '' : '처리 상태는 다시 로그인해 볼 수 있어요(마지막 단계 전까지).'));
+  }
+  /* 끝남·접수됨·이미 탈퇴: 이 기기 기록을 지우고 로그아웃 (탈퇴한 계정으로 더 올리지 않게). 번호는 남김 */
+  function leave(title, c, note){
+    if (!DLG) open('acDel', '회원 탈퇴');
+    fill(`<p class="ac-big">${esc(title)}</p>${c ? `<p class="ac-k">접수 번호</p>${codeBox(c, 'acCode')}${KEEP_NOTE}` : ''}${note ? `<p class="ac-note">${esc(note)}</p>` : ''}
+      <p class="ac-note">닫으면 로그아웃하고 첫 화면으로 가요. 첫 화면 아래 '탈퇴 처리 확인'에서 번호로 다시 볼 수 있어요.</p>
+      <div class="lg-join-btns"><button type="button" class="lg-join-go" data-acbye>닫기</button></div>`, '[data-acbye]');
+    DLG.box.dataset.busy = '1';   // Esc 로 닫지 않음: 닫기를 눌러야 로그아웃
+    DLG.body.querySelector('[data-acbye]').onclick = () => { shut(); L().bye(title); };
+  }
+  function unsure(m){
+    fill(`<p>${esc(m)}</p><p class="ac-k">접수 번호</p>${codeBox(rec().code, 'acCode')}${KEEP_NOTE}
+      <div class="lg-join-btns"><button type="button" class="lg-join-no" data-acx>닫기</button><button type="button" class="lg-join-go" data-acchk>상태 확인</button></div>`, '[data-acchk]');
+    DLG.body.querySelector('[data-acx]').onclick = shut;
+    DLG.body.querySelector('[data-acchk]').onclick = () => { const c = rec().code; shut(); openLookup(c, true); };
+  }
+
+  /* ---------- 번호로 처리 상태 보기 (요청서 5·6절, 로그인 없이) ---------- */
+  const STEP = {
+    learning: '학습 기록 정리가 잠시 안 되고 있어요. 서버가 매일 다시 시도해요. 하실 일은 없어요.',
+    payment: '자동 결제 해지를 마무리하고 있어요. 서버가 매일 다시 시도해요.',
+    childLogins: '아이 폰 연결 정리를 마무리하고 있어요. 서버가 매일 다시 시도해요.'
+  };
+  const ymd = t => { const d = new Date(t); return `${d.getFullYear()}년 ${d.getMonth() + 1}월 ${d.getDate()}일`; };
+  function openLookup(pre, auto){
+    open('acLook', '탈퇴 처리 확인');
+    const r = rec(), v = pre || (r && r.code) || '';
+    fill(`<label class="ac-k" for="acIn">접수 번호</label>
+      <input id="acIn" class="ac-in" type="text" inputmode="text" autocomplete="off" autocapitalize="off" autocorrect="off" spellcheck="false" maxlength="60" value="${esc(v)}" placeholder="20자 번호 (대소문자 그대로)">
+      <div class="ac-res" role="status" aria-live="polite"></div>
+      <div class="lg-join-btns">${r ? '<button type="button" class="lg-join-no" data-acdrop>이 기기 번호 지우기</button>' : ''}<button type="button" class="lg-join-no" data-acx>닫기</button><button type="button" class="lg-join-go" data-aclook>확인</button></div>`, '#acIn');
+    const B = DLG.body;
+    B.querySelector('[data-acx]').onclick = shut;
+    B.querySelector('[data-aclook]').onclick = lookup;
+    B.querySelector('#acIn').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); lookup(); } });
+    const dr = B.querySelector('[data-acdrop]');
+    if (dr) dr.onclick = () => { if (dr.dataset.sure) { setRec(null); dr.remove(); paintBox(); res('이 기기에서 번호를 지웠어요.'); } else { dr.dataset.sure = '1'; dr.textContent = '한 번 더 누르면 지워요'; } };
+    if (auto && v) lookup();
+  }
+  function res(h){ const x = DLG && DLG.body.querySelector('.ac-res'); if (x) x.innerHTML = h; }
+  async function lookup(){
+    if (!DLG) return;
+    const inp = DLG.body.querySelector('#acIn'), btn = DLG.body.querySelector('[data-aclook]'), c = String(inp.value).replace(/\s+/g, '');
+    if (!/^[A-Za-z0-9_-]{16,40}$/.test(c)) { res('<p class="ac-bad">접수 번호를 확인해 주세요.</p>'); return; }
+    btn.disabled = true; res('<p class="ac-wait">확인하는 중이에요…</p>');
+    let st = null, err = null;
+    try { st = await fn('deletionReceipt', { receipt: c }); } catch (e) { err = e; }
+    if (!DLG) return;
+    btn.disabled = false;
+    if (err) { const k = code(err); res(`<p class="ac-bad">${esc(k === 'resource-exhausted' ? '확인을 여러 번 해서 잠시 막혔어요. 잠시 뒤에 다시 해 주세요.' : k === 'invalid-argument' ? (msgOf(err) || '접수 번호를 확인해 주세요.') : '확인하지 못했어요. 인터넷을 확인하고 다시 해 주세요.')}</p>`); return; }
+    const r = rec(), mine = r && r.code === c;
+    if (st.stage === 'requested') res(`<p class="ac-big">탈퇴 요청을 받아 처리하고 있어요.</p>${st.needs === 'play' ? '<p>플레이스토어 > 구독에서 사랑교육 구독을 해지해 주세요. 해지가 확인되면 이어서 처리해요.</p>' : ''}${st.step && STEP[st.step] && !(st.step === 'payment' && st.needs === 'play') ? `<p>${STEP[st.step]}</p>` : ''}`);
+    else if (st.stage === 'final') res('<p class="ac-big">마지막 단계를 처리하고 있어요.</p><p>서버가 끝까지 마쳐요. 하실 일은 없어요.</p>');
+    else if (st.stage === 'done') { res(`<p class="ac-big">탈퇴가 끝났어요.</p>${st.doneAt ? `<p>끝난 날: ${ymd(st.doneAt)}</p>` : ''}<p class="ac-note">끝난 뒤 30일이 지나면 이 번호로 더 확인할 수 없어요.</p>`); if (mine && !r.doneSeenAt) { r.doneSeenAt = Date.now(); setRec(r); } }
+    else {   // unknown (드물게 none): 모두 같은 문장. 기기의 firstSentAt 으로 나누지 않음 (요청서 3·5절, 모음71 06-14 5번)
+      const lg = L(), u = lg && lg.user, parent = !!(u && !u.child && lg.agreed === true);
+      res('<p class="ac-big">접수되지 않았거나 끝난 지 30일이 지나 확인할 수 없는 번호예요.</p>'
+        + (parent ? '<p>탈퇴하려면 아래 단추로 다시 해 주세요. 이 기기에 있는 번호를 그대로 써요.</p><button type="button" class="lg-join-go ac-danger ac-again" data-acagain>탈퇴하기</button>' : '<p class="ac-note">탈퇴가 아직 끝나지 않았다면 로그인한 뒤 설정 › 계정에서 다시 확인할 수 있어요.</p>'));
+      const a = DLG && DLG.body.querySelector('[data-acagain]'); if (a) a.onclick = () => { shut(); openDelete(); };
+    }
+  }
+
+  /* ---------- 웹 푸시 (부모: 설정 '알림', 아이 폰: 첫 화면 '응원 알림 받기') ---------- */
+  const PK = 'sarang_push';   // { on: true, at } 이 기기에서 켰는지 (기기 것)
+  const pushOk = () => !!VAPID && /^(www\.)?lovedu\.kr$/.test(location.hostname) && 'serviceWorker' in navigator && 'Notification' in window && 'PushManager' in window;
+  const pushOn = () => { try { return !!(JSON.parse(LS.getItem(PK)) || {}).on; } catch (e) { return false; } };
+  let pushBusy = false;
+  async function pushSet(on){
+    if (pushBusy) return; pushBusy = true; paintBox();
+    try {
+      const A = await L().load(), sdk = L()._sdk;
+      if (on) {
+        if (!(await sdk.messagingSupported())) throw new Error('지원 안 함');
+        const perm = await Notification.requestPermission();
+        if (perm !== 'granted') { L().toast(perm === 'denied' ? '브라우저에서 알림이 막혀 있어요. 브라우저 설정에서 lovedu.kr 알림을 허용해 주세요.' : '알림을 켜지 않았어요.'); return; }
+        const reg = await navigator.serviceWorker.register('sw.js', { scope: './' });
+        const t = await sdk.getToken(sdk.getMessaging(A.firebaseApp), { vapidKey: VAPID, serviceWorkerRegistration: reg });
+        await A.savePush(t);
+        LS.setItem(PK, JSON.stringify({ on: true, at: Date.now() }));
+        await pushCfg();
+        L().toast('알림을 켰어요.');
+      } else {
+        await A.savePush(null);
+        try { await sdk.deleteToken(sdk.getMessaging(A.firebaseApp)); } catch (e) {}
+        LS.removeItem(PK);
+        L().toast('알림을 껐어요.');
+      }
+    } catch (e) { console.warn('알림 설정 실패', e && (e.code || e.message)); if (!(L().gone && L().gone(e))) L().toast('알림을 바꾸지 못했어요. 인터넷을 확인하고 다시 해 주세요.'); }
+    finally { pushBusy = false; paintBox(); kidPushPaint(); }
+  }
+  /* sw.js 가 읽는 설정 (캐시 sarang-push 의 ./push-cfg): 아이 별명(받침에 맞는 '아/야'용), 응원 보낸 사람, 이 기기가 부모인지 아이 폰인지.
+     별명은 이 기기에 이미 있는 것만 (서버로 보내지 않음) */
+  async function pushCfg(){
+    if (!('caches' in window)) return;
+    const lg = L(), kd = lg.kidDev && lg.kidDev(), K = window.SARANG_KIDS;
+    const kids = {}; try { (K ? K.list() : []).forEach(k => { kids[k.id] = String(k.name || '').slice(0, 10); }); } catch (e) {}
+    if (kd) kids[kd.childId] = String(kd.nick || kids[kd.childId] || '').slice(0, 10);
+    let from = '부모님'; try { from = LS.getItem('sarang_cheerfrom') || '부모님'; } catch (e) {}
+    const cfg = { me: kd ? 'child' : 'parent', kids, from };
+    try { const c = await caches.open('sarang-push'); await c.put('./push-cfg', new Response(JSON.stringify(cfg), { headers: { 'content-type': 'application/json' } })); } catch (e) {}
+  }
+  document.addEventListener('hub:child', () => { if (pushOn()) pushCfg(); });
+
+  /* ---------- 설정 '계정' 칸 아래 (src/login.js #lgBox 다음) ---------- */
+  function paintBox(){
+    const lb = $('lgBox'); if (!lb) return;
+    let el = $('acBox');
+    if (!el) { lb.insertAdjacentHTML('afterend', '<div id="acBox" class="ac-box"></div>'); el = $('acBox'); }
+    const lg = L(), u = lg && lg.user, parent = u && !u.child && lg.agreed === true && !(lg.kidDev && lg.kidDev());
+    let h = '';
+    if (parent && pushOk()) h += `<div class="set-child ac-row"><span><b>알림</b><small>${pushOn() ? '이 기기에서 응원·하교 알림을 받아요.' : '아이 응원·하교 30분 전 알림을 이 기기에서 받을 수 있어요.'}</small></span><button type="button" class="linkbtn" id="acPush"${pushBusy ? ' disabled' : ''}>${pushOn() ? '끄기' : '켜기'}</button></div>`;
+    const r = rec();
+    if (r && r.firstSentAt && !(lg.kidDev && lg.kidDev())) h += '<div class="set-child ac-row"><span><b>탈퇴 처리 확인</b><small>이 기기에 탈퇴 접수 번호가 있어요.</small></span><button type="button" class="linkbtn" id="acLook2">확인</button></div>';
+    if (parent && lg.hostOk) h += '<div class="ac-out"><button type="button" class="ac-link" id="acDelBtn">회원 탈퇴</button></div>';
+    if (el.dataset.h !== h) { el.innerHTML = h; el.dataset.h = h; }
+  }
+  /* 첫 화면(로그인) 아래 '탈퇴 처리 확인' (요청서 6절: 탈퇴가 끝나면 계정이 없어 로그인 전 화면에 있어야 함) */
+  function paintGate(){
+    const g = $('lgGate'); if (!g || $('acGateLook')) return;
+    g.insertAdjacentHTML('beforeend', '<div class="ac-gate"><button type="button" class="ac-link" id="acGateLook">탈퇴 처리 확인</button></div>');
+  }
+  document.addEventListener('click', e => {
+    const t = e.target.closest('#acDelBtn, #acLook2, #acGateLook, #acPush, #kdPushOn'); if (!t) return;
+    if (t.id === 'acDelBtn') openDelete();
+    else if (t.id === 'acLook2' || t.id === 'acGateLook') openLookup('', false);
+    else if (t.id === 'acPush') pushSet(!pushOn());
+    else if (t.id === 'kdPushOn') pushSet(true);
+  });
+  document.addEventListener('sarang:login', () => {
+    paintBox(); paintGate(); kidPushPaint();
+    const lg = L(), u = lg && lg.user;
+    let re = 0; try { re = +sessionStorage.getItem(REAUTH) || 0; } catch (e) {}
+    if (re && u && !u.child && lg.agreed === true) {   // '로그아웃하고 다시 로그인' 뒤: 탈퇴 창을 바로 엶 (30분 안에 돌아왔을 때만)
+      try { sessionStorage.removeItem(REAUTH); } catch (e) {}
+      if (Date.now() - re < 30 * 60000) setTimeout(openDelete, 300);
+    }
+    if (u && u.child) kidCheer();
+  });
+
+  /* ---------- 응원 (handoff/모음7_서버반영_앱안내_1005.md 2절: 목록 조회 막힘 → 아이 문서 cheer.lastId 로 하나만) ---------- */
+  const PHRASES = [
+    '{보낸이}의 응원이에요! 오늘 한 장만 같이 해 볼까?',
+    '보고 싶었어! 오늘은 쉬운 것부터 하나 해 보자.',
+    '{이름}~ 오늘 5분만 공부해 볼래? {보낸이}의 응원이 함께해.',
+    '다시 시작하는 날이야. 한 문제만 풀어도 최고야!',
+    '{보낸이}의 응원이에요. 오늘 공부 하나 해 볼까?',
+    '쉬는 날 잘 쉬었지? 오늘은 바로 풀기 하나 해 보자!',
+    '조금씩 해도 괜찮아. 오늘 한 장이면 충분해.',
+    '{이름}! 오늘 배운 것 저녁에 {보낸이}한테 알려 줄래?',
+    "숙제를 마치고 '다 했어요'를 누르면 스티커를 받을 수 있어! 천천히 해 보자.",
+    '천천히 해도 돼. {보낸이}의 응원은 늘 이어져!'
+  ];
+  /* {이름} = 별명 + 아/야 (받침 있으면 '아'). 별명이 없으면 그 자리를 뺌 */
+  function call(n){
+    n = String(n || '').trim(); if (!n) return '';
+    const c = n.charCodeAt(n.length - 1), han = c >= 0xAC00 && c <= 0xD7A3;
+    return n + (han && (c - 0xAC00) % 28 ? '아' : '야');
+  }
+  function phrase(no, name, from){
+    const p = PHRASES[(Number(no) || 1) - 1] || PHRASES[0], nm = call(name);
+    return (nm ? p.replace('{이름}', nm) : p.replace(/^\{이름\}[~!]\s*/, '')).replace(/\{보낸이\}/g, from || '부모님');
+  }
+  const SEEN = 'sarang_cheerseen';
+  async function kidCheer(){
+    const lg = L(), kd = lg.kidDev && lg.kidDev(); if (!kd) return;
+    try {
+      const A = lg.auth, sdk = lg._sdk, db = sdk.getFirestore(A.firebaseApp);
+      const c = await A.children.get(kd.childId), ch = c && c.cheer;
+      if (!ch || !ch.lastId || LS.getItem(SEEN) === ch.lastId) return;
+      const s = await sdk.getDoc(sdk.doc(db, 'users', kd.owner, 'cheers', ch.lastId)); if (!s.exists()) return;
+      const v = s.data(), at = v.sentAt && v.sentAt.toMillis ? v.sentAt.toMillis() : 0;
+      if (at && Date.now() - at > 2 * DAY) return;   // 오래된 응원은 띄우지 않음
+      let from = '부모님'; try { from = LS.getItem('sarang_cheerfrom') || '부모님'; } catch (e) {}
+      cheerCard(phrase(v.phraseNo, kd.nick, from), ch.lastId);
+    } catch (e) { console.warn('응원 읽기 실패', e && (e.code || e.message)); }
+  }
+  function cheerCard(t, id){
+    if ($('acCheer')) return;
+    const top = document.querySelector('#app > .hub-top'); if (!top) return;
+    top.insertAdjacentHTML('afterend', `<div class="card ac-cheer" id="acCheer" role="status"><p><b>응원 한마디</b>${esc(t)}</p><button type="button" class="linkbtn" id="acCheerOk">고마워요</button></div>`);
+    $('acCheerOk').onclick = () => { try { LS.setItem(SEEN, id); } catch (e) {} const x = $('acCheer'); if (x) x.remove(); };
+  }
+  /* 아이 폰 첫 화면 '응원 알림 받기' (알림을 아직 안 켠 아이 폰, 키가 있을 때만) */
+  function kidPushPaint(){
+    const lg = L(), kd = lg && lg.kidDev && lg.kidDev(), u = lg && lg.user;
+    const want = !!(kd && u && u.child && pushOk() && !pushOn() && Notification.permission !== 'denied');
+    let el = $('kdPush');
+    if (!want) { if (el) el.remove(); return; }
+    if (el) { const b = $('kdPushOn'); if (b) b.disabled = pushBusy; return; }
+    const top = document.querySelector('#app > .hub-top'); if (!top) return;
+    top.insertAdjacentHTML('afterend', `<div class="card ac-cheer ac-kpush" id="kdPush"><p><b>응원 알림</b>부모님이 보내는 응원을 알림으로 받을 수 있어요.</p><button type="button" class="linkbtn" id="kdPushOn"${pushBusy ? ' disabled' : ''}>알림 받기</button></div>`);
+  }
+  /* 부모 현황판: 오늘 보낸 응원 한 줄 (src/kidmode.js 아이 폰 줄이 부름). cheer.sentAt 이 오늘(이 기기 날짜)이면 */
+  function cheerLine(child){
+    const ch = child && child.cheer, at = ch && ch.sentAt && ch.sentAt.toMillis ? ch.sentAt.toMillis() : 0;
+    if (!at || new Date(at).toDateString() !== new Date().toDateString()) return '';
+    const d = new Date(at);
+    return `오늘 ${d.getHours()}:${String(d.getMinutes()).padStart(2, '0')}에 응원 한마디를 보냈어요. 이틀 넘게 공부 기록이 없을 때 하루 한 번 가요.`;
+  }
+
+  window.SARANG_ACCT = { openDelete, openLookup, phrase, call, cheerLine, pushCfg, get vapid(){ return !!VAPID; }, _newCode: newCode };
 })();
 </script>
 <script>/* 영어 듣기 = 오늘 배운 영단어 다시 듣기 (2026-10-04 대표 "영어 듣기 기능은 오늘 배운 영어단어를 다시 한번 듣는 과정", 옛 6단계 듣기 앱은 뺌)
@@ -27223,7 +27769,7 @@ window.DONATE_CORE = (function(){
      '연결 끊기'를 하면 다시 부모 폰에서 전부. 연결하지 않은 아이는 지금처럼 부모 폰에서 전부.
    - 숙제: 현황판 '숙제'에서 과목(지금 Day)·보내는 사람·한마디(30자) → 보내기. 아이 폰 숙제 칸에서 바로 풀기 → 부모 화면에 과목마다 '아이가 봄'·'다 했어요'·점수.
      아이에게는 점수를 보여 주지 않음. 저장은 users/{uid}/homework (규칙: 아이는 자기 숙제 과목 상태만 앞으로).
-   기록 주고받기(아이 폰도 그 아이의 기기 하나)는 src/login.js, 서버 부품은 src/vendor/sarang-auth (v1.2). */
+   기록 주고받기(아이 폰도 그 아이의 기기 하나)는 src/login.js, 서버 부품은 src/vendor/sarang-auth (v1.3). */
 (function(){
   const $ = id => document.getElementById(id);
   const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -27318,7 +27864,7 @@ window.DONATE_CORE = (function(){
       if (c) {
         if (cutAsk !== c.dataset.kdcut) { cutAsk = c.dataset.kdcut; renderSet(); const b = $('kdSet').querySelector(`[data-kdcut="${cutAsk}"]`); if (b) b.focus({ preventScroll: true }); return; }
         c.disabled = true; cutAsk = null;
-        A().kidDevice.unlink(c.dataset.kdcut).then(() => toast('연결을 끊었어요. 이제 부모 폰에서 모두 쓸 수 있어요.')).catch(er => { console.warn('연결 끊기 실패', er && er.code); c.disabled = false; toast('연결을 끊지 못했어요. 인터넷을 확인해 주세요.'); });
+        A().kidDevice.unlink(c.dataset.kdcut).then(() => toast('연결을 끊었어요. 이제 부모 폰에서 모두 쓸 수 있어요.')).catch(er => { console.warn('연결 끊기 실패', er && er.code); if (L().gone && L().gone(er)) return; c.disabled = false; toast('연결을 끊지 못했어요. 인터넷을 확인해 주세요.'); });
       }
       if (e.target.closest('[data-kdkeep]')) { cutAsk = null; renderSet(); }
     });
@@ -27333,7 +27879,7 @@ window.DONATE_CORE = (function(){
       const n = esc(K().label(k)), d = linkedOf(k.id);
       if (!d) h = `<button type="button" class="kd-ask-top" data-kdlink="${esc(k.id)}">${PHONE}<span><b>아이 폰을 아직 연결하지 않으셨나요?</b><small>${n}${josa(K().label(k), '이', '가')} 아이 폰으로 스마트 학습과 숙제를 하게 해 보세요.</small></span><i aria-hidden="true">›</i></button>`;
       else if (cutAsk === d.id) h = `<div class="kd-line kd-ask">${PHONE}<span><b>${n} 폰 연결을 끊을까요?</b><small>끊으면 그 폰은 첫 화면으로 돌아가고, 부모 폰에서 다시 모두 쓸 수 있어요.</small></span><div class="kd-ask-btns"><button type="button" class="linkbtn" data-kdkeep>그대로 두기</button><button type="button" class="linkbtn kd-cut" data-kdcut="${esc(d.id)}">연결 끊기</button></div></div>`;
-      else h = `<div class="kd-line">${PHONE}<span><b>${n} 폰 <em class="kd-on">연결됨</em></b><small>${esc(d.label || '아이 폰')}${ms(d.linkedAt) ? ` · ${md(ms(d.linkedAt))} 연결` : ''} · 스마트 학습과 숙제는 아이 폰에서 해요</small></span><button type="button" class="linkbtn" data-kdcut="${esc(d.id)}">연결 끊기</button></div>`;
+      else h = `<div class="kd-line">${PHONE}<span><b>${n} 폰 <em class="kd-on">연결됨</em></b><small>${esc(d.label || '아이 폰')}${ms(d.linkedAt) ? ` · ${md(ms(d.linkedAt))} 연결` : ''} · 스마트 학습과 숙제는 아이 폰에서 해요</small>${cheerOf(k.id) ? `<small class="kd-cheerln">${esc(cheerOf(k.id))}</small>` : ''}</span><button type="button" class="linkbtn" data-kdcut="${esc(d.id)}">연결 끊기</button></div>`;
       /* 목록에 없는 아이의 폰 (뺀 아이) */
       const ids = new Set(K().list().map(x => x.id));
       (devs || []).filter(x => !ids.has(x.childId)).forEach(x => {
@@ -27344,7 +27890,15 @@ window.DONATE_CORE = (function(){
     }
     if (box.dataset.h !== h) { box.dataset.h = h; box.innerHTML = h; box.hidden = !h; }
   }
-  document.addEventListener('db:mounted', mountSet);
+  /* 오늘 보낸 응원 한 줄 (응원 한마디, 서버 cheerDaily → 아이 문서 cheer.sentAt). 현황판을 열 때 아이마다 한 번 읽음 (src/acct.js cheerLine) */
+  let cheerAt = {};
+  document.addEventListener('db:mounted', () => { cheerAt = {}; mountSet(); renderSet(); });
+  function cheerOf(id){
+    if (cheerAt[id] !== undefined || !parentReady() || !window.SARANG_ACCT) return cheerAt[id] || '';
+    cheerAt[id] = '';
+    A().children.get(id).then(c => { const t = SARANG_ACCT.cheerLine(c); if (t) { cheerAt[id] = t; renderSet(); } }).catch(() => {});
+    return '';
+  }
   /* 자녀를 새로 등록하면: 아이 폰도 지금 연결할지 고르기 (2026-10-05 대표 "자녀 추가 시 아이 폰을 바로 연결할지 선택") */
   document.addEventListener('hub:kid-new', () => {
     if (isKid() || !parentReady() || !(L() && L().hostOk)) return;
@@ -27387,6 +27941,7 @@ window.DONATE_CORE = (function(){
       if (cEnd) codeTimer(d, cid, r.codeExpiresAt);
     } catch (e) {
       console.warn('아이 폰 번호 만들기 실패', e && (e.code || e.message));
+      if (L().gone && L().gone(e)) return;   // 탈퇴를 요청한 계정 (src/login.js gone)
       if (!inv || inv.cid !== cid) return;
       const nf = e && /not-found/.test(e.code || '');
       if (nf && L().upload) L().upload();   // 아직 계정에 없는 아이: 지금 기록을 올림 → 다시 누르면 됨
@@ -27682,6 +28237,8 @@ window.DONATE_CORE = (function(){
   function kidPaint(){
     const box = $('kdKidHw'); if (!box) return;
     const list = (kidHw || []).filter(w => Object.keys(w.items || {}).length);
+    const fr = list.map(w => w.from).find(f => FROM.includes(f));   // 응원 알림·한마디의 '보낸 사람' = 마지막으로 숙제를 보낸 사람 (src/acct.js, 없으면 '부모님')
+    if (fr) try { if (localStorage.getItem('sarang_cheerfrom') !== fr) { localStorage.setItem('sarang_cheerfrom', fr); if (window.SARANG_ACCT) SARANG_ACCT.pushCfg(); } } catch (e) {}
     if (!list.length) { box.hidden = true; box.innerHTML = ''; stampCheck(); return; }
     const S = window.SARANG_SCREEN;
     const h = list.map(w => {
@@ -27847,6 +28404,374 @@ window.DONATE_CORE = (function(){
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
 </script>
+<script>/* ==================== 우리 아이 학교생활 (판 76 후보, 대표 카드 '베타 전' 10-09 12:21, 시안 보고 "작업 진행해줘") ====================
+   기준: handoff/학교생활_앱화면_1009/요청.md·화면시안.html, handoff/학교정보_나이스_1009/요청서.md,
+   방침 조건 handoff/방침_학교생활_나이스_1009/00_고침안.md '이 문장이 맞으려면' 앱 1~6 (조정자 10-09 14:31 KST 전달),
+   서버 호출 handoff/서버_학교생활_패치_1009/전체파일/README.md (schoolSearch · setChildSchool · schoolData, FCM type "dismissal").
+   - 자리: 현황판 왼쪽 메뉴 '학교생활' (초1~중3 아이만, src/dash.js). 부모가 로그인하고 가입을 마친 기기에서만 서버를 부름.
+   - 학교 설정은 같은 칸 안의 두 번째 화면('‹ 학교생활'로 돌아감). 처음 저장할 때만 선택 동의 칸 → consent:true (앱 1).
+   - 반은 넣지 않아도 됨. 반이 있으면 반 시간표를 보여 줌, 반 시간표만 따로 끄는 설정은 없음 (앱 2). 하교 알림은 반이 있어야 켬
+     (서버 모음72 [중] 8 고침 방향 '하교 알림은 반이 있어야 켬'에 미리 맞춤). 학년은 아이 정보 값을 보냄.
+   - 세 길 (앱 3): 학교 정보 지우기 = 학교생활 동의 철회(school:null, 통째 삭제) / 반 '넣지 않음' 저장 = 반만 지움 / 하교 알림 끄기 = 기능만 끔.
+     저장할 때는 늘 지금 값을 모두 보냄(서버가 보낸 값으로 덮어씀) → 알림을 꺼도 부모가 넣은 수업 시작·하교 시각은 그대로 남음.
+   - 아이 기기 (앱 4): 학교 이름·반·시간표·알레르기 번호 없음. 부모가 '아이 기기에 오늘 급식 보이기'를 켰을 때만 학습 화면 맨 아래 '오늘 급식' 메뉴 이름.
+   - 알레르기는 입력받지 않음 (앱 5). 학교 찾기 칸 안내 "학교 이름만 넣어 주세요…" (앱 6).
+   - 학교폭력 칸: 번호는 글자 + '번호 복사'(tel: 안 씀). 번호는 게시 전에 공식 출처로 한 번 더 확인 (요청 1).
+   - 불러오지 못하면 한 줄 '학교 정보를 지금 불러올 수 없어요.' (자리 고정). 안내·상태 줄은 높이를 고정해 글이 바뀌어도 아래가 밀리지 않음. */
+(function(){
+  /* 켜는 스위치 (2026-10-09 조정자·서버 스레드: 첫 서버 배포에는 학교생활 함수 4개 schoolSearch·setChildSchool·schoolData·schoolDismissal 이 없음).
+     false 면 이 파일은 아무것도 하지 않음 → window.SARANG_SCHOOL 없음 → 현황판 메뉴 '학교생활' 숨김(src/dash.js scOk), 아이 폰 '오늘 급식' 없음, 서버 호출 없음.
+     학교생활 서버 패치(4fd65295)가 배포되면 true 로 바꾸고 다시 빌드. 검사(에뮬레이터, localhost ?emu=1)에서만 localStorage sarang_school_test='1' 로 켤 수 있음 */
+  const LIVE = false;
+  const TEST = /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && /[?&]emu=1(&|$)/.test(location.search) && (() => { try { return localStorage.getItem('sarang_school_test') === '1'; } catch (e) { return false; } })();
+  if (!LIVE && !TEST) return;
+  const $ = id => document.getElementById(id), L = () => window.SARANG_LOGIN, K = () => window.SARANG_KIDS;
+  const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const REGION = 'asia-northeast3', FAIL = '학교 정보를 지금 불러올 수 없어요.';
+  const WD = ['일', '월', '화', '수', '목', '금', '토'];
+  const PERIOD = { els: 40, mis: 45, his: 50 };
+  const KIND_NM = { els: '초등학교', mis: '중학교', his: '고등학교' };
+
+  const child = () => { try { return JSON.parse(localStorage.getItem('hub_child')) || {}; } catch (e) { return {}; } };
+  /* 초1~중3만 (앱에는 고등 과정이 없음) */
+  const gradeOf = () => { const m = /^([em])([1-6])$/.exec(child().grade || ''); return m ? { lv: m[1] === 'e' ? 'els' : 'mis', n: +m[2] } : null; };
+  const ok = () => !!gradeOf();
+  const cid = () => (K() && K().cur ? K().cur() : 'c1');
+  const nick = () => { try { return K() ? K().label(K().now()) : '우리 아이'; } catch (e) { return '우리 아이'; } };
+  const parentReady = () => { const l = L(); return !!(l && l.hostOk && l.user && !l.user.child && l.agreed === true && !(l.kidDev && l.kidDev())); };
+
+  async function fn(name, data){
+    const A = await L().load(), sdk = L()._sdk;
+    return (await sdk.httpsCallable(sdk.getFunctions(A.firebaseApp, REGION), name, { timeout: 30000 })(data || {})).data;
+  }
+  /* 나이스를 못 부르거나 자료가 덜 오면 unavailable + 우리말 문구 ('학교 정보를 지금 불러올 수 없어요.'·'학교 시간표가 커서 전체 정보를 불러오지 못했어요.', 서버 모음72 12-16 2번) */
+  const failMsg = e => { const m = String(e && e.message || '').replace(/^FirebaseError:\s*/, ''); return /unavailable/.test(e && e.code || '') && /[가-힣]/.test(m) ? m.slice(0, 100) : FAIL; };
+  const srv = e => { const m = String(e && e.message || '').replace(/^FirebaseError:\s*/, ''); return /invalid-argument|failed-precondition|resource-exhausted/.test(e && e.code || '') && /[가-힣]/.test(m) ? m.slice(0, 100) : ''; };
+
+  /* ---------- 날짜 ---------- */
+  const ymd = d => `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+  const day0 = d => new Date(d.getFullYear(), d.getMonth(), d.getDate());
+  const add = (d, n) => new Date(d.getFullYear(), d.getMonth(), d.getDate() + n);
+  const fromYmd = s => new Date(+s.slice(0, 4), +s.slice(4, 6) - 1, +s.slice(6, 8));
+  const md = s => { const d = fromYmd(s); return `${d.getMonth() + 1}월 ${d.getDate()}일`; };
+  const hmMin = s => { const m = /^(\d{2}):(\d{2})$/.exec(s || ''); return m ? +m[1] * 60 + +m[2] : null; };
+  const minHm = n => `${String(Math.floor(n / 60)).padStart(2, '0')}:${String(n % 60).padStart(2, '0')}`;
+  const say = n => { const h = Math.floor(n / 60), m = n % 60, hh = h > 12 ? h - 12 : h; return `${h < 12 ? '오전 ' : ''}${hh}시${m ? ` ${m}분` : ''}`; };
+
+  /* 하교 시각 셈 (서버 school.js dismissalMin 과 같은 식, 추정): 시작(기본 9:00) + n×수업 + (n−1)×쉬는 10분, n>4 면 점심 40분 더함 */
+  function calcEnd(kind, start, n){
+    if (!n) return null;
+    return (hmMin(start) ?? 540) + n * (PERIOD[kind] || 45) + (n - 1) * 10 + (n > 4 ? 40 : 0);
+  }
+
+  /* ---------- 상태 (아이마다) ---------- */
+  let S = null;   // { cid, info, loading, err(문구 또는 false), meal, sched, tt, at }
+  let mode = 'home', el = null, weekMeal = false, copyMsg = '';
+  const fresh = () => S && S.cid === cid() && Date.now() - S.at < 10 * 60000;
+  /* 아이 학년이 바뀌었는데(새 학년) 학교 정보는 옛 학년으로 저장된 때: 서버는 저장된 학년으로 시간표·하교 알림을 셈하므로 확인을 띄움
+     (2026-10-09 창구 F1 참고). 저절로 다시 저장하지 않음 — 반이 바뀌었을 수 있어 부모가 새 반을 확인하고 저장 */
+  const gradeMoved = () => { const g = gradeOf(), i = S && S.info; return !!(g && i && Number.isInteger(i.grade) && i.grade !== g.n); };
+  /* 교육청 이름: 서버는 교육청 코드(atpt)만 저장 → 나이스 학교 찾기 결과의 교육청 이름(region = ATPT_OFCDC_SC_NM)을 이 기기에 코드별로 기억.
+     없으면(다른 기기에서 넣은 학교) 학교 이름으로 한 번 찾아 같은 교육청·학교 코드의 이름을 씀. 코드→이름 표를 앱에 따로 두지 않음 (2026-10-09 창구 F1 [하] ①) */
+  const OFC = 'hub_sc_ofc';
+  const ofcGet = a => { try { return (JSON.parse(localStorage.getItem(OFC)) || {})[a] || ''; } catch (e) { return ''; } };
+  const ofcPut = (a, n) => { if (!/^[A-Z][0-9]{2}$/.test(a || '') || !n || typeof n !== 'string') return; try { const m = JSON.parse(localStorage.getItem(OFC)) || {}; if (m[a] !== n) { m[a] = n.slice(0, 30); localStorage.setItem(OFC, JSON.stringify(m)); } } catch (e) {} };
+  let ofcTried = '';
+  async function ofcFill(i, me){
+    if (!i || !i.atpt || ofcGet(i.atpt) || !i.name || ofcTried === i.atpt + i.code) return;
+    ofcTried = i.atpt + i.code;
+    try { const r = await fn('schoolSearch', { q: i.name }); (r.schools || []).forEach(s => { if (s.atpt === i.atpt && s.code === i.code) ofcPut(s.atpt, s.region); }); }
+    catch (e) { console.warn('교육청 이름 찾기 실패', e && (e.code || e.message)); return; }
+    if (cid() === me && ofcGet(i.atpt)) paint();
+  }
+  async function infoDoc(){
+    const l = L(), A = l.auth, sdk = l._sdk;
+    const s = await sdk.getDoc(sdk.doc(sdk.getFirestore(A.firebaseApp), 'users', l.user.uid, 'children', cid(), 'schoolInfo', 'main'));
+    return s.exists() ? s.data() : null;
+  }
+  async function load(force){
+    if (!force && fresh()) return;
+    const me = cid(); S = { cid: me, info: S && S.cid === me ? S.info : undefined, loading: true, err: false, at: Date.now() };
+    paint();
+    try {
+      const info = await infoDoc();
+      if (cid() !== me) return;
+      S.info = info;
+      if (info) {
+        const t = day0(new Date()), mon = add(t, -((t.getDay() + 6) % 7)), sun = add(mon, 6), fri = add(mon, 4);
+        const [meal, sched, tt] = await Promise.all([
+          fn('schoolData', { childId: me, kind: 'meal', from: ymd(mon), to: ymd(sun) }),
+          fn('schoolData', { childId: me, kind: 'schedule', from: ymd(t), to: ymd(add(t, 45)) }),
+          info.classNm ? fn('schoolData', { childId: me, kind: 'timetable', from: ymd(mon), to: ymd(fri) }) : Promise.resolve({ rows: [] })
+        ]);
+        if (cid() !== me) return;
+        S.meal = meal.rows || []; S.sched = sched.rows || []; S.tt = tt.rows || [];
+      }
+    } catch (e) { console.warn('학교생활 불러오기 실패', e && (e.code || e.message)); if (cid() === me) { if (L().gone && L().gone(e)) return; S.err = failMsg(e); } }
+    if (cid() === me) { S.loading = false; S.at = Date.now(); paint(); if (S.info && !S.err) ofcFill(S.info, me); }
+  }
+
+  /* ---------- 그리기 ---------- */
+  function paintInto(box){ el = box; if (!S || S.cid !== cid()) S = null; if (mode === 'set' && !parentReady()) mode = 'home'; if (parentReady() && !fresh() && !(S && S.loading)) { load(); return; } paint(); }
+  function paint(){
+    if (!el || el.hidden && !el.isConnected) return;
+    const keep = mode === 'set' ? keepSet() : null;
+    const h = mode === 'set' ? setHtml() : homeHtml();
+    if (el.dataset.h === h) return;
+    el.dataset.h = h; el.innerHTML = h;
+    if (keep) restoreSet(keep);
+  }
+  const ttDay = (d) => (S.tt || []).filter(r => r.date === ymd(d)).sort((a, b) => a.period - b.period);
+  function endFor(d){   // 그날 하교 (부모가 고친 시각이 먼저, 없으면 시간표 교시로 셈)
+    const i = S.info, dow = d.getDay(); if (dow === 0 || dow === 6) return null;
+    const o = hmMin((i.ends || {})[String(dow)]); if (o != null) return { min: o, fixed: true };
+    const rows = ttDay(d), n = rows.length ? Math.max(...rows.map(r => r.period)) : 0;
+    const c = calcEnd(i.kind, i.start, n); return c == null ? null : { min: c, n };
+  }
+  function memo(){
+    const i = S.info, t = day0(new Date()), dow = t.getDay(), off = (S.sched || []).find(r => r.date === ymd(t) && r.off);
+    let title, sub;
+    const e = endFor(t);
+    if (dow === 0 || dow === 6) { title = '오늘은 학교 쉬는 날이에요'; sub = '하교 알림은 평일에만 보내요.'; }
+    else if (off) { title = `오늘은 ${off.name || '휴업일'}이에요`; sub = '하교 알림을 쉬어요.'; }
+    else if (!i.classNm) { title = '반을 넣으면 하교 시각을 알려 드려요'; sub = '학교 설정에서 반을 고르면 반 시간표로 하교 시각을 셈해요.'; }
+    else if (!e) { title = '오늘 시간표가 아직 없어요'; sub = '시간표가 없는 날은 하교 알림을 보내지 않아요.'; }
+    else {
+      title = `오늘 하교 예상 ${say(e.min)}`;
+      sub = i.notify ? `${say(e.min - 30)}에 부모님 폰으로 알려 드려요.${e.n ? ` 오늘은 ${e.n}교시예요.` : ''}` : '하교 알림이 꺼져 있어요. 켜면 30분 전에 알려 드려요.';
+    }
+    const dis = !i.classNm;
+    return `<div class="sc-memo"><div class="sc-mrow"><b>${esc(title)}</b>
+      <label class="sc-sw"><input type="checkbox" id="scNotify" aria-label="하교 30분 전 알림"${i.notify ? ' checked' : ''}${dis ? ' disabled' : ''}><span aria-hidden="true"></span></label></div>
+      <p class="sc-msub">${esc(sub)}</p></div>`;
+  }
+  const HELP = `<section class="card sc-card sc-help" aria-labelledby="scHelpT"><h3 class="sc-h" id="scHelpT">학교폭력, 혼자 고민하지 마세요</h3>
+    <div class="sc-line"><div><span class="sc-num">117</span><small>국번 없이 전화, 24시간 신고·상담</small></div><button type="button" class="sc-btn" data-sccopy="117">번호 복사</button></div>
+    <div class="sc-line"><div><span class="sc-num">#0117</span><small>문자로 신고</small></div><button type="button" class="sc-btn" data-sccopy="#0117">번호 복사</button></div>
+    <div class="sc-line"><div><span class="sc-num">안전Dream</span><small>인터넷 신고 (safe182.go.kr)</small></div><button type="button" class="sc-btn" data-sccopy="safe182.go.kr">주소 복사</button></div>
+    <div class="sc-line"><div><span class="sc-num">112</span><small>지금 위험하면 바로</small></div><button type="button" class="sc-btn" data-sccopy="112">번호 복사</button></div>
+    <p class="sc-note">사랑교육은 신고 내용을 받거나 저장하지 않아요. 위 기관에 직접 연락해 주세요.</p>
+    <p class="sc-stat" id="scCopyMsg" role="status" aria-live="polite">__COPY__</p></section>`;
+  const help = () => HELP.replace('__COPY__', esc(copyMsg));
+  function homeHtml(){
+    const g = gradeOf();
+    if (!g) return '<section class="card sc-card"><p class="sc-p">학교생활은 초등학생·중학생 아이에게 보여요.</p></section>';
+    if (!parentReady()) return `<section class="card sc-card"><h3 class="sc-h">학교 급식·학사일정·시간표를 한곳에서</h3><p class="sc-p">lovedu.kr 앱에서 로그인하고 가입을 마치면 아이 학교를 넣고 급식·학사일정·시간표·하교 30분 전 알림을 볼 수 있어요.</p></section>${help()}`;
+    if (!S || S.info === undefined) return `<section class="card sc-card sc-wait"><p class="sc-p" role="status">${S && S.err ? esc(S.err) : '학교 정보를 불러오는 중이에요…'}</p></section>${help()}`;
+    const i = S.info;
+    if (!i) return `<section class="card sc-card"><h3 class="sc-h">${esc(nick())} 학교를 넣어 볼까요?</h3>
+      <p class="sc-p">학교를 넣으면 급식·학사일정을 보고, 반까지 넣으면 반 시간표와 하교 30분 전 알림을 받을 수 있어요. 넣지 않아도 다른 기능은 그대로 써요.</p>
+      <button type="button" class="sc-pri" data-scset>학교 넣기</button></section>${help()}<p class="sc-note">학교 정보: 나이스 교육정보 개방 포털.</p>`;
+    const t = day0(new Date());
+    const ofc = ofcGet(i.atpt), moved = gradeMoved();
+    let h = `<section class="card sc-card sc-school"><div><b>${esc(i.name || '')}</b><small>${moved ? i.grade : g.n}학년${i.classNm ? ` ${esc(i.classNm)}반` : ''}${ofc ? ` · ${esc(ofc)}` : ''}</small></div><button type="button" class="sc-btn" data-scset>학교 설정</button></section>`;
+    if (moved) h += `<section class="card sc-card sc-moved" role="note"><h3 class="sc-h">아이 학년이 ${g.n}학년으로 바뀌었어요</h3><p class="sc-p">학교 정보는 아직 ${i.grade}학년${i.classNm ? ` ${esc(i.classNm)}반` : ''}으로 저장돼 있어 시간표와 하교 알림도 그 학년으로 셈해요. 학교 설정에서 새 반을 확인하고 저장해 주세요.</p><button type="button" class="sc-pri" data-scset>새 학년으로 다시 저장하기</button></section>`;
+    if (S.err) return h + `<p class="sc-fail" role="status">${esc(S.err)}</p>${help()}`;
+    if (S.loading && !S.meal) return h + `<p class="sc-fail sc-wait" role="status">불러오는 중이에요…</p>${help()}`;
+    h += memo();
+    if (i.classNm) {
+      const rows = ttDay(t);
+      h += `<section class="card sc-card"><h3 class="sc-h">오늘 시간표 <small>${t.getMonth() + 1}월 ${t.getDate()}일 (${WD[t.getDay()]})</small></h3>`
+        + (rows.length ? `<div class="sc-tt">${rows.map(r => `<span class="sc-p2">${r.period}교시</span><span>${esc(r.subject)}</span>`).join('')}</div>` : '<p class="sc-p">오늘은 시간표가 없어요.</p>') + '</section>';
+    }
+    const today = (S.meal || []).filter(r => r.date === ymd(t));
+    const dishes = r => `<ul class="sc-meal">${(r.dishes || []).map(d => `<li>${esc(d.name)}${d.allergy ? `<sup>${esc(d.allergy)}</sup>` : ''}</li>`).join('')}</ul>`;
+    h += `<section class="card sc-card"><h3 class="sc-h">오늘 급식 <small>${today.length ? esc(today.map(r => [r.meal, r.cal].filter(Boolean).join(' · ')).join(', ')) : ''}</small></h3>`
+      + (today.length ? today.map(dishes).join('') : '<p class="sc-p">오늘은 급식 정보가 없어요.</p>')
+      + '<p class="sc-note">작은 숫자는 알레르기 번호예요. 부모님 화면에만 보여요.</p>'
+      + `<button type="button" class="sc-btn sc-wide" id="scWeek" aria-expanded="${weekMeal}">${weekMeal ? '이번 주 급식 접기' : '이번 주 급식 보기'}</button>`;
+    if (weekMeal) {
+      const days = [...new Set((S.meal || []).map(r => r.date))].sort();
+      h += days.length ? `<div class="sc-week">${days.map(d => `<div class="sc-wd"><b>${md(d)} (${WD[fromYmd(d).getDay()]})</b>${(S.meal || []).filter(r => r.date === d).map(dishes).join('')}</div>`).join('')}</div>` : '<p class="sc-p">이번 주 급식 정보가 없어요.</p>';
+    }
+    h += '</section>';
+    const ev = (S.sched || []).filter(r => r.date >= ymd(t) && r.name).slice(0, 8);
+    h += `<section class="card sc-card"><h3 class="sc-h">다가오는 학사일정 <small>45일 안</small></h3>`
+      + (ev.length ? `<ul class="sc-ev">${ev.map(r => `<li><time>${md(r.date)}</time><span>${esc(r.name)}${r.off ? '<span class="sc-tag">하교 알림 쉼</span>' : ''}</span></li>`).join('')}</ul>` : '<p class="sc-p">다가오는 일정이 없어요.</p>') + '</section>';
+    return h + help() + '<p class="sc-note">학교 정보: 나이스 교육정보 개방 포털. 하교 시각은 시간표 교시로 셈한 것이라 학교 사정에 따라 다를 수 있어요.</p>';
+  }
+
+  /* ---------- 학교 설정 ---------- */
+  let F = null;   // 고르는 중인 값 { q, results, searching, pick:{atpt,code,name,kind,region,addr}|null, classNm, start, ends:{1..5}, touched:Set, notify, mealToKid, agree, msg, bad, busy, askClear }
+  function setStart(){
+    const i = S && S.info;
+    F = { q: '', results: null, searching: false, pick: i ? { atpt: i.atpt, code: i.code, name: i.name, kind: KIND_NM[i.kind] || '' } : null,
+      classNm: i && i.classNm || '', start: i && i.start || '', ends: Object.assign({}, i && i.ends || {}), touched: new Set(),
+      notify: !!(i && i.notify), mealToKid: !!(i && i.mealToKid), agree: false, msg: gradeMoved() ? `${gradeOf().n}학년 반을 확인하고 저장해 주세요.` : '', bad: false, busy: false, askClear: false };
+    mode = 'set'; paint();
+    const b = el && el.querySelector('#scBack'); if (b) b.focus({ preventScroll: true });
+    window.scrollTo(0, Math.min(window.scrollY, Math.max(0, el.getBoundingClientRect().top + window.scrollY - 70)));
+  }
+  function setHtml(){
+    const g = gradeOf(), i = S && S.info, nm = esc(nick());
+    const want = g ? (g.lv === 'els' ? '초등학교' : '중학교') : '';
+    const res = F.results;
+    let list;
+    if (F.searching) list = '<p class="sc-p sc-dim">찾는 중이에요…</p>';
+    else if (res === null) list = `<p class="sc-p sc-dim">학교 이름을 두 글자 이상 넣고 찾기를 눌러 주세요.</p>`;
+    else if (typeof res === 'string') list = `<p class="sc-p sc-dim">${esc(res)}</p>`;
+    else if (!res.length) list = `<p class="sc-p sc-dim">찾는 ${want}가 없어요. 이름을 다시 확인해 주세요.</p>`;
+    else list = res.map((s, k) => `<button type="button" class="sc-res" data-scpick="${k}" aria-pressed="${!!(F.pick && F.pick.code === s.code && F.pick.atpt === s.atpt)}">${esc(s.name)}<small>${esc([s.region, s.addr].filter(Boolean).join(' · '))}</small></button>`).join('');
+    const days = [1, 2, 3, 4, 5].map(d => {
+      const v = F.ends[d] || '';
+      return `<label class="sc-day"><span>${WD[d]}</span><input type="time" data-scend="${d}" min="11:00" max="18:59" step="600" value="${esc(v)}" aria-label="${WD[d]}요일 하교 시각"></label>`;
+    }).join('');
+    const canNotify = !!F.classNm;
+    return `<div class="sc-sethead"><button type="button" class="sc-back" id="scBack" aria-label="학교생활로 돌아가기">‹ 학교생활</button><b>학교 설정 · ${nm}</b></div>
+      <section class="card sc-card"><label class="sc-lab" for="scQ">학교 찾기</label>
+        <div class="sc-find"><input class="sc-inp" id="scQ" type="search" enterkeyhint="search" autocomplete="off" maxlength="30" placeholder="학교 이름 두 글자 이상" value="${esc(F.q)}"><button type="button" class="sc-btn" id="scFind">찾기</button></div>
+        <p class="sc-note">학교 이름만 넣어 주세요. 이름·연락처 같은 개인정보는 넣지 마세요.</p>
+        <p class="sc-sel" aria-live="polite">${F.pick ? `고른 학교: <b>${esc(F.pick.name)}</b>` : `${want}만 고를 수 있어요 (아이 학년 ${g ? g.n : ''}학년).`}</p>
+        <div class="sc-results">${list}</div></section>
+      <section class="card sc-card"><div class="sc-two">
+        <div class="sc-field"><span class="sc-lab">학년</span><input class="sc-inp" value="${g ? (g.lv === 'els' ? '초' : '중') + g.n + '학년' : ''}" readonly aria-readonly="true" aria-label="학년"><small>아이 정보의 학년이에요</small></div>
+        <div class="sc-field"><label class="sc-lab" for="scCls">반</label><select class="sc-inp" id="scCls"><option value="">넣지 않음</option>${Array.from({ length: 20 }, (_, k) => `<option value="${k + 1}"${F.classNm === String(k + 1) ? ' selected' : ''}>${k + 1}반</option>`).join('')}</select><small>반 시간표·하교 알림에 써요</small></div>
+      </div></section>
+      <section class="card sc-card"><span class="sc-lab">하교 시각</span><p class="sc-note">비워 두면 그날 시간표 교시로 셈해요. 학교와 다르면 요일마다 넣어 주세요.</p>
+        <label class="sc-day sc-start"><span>수업 시작</span><input type="time" id="scStart" min="07:00" max="10:59" step="600" value="${esc(F.start)}" aria-label="수업 시작 시각"><small>비우면 9시</small></label>
+        <div class="sc-days">${days}</div>
+        <button type="button" class="sc-link" id="scEndsClear">요일 시각 모두 비우기</button></section>
+      <section class="card sc-card">
+        <div class="sc-tog"><div><b>하교 30분 전 알림</b><small>${canNotify ? '부모님 폰으로만 와요. 주말·방학·휴업일엔 쉬어요.' : '반을 넣어야 켤 수 있어요.'}</small></div><label class="sc-sw"><input type="checkbox" id="scN2" aria-label="하교 30분 전 알림"${F.notify && canNotify ? ' checked' : ''}${canNotify ? '' : ' disabled'}><span aria-hidden="true"></span></label></div>
+        <div class="sc-tog"><div><b>아이 기기에 오늘 급식 보이기</b><small>메뉴 이름만 보여요. 학교 이름·반은 안 보여요.</small></div><label class="sc-sw"><input type="checkbox" id="scKid" aria-label="아이 기기에 오늘 급식 보이기"${F.mealToKid ? ' checked' : ''}><span aria-hidden="true"></span></label></div></section>
+      ${i ? '' : `<label class="sc-consent" for="scAgree"><input type="checkbox" id="scAgree"${F.agree ? ' checked' : ''}><span>학교·학년·반을 학사일정·급식·시간표·하교 알림을 보여 주는 데만 쓰는 것에 동의해요. (선택이에요. 넣지 않아도 다른 기능은 그대로 써요. 학교 정보를 지우거나 탈퇴하면 바로 지워져요.)</span></label>`}
+      <button type="button" class="sc-pri" id="scSave"${F.busy ? ' disabled' : ''}>${F.busy ? '저장하는 중…' : '저장'}</button>
+      <p class="sc-stat${F.bad ? ' bad' : ''}" id="scMsg" role="status" aria-live="polite">${esc(F.msg)}</p>
+      ${i ? (F.askClear ? `<div class="sc-ask"><p>학교생활 동의를 거두고 학교·반·알림 설정을 모두 지울까요? 바로 지워져요.</p><div class="sc-askb"><button type="button" class="sc-btn" id="scClearNo">그대로 두기</button><button type="button" class="sc-btn sc-danger" id="scClearGo">지우기</button></div></div>`
+        : '<button type="button" class="sc-link sc-dangerl" id="scClear">학교 정보 지우기 (동의 거두기)</button>') : ''}`;
+  }
+  /* 다시 그릴 때 입력 중인 칸·커서 지키기 */
+  function keepSet(){ const a = document.activeElement; return a && el && el.contains(a) ? { id: a.id, end: a.dataset && a.dataset.scend, s: a.selectionStart, e: a.selectionEnd } : null; }
+  function restoreSet(k){
+    const x = k.id ? el.querySelector('#' + k.id) : k.end ? el.querySelector(`[data-scend="${k.end}"]`) : null;
+    if (!x) return; x.focus({ preventScroll: true }); try { if (k.s != null) x.setSelectionRange(k.s, k.e); } catch (e) {}
+  }
+  async function find(){
+    const q = F.q.trim(); if (q.length < 2) { F.results = null; F.msg = '학교 이름을 두 글자 이상 넣어 주세요.'; F.bad = true; paint(); return; }
+    F.searching = true; F.msg = ''; F.bad = false; paint();
+    try {
+      const r = await fn('schoolSearch', { q });
+      const g = gradeOf(), want = g && g.lv === 'els' ? '초등학교' : '중학교';
+      F.results = (r.schools || []).filter(s => s.kind === want);
+    } catch (e) { console.warn('학교 찾기 실패', e && (e.code || e.message)); if (L().gone && L().gone(e)) return; F.results = failMsg(e); const m = srv(e); if (m) { F.msg = m; F.bad = true; } }
+    F.searching = false; paint();
+  }
+  /* 지금 값을 모두 보냄 (서버가 보낸 값으로 덮어씀, 앱 3) */
+  function payload(extra){
+    const g = gradeOf(), ends = {};
+    Object.entries(F.ends).forEach(([d, v]) => { if (/^[1-5]$/.test(d) && hmMin(v) != null) ends[d] = v; });
+    return Object.assign({ childId: cid(), school: { atpt: F.pick.atpt, code: F.pick.code }, grade: g ? g.n : null, classNm: F.classNm || null,
+      start: F.start || null, ends, notify: !!(F.notify && F.classNm), mealToKid: !!F.mealToKid }, extra || {});
+  }
+  function check(){
+    if (!F.pick) return '학교를 찾아 골라 주세요.';
+    if (F.start && !(hmMin(F.start) >= 420 && hmMin(F.start) < 660)) return '수업 시작은 오전 7시부터 10시 59분 사이로 넣어 주세요.';
+    for (const [d, v] of Object.entries(F.ends)) if (v && !(hmMin(v) >= 660 && hmMin(v) < 1140)) return `${WD[d]}요일 하교 시각은 오전 11시부터 오후 6시 59분 사이로 넣어 주세요.`;
+    if (!(S && S.info) && !F.agree) return '처음 저장할 때는 위 동의 칸에 체크해 주세요.';
+    return '';
+  }
+  async function save(){
+    const bad = check(); if (bad) { F.msg = bad; F.bad = true; paint(); return; }
+    F.busy = true; F.msg = ''; F.bad = false; paint();
+    try {
+      const pl = payload(S && S.info ? {} : { consent: true });
+      await fn('setChildSchool', pl);
+      /* 다시 불러오기 전에도 저장한 값으로 그림 (옛 학년·반·학년 바뀜 칸이 잠깐 보이지 않게) */
+      if (S && S.info) Object.assign(S.info, { atpt: pl.school.atpt, code: pl.school.code, name: F.pick.name || S.info.name, grade: pl.grade, classNm: pl.classNm, start: pl.start, ends: pl.ends, notify: pl.notify, mealToKid: pl.mealToKid });
+      F.busy = false; mode = 'home'; S.at = 0; await load(true);
+      flash('저장했어요.');
+    } catch (e) {
+      console.warn('학교 저장 실패', e && (e.code || e.message)); if (L().gone && L().gone(e)) return;
+      F.busy = false; F.msg = srv(e) || '저장하지 못했어요. 인터넷을 확인하고 다시 눌러 주세요.'; F.bad = true; paint();
+    }
+  }
+  async function clearAll(){
+    F.busy = true; paint();
+    try { await fn('setChildSchool', { childId: cid(), school: null }); F.busy = false; mode = 'home'; S.info = null; S.at = 0; await load(true); flash('학교 정보를 지웠어요.'); }
+    catch (e) { console.warn('학교 지우기 실패', e && (e.code || e.message)); if (L().gone && L().gone(e)) return; F.busy = false; F.askClear = false; F.msg = srv(e) || '지우지 못했어요. 인터넷을 확인하고 다시 해 주세요.'; F.bad = true; paint(); }
+  }
+  /* 학교생활 화면의 하교 알림 스위치: 지금 값 그대로 + notify 만 바꿔 저장 */
+  async function toggleNotify(on, input){
+    const i = S && S.info; if (!i) return;
+    if (gradeMoved()) { input.checked = !on; setStart(); return; }
+    input.disabled = true;
+    F = { pick: { atpt: i.atpt, code: i.code }, classNm: i.classNm || '', start: i.start || '', ends: Object.assign({}, i.ends || {}), notify: on, mealToKid: !!i.mealToKid };
+    try { await fn('setChildSchool', payload()); i.notify = on; S.at = Date.now(); paint(); }
+    catch (e) { console.warn('하교 알림 바꾸기 실패', e && (e.code || e.message)); if (L().gone && L().gone(e)) return; input.checked = !on; input.disabled = false; flash(srv(e) || '하교 알림을 바꾸지 못했어요. 인터넷을 확인해 주세요.'); }
+  }
+  function flash(t){ if (L() && L().toast) L().toast(t); }
+  async function copy(v){
+    let done = false;
+    try { await navigator.clipboard.writeText(v); done = true; } catch (e) {
+      try { const x = document.createElement('textarea'); x.value = v; x.setAttribute('readonly', ''); x.style.cssText = 'position:fixed;top:0;left:0;opacity:0'; document.body.appendChild(x); x.select(); done = document.execCommand('copy'); x.remove(); } catch (er) {}
+    }
+    copyMsg = done ? `복사했어요: ${v}` : '번호를 길게 눌러 복사해 주세요.';
+    const m = $('scCopyMsg'); if (m) m.textContent = copyMsg;
+  }
+
+  /* ---------- 누름·입력 (현황판 칸 하나에 한 번만 붙임) ---------- */
+  function bind(box){
+    if (box.dataset.scb) return; box.dataset.scb = '1';
+    box.addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b) return;
+      if (b.dataset.sccopy) return copy(b.dataset.sccopy);
+      if (b.hasAttribute('data-scset')) return setStart();
+      if (b.id === 'scBack') { mode = 'home'; F = null; paint(); const s = box.querySelector('[data-scset]'); if (s) s.focus({ preventScroll: true }); return; }
+      if (b.id === 'scWeek') { weekMeal = !weekMeal; paint(); return; }
+      if (b.id === 'scFind') return find();
+      if (b.dataset.scpick != null && Array.isArray(F.results)) { const s = F.results[+b.dataset.scpick]; F.pick = s; ofcPut(s.atpt, s.region); F.msg = ''; paint(); return; }
+      if (b.id === 'scEndsClear') { F.ends = {}; paint(); return; }
+      if (b.id === 'scSave') return save();
+      if (b.id === 'scClear') { F.askClear = true; paint(); const n = box.querySelector('#scClearNo'); if (n) n.focus({ preventScroll: true }); return; }
+      if (b.id === 'scClearNo') { F.askClear = false; paint(); return; }
+      if (b.id === 'scClearGo') return clearAll();
+    });
+    box.addEventListener('keydown', e => { if (e.target.id === 'scQ' && e.key === 'Enter') { e.preventDefault(); find(); } });
+    box.addEventListener('input', e => {
+      const t = e.target; if (!F) return;
+      if (t.id === 'scQ') F.q = t.value;   // 다시 그리지 않음 (입력 중 깜빡임 없게)
+    });
+    box.addEventListener('change', e => {
+      const t = e.target;
+      if (t.id === 'scNotify') return toggleNotify(t.checked, t);
+      if (!F) return;
+      if (t.id === 'scCls') { F.classNm = t.value; if (!t.value) F.notify = false; paint(); }
+      else if (t.id === 'scStart') F.start = t.value;
+      else if (t.dataset.scend) { F.ends[t.dataset.scend] = t.value; }
+      else if (t.id === 'scN2') F.notify = t.checked;
+      else if (t.id === 'scKid') F.mealToKid = t.checked;
+      else if (t.id === 'scAgree') F.agree = t.checked;
+    });
+  }
+
+  /* ---------- 아이 기기: 학습 화면 맨 아래 '오늘 급식' (부모가 켰을 때만, 메뉴 이름만) ---------- */
+  let kidDone = '';
+  async function kidMeal(){
+    const l = L(), kd = l && l.kidDev && l.kidDev(); if (!kd || !(l.user && l.user.child)) return;
+    const key = kd.childId + ymd(new Date()); if (kidDone === key) return; kidDone = key;
+    let r = null; try { r = await fn('schoolData', {}); } catch (e) { console.warn('아이 급식 실패', e && (e.code || e.message)); return; }
+    const meals = (r && r.meals || []).filter(m => (m.dishes || []).length);
+    let box = $('scKidMeal');
+    if (!meals.length) { if (box) box.remove(); return; }
+    if (!$('today')) return;
+    const h = `<h3 id="scKidMealT">오늘 급식</h3>${meals.map(m => `<ul>${m.dishes.map(d => `<li>${esc(d)}</li>`).join('')}</ul>`).join('')}`;
+    if (!box) { box = document.createElement('section'); box.className = 'card sc-kidmeal'; box.id = 'scKidMeal'; box.setAttribute('aria-labelledby', 'scKidMealT'); }
+    if (box.innerHTML !== h) box.innerHTML = h;
+    kidMealPlace(box);
+  }
+  /* 학습 화면(오늘 학습 칸이 든 곳)의 맨 아래로: 숙제·연속 공부 칸이 늦게 생겨도 그 뒤 (2026-10-09 창구 F1 [하] ③, 요청서 '학습 화면 맨 아래') */
+  function kidMealPlace(box){
+    const td = $('today'); if (!box || !td || !td.parentNode) return;
+    const last = ['kdCal', 'kdKidHw'].map($).filter(x => x && x.parentNode === td.parentNode).concat([td])
+      .reduce((a, b) => (a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? b : a));
+    if (last.nextElementSibling !== box) last.after(box);
+  }
+  document.addEventListener('sarang:login', () => { kidMeal(); if (el && !el.hidden && mode === 'home' && !S && parentReady()) load(); });
+  document.addEventListener('hub:child', () => { S = null; F = null; mode = 'home'; weekMeal = false; });
+
+  window.SARANG_SCHOOL = { ok, paint(box){ bind(box); paintInto(box); }, _calcEnd: calcEnd, get state(){ return S; } };
+})();
+</script>
 <script>/* ===== 현황판 (2026-10-03 대표 확정, 시안 https://claude.ai/artifact/WfiJbCo3ygZHqaYWpwaPCa) =====
    아래 메뉴 '현황판' 칸: 지금 보는 아이의 학습 현황 (아이는 위 자녀 카드로 바꿈 — 바꾸면 새로 켜지므로 이 칸으로 다시 엶).
    - 왼쪽 세로 메뉴 = 현황판 안 기능 목록 (대표: 추후 기능은 왼쪽에 세로로). PC 는 글자 메뉴, 좁으면 아이콘 줄, 폰은 ☰ 서랍
@@ -27883,6 +28808,7 @@ window.DONATE_CORE = (function(){
   const NAV = () => window.HUB_NAV;
   const GNAME = { k2: '2세', k3: '3세', k4: '4세', k5: '5세', k6: '6세', k7: '7세', e1: '초1', e2: '초2', e3: '초3', e4: '초4', e5: '초5', e6: '초6', m1: '중1', m2: '중2', m3: '중3' };
   const isTod = () => ['k2', 'k3', 'k4'].includes(J('hub_child').grade);
+  const scOk = () => /^[em][1-6]$/.test(J('hub_child').grade || '') && !!window.SARANG_SCHOOL;   // 왼쪽 메뉴 '학교생활' (src/school.js, 판 76 후보)
   const Wd = () => isTod() ? { p: '뽑아서', s: '화면', u: '장', act: '놀이', did: '논' } : { p: '프린트', s: '스마트', u: '과목', act: '공부', did: '공부한' };
   /* 놀이 기록: { 'Y-M-D': { p, s } } — play_log 에 없는 날은 play_printed·play_done(장마다 마지막 날)로 셈 */
   function playDays(){
@@ -28032,11 +28958,12 @@ window.DONATE_CORE = (function(){
     hw: '<path d="M8 4h8v3H8zM6 6H5v15h14V6h-1M9 12h6M9 16h4"/>',
     rep: '<path d="M6 3h9l4 4v14H6zM14 3v5h5M9 13h7M9 17h5"/>',
     mgmt: '<path d="M4 6h9M17 6h3M4 12h3M11 12h9M4 18h11M19 18h1"/><circle cx="15" cy="6" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="18" r="2"/>',
+    school: '<path d="M3 10l9-5 9 5-9 5zM7 12.2V17c3 2.2 7 2.2 10 0v-4.8M21 10v5"/>',
     menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
     x: '<path d="M6 6l12 12M18 6L6 18"/>'
   };
   const svg = (d, c) => `<svg class="${c || ''}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
-  function mount(){   // 왼쪽 메뉴: 학습 현황 → 학습 관리 → 리포트 → 숙제 (2026-10-04 대표)
+  function mount(){   // 왼쪽 메뉴: 학습 현황 → 학습 관리 → 리포트 → 숙제 (2026-10-04 대표) → 학교생활 (판 76 후보, 초1~중3)
     if (root || !$('sarangDashboard')) return;
     root = document.createElement('section'); root.id = 'dashPane'; root.className = 'db'; root.hidden = true; root.setAttribute('aria-label', '현황판');
     root.innerHTML = `<div class="db-scrim" id="dbScrim" hidden></div>
@@ -28047,6 +28974,7 @@ window.DONATE_CORE = (function(){
         <button type="button" class="db-nav-i" data-dbnav="mgmt">${svg(ICON.mgmt)}<span>학습 관리</span></button>
         <button type="button" class="db-nav-i" data-dbnav="rep">${svg(ICON.rep)}<span>리포트</span></button>
         <button type="button" class="db-nav-i" data-dbnav="hw">${svg(ICON.hw)}<span>숙제</span></button>
+        <button type="button" class="db-nav-i" data-dbnav="school"${scOk() ? '' : ' hidden'}>${svg(ICON.school)}<span>학교생활</span></button>
         <div class="db-nav-slot">새 기능은 이 아래로 추가돼요</div>
       </nav>
       <div class="db-main" id="dbMain">
@@ -28084,6 +29012,7 @@ window.DONATE_CORE = (function(){
         </div>
         <div class="db-view" id="dbRep" hidden></div>
         <div class="db-view db-hw" id="dbHw" hidden></div>
+        <div class="db-view db-sc" id="dbSchool" hidden></div>
         <div class="db-view db-mg" id="dbMgmt" hidden>
           <div class="db-mg-steps" role="tablist" aria-label="학습 관리 순서">
             <button type="button" role="tab" class="db-mg-st" id="dbMgT1" data-mgst="week" aria-controls="dbMgS1"><i>1</i><span>시간표 설정</span></button>
@@ -28111,7 +29040,7 @@ window.DONATE_CORE = (function(){
       if (b.dataset.dbnav === 'stat' && !isTod()) { if (view === 'stat') { subOpen = !subOpen; paintSub(); return; } subOpen = true; if (guard(() => setView('stat'))) return; setView('stat'); return; }
       if (b.dataset.dbsub) { const x = b.dataset.dbsub; setDrawer(false); const go = () => { sub = x; subOpen = true; if (view === 'stat') { render(); window.scrollTo(0, Math.min(window.scrollY, Math.max(0, root.getBoundingClientRect().top + window.scrollY - 12))); } else setView('stat'); };
         if (view !== 'stat' && guard(go)) return; go(); return; }
-      if (b.dataset.dbnav === 'stat' || b.dataset.dbnav === 'rep' || b.dataset.dbnav === 'mgmt' || b.dataset.dbnav === 'hw') { const v = b.dataset.dbnav; setDrawer(false); if (v !== 'mgmt' && guard(() => setView(v))) return; if (v === 'mgmt') { if (view === 'mgmt') return; step = 'week'; } setView(v); return; }
+      if (b.dataset.dbnav === 'stat' || b.dataset.dbnav === 'rep' || b.dataset.dbnav === 'mgmt' || b.dataset.dbnav === 'hw' || b.dataset.dbnav === 'school') { const v = b.dataset.dbnav; setDrawer(false); if (v !== 'mgmt' && guard(() => setView(v))) return; if (v === 'mgmt') { if (view === 'mgmt') return; step = 'week'; } setView(v); return; }
       if (b.dataset.mg) { if (!mgRead()) mgStart(); const N = NAV(); if (N && N.openFrom) N.openFrom(b.dataset.mg, 'dash'); return; }
       if (b.dataset.mgst) { $('dbMgFill').hidden = true; return mgStep(b.dataset.mgst, true); }   // 단계 탭은 막지 않음: 2단계에서 진도를 학교 진도로 옮기면 모자람이 풀릴 수 있음 (판 62 1차 검수). 채우라는 물음은 '다음' 단추에서만
       if (b.id === 'dbMgNext') { const P = window.HUB_PACE, L = P && P.block ? P.block() : []; if (L.length) return fillAsk(L); return mgStep('subj', true); }   // 1년치를 못 끝내는 과목이 있으면 먼저 채우기 (2026-10-05 대표 '최소 횟수 지키기')
@@ -28149,6 +29078,7 @@ window.DONATE_CORE = (function(){
   }
   function setDrawer(o){
     drawer = !!o; root.classList.toggle('drawer', drawer); $('dbScrim').hidden = !drawer;
+    document.documentElement.classList.toggle('db-lock', drawer);   // 서랍이 열린 동안 뒤 화면은 멈춤, 서랍 안만 스크롤 (플립 겉화면 260×280에서 맨 아래 '숙제'가 닿지 않던 것, 2026-10-10 창구)
     $('dbHamb').setAttribute('aria-expanded', String(drawer)); $('dbHamb').setAttribute('aria-label', drawer ? '현황판 메뉴 닫기' : '현황판 메뉴 열기');
   }
   function paintOpen(){
@@ -28163,16 +29093,17 @@ window.DONATE_CORE = (function(){
   }
   /* 왼쪽 메뉴: 학습 현황 / 리포트 */
   function setView(v, still){   // still: 스크롤은 그대로 (현황판으로 돌아올 때 첫 화면으로 되돌림, 탭 바꾸기가 자리를 정함)
-    if (v !== 'stat' && v !== 'rep' && v !== 'mgmt' && v !== 'hw') return;
+    if (v !== 'stat' && v !== 'rep' && v !== 'mgmt' && v !== 'hw' && v !== 'school') return;
     if (v === 'mgmt' && isTod()) v = 'stat';
+    if (v === 'school' && !scOk()) v = 'stat';
     if (v !== 'rep' && rep) closeRep(true);
     if (v !== 'mgmt') { weekOff(); padOff(); }
     view = v;
     root.querySelectorAll('[data-dbnav]').forEach(b => { const o = b.dataset.dbnav === v; b.classList.toggle('on', o); if (o) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
-    $('dbStat').hidden = v !== 'stat'; if ($('dbIntro').innerHTML) { $('dbIntro').hidden = v !== 'stat'; root.classList.toggle('has-intro', v === 'stat'); } $('dbRep').hidden = v !== 'rep'; $('dbMgmt').hidden = v !== 'mgmt'; $('dbHw').hidden = v !== 'hw';
-    $('dbTitle').textContent = v === 'rep' ? '리포트' : v === 'mgmt' ? '학습 관리' : v === 'hw' ? '숙제' : statTitle();
+    $('dbStat').hidden = v !== 'stat'; if ($('dbIntro').innerHTML) { $('dbIntro').hidden = v !== 'stat'; root.classList.toggle('has-intro', v === 'stat'); } $('dbRep').hidden = v !== 'rep'; $('dbMgmt').hidden = v !== 'mgmt'; $('dbHw').hidden = v !== 'hw'; $('dbSchool').hidden = v !== 'school';
+    $('dbTitle').textContent = v === 'rep' ? '리포트' : v === 'mgmt' ? '학습 관리' : v === 'hw' ? '숙제' : v === 'school' ? '학교생활' : statTitle();
     paintSub();
-    if (v === 'stat') render(); else if (v === 'mgmt') paintMgmt(); else if (v === 'hw') { if (window.SARANG_HW) SARANG_HW.paint($('dbHw')); } else paintRep();   // 숙제 화면은 src/kidmode.js
+    if (v === 'stat') render(); else if (v === 'mgmt') paintMgmt(); else if (v === 'hw') { if (window.SARANG_HW) SARANG_HW.paint($('dbHw')); } else if (v === 'school') { if (window.SARANG_SCHOOL) SARANG_SCHOOL.paint($('dbSchool')); } else paintRep();   // 학교생활은 src/school.js   // 숙제 화면은 src/kidmode.js
     if (!still) window.scrollTo(0, Math.min(window.scrollY, Math.max(0, root.getBoundingClientRect().top + window.scrollY - 12)));   // 긴 학습 현황 아래에서 짧은 리포트로 바꾸면 빈 곳에 남지 않게
   }
   /* 학습 현황 소메뉴: 시간(공부한 날·연속·공부 시간·주별 공부·공부한 날 달력·오늘 복습) / 교육 성과(완료율·과목별 진도·많이 틀린 단원). 0~4세 놀이 현황은 나누지 않음 */
@@ -28198,6 +29129,7 @@ window.DONATE_CORE = (function(){
 
   function render(){
     if (!root) return;
+    { const sb = root.querySelector('[data-dbnav="school"]'); if (sb) sb.hidden = !scOk(); }   // 학교생활: 초1~중3 아이만 (아이를 바꾸면 다시 봄)
     const now = new Date(), today = day0(now), rec = studied(), subs = subjects();
     $('dbDate').textContent = `${now.getMonth() + 1}월 ${now.getDate()}일 ${WD[now.getDay()]}요일`;
     /* D안 (2026-10-05 대표 확정): 학습 현황 맨 위 날짜 + "○○의 하루, 차근차근." + 손그림 해 (날짜는 머리줄 대신 여기) */
@@ -28641,8 +29573,8 @@ window.DONATE_CORE = (function(){
     if (back && !mgRead() && (view !== 'stat' || sub !== 'time')) { sub = 'time'; subOpen = true; setView('stat', true); }
     try { if (on) sessionStorage.setItem(KEEP, '1'); else sessionStorage.removeItem(KEEP); } catch (e) {}
     if (!on) { if (drawer) setDrawer(false); if (rep) closeRep(true); weekOff(); padOff(); return; }
-    if (view === 'mgmt' && isTod()) setView('stat');
-    fitW(); if (view === 'rep') paintRep(); else if (view === 'mgmt') { render(); paintMgmt(); } else render(); if (view === 'hw' && window.SARANG_HW) SARANG_HW.paint($('dbHw')); paintOpen();
+    if ((view === 'mgmt' && isTod()) || (view === 'school' && !scOk())) setView('stat');
+    fitW(); if (view === 'rep') paintRep(); else if (view === 'mgmt') { render(); paintMgmt(); } else render(); if (view === 'hw' && window.SARANG_HW) SARANG_HW.paint($('dbHw')); if (view === 'school' && window.SARANG_SCHOOL) SARANG_SCHOOL.paint($('dbSchool')); paintOpen();
   }
   document.addEventListener('hub:refresh', () => { if (!on) return; if (view === 'rep') paintRep(); else render(); if (view === 'mgmt') paintMgmt(); });
   /* 아이를 바꾸면 앱이 새로 켜짐: 현황판에서 바꿨으면 다시 현황판으로 */

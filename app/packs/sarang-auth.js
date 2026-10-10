@@ -1,4 +1,4 @@
-// 사랑교육 로그인 부품 v1.2 (2026-10-04: 아이 폰 연결·숙제 추가, 앱 스레드) — v1.1 (2026-10-02) — 서버 설계 S3: 구글·카카오 로그인, 계정 문서, 기기 제한, 아이 프로필·진도 저장
+// 사랑교육 로그인 부품 v1.3 (2026-10-05: App Check, 이 자녀 빼기 서버 함수, 웹 푸시 토큰 저장) — v1.2 (2026-10-04: 아이 폰 연결·숙제 추가, 앱 스레드) — v1.1 (2026-10-02) — 서버 설계 S3: 구글·카카오 로그인, 계정 문서, 기기 제한, 아이 프로필·진도 저장
 // 근거: roadmap/사랑교육_서버설계_v1.md 2절(데이터), 4-1(로그인·이관), 4-2(폰 1 + PC 1).
 // 화면은 없음. 앱 화면(앱 스레드)이 이 함수들을 부른다.
 //
@@ -16,7 +16,10 @@ export const LOVEDU_DEV = {
   messagingSenderId: '843439736761',
   appId: '1:843439736761:web:f525362c6da8c4d5a8d868',
   kakaoRestKey: 'f73cdb968d1937ab3979ab40bb972929',                                          // 카카오 REST API 키 (주소창에 드러나는 공개값). 대표님 등록 뒤 채움
+  appCheckKey: '6Ldnn98tAAAAAHCsOzHOhbqwdyJLFKwfgRgV_CCM',      // App Check용 reCAPTCHA Enterprise 사이트 키 (공개값, 2026-10-05)
 };
+// App Check는 키에 등록한 주소에서만 켬 (claude.ai 시험판 등 다른 곳에서는 reCAPTCHA가 실패하므로 켜지 않음)
+const APP_CHECK_HOSTS = /^(www\.)?lovedu\.kr$|^lovedu-dev\.web\.app$|^localhost$/;
 const REGION = 'asia-northeast3';
 const CHILD_IDS = ['c1', 'c2', 'c3'];                           // 아이 프로필 최대 3명 (규칙과 같음)
 const SUBJECTS = ['kor', 'eng', 'math', 'soc', 'sci', 'his', 'wh', 'hanja'];
@@ -31,8 +34,16 @@ export function deviceKind(nav = globalThis.navigator) {
   return 'pc';
 }
 
-export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', emulator = null, storage = globalThis.localStorage, session = globalThis.sessionStorage, nav = globalThis.navigator, go = u => globalThis.location.assign(u), kakaoAuthBase = 'https://kauth.kakao.com' } = {}) {
+export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', emulator = null, storage = globalThis.localStorage, session = globalThis.sessionStorage, nav = globalThis.navigator, go = u => globalThis.location.assign(u), kakaoAuthBase = 'https://kauth.kakao.com', appCheck = 'auto', host = globalThis.location && globalThis.location.hostname } = {}) {
   const app = sdk.initializeApp(config, name);
+  // 앱 확인(App Check): 다른 서비스보다 먼저 켬. 'auto' = 등록한 주소에서만, false = 끔. 에뮬레이터에서는 켜지 않음
+  let appCheckOn = false;
+  if (appCheck && !emulator && config.appCheckKey && sdk.initializeAppCheck && (appCheck !== 'auto' || APP_CHECK_HOSTS.test(host || ''))) {
+    try {
+      sdk.initializeAppCheck(app, { provider: new sdk.ReCaptchaEnterpriseProvider(config.appCheckKey), isTokenAutoRefreshEnabled: true });
+      appCheckOn = true;
+    } catch (e) { /* 이미 켜졌거나 실패: 서버가 enforce 전이면 동작에 영향 없음 */ }
+  }
   const auth = sdk.getAuth(app);
   const db = sdk.getFirestore(app);
   const fns = sdk.getFunctions(app, REGION);
@@ -115,6 +126,19 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
 
   return {
     deviceKind: kind,
+    appCheckOn,                    // 이 기기에서 App Check를 켰는지 (확인용)
+    firebaseApp: app,              // 웹 푸시: sdk.getMessaging(A.firebaseApp)
+
+    // 웹 푸시 토큰 저장 (2026-10-05). 부모 = users/{uid}/devices/{phone|pc}.push, 아이 폰 = users/{owner}/childDevices/{deviceId}.push
+    // token = FCM getToken() 결과 문자열, null이면 칸을 지움(알림 끔). 서버 cheerDaily 등이 이 토큰으로 데이터 메시지를 보냄
+    savePush(token) {
+      if (!auth.currentUser) throw new Error('로그인이 필요해요.');
+      if (token != null && (typeof token !== 'string' || !token || token.length > 4096)) throw new Error('알림 토큰이 잘못됐어요.');
+      const ref = kidClaims
+        ? sdk.doc(db, 'users', kidClaims.owner, 'childDevices', kidClaims.deviceId)
+        : sdk.doc(db, 'users', auth.currentUser.uid, 'devices', kind);
+      return sdk.updateDoc(ref, { push: token == null ? sdk.deleteField() : token });
+    },
     get state() { return state; },
     onChange(f) { listeners.add(f); if (state.ready) f(state); return () => listeners.delete(f); },
 
@@ -195,7 +219,8 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
         if (!snap.exists()) body.createdAt = sdk.serverTimestamp();
         return sdk.setDoc(ref, body, { merge: true });
       },
-      remove(id) { return sdk.deleteDoc(childRef(id)); },
+      // 이 자녀 빼기: 서버가 그 아이의 기록·숙제·아이 폰 연결을 모두 지움 (마지막 아이면 부모 동의 기록도)
+      remove(id) { childRef(id); return call('removeChild', { childId: id, confirm: true }); },
     },
 
     progress: {
