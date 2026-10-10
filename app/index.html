@@ -947,6 +947,14 @@ h2.sec{font-size:16px;margin:22px 2px 8px}
 .ob-subs button{padding:13px 6px;font-size:15px;font-weight:700}
 .ob-auto{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .ob-auto span{background:var(--soft);color:var(--pri);border-radius:999px;padding:7px 13px;font-size:14px;font-weight:700}
+.ob-mid{margin-top:14px;padding:14px;border-radius:12px;background:var(--soft,#f3f5f2);border:1px solid var(--line)}
+.ob-mid b{display:block;font-size:16px}
+.ob-mid p{margin:6px 0 0;font-size:14.5px;line-height:1.6;color:var(--sub)}
+.ob-mid .ob-pre{min-height:48px}
+.ob-pre[disabled]{opacity:.65;cursor:default;border-style:solid}
+.ob-mid-acts{display:flex;flex-direction:column;gap:10px;margin-top:16px}
+.ob-mid-acts button{min-height:48px;margin:0}
+.ob-mid-acts button.pri{border:1px solid var(--pri);border-radius:12px;background:var(--pri);color:var(--pri-ink,#fff);font-size:16px;font-weight:700;cursor:pointer}
 .ob-pre{margin-top:14px;width:100%;border:1px dashed var(--pri);background:transparent;color:var(--pri);border-radius:10px;padding:12px;font-size:15px;font-weight:700;cursor:pointer}
 .ob-nav{margin-top:18px}
 .ob-nav button.wide{grid-column:auto}
@@ -4266,6 +4274,9 @@ P.extend(C);
    학년도가 바뀌면 지난 햇수만큼 학년을 올림 (2세 … 7세 → 초1 … 중3, 중3 다음은 그대로).
    올렸으면 sessionStorage hub_newyear 에 적어 두고 hub-ui.js 가 과목·과목별 학년·시간표를 새 학년에 맞추고 알림 (2~4세 → 5세는 과목을 새로 고르는 가입 칸).
    <head> 에서 tod-theme.js 보다 먼저 돎 (나이 단계 색이 새 학년으로). 다른 자녀 기록은 그 자녀로 바꿔 새로 켤 때 다시 돎. */
+/* 중학 과정 '준비 중' (2026-10-10 대표 "중학과정은 준비중으로 가자"): open=false 인 동안 가입·학년 고르기·과목 학년 단추·모의시험·틀린 문제에서 중1~3(세계사 포함)을 빼고,
+   이미 중학 학년인 아이는 기록을 지우지 않고 '준비 중' 안내 화면만 보여 줌 (src/hub-ui.js midLock). 열 때는 open 만 true 로 */
+window.SARANG_MID = { open: false, locked(g){ return !this.open && /^m[123]$/.test(String(g || '')); } };
 (function(){
   const ORD = ['k2', 'k3', 'k4', 'k5', 'k6', 'k7', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'm1', 'm2', 'm3'];
   const now = new Date(), NOW = now.getMonth() >= 2 ? now.getFullYear() : now.getFullYear() - 1;
@@ -14543,11 +14554,12 @@ const SUBJ = {
   emath: { name: '수학', color: '#3A5BA0', tint: '#E6ECFB' }   // 초4~중3 수학 (수학 화면 안에 들어감, 데이터는 math. 앱의 'math'는 초1~3 옛 수학)
 };
 const IDS = ['soc', 'sci', 'his', 'wh', 'eng', 'ekor', 'emath'];
-const GRADES = ['e3', 'e4', 'e5', 'e6', 'm1', 'm2', 'm3'];
-const KGRADES = ['e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'm1', 'm2', 'm3'];
-const WGRADES = ['m2'];
-const EGRADES = ['e3', 'e4', 'e5', 'e6', 'm1', 'm2', 'm3'];
-const MGRADES = ['e4', 'e5', 'e6', 'm1', 'm2', 'm3'];
+const MIDOK = g => !(window.SARANG_MID && SARANG_MID.locked(g));   // 중학 '준비 중' 동안 중1~3 학년 단추·세계사를 뺌 (src/newyear.js)
+const GRADES = ['e3', 'e4', 'e5', 'e6', 'm1', 'm2', 'm3'].filter(MIDOK);
+const KGRADES = ['e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'm1', 'm2', 'm3'].filter(MIDOK);
+const WGRADES = ['m2'].filter(MIDOK);
+const EGRADES = ['e3', 'e4', 'e5', 'e6', 'm1', 'm2', 'm3'].filter(MIDOK);
+const MGRADES = ['e4', 'e5', 'e6', 'm1', 'm2', 'm3'].filter(MIDOK);
 /* 학습지 묶음이 있는 학년만 (계획만 있고 내용이 아직 없는 학년은 보이지 않게) */
 const hasData = g => !!(DATA.files[g] || DATA.pack[g]);
 const hasKor = g => !!(DATA.plans.kor && DATA.plans.kor.tracks[g] && hasData('kor/' + g));
@@ -14566,6 +14578,10 @@ const KEY = 'ssh.state';
 let st = {};
 try { st = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { st = {}; }
 const childGrade = () => { try { return (JSON.parse(localStorage.getItem('hub_child')) || {}).grade || null; } catch (e) { return null; } };
+/* 중학 '준비 중' 동안 잠긴 학년(중1~3)으로 저장된 과목 학년: 화면에서만 아래 줄처럼 초등으로 바꾸고, 저장할 때는 원래 값(HELD)을 그대로 둠.
+   부모가 학년 단추로 새로 고르면(setGrade 등·과목 화면 단추) HELD 를 지우고 그 값으로 (창구 판 81 Q3 대조 ★: 열기만 해도 m2 → e6 로 저장·계정에 올라가던 것, 초6의 중1 선행도) */
+const HELD = {};
+['grade', 'kgrade', 'egrade', 'mgrade'].forEach(k => { if (typeof st[k] === 'string' && /^m[123]$/.test(st[k]) && !MIDOK(st[k])) HELD[k] = st[k]; });
 if (!GRADES.includes(st.grade)) st.grade = GRADES.includes(childGrade()) ? childGrade() : 'e3';   // 초1~2 선행·유아는 초3부터 (가입 화면 finishChild와 같게)
 if (!KGRADES.includes(st.kgrade)) st.kgrade = KGRADES.includes(childGrade()) ? childGrade() : 'e1';
 if (!EGRADES.includes(st.egrade)) st.egrade = EGRADES.includes(childGrade()) ? childGrade() : 'e3';
@@ -14574,7 +14590,7 @@ if (![0.7, 0.85, 1].includes(st.erate)) st.erate = 0.85;   // 영어 소리 빠�
 const G = subj => subj === 'ekor' ? st.kgrade : subj === 'wh' ? WGRADES[0] : subj === 'eng' ? st.egrade : subj === 'emath' ? st.mgrade : st.grade;
 /* 고를 수 있는 학년: 영어를 빼고 아이 학년 ±2 (2026-10-02 대표 '선행·후행도 2년 넘게 하는 아이가 학습지를 할까'). 학년을 모르면 다.
    그 범위에 그 과목 학년이 하나도 없으면 가장 가까운 학년 하나 */
-const GORD = ['k5', 'k6', 'k7', ...KGRADES];
+const GORD = ['k5', 'k6', 'k7', 'e1', 'e2', 'e3', 'e4', 'e5', 'e6', 'm1', 'm2', 'm3'];   // 학년 차이 셈은 중학 '준비 중'이어도 그대로
 /* 예습: 이 과목 학년이 아이 학년보다 높음 (초1~2 선행 사회·과학·한국사, 학년을 올려 고른 과목). 그 학년의 학교 진도는 아이와 상관없으니 처음(Day 1)부터 시작하고,
    '학교 진도에 맞추기'로 옮기지 않음 (2026-10-08 대표 "내년도 과목 예습 선택 시 그 과목의 내용이 교과 과정 진척사항을 따라 선택이 되네") */
 const ahead = subj => { const i = GORD.indexOf(childGrade()), j = GORD.indexOf(G(subj)); return i >= 0 && j > i; };
@@ -14601,7 +14617,7 @@ if (!st.last || typeof st.last !== 'object') st.last = {};
 if (!st.seen || typeof st.seen !== 'object') st.seen = {};   // 본 기록: { '과목/학년': [[Day, Day], …] } 뽑았거나 화면 공부로 끝낸 Day (복습은 본 Day만)
 if (!st.exam || typeof st.exam !== 'object') delete st.exam;   // 모의시험에서 고른 학기·시험
 if (![20, 30, 40].includes(st.examN)) st.examN = 40;   // 모의시험 과목당 문제 수 (부모가 고름)
-function save(){ try { localStorage.setItem(KEY, JSON.stringify({ grade: st.grade, kgrade: st.kgrade, egrade: st.egrade, mgrade: st.mgrade, erate: st.erate, hmode: st.hmode, guide: st.guide, pos: st.pos, last: st.last, seen: st.seen, exam: st.exam, examN: st.examN })); } catch (e) {} }
+function save(){ try { const o = { grade: st.grade, kgrade: st.kgrade, egrade: st.egrade, mgrade: st.mgrade, erate: st.erate, hmode: st.hmode, guide: st.guide, pos: st.pos, last: st.last, seen: st.seen, exam: st.exam, examN: st.examN }; Object.keys(HELD).forEach(k => { o[k] = HELD[k]; }); localStorage.setItem(KEY, JSON.stringify(o)); } catch (e) {} }
 
 const todayYmd = () => SCH.ymd(new Date());
 const schoolYmd = () => SCH.refDate(todayYmd());   // 학교 진도 자리: 오늘을 Day 계획 기준 달력(2026학년도)의 같은 자리로 (schedule.js refDate)
@@ -17004,7 +17020,8 @@ function mountPane(subj){
   const p = subj;
   $(p + '-grades').addEventListener('click', e => {
     const b = e.target.closest('button[data-g]'); if (!b) return;
-    if (subj === 'ekor') st.kgrade = b.dataset.g; else if (subj === 'eng') st.egrade = b.dataset.g; else if (subj === 'emath') st.mgrade = b.dataset.g; else st.grade = b.dataset.g;
+    const k = subj === 'ekor' ? 'kgrade' : subj === 'eng' ? 'egrade' : subj === 'emath' ? 'mgrade' : 'grade';
+    delete HELD[k]; st[k] = b.dataset.g;   // 부모가 고른 학년 (잠긴 동안 지켜 둔 중학 학년 대신)
     if (subj === 'eng') ETTS.stop();
     save(); renderAll();
   });
@@ -17599,10 +17616,10 @@ async function wrongPdf(list, o){
   return Object.assign({ pages: total }, res || {});
 }
 
-function setGrade(g){ if (GRADES.includes(g)) { st.grade = g; save(); renderAll(); } }
-function setKorGrade(g){ if (KGRADES.includes(g)) { st.kgrade = g; save(); renderAll(); } }
-function setEngGrade(g){ if (EGRADES.includes(g)) { st.egrade = g; save(); renderAll(); } }
-function setMathGrade(g){ if (MGRADES.includes(g)) { st.mgrade = g; save(); renderAll(); } }
+function setGrade(g){ if (GRADES.includes(g)) { delete HELD.grade; st.grade = g; save(); renderAll(); } }
+function setKorGrade(g){ if (KGRADES.includes(g)) { delete HELD.kgrade; st.kgrade = g; save(); renderAll(); } }
+function setEngGrade(g){ if (EGRADES.includes(g)) { delete HELD.egrade; st.egrade = g; save(); renderAll(); } }
+function setMathGrade(g){ if (MGRADES.includes(g)) { delete HELD.mgrade; st.mgrade = g; save(); renderAll(); } }
 /* '학교 진도대로'(src/hub-ui.js, 2026-09-29): 받은 과목마다 과목 화면의 '학교 진도에 맞추기'와 같게 학교 진도 Day로 */
 function toSchool(list){ (list || []).forEach(subj => { if (IDS.includes(subj) && dayList(subj).length && !ahead(subj)) setDay(subj, schoolDay(subj)); }); renderAll(); }
 /* 다른 화면으로 가면 영어 소리를 멈춤 */
@@ -21105,7 +21122,14 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   let ob = null;   // { step, grade, subs, pre, again }
   const chip = (attr, v, label, on) => `<button type="button" ${attr}="${v}" class="${on ? 'on' : ''}" aria-pressed="${on}">${label}</button>`;
   /* 가입 1단계: 유아 / 초등학생 / 중학생 을 먼저 고르면 그 아래에 나이·학년 칩이 나옴 */
-  const LEVEL = { t: [`<b>${SN.t}기</b> <small>2~4세</small>`, '나이', TOD], k: [`<b>${SN.k}기</b> <small>5~7세</small>`, '나이', KIDS], e: ['<b>초등학생</b> <small>초1~6 (8~13세)</small>', '학년', SCHOOL.slice(0, 6)], m: ['<b>중학생</b> <small>중1~3 (14~16세)</small>', '학년', SCHOOL.slice(6)] };   // 2026-09-29 주인 요청: 네 단계. 학년 범위 같이 (모음17 07-2 7번)
+  const LEVEL = { t: [`<b>${SN.t}기</b> <small>2~4세</small>`, '나이', TOD], k: [`<b>${SN.k}기</b> <small>5~7세</small>`, '나이', KIDS], e: ['<b>초등학생</b> <small>초1~6 (8~13세)</small>', '학년', SCHOOL.slice(0, 6)], m: [MIDLOCK('m1') ? '<b>중학생</b> <small>준비 중</small>' : '<b>중학생</b> <small>중1~3 (14~16세)</small>', '학년', SCHOOL.slice(6)] };   // 2026-09-29 주인 요청: 네 단계. 학년 범위 같이 (모음17 07-2 7번)
+  /* 중학 과정 '준비 중' (2026-10-10 대표, src/newyear.js SARANG_MID): 가입에서는 중학생을 고르면 학년 대신 안내 + '열리면 알림 받기'.
+     이미 중학 학년인 아이는 기록을 지우지 않고 안내 화면(midLock)만. 알림 신청은 hub_mid_wait { at } (아이 기록과 함께 올라감, 열 때 신청한 가구에 앱 안 알림) */
+  function MIDLOCK(g){ return !!(window.SARANG_MID && SARANG_MID.locked(g)); }
+  const MIDWAIT = 'hub_mid_wait';
+  const midWaited = () => !!load(MIDWAIT);
+  const midBtn = () => midWaited() ? '<button type="button" class="ob-pre" data-mid="wait" disabled aria-disabled="true">알림을 신청했어요</button>' : '<button type="button" class="ob-pre" data-mid="wait">열리면 알림 받기</button>';
+  const midNote = '<div class="ob-mid" role="note"><b>중학 과정은 준비 중이에요.</b><p>지금은 유아기(5~7세)부터 초등 6학년까지 공부할 수 있어요. 중학 과정이 열리면 앱에서 알려 드릴게요.</p>' + '__BTN__' + '</div>';
   const levelOf = g => g ? (isTod(g) ? 't' : g[0]) : null;   // k3→t, k5→k, e4→e, m2→m
   let obShown = 0;   // 단계가 바뀔 때만 떠오르는 효과(칩 누를 때는 깜빡이지 않게)
   /* 시간표 칸(#week, 오늘의 학습 카드 맨 아래)은 가입 3단계에서만 가입 칸 안으로 옮겨 씀 */
@@ -21139,7 +21163,7 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
       box.innerHTML = dots + `<h2>아이의 나이와 학년을 알려주세요</h2>
         <div class="info">학년에 맞춰 과목과 학습 범위를 정해 드려요. 나이는 한국 나이 기준이며, 초등·중학생은 현재 학년을 기준으로 골라 주세요.</div>
         <div class="seg ob-levels">${Object.keys(LEVEL).map(k => chip('data-lv', k, LEVEL[k][0], o.lv === k)).join('')}</div>` +
-        (o.lv ? `<div class="ob-label">${LEVEL[o.lv][1]}</div>
+        (o.lv === 'm' && MIDLOCK('m1') ? midNote.replace('__BTN__', midBtn()) : o.lv ? `<div class="ob-label">${LEVEL[o.lv][1]}</div>
         <div class="seg ob-grades">${LEVEL[o.lv][2].map(g => chip('data-g', g, isKid(g) || isTod(g) ? GNAME[g] : g[1] + '학년', o.grade === g)).join('')}</div>` : '') + `
         <div class="actions a2 ob-nav">${o.again ? '<button type="button" data-ob="cancel">취소</button>' : o.step > 1 ? '<button type="button" data-ob="back">이전</button>' : ''}<button type="button" class="wide pri" data-ob="next" ${o.grade ? '' : 'disabled'}>${o.step === T ? '완료' : '다음'}</button></div>`;
     } else if (kind === 'subs') {
@@ -21174,9 +21198,27 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     if (obShown !== o.step) { obShown = o.step; [...box.children].forEach((el, i) => { el.classList.add('fx-step'); el.style.animationDelay = Math.min(i, 6) * 0.03 + 's'; }); }
   }
   { const hm = document.querySelector('#settings .hub-mode'), lb = hm.previousElementSibling; if (lb && lb.classList.contains('label')) lb.remove(); hm.remove(); }   // 설정의 '학습 방식' 칸 없앰
+  /* 이미 중학 학년인 아이 (중학 '준비 중'): 공부 화면 대신 안내만. 기록은 그대로 */
+  function midLock(){
+    const box = $('onboard'), kid = document.documentElement.classList.contains('kid-dev'), K = KIDS_(), k = K && K.now(), nm = (k && k.name) || '우리 아이';
+    if (!$('settings').hidden) setOpen(false);
+    ['today', 'subj', 'subbar', 'settings', 'tabBar'].forEach(id => { $(id).hidden = true; });
+    document.querySelectorAll('.pane').forEach(p => { p.hidden = true; });
+    $('app').classList.remove('has-tabs'); $('setBtnHub').hidden = kid;
+    box.hidden = false; box.classList.add('mid-lock');
+    box.innerHTML = `<h2>중학 과정은 준비 중이에요</h2>
+      <div class="info">${esc(nm)}(${GNAME[child().grade]})는 중학 과정이라 아직 공부 화면이 열리지 않아요. 지금은 유아기(5~7세)부터 초등 6학년까지 공부할 수 있어요. 지금까지 공부한 기록은 그대로 남아 있어요.</div>
+      ${kid ? '<div class="info">부모님 폰에서 학년을 다시 고르거나 알림을 신청할 수 있어요.</div>' : `<div class="ob-mid-acts">${midBtn()}<button type="button" class="wide pri" data-mid="again">학년 다시 고르기</button></div>`}`;
+  }
+  $('onboard').addEventListener('click', e => {
+    if (ob || !$('onboard').classList.contains('mid-lock')) return;
+    const b = e.target.closest('[data-mid]'); if (!b || b.disabled) return;
+    if (b.dataset.mid === 'wait') { store(MIDWAIT, JSON.stringify({ at: Date.now() })); midLock(); return; }
+    if (b.dataset.mid === 'again') { $('onboard').classList.remove('mid-lock'); startOnboard(true); }
+  });
   function startOnboard(again){
     const c = child();
-    ob = { step: 1, grade: c ? c.grade : null, lv: levelOf(c && c.grade), subs: c ? c.subs.slice() : [], pre: false, again: !!again, first: !again && !c, askName: !again && !c && needName(), keep: { child: load(CHILD), week: load('hub_week') } };
+    ob = { step: 1, grade: c && !MIDLOCK(c.grade) ? c.grade : null, lv: levelOf(c && c.grade), subs: c ? c.subs.slice() : [], pre: false, again: !!again, first: !again && !c, askName: !again && !c && needName(), keep: { child: load(CHILD), week: load('hub_week') } };
     if (c && !isKid(c.grade)) ob.pre = c.subs.some(x => extraSubs(c.grade).includes(x));
     show(view); window.scrollTo(0, 0);
   }
@@ -21219,6 +21261,7 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     const o = ob; if (!o || e.target.closest('#week')) return;   // 시간표 칸은 오늘의 학습 쪽이 받음
     const lv = e.target.closest('[data-lv]'), g = e.target.closest('[data-g]'), sb = e.target.closest('[data-sub]'), nav = e.target.closest('[data-ob]'), pc = e.target.closest('[data-pace]');
     if (pc) { o.pace = pc.dataset.pace; renderOnboard(); return; }
+    if (e.target.closest('[data-mid="wait"]')) { store(MIDWAIT, JSON.stringify({ at: Date.now() })); renderOnboard(); return; }
     if (lv) {
       o.lv = lv.dataset.lv;
       if (levelOf(o.grade) !== o.lv) { o.grade = null; o.pre = false; o.subs = []; }   // 다른 단계의 학년 선택은 지움
@@ -21286,6 +21329,8 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
       document.querySelectorAll('.pane').forEach(p => { p.hidden = true; });
       return;
     }
+    if (!ob && child() && MIDLOCK(child().grade)) { midLock(); return; }
+    $('onboard').classList.remove('mid-lock');
     $('onboard').hidden = true; $('setBtnHub').hidden = false; parkWeek();
     const T = tod();   // 유아 놀이: 과목 화면 없이 놀이 모음·화면 놀이만. 형제 프로필로 학년이 바뀌면 메뉴도 바뀜
     /* 아이 기기(2~4세): 놀이 모음(프린트)·현황판 없이 화면 놀이만 (2026-10-08 대표 'PC에 아이 연결하니 학습 내용이 안 뜸') */
@@ -29754,7 +29799,7 @@ window.SARANG_WRONG = (function(){
     return got;
   }
   function remove(keys){ const m = load(); keys.forEach(k => { delete m[k]; }); save(m); paint(); }
-  const list = () => items(load()).map(([k, x]) => Object.assign({ k }, x)).sort((a, b) => (b.t || 0) - (a.t || 0));
+  const list = () => items(load()).map(([k, x]) => Object.assign({ k }, x)).filter(x => !(window.SARANG_MID && SARANG_MID.locked(x.g))).sort((a, b) => (b.t || 0) - (a.t || 0));   // 중학 '준비 중' 동안 중학 문제는 숨김 (지우지 않음, src/newyear.js)
   const mastered = days => { const mm = load()._m || {}, cut = ymd(new Date(Date.now() - (days || 7) * 864e5)); return Object.entries(mm).filter(([d]) => d > cut).reduce((a, [, n]) => a + (+n || 0), 0); };
 
   /* ---------- 문제 글 (목록·자세히) ---------- */
