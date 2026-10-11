@@ -2629,8 +2629,6 @@ html.fc-lock,html.fc-lock body{overflow:hidden}   /* 카드를 보는 동안 뒤
 }
 @media print{.fc{display:none!important}}
 /* ===== 영단어 '외웠는지 확인' (src/screen/vquiz.js, 2026-10-04) — 틀은 플래시카드(.fc, flash.css) ===== */
-.vq-sum{display:flex;flex-wrap:wrap;gap:6px 14px;margin:2px 0 10px;font-size:14px;color:var(--sub)}
-.vq-sum b{font-size:18px;color:var(--ink);margin-right:3px;font-variant-numeric:tabular-nums}
 .vq-entry .info{margin-top:8px}
 .vq-kind{min-height:24px;font-size:13.5px;font-weight:700;color:var(--sub);line-height:24px}
 .vq-kind.chk{color:var(--pri)}
@@ -2677,6 +2675,10 @@ html.fc-lock,html.fc-lock body{overflow:hidden}   /* 카드를 보는 동안 뒤
   .fc.vq .vq-ans.c button{min-height:44px}
   .fc.vq .vq-nav{grid-column:2;grid-row:4;align-self:end}
 }
+/* 영단어 제목 줄 '외운 단어 N' 작은 상자 (2026-10-12 대표) */
+.subbar .sb-mem{flex:none;display:inline-flex;align-items:baseline;gap:4px;padding:4px 10px;border:1px solid var(--line);border-radius:9px;background:var(--card);color:var(--sub);font-size:12.5px;font-weight:600;white-space:nowrap}
+.subbar .sb-mem[hidden]{display:none}
+.subbar .sb-mem strong{font-size:15px;color:var(--pri);font-variant-numeric:tabular-nums}
 </style>
 <style id="play-screen">/* ===== 유아 화면 놀이 (src/play/screen.js) — 담당: 화면 놀이 에이전트 =====
    전체 화면 덮개. 종이(그림)는 늘 흰색, 둘레는 앱 색(밝게·어둡게). 누를 것은 모두 56px 이상 */
@@ -5839,12 +5841,12 @@ html.db-lock,html.db-lock body{overflow:hidden}
 .db-tiles.n2{grid-template-columns:repeat(2,minmax(0,1fr))}
 .db-tiles.n1{grid-template-columns:minmax(0,1fr)}
 .db.sub-time .db-grid{grid-template-areas:"time time" "chart cal" "rv rv"}
-.db.sub-perf .db-grid{grid-template-areas:"subj subj" "weak weak"}
+.db.sub-perf .db-grid{grid-template-areas:"subj subj" "weak vm"}
 @container dbm (max-width:819px){
   .db-tiles.n2{grid-template-columns:repeat(2,minmax(0,1fr))}
   .db.sub-time .db-grid{grid-template-areas:"time time" "chart chart" "cal rv"}
 }
-@container dbm (max-width:560px){ .db.sub-time .db-grid{grid-template-areas:"time" "chart" "cal" "rv"} .db.sub-perf .db-grid{grid-template-areas:"subj" "weak"} }
+@container dbm (max-width:560px){ .db.sub-time .db-grid{grid-template-areas:"time" "chart" "cal" "rv"} .db.sub-perf .db-grid{grid-template-areas:"subj" "weak" "vm"} }
 @container dbm (max-width:480px){
   .db.sub-time .db-grid{grid-template-areas:"time" "rv" "more" "chart" "cal"}
   .db.sub-perf:not(.open) .db-weak-i:nth-child(n+3){display:grid}   /* 교육 성과에는 '자세히 보기'가 없으니 틀린 단원 3개 다 */
@@ -5929,6 +5931,16 @@ html.db-lock,html.db-lock body{overflow:hidden}
 .db-leave small{flex-basis:100%;color:var(--sub);font-size:12.5px}
 
 .db.db-still .db-nav,.db.db-still .db-scrim{transition:none!important}   /* dash.js fitW: 모양이 바뀌는 순간 서랍이 미끄러져 나가지 않게 */
+/* 교육 성과 '영단어' (2026-10-12 대표): 외웠어요·익히는 중·오늘 확인. 교육 성과에서만 보임 */
+.a-vm{grid-area:vm}
+.db:not(.sub-perf) .a-vm,.db.tod .a-vm{display:none!important}
+.db-vm{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.db-vm-i{display:grid;justify-items:center;gap:2px;min-width:0;padding:10px 4px;border-radius:12px;background:var(--soft);text-align:center}
+.db-vm-i b{font-size:22px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.2}
+.db-vm-i span{font-size:12.5px;color:var(--sub);word-break:keep-all}
+.db-vm-i b{white-space:nowrap}   /* 창구 S87 [하]: 260px 에서 네 자리 수가 '123 / 4' 로 꺾이던 것 */
+@container dbm (max-width:300px){ .db-vm{gap:6px} .db-vm-i{padding:10px 2px} .db-vm-i b{font-size:18px} }
+.db.sub-perf .a-weak,.db.sub-perf .a-vm{align-self:stretch}   /* 창구 S87 [하]: 넓은 화면에서 나란한 '많이 틀린 단원'·'영단어' 칸 아래 끝을 맞춤 */
 </style>
 <style id="sarang-wrong">/* ===== 틀린 문제 모음 (src/wrong.js, 2026-10-08) — D안 색 변수만 씀 (밝게·어둡게·나이 단계 따라감) ===== */
 :root{--wr-kor:#7A4FA0;--wr-eng:#C4661F;--wr-math:#3A5BA0;--wr-soc:#1F7F80;--wr-sci:#2F8A5B;--wr-his:#A5432F;--wr-wh:#4F5AA0;--wr-hanja:#8a6a2a}
@@ -25684,14 +25696,22 @@ if (window.SARANG_SCREEN) reg(); else document.addEventListener('DOMContentLoade
   /* 영단어 화면의 칸: 플래시카드 칸 아래 */
   const entry = document.createElement('div');
   entry.className = 'card vq-entry';
-  entry.innerHTML = '<div class="label">외웠는지 확인</div><div class="vq-sum" id="vqSum"></div><div class="actions"><button type="button" class="wide" id="vqOpen">확인하기</button></div>'
+  entry.innerHTML = '<div class="label">외웠는지 확인</div><div class="actions"><button type="button" class="wide" id="vqOpen">확인하기</button></div>'
     + '<div class="info">한 단어를 3번 맞히면 익히는 중, 다음 날과 7일째에 바로 맞히면 외웠어요.</div>';
   const pdf = pane.querySelector('[data-vpdf]'), after = pane.querySelector('.fc-entry') || (pdf && pdf.closest('.card'));
   (after || pane.lastElementChild).after(entry);
   const openBtn = entry.querySelector('#vqOpen');
+  /* 외운 단어 수: 영단어 화면 제목 줄 오른쪽 작은 상자 (대표 10-12 00:57 "외운 단어는 여기에 작은 박스로").
+     외웠어요·익히는 중·오늘 확인 세 숫자는 현황판 '교육 성과'로 옮김 (대표 00:57 "현황판에 성과로", src/dash.js) */
+  const memBox = document.createElement('span'); memBox.className = 'sb-mem'; memBox.id = 'sbMem'; memBox.hidden = true; memBox.setAttribute('role', 'status');
+  memBox.innerHTML = '외운 단어 <strong id="sbMemN">0</strong>';
+  const memN = memBox.querySelector('strong');
+  { const t = document.getElementById('subTitle'); if (t) t.after(memBox); }
+  new MutationObserver(() => { memBox.hidden = pane.hidden; if (!pane.hidden) setTimeout(label, 0); }).observe(pane, { attributes: true, attributeFilter: ['hidden'] });
   function label() {
-    const D = data(), c = M.count(D && D.pool ? D.pool : []), n = todo(), due = M.due().length;
-    entry.querySelector('#vqSum').innerHTML = `<span><b>${c.mem}</b> 외웠어요</span><span><b>${c.mid}</b> 익히는 중</span><span><b>${due}</b> 오늘 확인</span>`;
+    const n = todo();
+    { const t = M.counts().mem; memN.textContent = t; memBox.setAttribute('aria-label', `외운 단어 ${t}개`); }   // 모든 단계를 합친 수 (현황판 '교육 성과'와 같은 수)
+    memBox.hidden = pane.hidden;
     openBtn.textContent = n ? `확인하기 (${n}단어)` : '오늘 확인할 단어가 없어요';
     openBtn.disabled = !n;
   }
@@ -30054,6 +30074,9 @@ window.DONATE_CORE = (function(){
             <p class="db-note">오늘 학습지에 함께 나오는 복습이에요. 실제로 푼 학습지만 복습에 나와요.</p></section>
           <section class="card db-box a-weak"><h3 class="db-h">많이 틀린 단원 <small>스마트 학습 정답률 · 최근 30일</small></h3>
             <div class="db-weak" id="dbWeak"></div></section>
+          <section class="card db-box a-vm"><h3 class="db-h">영단어 <small>외웠는지 확인 기록 · 모든 단계</small></h3>
+            <div class="db-vm" id="dbVm"></div>
+            <p class="db-note">한 단어를 3번 맞히면 익히는 중, 다음 날과 7일째에 바로 맞히면 외웠어요. 영단어 화면 '외웠는지 확인'에서 쌓여요.</p></section>
           <div class="db-ph a-more"><button type="button" class="db-more" id="dbMore" aria-expanded="false">자세히 보기</button></div>
         </div>
         </div>
@@ -30227,6 +30250,9 @@ window.DONATE_CORE = (function(){
       const did = tr.p.includes(s) || tr.s.includes(s) || tr.p.includes(id) || tr.s.includes(id);
       if (l.length) rv.push(`<div class="db-rv-i"><span class="db-rv-k">D+${l[0].k}</span><span class="db-rv-t"><b>${esc(NAME[s])}</b> ${esc(l[0].title)}${l.length > 1 ? ` <small>외 ${l.length - 1}개 (D+${l.slice(1).map(x => x.k).join('·')})</small>` : ''}</span><span class="db-pill ${did ? 'ok' : 'late'}">${did ? '✓ 함' : '오늘 할 일'}</span></div>`); });   // 복습 5번: 과목마다 한 줄 (가장 가까운 Day + 나머지 수)
     $('dbRv').innerHTML = rv.length ? rv.join('') : '<p class="db-empty">오늘 학습지에 나올 복습이 없어요. 학습지를 풀어 나가면 바로 전·1~4주 전 내용이 복습으로 나와요.</p>';
+    /* 영단어 외운 정도 (2026-10-12 대표 "현황판에 성과로": 영단어 화면 '외웠는지 확인' 칸의 세 숫자를 여기로, src/screen/vmem.js) */
+    { const V = window.SARANG_VMEM, c = V ? V.counts() : { mem: 0, mid: 0, due: 0 };
+      $('dbVm').innerHTML = `<div class="db-vm-i"><b>${c.mem}</b><span>외웠어요</span></div><div class="db-vm-i"><b>${c.mid}</b><span>익히는 중</span></div><div class="db-vm-i"><b>${c.due}</b><span>오늘 확인</span></div>`; }
     /* 많이 틀린 단원 */
     const by = {}; R.filter(x => ymdOf(x.d) >= addD(today, -29)).forEach(x => { const k = x.s + '|' + x.unit; const o = by[k] = by[k] || { s: x.s, unit: x.unit, ok: 0, total: 0 }; o.ok += x.ok; o.total += x.total; });
     const weak = Object.values(by).filter(o => o.total >= 3 && o.ok / o.total < 0.9).sort((a, b) => a.ok / a.total - b.ok / b.total).slice(0, 3);
