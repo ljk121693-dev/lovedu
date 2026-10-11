@@ -123,29 +123,68 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
   .note-sub{display:block;margin-top:2px;font-size:var(--fs-small)}
 }
 @media(max-width:290px){.hero-note{padding:14px 16px 13px}}
-/* 앱 둘러보기 (10-05 대표 "앱 기능 소개(섹터별)"): 메뉴마다 글 + 폰 화면. 좁으면 글 아래 화면, 넓으면(칸 640px 이상) 반반 */
-.tour{container-type:inline-size}
-.tour-item{display:grid;gap:26px;padding:40px 0;border-top:1px solid var(--line)}
-.tour-item:first-child{padding-top:4px;border-top:0}
-.tour-tab{display:flex;align-items:center;gap:8px;color:var(--green);font-size:var(--fs-small);font-weight:700}
-.tour-tab svg{width:20px;height:20px;flex:none}
-.tour-copy h2{margin:12px 0 10px}
-.tour-desc{color:var(--soft);font-size:var(--fs-body)}
-.tour-points{display:grid;gap:12px;margin:22px 0 0;padding:20px 0 0;border-top:1px solid var(--line)}
-.tour-points div{display:grid;grid-template-columns:5.6em minmax(0,1fr);gap:12px;font-size:var(--fs-small);line-height:1.75}
-.tour-points dt{font-weight:700}
-.tour-points dd{margin:0;color:var(--soft)}
-.tour-shot{justify-self:center;width:min(280px,100%);margin:0;padding:9px;background:var(--card);border:1px solid var(--line);border-radius:36px}
-.tour-shot picture,.tour-shot img{display:block}
-.tour-shot img{width:100%;height:auto;border-radius:27px;background:var(--bg)}
-@container (min-width:640px){
-  .tour-item{grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;align-items:center;padding:48px 0}
-  .tour-item:first-child{padding-top:8px}
-  .tour-shot{width:min(300px,100%)}
+/* 앱 둘러보기 시안 (10-11 대표 "기능별로 섹터를 나눠 메뉴화하고 상세이미지 설명까지"): 기능 메뉴 → 기능마다 한 줄 요약 + 화면 고르기 + 번호 붙은 폰 화면 + 번호 설명.
+   폰 화면은 한 칸에 겹쳐 두고 안 보이는 것만 숨김(visibility) → 화면을 바꿔도 높이가 그대로. 기능·설명은 메뉴·단추 아래에서만 바뀌어 보던 자리가 밀리지 않음 */
+.tv{container-type:inline-size}
+.tv-menu{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:0 0 28px}
+.tv-menu button{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-width:0;min-height:68px;padding:8px 4px;border:1px solid var(--line);border-radius:14px;background:var(--card);color:var(--soft);font:700 var(--fs-small)/1.35 var(--sans);letter-spacing:-.03em;text-align:center;cursor:pointer}
+.tv-menu button svg{width:22px;height:22px;flex:none}
+.tv-menu button[aria-selected="true"]{background:var(--green);border-color:var(--green);color:var(--btn-ink)}
+.tv-stage{--pin:26px}
+.tv-sector{min-width:0;display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"head" "tabs" "phone" "legend" "tip" "next";row-gap:18px;align-content:start}
+.tv-screen:not(.on){visibility:hidden}
+.tv-head{grid-area:head;min-width:0}
+.tv-head h2{margin:0 0 8px}
+.tv-head p{color:var(--soft);font-size:var(--fs-body)}
+.tv-tabs{grid-area:tabs;display:flex;flex-wrap:wrap;gap:6px;min-width:0}
+.tv-tabs button,.tv-tabs .tv-one{flex:1 1 auto;min-height:44px;padding:8px 14px;border:1px solid var(--line);border-radius:12px;background:transparent;color:var(--soft);font:700 var(--fs-small)/1.4 var(--sans);letter-spacing:-.03em;white-space:nowrap;cursor:pointer}
+.tv-tabs .tv-one{flex:0 1 auto;display:inline-flex;align-items:center;margin:0;cursor:default}
+.tv-tabs button[aria-selected="true"],.tv-tabs .tv-one{background:var(--hero);border-color:var(--hero-line);color:var(--ink)}
+.tv-phone{grid-area:phone;justify-self:center;width:min(300px,100%);margin:0}
+.tv-frame{padding:9px;background:var(--card);border:1px solid var(--line);border-radius:36px}
+.tv-screens{display:grid}
+.tv-screen{grid-area:1/1;position:relative;overflow:hidden;border-radius:27px;background:var(--bg);container-type:inline-size}
+.tv-screen picture,.tv-screen img{display:block;width:100%;height:auto}
+.tv-pin{position:absolute;z-index:3;width:var(--pin);height:var(--pin);margin:calc(var(--pin)/-2) 0 0 calc(var(--pin)/-2);padding:0;border:2px solid var(--card);border-radius:50%;background:var(--ink);color:var(--bg);font:800 13px/1 var(--sans);letter-spacing:0;display:grid;place-items:center;box-shadow:0 1px 5px rgba(0,0,0,.3);cursor:pointer}
+.tv-pin::before{content:"";position:absolute;inset:-9px;border-radius:50%}
+.tv-pin[aria-pressed="true"]{background:var(--accent);color:var(--btn-ink)}
+.tv-hl{position:absolute;z-index:2;border-radius:10px;box-shadow:0 0 0 2px var(--card),0 0 0 999px rgba(14,20,27,.45);pointer-events:none}
+.tv-chg{position:absolute;z-index:1;border:2px dashed var(--accent);border-radius:12px;pointer-events:none}
+.tv-chg>span{position:absolute;left:4px;top:calc(100% + 3px);padding:1px 6px;border-radius:6px;background:var(--accent);color:var(--btn-ink);font:800 max(10px,3.2cqi)/1.4 var(--sans);letter-spacing:-.02em;white-space:nowrap}
+.tv-ghost{position:absolute;z-index:1;display:grid;align-content:center;gap:0;padding:0 6%;border:2px dashed var(--accent);border-radius:12px;background:var(--card);color:var(--ink);font:500 3.4cqi/1.35 var(--sans);letter-spacing:-.02em;overflow:hidden;pointer-events:none}
+.tv-ghost b{font-size:4.4cqi;font-weight:800}
+.tv-ghost small{color:var(--accent);font-weight:700;font-size:3.2cqi}
+.tv-legends{grid-area:legend;min-width:0}
+.tv-legend{list-style:none;margin:0;padding:0;display:grid;gap:4px;align-content:start;min-width:0}
+.tv-key,.tv-note{display:grid;grid-template-columns:var(--pin) minmax(0,1fr);gap:12px;width:100%;min-height:44px;padding:8px 12px;border:1px solid transparent;border-radius:14px;background:transparent;color:var(--ink);text-align:left;font:inherit}
+.tv-key{cursor:pointer}
+/* 손가락으로 누르는 폰에서는 누른 뒤 :hover 가 남아 눌린 것처럼 보임 → 마우스 쓰는 기기에서만 */
+@media (hover:hover){.tv-menu button:hover{color:var(--ink);border-color:var(--hero-line)}.tv-key:hover{background:var(--hero)}}
+.tv-key[aria-pressed="true"]{background:var(--hero);border-color:var(--hero-line)}
+.tv-no{width:var(--pin);height:var(--pin);margin-top:2px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font:800 13px/1 var(--sans);letter-spacing:0}
+.tv-key[aria-pressed="true"] .tv-no{background:var(--accent);color:var(--btn-ink)}
+.tv-note .tv-no{background:transparent;color:var(--accent);border:2px dashed var(--accent);font-size:15px}
+.tv-note .tv-dot{border:0}
+.tv-dot::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--soft)}
+.tv-tx{display:block;min-width:0}
+.tv-tx b{font-size:var(--fs-body);line-height:1.6}
+.tv-tx .d{display:block;color:var(--soft);font-size:var(--fs-small);line-height:1.7}
+.tv-tx .was{display:block;margin-top:2px;color:var(--accent);font-size:var(--fs-caption);font-weight:600;line-height:1.6}
+.tv-tag{display:inline-block;margin-left:6px;padding:0 7px;border:1px solid var(--accent);border-radius:6px;color:var(--accent);font-size:var(--fs-caption);font-weight:700;line-height:1.6;white-space:nowrap;vertical-align:1px}
+.tv-tip{grid-area:tip;margin:0;padding:14px 16px;border-radius:6px 18px 18px 18px;background:var(--sky);font-size:var(--fs-small);line-height:1.75}
+.tv-tip b{margin-right:8px}
+.tv-next{grid-area:next;justify-self:start;display:inline-flex;align-items:center;min-height:44px;padding:0;border:0;background:transparent;color:var(--ink);font:600 var(--fs-small)/1.5 var(--sans);text-decoration:underline;text-underline-offset:5px;cursor:pointer}
+@container (min-width:720px){
+  .tv-menu{grid-template-columns:repeat(6,minmax(0,1fr))}
+  .tv-sector{grid-template-columns:minmax(0,1fr) 340px;grid-template-rows:auto auto auto auto auto 1fr;grid-template-areas:"head phone" "tabs phone" "legend phone" "tip phone" "next phone" ". phone";column-gap:56px}
+  .tv-phone{width:340px;align-self:start}
+  .tv-tabs button,.tv-tabs .tv-one{flex:0 1 auto}
 }
+@container (max-width:340px){.tv-stage{--pin:22px}.tv-key,.tv-note{gap:10px;padding:8px 6px}}
+@container (max-width:279px){.tv-menu{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:899px){.tv-menu{scroll-margin-top:calc(var(--bar-height) + env(safe-area-inset-top,0px) + 12px)}}
 .how-foot{margin-top:32px}
-@media(max-width:640px){.tour-item{padding:34px 0}.how-foot{margin-top:28px}}
-@media(max-width:290px){.tour-points div{grid-template-columns:1fr;gap:2px}.tour-shot{padding:7px;border-radius:30px}.tour-shot img{border-radius:23px}}
+@media(max-width:640px){.how-foot{margin-top:28px}}
 /* 메뉴가 일곱 칸이 되어, 낮은 PC 화면(높이 820px 이하)에서도 메뉴가 다 보이게 칸 사이를 줄임 */
 @media(min-width:900px) and (min-height:651px) and (max-height:820px){.rail-caption{margin:16px 3px 24px}.menu{gap:4px}.menu a{min-height:48px}.rail-bottom{padding-top:22px}}
 </style>
@@ -218,7 +257,7 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
       </article>
       <article class="card benefit" data-anchor>
         <div class="benefit-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M5 6h14M5 12h14M5 18h14"/><circle cx="9" cy="6" r="2" fill="var(--hero)"/><circle cx="15" cy="12" r="2" fill="var(--hero)"/><circle cx="10" cy="18" r="2" fill="var(--hero)"/></svg></div>
-        <div><h2>공부 범위는 자유롭게</h2><p>학교 진도대로 따라가도, 부모님이 정한 범위로 공부해도 돼요.</p></div>
+        <div><h2>공부 범위는 자유롭게</h2><p>과목마다 진도를 부모님이 정해요. 학교 진도는 참고로 함께 보여 줘요.</p></div>
       </article>
     </div>
     <div class="about-foot" data-anchor><p>처음 한 번 정해 두면, 매일은 버튼 하나예요.</p><a class="text-link" href="#how">공부 방법 알아보기 →</a></div>
@@ -246,62 +285,59 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
   </section>
 
   <section class="panel" id="tour" aria-labelledby="tour-title" hidden>
-    <div class="panel-head" data-anchor><p class="eyebrow">앱 둘러보기</p><h1 id="tour-title" tabindex="-1">메뉴마다 하는 일을,<br>화면으로 보여 드려요</h1><p>앱 아래 메뉴는 학습&#8288;·현황판&#8288;·모의시험&#8288;·부록이에요. 아이 나이에 따라 조금씩 달라요. 화면은 실제 앱이고, 아이 이름과 기록 숫자는 예시예요.</p></div>
-    <div class="tour">
-      <article class="tour-item" aria-labelledby="tour-study">
-        <div class="tour-copy" data-anchor>
-          <p class="tour-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 11h16"/></svg>학습</p>
-          <h2 id="tour-study">오늘 할 공부가 차례대로 나와요</h2>
-          <p class="tour-desc">시간표에 맞춰 오늘 할 과목과 단원이 나와요. 과목마다 스마트와 프린트 가운데 골라 풀어요.</p>
-          <dl class="tour-points"><div><dt>스마트</dt><dd>화면에서 풀고, 선택형&#8288;·O/X는 바로 채점해요. 짧은 답은 정답과 비교하고, 열린 답은 예시 답을 보며 스스로 확인해요.</dd></div><div><dt>프린트</dt><dd>학습지를 PDF로 뽑아 종이에 풀어요. 오늘 과목을 한 파일로 모아 뽑을 수 있어요.</dd></div><div><dt>부모 가이드</dt><dd>국어&#8288;·영어&#8288;·사회&#8288;·과학 같은 교과 과목은 오늘 배울 내용, 아이에게 물어볼 질문, 정답과 해설을 담은 가이드를 학습지와 함께 뽑을 수 있어요.</dd></div><div><dt>복습</dt><dd>대부분의 과목에서 오늘 공부할 Day의 바로 전 Day와 7&#8288;·&#8288;14&#8288;·&#8288;21&#8288;·&#8288;28 Day 전 내용이 복습 문제로 다시 나와요. 하루 복습 양은 늘지 않고, 오래된 Day는 조금씩만 나와요. 학습지를 뽑았거나 스마트 학습을 마친 Day만 복습에 들어가요. Day는 달력 날짜가 아니라 과목마다 공부하는 차례예요.</dd></div><div><dt>틀린 문제</dt><dd>‘틀린&nbsp;문제&nbsp;모음’에는 스마트로 풀다 처음 틀린 문제가 과목과 날짜별로 모여요. 유아기 과정과 파닉스&#8288;·&#8288;영단어는 들어가지 않아요. 다시 풀거나, 뽑거나, 아이 폰으로 보낼 수 있어요. 다른 날 두 번 맞히면 빠져요.</dd></div><div><dt>진도</dt><dd>‘학교&nbsp;진도대로’는 학교 진도가 있는 과목을 학교 진도에 맞추고, ‘자유&nbsp;진도설정’은 부모님이 과목마다 진도를 정해요. 지금 쓰는 쪽에는 ‘현재’ 표시가 붙어요.</dd></div></dl>
-        </div>
-        <figure class="tour-shot" data-anchor><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour/study-dark.webp"><img src="img/tour/study-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="학습 화면 예시. 위에 학교 진도대로와 자유 진도설정 단추가 있고, 오늘 할 과목이 차례대로 있어요. 끝낸 과목에는 다 했어요가, 남은 과목에는 스마트와 프린트 단추가 보여요."></picture></figure>
-      </article>
-      <article class="tour-item" aria-labelledby="tour-dash">
-        <div class="tour-copy" data-anchor>
-          <p class="tour-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/></svg>현황판</p>
-          <h2 id="tour-dash">아이 공부를 한눈에 봐요</h2>
-          <p class="tour-desc">이번 주 공부한 날, 연속 공부, 공부 시간을 숫자와 그래프로 보여 줘요. 공부 시간은 스마트 학습을 한 시간만 재고, 프린트 학습은 뽑아서 푼 학습지 장 수로 나와요.</p>
-          <dl class="tour-points"><div><dt>교육 성과</dt><dd>스마트 학습을 끝까지 한 비율, 학교 진도보다 늦은 과목, 많이 틀린 단원을 알려 줘요.</dd></div><div><dt>학습 관리</dt><dd>요일별 시간표와 과목 진도를 여기서 정해요. 과목마다 언제 끝나는지도 알려 줘요.</dd></div><div><dt>리포트</dt><dd>지난 한 주와 지난달 공부를 정리해 보여 줘요.</dd></div></dl>
-        </div>
-        <figure class="tour-shot" data-anchor><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour/dash-dark.webp"><img src="img/tour/dash-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="현황판 화면 예시. 이번 주 공부한 날, 연속 공부 날수, 이번 주 공부 시간이 보여요."></picture></figure>
-      </article>
-      <article class="tour-item" aria-labelledby="tour-exam">
-        <div class="tour-copy" data-anchor>
-          <p class="tour-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8l4 4v14H4V3h4"/><path d="M8 3v3h8V3M8 12l2 2 4-4M8 18h8"/></svg>모의시험</p>
-          <h2 id="tour-exam">시험 전에는 모의시험을 뽑아요</h2>
-          <p class="tour-desc">학기와 중간&#8288;·기말고사를 고르면, 시험 범위 단원에서 객관식 문제를 골라 PDF 한 파일로 만들어요.</p>
-          <dl class="tour-points"><div><dt>문제 수</dt><dd>과목당 20&#8288;·30&#8288;·40문제 가운데 골라요. 시험 범위의 문제가 고른 수보다 적으면 있는 만큼 넣어요.</dd></div><div><dt>정답과 해설</dt><dd>맨 뒤에 모아 두어 채점하기 쉬워요.</dd></div><div><dt>과목</dt><dd>한자를 뺀 고른 과목 가운데, 시험 범위에 문제가 20개 이상 있는 과목이 들어가요. 초1~2는 국어와, 선행학습으로 더한 사회&#8288;·과학&#8288;·한국사가 대상이에요.</dd></div></dl>
-        </div>
-        <figure class="tour-shot" data-anchor><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour/exam-dark.webp"><img src="img/tour/exam-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="모의시험 화면 예시. 학기, 중간고사와 기말고사, 과목당 문제 수를 고르고 과목별 시험 범위가 보여요."></picture></figure>
-      </article>
-      <article class="tour-item" aria-labelledby="tour-extra">
-        <div class="tour-copy" data-anchor>
-          <p class="tour-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3M9 7h6M9 10.5h4"/></svg>부록</p>
-          <h2 id="tour-extra">진도와 상관없이 언제든 골라 써요</h2>
-          <p class="tour-desc">날마다 하는 진도와 따로, 필요할 때 골라 쓰는 학습 자료예요. 영어를 고르면 영단어와 영어 듣기가 나와요.</p>
-          <dl class="tour-points"><div><dt>영단어</dt><dd>단계별 단어 학습지와 플래시카드로 익히고, 외웠는지 확인해요.</dd></div><div><dt>영어 듣기</dt><dd>오늘 배운 영단어를 다시 들어요.</dd></div><div><dt>파닉스</dt><dd>초3~6은 영어 소리와 글자를 여기서 익혀요. 시간표에 넣으면 오늘의 학습에 나와요.</dd></div></dl>
-        </div>
-        <figure class="tour-shot" data-anchor><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour/extra-dark.webp"><img src="img/tour/extra-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="부록 화면 예시. 영단어, 영어 듣기, 파닉스가 있어요."></picture></figure>
-      </article>
-      <article class="tour-item" aria-labelledby="tour-kid">
-        <div class="tour-copy" data-anchor>
-          <p class="tour-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>아이 폰</p>
-          <h2 id="tour-kid">아이 폰에는 공부만 나와요</h2>
-          <p class="tour-desc">부모 폰 설정에서 받은 연결 번호를 아이 폰에 넣으면, 로그인 없이 그 아이 전용 공부 폰이 돼요.</p>
-          <dl class="tour-points"><div><dt>오늘의 학습</dt><dd>부모님이 정한 공부를 아이 폰에서 스마트로 풀어요. 프린트와 설정, 현황판은 부모 폰에서 해요.</dd></div><div><dt>숙제</dt><dd>현황판의 ‘숙제’에서 오늘 학습, 과목별 모의시험, 영단어 ‘외웠는지 확인’을 보내요. 점수는 부모 화면에만 보여요.</dd></div><div><dt>연속 공부</dt><dd>그날 할 일을 다 하면 달력에 ‘다 했어요’ 도장이 찍혀요.</dd></div></dl>
-        </div>
-        <figure class="tour-shot" data-anchor><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour/kid-dark.webp"><img src="img/tour/kid-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="아이 폰 화면 예시. 숙제 목록 아래쪽과, 다 했어요 도장이 찍힌 연속 공부 달력이 보여요."></picture></figure>
-      </article>
-      <article class="tour-item" aria-labelledby="tour-play">
-        <div class="tour-copy" data-anchor>
-          <p class="tour-tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><circle cx="10.5" cy="12" r="1.6"/><path d="M9 17c1.8-1.6 4.2-1.6 6 0"/></svg>놀이 모음 · 화면 놀이</p>
-          <h2 id="tour-play">영아기 2~4세는 놀이로 시작해요</h2>
-          <p class="tour-desc">영아기 아이에게는 아래 메뉴가 놀이 모음, 현황판, 화면 놀이로 바뀌어요.</p>
-          <dl class="tour-points"><div><dt>놀이 모음</dt><dd>선 긋기, 색칠놀이, 미로 같은 놀이를 골라 담아 한 번에 뽑아요.</dd></div><div><dt>화면 놀이</dt><dd>같은 놀이를 화면에서 손가락으로 해요.</dd></div><div><dt>현황판</dt><dd>논 날, 연속 놀이, 놀이 시간을 보여 줘요.</dd></div></dl>
-        </div>
-        <figure class="tour-shot" data-anchor><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour/play-dark.webp"><img src="img/tour/play-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="놀이 모음 화면 예시. 선 긋기, 같은 그림 찾기, 색칠놀이 같은 놀이 카드가 있어요."></picture></figure>
-      </article>
+    <div class="panel-head" data-anchor><p class="eyebrow">앱 둘러보기</p><h1 id="tour-title" tabindex="-1">기능을 고르면,<br>화면으로 보여 드려요</h1><p>화면 속 번호나 아래 설명을 누르면 그 자리를 짚어 줘요. 화면은 실제 앱이고, 아이 이름과 기록 숫자는 예시예요.</p></div>
+    <div class="tv" data-tour>
+      <div class="tv-menu" role="tablist" aria-label="앱 기능" data-anchor><button type="button" role="tab" id="tvm-study" aria-controls="tv-study" aria-selected="true" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 11h16"/></svg><span>학습</span></button><button type="button" role="tab" id="tvm-dash" aria-controls="tv-dash" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/></svg><span>현황판</span></button><button type="button" role="tab" id="tvm-exam" aria-controls="tv-exam" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8l4 4v14H4V3h4"/><path d="M8 3v3h8V3M8 12l2 2 4-4M8 18h8"/></svg><span>모의시험</span></button><button type="button" role="tab" id="tvm-extra" aria-controls="tv-extra" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3M9 7h6M9 10.5h4"/></svg><span>부록</span></button><button type="button" role="tab" id="tvm-kid" aria-controls="tv-kid" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg><span>아이 폰</span></button><button type="button" role="tab" id="tvm-play" aria-controls="tv-play" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><circle cx="10.5" cy="12" r="1.6"/><path d="M9 17c1.8-1.6 4.2-1.6 6 0"/></svg><span>영아기 놀이</span></button></div>
+      <div class="tv-stage">
+<article class="tv-sector" id="tv-study" role="tabpanel" aria-labelledby="tvm-study">
+<div class="tv-head" data-anchor><h2 id="tv-study-h">오늘 할 공부가 차례대로 나와요</h2><p>시간표에 넣은 과목을, 과목마다 스마트(화면)나 프린트(종이)로 풀어요.</p></div>
+<div class="tv-tabs" role="tablist" aria-label="학습 화면" data-anchor><button type="button" role="tab" id="tv-study-t0" aria-controls="tv-study-s0" aria-selected="true" tabindex="0">오늘 목록</button><button type="button" role="tab" id="tv-study-t1" aria-controls="tv-study-s1" aria-selected="false" tabindex="-1">바로 풀기</button><button type="button" role="tab" id="tv-study-t2" aria-controls="tv-study-s2" aria-selected="false" tabindex="-1">프린트·숙제</button></div>
+<figure class="tv-phone" data-anchor><div class="tv-frame"><div class="tv-screens"><div class="tv-screen on" role="tabpanel" id="tv-study-s0" aria-labelledby="tv-study-t0"><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour2/study-dark.webp"><img src="img/tour2/study-light.webp" width="390" height="640" decoding="async" alt="학습 화면 예시. 오늘의 학습 제목 아래 과목 카드가 차례대로 있고, 끝낸 과목에는 다 했어요가 붙어 있어요. 오른쪽 위에 아이 폰 연결과 아이 진도변경 단추가 있어요."></picture><span class="tv-hl" hidden></span><button type="button" class="tv-pin" data-n="1" data-box="2.82,3.28,34.62,15.16" style="left:41.54%;top:9.69%" aria-pressed="false" aria-label="1번 오늘의 학습">1</button><button type="button" class="tv-pin" data-n="2" data-box="3.33,19.06,93.33,25.62" style="left:89.74%;top:23.44%" aria-pressed="false" aria-label="2번 과목 카드">2</button><button type="button" class="tv-pin" data-n="3" data-box="16.41,34.22,33.33,8.12" style="left:53.33%;top:38.28%" aria-pressed="false" aria-label="3번 다 했어요">3</button><button type="button" class="tv-pin" data-n="4" data-box="68.72,1.88,27.95,16.25" style="left:64.1%;top:10%" aria-pressed="false" aria-label="4번 아이 폰 연결 · 아이 진도변경">4</button></div><div class="tv-screen" role="tabpanel" id="tv-study-s1" aria-labelledby="tv-study-t1"><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour2/study-hint-dark.webp"><img src="img/tour2/study-hint-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="스마트 학습 화면 예시. 과학 문제에 힌트 1이 열려 있고, 오른쪽에 한 번 더와 도와주세요 하트 단추가 있어요."></picture><span class="tv-hl" hidden></span><button type="button" class="tv-pin" data-n="1" data-box="3.33,0.62,46.67,8.12" style="left:52.82%;top:4.69%" aria-pressed="false" aria-label="1번 스마트 학습">1</button><button type="button" class="tv-pin" data-n="2" data-box="70.77,0.94,25.38,7.5" style="left:67.18%;top:4.69%" aria-pressed="false" aria-label="2번 부모님 보기">2</button><button type="button" class="tv-pin" data-n="3" data-box="13.33,25.94,78.97,10.78" style="left:90.26%;top:26.56%" aria-pressed="false" aria-label="3번 힌트">3</button><button type="button" class="tv-pin" data-n="4" data-box="12.31,37.66,81.03,32.5" style="left:86.67%;top:41.72%" aria-pressed="false" aria-label="4번 보기">4</button><button type="button" class="tv-pin" data-n="5" data-box="75.9,75.16,17.44,9.06" style="left:72.31%;top:73.44%" aria-pressed="false" aria-label="5번 도와주세요">5</button></div><div class="tv-screen" role="tabpanel" id="tv-study-s2" aria-labelledby="tv-study-t2"><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour2/study-print-dark.webp"><img src="img/tour2/study-print-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="학습 화면 아래쪽 예시. 과목 카드의 스마트와 프린트 단추, 오늘 공부를 끝내면 열리는 놀이 보상 칸, 전체 뽑아서 풀기, 가이드 PDF 함께 출력, 하늘에게 숙제 보내기가 있어요."></picture><span class="tv-hl" hidden></span><button type="button" class="tv-pin" data-n="1" data-box="16.92,17.19,76.41,8.12" style="left:11.79%;top:21.25%" aria-pressed="false" aria-label="1번 스마트 · 프린트">1</button><button type="button" class="tv-pin" data-n="2" data-box="3.33,31.09,93.33,24.84" style="left:93.33%;top:32.66%" aria-pressed="false" aria-label="2번 놀이 보상">2</button><button type="button" class="tv-pin" data-n="3" data-box="3.33,56.88,46.67,13.91" style="left:6.15%;top:58.44%" aria-pressed="false" aria-label="3번 전체 뽑아서 풀기">3</button><button type="button" class="tv-pin" data-n="4" data-box="50,56.88,46.67,13.91" style="left:93.33%;top:58.44%" aria-pressed="false" aria-label="4번 부모 가이드">4</button><button type="button" class="tv-pin" data-n="5" data-box="3.33,71.88,93.33,14.22" style="left:93.33%;top:73.44%" aria-pressed="false" aria-label="5번 숙제 보내기">5</button></div></div></div></figure>
+<div class="tv-legends"><ol class="tv-legend" aria-label="오늘 목록 화면 설명"><li data-anchor><button type="button" class="tv-key" data-n="1" aria-pressed="false"><span class="tv-no" aria-hidden="true">1</span><span class="tv-tx"><b>오늘의 학습</b><span class="d">시간표에 넣은 오늘 과목이 차례대로 나와요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="2" aria-pressed="false"><span class="tv-no" aria-hidden="true">2</span><span class="tv-tx"><b>과목 카드</b><span class="d">오늘 배울 단원 이름과 진도(예: 2단원 11/14)가 보여요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="3" aria-pressed="false"><span class="tv-no" aria-hidden="true">3</span><span class="tv-tx"><b>다 했어요</b><span class="d">끝낸 과목에는 푼 방법(스마트·프린트)과 함께 붙어요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="4" aria-pressed="false"><span class="tv-no" aria-hidden="true">4</span><span class="tv-tx"><b>아이 폰 연결 · 아이 진도변경</b><span class="d">아이 폰을 잇고 끊는 단추와 과목 진도를 바꾸는 단추예요. 진도는 부모님이 과목마다 정하고, 학교 진도는 ‘○⁠차시쯤’으로 참고만 보여 줘요.</span></span></button></li></ol><ol class="tv-legend" hidden aria-label="바로 풀기 화면 설명"><li data-anchor><button type="button" class="tv-key" data-n="1" aria-pressed="false"><span class="tv-no" aria-hidden="true">1</span><span class="tv-tx"><b>스마트 학습</b><span class="d">폰·태블릿·PC 화면에서 바로 풀어요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="2" aria-pressed="false"><span class="tv-no" aria-hidden="true">2</span><span class="tv-tx"><b>부모님 보기</b><span class="d">켜면 가이드와 모든 정답·해설이 보여요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="3" aria-pressed="false"><span class="tv-no" aria-hidden="true">3</span><span class="tv-tx"><b>힌트</b><span class="d">답 대신 생각할 거리를 줘요. ‘한 번 더’를 누르면 다음 힌트예요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="4" aria-pressed="false"><span class="tv-no" aria-hidden="true">4</span><span class="tv-tx"><b>보기</b><span class="d">선택형·O/X는 고르면 바로 채점해요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="5" aria-pressed="false"><span class="tv-no" aria-hidden="true">5</span><span class="tv-tx"><b>도와주세요</b><span class="d">막히면 하트를 눌러 힌트를 봐요. 정답은 알려 주지 않아요.</span></span></button></li></ol><ol class="tv-legend" hidden aria-label="프린트·숙제 화면 설명"><li data-anchor><button type="button" class="tv-key" data-n="1" aria-pressed="false"><span class="tv-no" aria-hidden="true">1</span><span class="tv-tx"><b>스마트 · 프린트</b><span class="d">과목마다 화면으로 풀지, 뽑아서 풀지 골라요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="2" aria-pressed="false"><span class="tv-no" aria-hidden="true">2</span><span class="tv-tx"><b>놀이 보상</b><span class="d">유아기·초등은 오늘 공부를 다 하면 스티커 1장과 짝 맞추기 놀이가 열려요. 프린트로 푼 과목은 부모님이 ‘다 풀었어요’를 눌러야 세요. 모은 스티커는 ‘스티커판’에서 봐요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="3" aria-pressed="false"><span class="tv-no" aria-hidden="true">3</span><span class="tv-tx"><b>전체 뽑아서 풀기</b><span class="d">오늘 과목을 PDF 한 파일로 모아 뽑아요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="4" aria-pressed="false"><span class="tv-no" aria-hidden="true">4</span><span class="tv-tx"><b>부모 가이드</b><span class="d">오늘 배울 내용, 아이에게 물어볼 질문, 정답과 해설을 함께 뽑아요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="5" aria-pressed="false"><span class="tv-no" aria-hidden="true">5</span><span class="tv-tx"><b>숙제 보내기</b><span class="d">오늘 학습·모의시험·영단어 퀴즈를 아이 폰으로 보내요. 초등부터 보여요.</span></span></button></li></ol></div>
+<p class="tv-tip" data-anchor><b>복습</b>대부분의 과목에서 바로 전 Day와 7·14·21·28 Day 전 내용이 복습 문제로 다시 나와요. 하루 복습 양은 늘지 않아요.</p>
+<button type="button" class="tv-next">다음 기능: 현황판 →</button>
+</article>
+<article class="tv-sector" id="tv-dash" role="tabpanel" aria-labelledby="tvm-dash" hidden>
+<div class="tv-head" data-anchor><h2 id="tv-dash-h">아이 공부를 한눈에 봐요</h2><p>공부한 날·연속 공부·공부 시간을 보고, 시간표와 진도도 여기서 정해요.</p></div>
+<div class="tv-tabs" role="tablist" aria-label="현황판 화면" data-anchor><button type="button" role="tab" id="tv-dash-t0" aria-controls="tv-dash-s0" aria-selected="true" tabindex="0">한눈에 보기</button><button type="button" role="tab" id="tv-dash-t1" aria-controls="tv-dash-s1" aria-selected="false" tabindex="-1">메뉴</button></div>
+<figure class="tv-phone" data-anchor><div class="tv-frame"><div class="tv-screens"><div class="tv-screen on" role="tabpanel" id="tv-dash-s0" aria-labelledby="tv-dash-t0"><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour2/dash-dark.webp"><img src="img/tour2/dash-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="현황판 화면 예시. 이번 주 공부한 날, 연속 공부 날수, 이번 주 공부 시간이 보여요."></picture><span class="tv-hl" hidden></span><button type="button" class="tv-pin" data-n="1" data-box="3.85,31.09,44.87,19.06" style="left:44.1%;top:34.06%" aria-pressed="false" aria-label="1번 이번 주 공부한 날">1</button><button type="button" class="tv-pin" data-n="2" data-box="51.03,31.09,45.13,19.06" style="left:91.28%;top:34.06%" aria-pressed="false" aria-label="2번 연속 공부">2</button><button type="button" class="tv-pin" data-n="3" data-box="3.85,51.25,92.31,37.19" style="left:27.69%;top:56.09%" aria-pressed="false" aria-label="3번 공부 시간">3</button></div><div class="tv-screen" role="tabpanel" id="tv-dash-s1" aria-labelledby="tv-dash-t1"><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour2/dash-menu-dark.webp"><img src="img/tour2/dash-menu-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="현황판 메뉴 예시. 학습 현황(시간, 교육 성과), 학습 관리, 리포트, 숙제가 있어요."></picture><span class="tv-hl" hidden></span><button type="button" class="tv-pin" data-n="1" data-box="2.82,7.5,63.59,21.88" style="left:60.51%;top:11.25%" aria-pressed="false" aria-label="1번 학습 현황">1</button><button type="button" class="tv-pin" data-n="2" data-box="2.82,30,63.59,7.5" style="left:60.51%;top:33.75%" aria-pressed="false" aria-label="2번 학습 관리">2</button><button type="button" class="tv-pin" data-n="3" data-box="2.82,37.5,63.59,7.5" style="left:60.51%;top:41.25%" aria-pressed="false" aria-label="3번 리포트">3</button><button type="button" class="tv-pin" data-n="4" data-box="2.82,45,63.59,7.5" style="left:60.51%;top:48.75%" aria-pressed="false" aria-label="4번 숙제">4</button></div></div></div></figure>
+<div class="tv-legends"><ol class="tv-legend" aria-label="한눈에 보기 화면 설명"><li data-anchor><button type="button" class="tv-key" data-n="1" aria-pressed="false"><span class="tv-no" aria-hidden="true">1</span><span class="tv-tx"><b>이번 주 공부한 날</b><span class="d">월요일부터 오늘까지 공부한 날을 세요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="2" aria-pressed="false"><span class="tv-no" aria-hidden="true">2</span><span class="tv-tx"><b>연속 공부</b><span class="d">쉬는 요일은 빼고 이어서 세요. 프린트로 푼 날은 부모님이 ‘다 풀었어요’를 누른 뒤에 세요. 놀이에서 모은 스티커가 있으면 그 수도 함께 보여요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="3" aria-pressed="false"><span class="tv-no" aria-hidden="true">3</span><span class="tv-tx"><b>공부 시간</b><span class="d">스마트 학습은 푼 시간으로, 프린트는 뽑아서 푼 장 수로 보여요.</span></span></button></li></ol><ol class="tv-legend" hidden aria-label="메뉴 화면 설명"><li data-anchor><button type="button" class="tv-key" data-n="1" aria-pressed="false"><span class="tv-no" aria-hidden="true">1</span><span class="tv-tx"><b>학습 현황</b><span class="d">‘시간’과 ‘교육 성과’로 나뉘어요. 교육 성과에서 많이 틀린 단원과 틀린 문제 모음을 봐요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="2" aria-pressed="false"><span class="tv-no" aria-hidden="true">2</span><span class="tv-tx"><b>학습 관리</b><span class="d">요일별 시간표와 과목 진도를 정해요. 과목마다 언제 끝나는지도 알려 줘요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="3" aria-pressed="false"><span class="tv-no" aria-hidden="true">3</span><span class="tv-tx"><b>리포트</b><span class="d">지난 한 주와 지난달 공부를 정리해 보여 줘요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="4" aria-pressed="false"><span class="tv-no" aria-hidden="true">4</span><span class="tv-tx"><b>숙제</b><span class="d">아이 폰으로 숙제를 보내고, 다 했는지와 점수를 봐요. 초등부터 보여요.</span></span></button></li></ol></div>
+<p class="tv-tip" data-anchor><b>학교 진도</b>우리 단원을 학기 날짜에 나눈 짐작이에요. 실제 학교와 다를 수 있어 참고로만 보여 줘요.</p>
+<button type="button" class="tv-next">다음 기능: 모의시험 →</button>
+</article>
+<article class="tv-sector" id="tv-exam" role="tabpanel" aria-labelledby="tvm-exam" hidden>
+<div class="tv-head" data-anchor><h2 id="tv-exam-h">시험 전에는 모의시험을 뽑아요</h2><p>학기와 시험을 고르면, 시험 범위 단원의 객관식 문제를 PDF 한 파일로 만들어요.</p></div>
+<div class="tv-tabs" role="tablist" aria-label="모의시험 화면" data-anchor><button type="button" role="tab" id="tv-exam-t0" aria-controls="tv-exam-s0" aria-selected="true" tabindex="0">범위 고르기</button><button type="button" role="tab" id="tv-exam-t1" aria-controls="tv-exam-s1" aria-selected="false" tabindex="-1">PDF 만들기</button></div>
+<figure class="tv-phone" data-anchor><div class="tv-frame"><div class="tv-screens"><div class="tv-screen on" role="tabpanel" id="tv-exam-s0" aria-labelledby="tv-exam-t0"><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour2/exam-dark.webp"><img src="img/tour2/exam-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="모의시험 화면 예시. 학기, 중간고사와 기말고사, 과목당 문제 수를 고르고, 과목별 시험 범위 단원이 보여요."></picture><span class="tv-hl" hidden></span><button type="button" class="tv-pin" data-n="1" data-box="8.21,25.31,83.59,12.03" style="left:88.21%;top:27.5%" aria-pressed="false" aria-label="1번 학기 · 시험">1</button><button type="button" class="tv-pin" data-n="2" data-box="8.21,37.66,83.59,12.03" style="left:88.21%;top:39.84%" aria-pressed="false" aria-label="2번 과목당 문제 수">2</button><button type="button" class="tv-pin" data-n="3" data-box="8.21,50.31,83.59,38.44" style="left:61.54%;top:54.84%" aria-pressed="false" aria-label="3번 시험 범위">3</button></div><div class="tv-screen" role="tabpanel" id="tv-exam-s1" aria-labelledby="tv-exam-t1"><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour2/exam-pdf-dark.webp"><img src="img/tour2/exam-pdf-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="모의시험 화면 아래쪽 예시. 과목별 범위와 문제 수, 한자는 문제가 없어 빠진다는 안내, 모의시험 PDF 만들기 단추가 있어요."></picture><span class="tv-hl" hidden></span><button type="button" class="tv-pin" data-n="1" data-box="8.21,65.78,61.54,4.69" style="left:64.1%;top:68.12%" aria-pressed="false" aria-label="1번 빠지는 과목">1</button><button type="button" class="tv-pin" data-n="2" data-box="8.21,71.56,83.59,8.59" style="left:88.21%;top:73.12%" aria-pressed="false" aria-label="2번 PDF 만들기">2</button></div></div></div></figure>
+<div class="tv-legends"><ol class="tv-legend" aria-label="범위 고르기 화면 설명"><li data-anchor><button type="button" class="tv-key" data-n="1" aria-pressed="false"><span class="tv-no" aria-hidden="true">1</span><span class="tv-tx"><b>학기 · 시험</b><span class="d">1·2학기와 중간·기말고사를 골라요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="2" aria-pressed="false"><span class="tv-no" aria-hidden="true">2</span><span class="tv-tx"><b>과목당 문제 수</b><span class="d">20·30·40문제 가운데 골라요. 문제가 모자라면 있는 만큼 넣어요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="3" aria-pressed="false"><span class="tv-no" aria-hidden="true">3</span><span class="tv-tx"><b>시험 범위</b><span class="d">고른 시험의 범위 단원이 과목마다 보여요.</span></span></button></li></ol><ol class="tv-legend" hidden aria-label="PDF 만들기 화면 설명"><li data-anchor><button type="button" class="tv-key" data-n="1" aria-pressed="false"><span class="tv-no" aria-hidden="true">1</span><span class="tv-tx"><b>빠지는 과목</b><span class="d">문제가 없는 과목은 빠진다고 미리 알려 줘요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="2" aria-pressed="false"><span class="tv-no" aria-hidden="true">2</span><span class="tv-tx"><b>PDF 만들기</b><span class="d">한 파일로 뽑아요. 정답과 해설은 맨 뒤에 모여 있어 채점하기 쉬워요.</span></span></button></li></ol></div>
+<p class="tv-tip" data-anchor><b>과목</b>시험 범위에 문제가 20개 이상 있는 과목이 들어가요. 초1~2는 국어와, 선행학습으로 더한 사회·과학·한국사가 대상이에요.</p>
+<button type="button" class="tv-next">다음 기능: 부록 →</button>
+</article>
+<article class="tv-sector" id="tv-extra" role="tabpanel" aria-labelledby="tvm-extra" hidden>
+<div class="tv-head" data-anchor><h2 id="tv-extra-h">진도와 상관없이 언제든 골라 써요</h2><p>날마다 하는 진도와 따로, 필요할 때 골라 쓰는 학습 자료예요.</p></div>
+<div class="tv-tabs" role="tablist" aria-label="부록 화면" data-anchor><button type="button" role="tab" id="tv-extra-t0" aria-controls="tv-extra-s0" aria-selected="true" tabindex="0">부록 목록</button><button type="button" role="tab" id="tv-extra-t1" aria-controls="tv-extra-s1" aria-selected="false" tabindex="-1">플래시카드</button></div>
+<figure class="tv-phone" data-anchor><div class="tv-frame"><div class="tv-screens"><div class="tv-screen on" role="tabpanel" id="tv-extra-s0" aria-labelledby="tv-extra-t0"><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour2/extra-dark.webp"><img src="img/tour2/extra-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="부록 화면 예시. 영단어, 영어 듣기, 파닉스가 있어요."></picture><span class="tv-hl" hidden></span><button type="button" class="tv-pin" data-n="1" data-box="8.21,15.94,83.59,15.94" style="left:88.21%;top:18.12%" aria-pressed="false" aria-label="1번 영단어">1</button><button type="button" class="tv-pin" data-n="2" data-box="8.21,32.5,83.59,15.94" style="left:88.21%;top:34.69%" aria-pressed="false" aria-label="2번 영어 듣기">2</button><button type="button" class="tv-pin" data-n="3" data-box="8.21,48.91,83.59,15.94" style="left:88.21%;top:51.09%" aria-pressed="false" aria-label="3번 파닉스">3</button></div><div class="tv-screen" role="tabpanel" id="tv-extra-s1" aria-labelledby="tv-extra-t1"><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour2/extra-fc-dark.webp"><img src="img/tour2/extra-fc-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="영단어 플래시카드 화면 예시. 초3~4학년 영단어 1~15번 가운데 첫 카드 mother가 보여요."></picture><span class="tv-hl" hidden></span><button type="button" class="tv-pin" data-n="1" data-box="23.33,2.5,73.59,5" style="left:52.56%;top:8.75%" aria-pressed="false" aria-label="1번 단계 · 번호">1</button><button type="button" class="tv-pin" data-n="2" data-box="59.74,10,37.18,8.12" style="left:56.92%;top:14.06%" aria-pressed="false" aria-label="2번 섞기 · 뜻 먼저">2</button><button type="button" class="tv-pin" data-n="3" data-box="4.1,19.38,91.79,59.38" style="left:90.77%;top:22.5%" aria-pressed="false" aria-label="3번 카드">3</button><button type="button" class="tv-pin" data-n="4" data-box="3.08,89.38,93.85,8.75" style="left:50%;top:87.5%" aria-pressed="false" aria-label="4번 뒤집기 · 이전 · 다음">4</button></div></div></div></figure>
+<div class="tv-legends"><ol class="tv-legend" aria-label="부록 목록 화면 설명"><li data-anchor><button type="button" class="tv-key" data-n="1" aria-pressed="false"><span class="tv-no" aria-hidden="true">1</span><span class="tv-tx"><b>영단어</b><span class="d">단계별 단어 학습지와 플래시카드로 익히고, 외웠는지 확인해요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="2" aria-pressed="false"><span class="tv-no" aria-hidden="true">2</span><span class="tv-tx"><b>영어 듣기</b><span class="d">오늘 배운 영단어를 다시 들어요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="3" aria-pressed="false"><span class="tv-no" aria-hidden="true">3</span><span class="tv-tx"><b>파닉스</b><span class="d">초3~6은 영어 소리와 글자를 여기서 익혀요. 시간표에 넣으면 오늘의 학습에 나와요.</span></span></button></li></ol><ol class="tv-legend" hidden aria-label="플래시카드 화면 설명"><li data-anchor><button type="button" class="tv-key" data-n="1" aria-pressed="false"><span class="tv-no" aria-hidden="true">1</span><span class="tv-tx"><b>단계 · 번호</b><span class="d">학습지와 같은 단어 묶음을 카드로 넘겨 봐요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="2" aria-pressed="false"><span class="tv-no" aria-hidden="true">2</span><span class="tv-tx"><b>섞기 · 뜻 먼저</b><span class="d">순서를 섞거나 뜻부터 보여 줘요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="3" aria-pressed="false"><span class="tv-no" aria-hidden="true">3</span><span class="tv-tx"><b>카드</b><span class="d">앞면은 영어와 읽는 소리, 누르면 뒷면에 뜻이 나와요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="4" aria-pressed="false"><span class="tv-no" aria-hidden="true">4</span><span class="tv-tx"><b>뒤집기 · 이전 · 다음</b><span class="d">뒤집은 뒤 ‘알아요’·‘헷갈려요’를 고르면, 끝에 헷갈린 카드만 다시 봐요.</span></span></button></li></ol></div>
+<p class="tv-tip" data-anchor><b>보이는 것</b>아이 학년과 고른 과목에 따라 달라요. 영어를 고르면 영단어와 영어 듣기가 나와요.</p>
+<button type="button" class="tv-next">다음 기능: 아이 폰 →</button>
+</article>
+<article class="tv-sector" id="tv-kid" role="tabpanel" aria-labelledby="tvm-kid" hidden>
+<div class="tv-head" data-anchor><h2 id="tv-kid-h">아이 폰에는 공부만 나와요</h2><p>부모 폰의 ‘아이 폰 연결’로 링크를 보내면, 로그인 없이 그 아이 전용 공부 폰이 돼요. 프린트·진도 설정·현황판은 부모 폰에서 해요.</p></div>
+<div class="tv-tabs" data-anchor><p class="tv-one">숙제·연속 공부</p></div>
+<figure class="tv-phone" data-anchor><div class="tv-frame"><div class="tv-screens"><div class="tv-screen on"><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour2/kid-dark.webp"><img src="img/tour2/kid-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="아이 폰 화면 예시. 숙제 목록 아래쪽과, 다 했어요 도장이 찍힌 연속 공부 달력이 보여요."></picture><span class="tv-hl" hidden></span><button type="button" class="tv-pin" data-n="1" data-box="3.59,0.62,92.82,23.75" style="left:56.41%;top:4.38%" aria-pressed="false" aria-label="1번 숙제">1</button><button type="button" class="tv-pin" data-n="2" data-box="3.59,32.81,92.82,10" style="left:51.28%;top:36.09%" aria-pressed="false" aria-label="2번 연속 공부">2</button><button type="button" class="tv-pin" data-n="3" data-box="3.59,43.44,92.82,51.56" style="left:38.46%;top:58.13%" aria-pressed="false" aria-label="3번 도장 달력">3</button></div></div></div></figure>
+<div class="tv-legends"><ol class="tv-legend" aria-label="숙제·연속 공부 화면 설명"><li data-anchor><button type="button" class="tv-key" data-n="1" aria-pressed="false"><span class="tv-no" aria-hidden="true">1</span><span class="tv-tx"><b>숙제</b><span class="d">부모님이 보낸 숙제가 떠요. 끝내면 ‘다 했어요’가 붙고, 점수는 부모 화면에만 보여요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="2" aria-pressed="false"><span class="tv-no" aria-hidden="true">2</span><span class="tv-tx"><b>연속 공부</b><span class="d">그날 할 일을 다 하면 이어서 세요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="3" aria-pressed="false"><span class="tv-no" aria-hidden="true">3</span><span class="tv-tx"><b>도장 달력</b><span class="d">다 한 날에는 ‘다 했어요’ 도장이 찍혀요. 프린트로 한 날은 부모님이 확인하면 찍혀요.</span></span></button></li><li class="tv-note" data-anchor><span class="tv-no tv-dot" aria-hidden="true"></span><span class="tv-tx"><b>숙제는 초등부터</b><span class="d">유아기(5~7세)는 아이 폰에서 스마트 학습만 해요.</span></span></li></ol></div>
+<p class="tv-tip" data-anchor><b>연결 링크</b>24시간 안에 한 번만 쓸 수 있어요.</p>
+<button type="button" class="tv-next">다음 기능: 영아기 놀이 →</button>
+</article>
+<article class="tv-sector" id="tv-play" role="tabpanel" aria-labelledby="tvm-play" hidden>
+<div class="tv-head" data-anchor><h2 id="tv-play-h">영아기 2~4세는 놀이로 시작해요</h2><p>아래 메뉴가 놀이 모음·현황판·화면 놀이로 바뀌어요. 뽑아서 놀거나, 화면에서 손가락으로 놀아요.</p></div>
+<div class="tv-tabs" role="tablist" aria-label="영아기 놀이 화면" data-anchor><button type="button" role="tab" id="tv-play-t0" aria-controls="tv-play-s0" aria-selected="true" tabindex="0">놀이 모음</button><button type="button" role="tab" id="tv-play-t1" aria-controls="tv-play-s1" aria-selected="false" tabindex="-1">화면 놀이</button></div>
+<figure class="tv-phone" data-anchor><div class="tv-frame"><div class="tv-screens"><div class="tv-screen on" role="tabpanel" id="tv-play-s0" aria-labelledby="tv-play-t0"><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour2/play-dark.webp"><img src="img/tour2/play-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="놀이 모음 화면 예시. 3세 놀이 표시와 난이도, 선 긋기·같은 그림 찾기·색칠놀이 같은 놀이 카드, 뽑기 단추가 있어요."></picture><span class="tv-hl" hidden></span><button type="button" class="tv-pin" data-n="1" data-box="72.82,6.56,18.97,5.47" style="left:69.74%;top:9.22%" aria-pressed="false" aria-label="1번 나이">1</button><button type="button" class="tv-pin" data-n="2" data-box="8.21,16.72,61.03,8.12" style="left:72.82%;top:20.78%" aria-pressed="false" aria-label="2번 난이도">2</button><button type="button" class="tv-pin" data-n="3" data-box="8.21,24.53,83.59,54.69" style="left:91.28%;top:25.47%" aria-pressed="false" aria-label="3번 놀이 카드">3</button><button type="button" class="tv-pin" data-n="4" data-box="8.46,79.53,83.08,9.06" style="left:91.28%;top:79.84%" aria-pressed="false" aria-label="4번 뽑기">4</button><button type="button" class="tv-pin" data-n="5" data-box="2.05,89.38,95.9,9.38" style="left:50%;top:89.06%" aria-pressed="false" aria-label="5번 아래 메뉴">5</button></div><div class="tv-screen" role="tabpanel" id="tv-play-s1" aria-labelledby="tv-play-t1"><picture><source media="(prefers-color-scheme: dark)" srcset="img/tour2/play-game-dark.webp"><img src="img/tour2/play-game-light.webp" width="390" height="640" loading="lazy" decoding="async" alt="화면 놀이 예시. 같은 그림 찾기 놀이에서 눈사람, 실로폰, 옥수수, 치마 그림 가운데 똑같은 그림을 찾아요."></picture><span class="tv-hl" hidden></span><button type="button" class="tv-pin" data-n="1" data-box="18.97,1.88,78.97,7.5" style="left:64.1%;top:5.62%" aria-pressed="false" aria-label="1번 놀이 이름">1</button><button type="button" class="tv-pin" data-n="2" data-box="1.54,26.88,96.92,57.5" style="left:92.82%;top:33.44%" aria-pressed="false" aria-label="2번 같은 그림 찾기">2</button><button type="button" class="tv-pin" data-n="3" data-box="2.56,0.94,15.38,9.38" style="left:17.95%;top:10.31%" aria-pressed="false" aria-label="3번 닫기">3</button></div></div></div></figure>
+<div class="tv-legends"><ol class="tv-legend" aria-label="놀이 모음 화면 설명"><li data-anchor><button type="button" class="tv-key" data-n="1" aria-pressed="false"><span class="tv-no" aria-hidden="true">1</span><span class="tv-tx"><b>나이</b><span class="d">아이 나이에 맞춘 놀이가 나와요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="2" aria-pressed="false"><span class="tv-no" aria-hidden="true">2</span><span class="tv-tx"><b>난이도</b><span class="d">쉬움·보통·어려움으로 골라요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="3" aria-pressed="false"><span class="tv-no" aria-hidden="true">3</span><span class="tv-tx"><b>놀이 카드</b><span class="d">선 긋기·같은 그림 찾기·색칠놀이·미로 같은 놀이를 눌러 담아요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="4" aria-pressed="false"><span class="tv-no" aria-hidden="true">4</span><span class="tv-tx"><b>뽑기</b><span class="d">담은 놀이를 한 번에 뽑거나, 섞어서 5장을 뽑아요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="5" aria-pressed="false"><span class="tv-no" aria-hidden="true">5</span><span class="tv-tx"><b>아래 메뉴</b><span class="d">현황판에서는 논 날·연속 놀이·놀이 시간을 봐요.</span></span></button></li></ol><ol class="tv-legend" hidden aria-label="화면 놀이 화면 설명"><li data-anchor><button type="button" class="tv-key" data-n="1" aria-pressed="false"><span class="tv-no" aria-hidden="true">1</span><span class="tv-tx"><b>놀이 이름</b><span class="d">‘화면 놀이’에서 고른 놀이를 폰 화면에서 해요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="2" aria-pressed="false"><span class="tv-no" aria-hidden="true">2</span><span class="tv-tx"><b>같은 그림 찾기</b><span class="d">왼쪽 그림과 똑같은 그림을 찾아 손가락으로 ○ 해요.</span></span></button></li><li data-anchor><button type="button" class="tv-key" data-n="3" aria-pressed="false"><span class="tv-no" aria-hidden="true">3</span><span class="tv-tx"><b>닫기</b><span class="d">길게 눌러야 닫혀서, 놀다가 잘못 닫히지 않아요.</span></span></button></li></ol></div>
+<p class="tv-tip" data-anchor><b>요금</b>영아기(2~4세) 놀이는 무료예요.</p>
+<button type="button" class="tv-next">처음으로: 학습 →</button>
+</article>
+      </div>
     </div>
   </section>
 
@@ -489,6 +525,111 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
   document.querySelectorAll('footer .links a[href^="/"]').forEach(function(a){
     a.addEventListener('click',function(e){e.preventDefault();say('이용약관과 개인정보처리방침은 준비 중이에요. 완성되면 이 링크에 연결해요.');});
   });
+})();
+(function(){
+  // 앱 둘러보기 시안: 기능 메뉴·화면 고르기·번호(핀과 설명 줄)
+  'use strict';
+  var tv=document.querySelector('[data-tour]');if(!tv)return;
+  var menuTabs=[].slice.call(tv.querySelectorAll('.tv-menu [role="tab"]'));
+  var sectors=[].slice.call(tv.querySelectorAll('.tv-sector'));
+  var narrow=matchMedia('(max-width:899px)'),stage=tv.querySelector('.tv-stage');
+  function shown(){return sectors.filter(function(s){return !s.hidden;})[0];}
+  // 기능·화면을 바꿔 아래 글이 짧아지면, 페이지 끝을 보던 사람은 화면이 끌려 내려온 것처럼 보임(줄어든 페이지 끝에 스크롤이 맞춰짐)
+  // → 지금 보이는 아래 끝까지는 페이지 길이를 지켜 둠. 남긴 빈칸은 화면 밖으로 지나가거나 크기가 바뀌면 걷음
+  function keep(change){
+    var h=stage.getBoundingClientRect().height,slack=document.documentElement.scrollHeight-(scrollY+innerHeight);
+    stage.style.minHeight=h+'px';
+    change();
+    var need=Math.ceil(h-Math.max(0,slack))+1;
+    stage.style.minHeight=need>shown().getBoundingClientRect().height?need+'px':'';
+    dispatchEvent(new Event('scroll'));  // 홈페이지가 기억하는 '보던 칸'을 새 화면 기준으로(돌릴 때 숨은 칸을 기준 삼지 않게)
+  }
+  function release(){
+    if(!stage.style.minHeight)return;
+    var r=stage.getBoundingClientRect(),cut=r.height-shown().getBoundingClientRect().height;
+    if(r.bottom-cut>=innerHeight)stage.style.minHeight='';
+  }
+  // 돌리기·접고 펴기: 홈페이지가 맨 위 칸(대개 폰 화면)을 기준으로 자리를 되살림. 그 뒤 눌러 둔 설명 줄과 화면 속 밝힌 칸이
+  // 둘 다 화면 밖으로 나가 버렸으면, 설명 줄을 돌리기 전과 같은 높이로 데려옴(보던 것을 잃지 않게)
+  var held=null,busy=false,fixFrame=0;
+  function line(){return narrow.matches?document.querySelector('.site-header').getBoundingClientRect().bottom+12:24;}
+  function seen(r,l){return r.height>0&&r.bottom>l&&r.top<innerHeight;}
+  function note(){
+    held=null;
+    var k=tv.querySelector('.tv-sector:not([hidden]) .tv-legend:not([hidden]) .tv-key[aria-pressed="true"]');if(!k)return;
+    // 설명 줄을 읽던 때만: 줄이 다 보이고, 폰 화면은 위가 지나가 있음(폰 화면을 보던 때는 홈페이지 기준 그대로)
+    var r=k.getBoundingClientRect(),l=line(),ph=k.closest('.tv-sector').querySelector('.tv-phone').getBoundingClientRect();
+    if(r.top>=l&&r.bottom<=innerHeight&&ph.top<l)held={el:k,top:r.top-l};
+  }
+  function bringBack(h){
+    if(!h||h.el.getAttribute('aria-pressed')!=='true'||!h.el.getClientRects().length)return;
+    var l=line(),r=h.el.getBoundingClientRect(),hl=h.el.closest('.tv-sector').querySelector('.tv-screen.on .tv-hl');
+    if(seen(r,l)||(hl&&!hl.hidden&&seen(hl.getBoundingClientRect(),l)))return;
+    var want=Math.max(0,Math.min(h.top,innerHeight-l-r.height));
+    scrollTo(0,Math.max(0,scrollY+r.top-l-want));
+  }
+  addEventListener('scroll',function(){release();if(!busy)note();},{passive:true});
+  // 폭이 바뀌면(돌리기·접고 펴기) 높이가 새로 정해지므로 걷고, 높이만 바뀌면(폰 주소창이 숨고 나옴) 빈칸이 보이는 동안은 그대로 둠
+  var lastW=innerWidth,first=null;
+  addEventListener('resize',function(){
+    if(innerWidth!==lastW){lastW=innerWidth;stage.style.minHeight='';}else release();
+    if(!busy)first=held;busy=true;cancelAnimationFrame(fixFrame);
+    // 홈페이지의 되살리기(먼저 등록된 같은 프레임 일)가 끝난 뒤에 봄
+    fixFrame=requestAnimationFrame(function(){bringBack(first);fixFrame=requestAnimationFrame(function(){busy=false;note();});});
+  });
+  function clearMarks(sec){
+    sec.querySelectorAll('.tv-pin[aria-pressed="true"],.tv-key[aria-pressed="true"]').forEach(function(b){b.setAttribute('aria-pressed','false');});
+    sec.querySelectorAll('.tv-hl').forEach(function(h){h.hidden=true;});
+  }
+  // 번호(핀이나 설명 줄)를 누르면 화면에서 그 자리를 밝힘. 같은 번호를 다시 누르면 끔
+  function pick(sec,n){
+    var scr=sec.querySelector('.tv-screen.on'),leg=sec.querySelector('.tv-legend:not([hidden])');
+    var pin=scr.querySelector('.tv-pin[data-n="'+n+'"]'),key=leg.querySelector('.tv-key[data-n="'+n+'"]');
+    if(!pin||!key)return;
+    var again=pin.getAttribute('aria-pressed')==='true';
+    clearMarks(sec);
+    if(again)return;
+    pin.setAttribute('aria-pressed','true');key.setAttribute('aria-pressed','true');
+    var b=pin.getAttribute('data-box').split(','),hl=scr.querySelector('.tv-hl');
+    hl.style.left=b[0]+'%';hl.style.top=b[1]+'%';hl.style.width=b[2]+'%';hl.style.height=b[3]+'%';hl.hidden=false;
+  }
+  function select(list,i){list.forEach(function(t,j){t.setAttribute('aria-selected',String(i===j));t.tabIndex=i===j?0:-1;});}
+  function showShot(sec,i){
+    select([].slice.call(sec.querySelectorAll('.tv-tabs [role="tab"]')),i);
+    [].slice.call(sec.querySelectorAll('.tv-screen')).forEach(function(s,j){s.classList.toggle('on',i===j);});
+    [].slice.call(sec.querySelectorAll('.tv-legend')).forEach(function(s,j){s.hidden=i!==j;});
+    clearMarks(sec);
+  }
+  function showSector(i){
+    select(menuTabs,i);
+    sectors.forEach(function(s,j){s.hidden=i!==j;});
+    clearMarks(sectors[i]);
+  }
+  tv.addEventListener('click',function(e){
+    var t=e.target.closest('button');if(!t||!tv.contains(t))return;
+    if(t.closest('.tv-menu')){keep(function(){showSector(menuTabs.indexOf(t));});return;}
+    var sec=t.closest('.tv-sector');if(!sec)return;
+    if(t.closest('.tv-tabs')){keep(function(){showShot(sec,[].indexOf.call(sec.querySelectorAll('.tv-tabs [role="tab"]'),t));});return;}
+    if(t.classList.contains('tv-pin')||t.classList.contains('tv-key')){pick(sec,t.getAttribute('data-n'));note();return;}
+    if(t.classList.contains('tv-next')){
+      // 다음 기능: 메뉴가 화면 위로 지나가 있을 때만 메뉴가 보이게 올림(누른 사람이 바란 이동)
+      var i=(sectors.indexOf(sec)+1)%sectors.length;keep(function(){showSector(i);});
+      var l=line(),top=tv.querySelector('.tv-menu').getBoundingClientRect().top;
+      if(top<l)scrollTo(0,Math.max(0,scrollY+top-l));
+      menuTabs[i].focus({preventScroll:true});
+    }
+  });
+  // 화살표 키로 메뉴·화면 고르기
+  function arrows(list,onSelect){
+    list.addEventListener('keydown',function(e){
+      var tabs=[].slice.call(list.querySelectorAll('[role="tab"]')),i=tabs.indexOf(document.activeElement),j=-1;if(i<0)return;
+      if(e.key==='ArrowRight')j=(i+1)%tabs.length;else if(e.key==='ArrowLeft')j=(i-1+tabs.length)%tabs.length;else if(e.key==='Home')j=0;else if(e.key==='End')j=tabs.length-1;
+      if(j<0)return;e.preventDefault();keep(function(){onSelect(j);});tabs[j].focus({preventScroll:true});
+    });
+  }
+  arrows(tv.querySelector('.tv-menu'),showSector);
+  sectors.forEach(function(sec){var l=sec.querySelector('.tv-tabs');if(l)arrows(l,function(j){showShot(sec,j);});});
+  showSector(0);
 })();
 </script>
 </body>
