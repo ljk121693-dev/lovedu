@@ -1801,6 +1801,10 @@ textarea.scr-in{resize:vertical}
 #app>.pace-lock-note{box-sizing:border-box;max-width:760px;margin:0 auto 12px}   /* 과목 화면(#app>.pane)과 같은 폭 */
 .pace-lock-note p{flex:1 1 220px;margin:0;font-weight:700}
 .pace-lock-note button{flex:0 0 auto;min-height:44px;padding:6px 16px;border:0;border-radius:10px;background:var(--pri);color:var(--pri-ink);font-size:13.5px;font-weight:700;cursor:pointer}
+.pace-lock-note.pace-pin{position:sticky;z-index:14;box-shadow:0 6px 16px rgba(0,0,0,.14)}   /* 진도 막기: 누를 때 잠깐 과목 머리 줄 아래에 붙음 (src/hub-ui.js lockFlash, 2026-10-11) */
+.pace-lock-note.pace-flash{animation:paceFlash 1.2s ease-out 1}
+@keyframes paceFlash{0%,40%{border-color:var(--pri);box-shadow:0 0 0 3px var(--pri),0 6px 16px rgba(0,0,0,.14)}100%{box-shadow:0 6px 16px rgba(0,0,0,.14)}}
+@media (prefers-reduced-motion:reduce){.pace-lock-note.pace-flash{animation:none;border-color:var(--pri)}}
 
 /* 풀던 중 나가기 물음 (2026-10-04) */
 .scr-ask{position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:16px;padding-top:max(16px,env(safe-area-inset-top,0px));padding-bottom:max(16px,env(safe-area-inset-bottom,0px));background:rgba(15,20,18,.5)}
@@ -1984,6 +1988,14 @@ html.kid-dev .td-pw{grid-column:1/-1}
 .sv{max-width:780px;margin:0 auto}
 @media (min-width:600px){.sv-row{grid-template-columns:38px 13em minmax(0,1fr)}}
 @media (min-width:700px){.sv-ch{grid-template-columns:repeat(4,1fr)}}
+/* 문장 빈칸 (2026-10-11): 6세~초2에서 배운 단어를 문장 속에 쓰기 */
+.sv-bq .sv-qh{align-items:flex-start}
+.sv-bq .sv-no{padding-top:10px}
+.sv-bs{flex:1;min-width:0;padding-top:8px;font-size:16px;font-weight:700;line-height:1.7;overflow-wrap:anywhere}
+.sv-blank{display:inline-block;min-width:3.2em;margin:0 4px;border-bottom:2px solid var(--ink);line-height:1.15;vertical-align:baseline}
+.sv-bq .sv-mark{padding-top:12px}
+.sv-bko{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;margin:0 0 8px;font-size:14px;color:var(--sub);word-break:keep-all;overflow-wrap:anywhere}
+.sv-bko small{font-size:12.5px;color:var(--pri);font-weight:700}
 /* 화면으로 공부하기 — 한자 (src/screen/hanja.js). 색은 앱 테마 변수(밝게·어둡게) */
 .hjs{--hjs-f:var(--hj-hanja,"Noto Serif KR","Noto Serif CJK KR","Batang",serif);color:var(--ink,#222);min-width:0;word-break:keep-all;overflow-wrap:break-word}
 .hjs *{box-sizing:border-box}
@@ -3867,6 +3879,7 @@ function refreshMarks(){
   const x = s.querySelector('.pl-ext'); if (x) { const t = document.createElement('div'); t.innerHTML = extHtml(); const nx = t.querySelector('.pl-ext'); if (nx) x.replaceWith(nx); }
 }
 const say = t => { const m = $('plMsg'); if (m) m.textContent = t; };
+const fin = t => W.SARANG_POP ? W.SARANG_POP.fin($('plMsg'), t) : say(t);   // 끝난 결과·안내는 팝업 + '확인' (2026-10-11 대표), 'PDF를 만드는 중이에요…' 진행 글만 줄에
 /* 다시 그려도 누른 것(el)이 화면에서 제자리: 쪽이 짧아지면 맨 아래 빈칸(pl-pad)으로 메움 */
 function keepPlace(el, f){
   const sel = `[data-lv="${el.dataset.lv}"]`, y = el.getBoundingClientRect().top, sy = scrollY;
@@ -3882,9 +3895,9 @@ async function doPrint(list, how){
   try {
     say('PDF를 만드는 중이에요…');
     const res = await pdf(list, null, (k, n) => say(`PDF를 만드는 중이에요… (${k} / ${n}장)`));
-    if (res.ok) { if (how === 'basket') setBasket([]); say(`놀이 ${list.length}장을 PDF 한 파일로 저장했어요.`); }
-    else say(res.msg || 'PDF를 저장하지 못했어요. 다시 눌러 주세요.');
-  } catch (e) { say('PDF를 만들지 못했어요. 다시 눌러 주세요.'); if (W.console) console.warn('PLAY pdf', e); }
+    if (res.ok) { if (how === 'basket') setBasket([]); fin(`놀이 ${list.length}장을 PDF 한 파일로 저장했어요.`); }
+    else fin(res.msg || 'PDF를 저장하지 못했어요. 다시 눌러 주세요.');
+  } catch (e) { fin('PDF를 만들지 못했어요. 다시 눌러 주세요.'); if (W.console) console.warn('PLAY pdf', e); }
   finally { ui.busy = false; refreshCounts(); }
 }
 function onClick(e){
@@ -3896,7 +3909,7 @@ function onClick(e){
     if (ui.mode === 'play') {
       let b = basket();
       if (b.includes(s.id)) b = b.filter(x => x !== s.id);
-      else if (b.length >= MAXB) { say(`한 번에 ${MAXB}장까지 담을 수 있어요. 먼저 뽑은 뒤 더 담아 주세요.`); return; }
+      else if (b.length >= MAXB) { fin(`한 번에 ${MAXB}장까지 담을 수 있어요. 먼저 뽑은 뒤 더 담아 주세요.`); return; }
       else b.push(s.id);
       setBasket(b); say(''); refreshCounts(); return;
     }
@@ -3907,8 +3920,8 @@ function onClick(e){
       const optsAt = i => ({ next: i + 1 < steps.length ? { sheet: steps[i + 1], opts: optsAt(i + 1) } : null,
         onClose(r){ if (r && r.replaced) return; clock(false); if (r && r.done && i === steps.length - 1) { markDone(s.id); logPlay('s', 1); refreshMarks(); } const el = $('play') && $('play').querySelector(`.pl-sh[data-id="${s.id}"]`); if (el) el.focus({ preventScroll: true }); } });
       try { if (PLAY_SCREEN.open(steps[0], optsAt(0)) !== false) clock(true); }
-      catch (er) { clock(false); say('이 놀이를 열지 못했어요. 다시 눌러 주세요.'); if (W.console) console.warn('PLAY_SCREEN', er); }
-    } else say('화면 놀이는 아직 준비 중이에요. 곧 열어 드릴게요.');
+      catch (er) { clock(false); fin('이 놀이를 열지 못했어요. 다시 눌러 주세요.'); if (W.console) console.warn('PLAY_SCREEN', er); }
+    } else fin('화면 놀이는 아직 준비 중이에요. 곧 열어 드릴게요.');
     return;
   }
   if (!act) return;
@@ -5342,6 +5355,14 @@ div.kd-wrl{padding-left:12px}
 .kd-sheet .kd-hw-box{padding:0;border:0;border-radius:0;background:none;box-shadow:none}
 .kd-sheet .kd-hw-box + .kd-hw-box{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
 @media (min-width:600px){.kd-dlg.kd-sheet{align-items:center;padding:16px}.kd-dlg.kd-sheet .kd-card{border-radius:16px}}
+/* 아이 폰을 연결한 아이: 부모 폰 '바로 풀기' 자리 글 (src/kidmode.js kpLabels, 2026-10-11) */
+#app .kp-off,#app .kp-off:hover{border-color:var(--line)!important;background:var(--soft)!important;color:var(--sub)!important;cursor:default;box-shadow:none!important}
+/* 오늘 카드 머리 아래: 아이 폰 끊기 물음·뺀 아이 폰 줄 (2026-10-11, 입구 = 머리의 '아이 폰 연결 해제') */
+.kd-top.kd-under{margin:12px 0 0}
+.kd-top[hidden]{display:none}
+.kd-line.kd-cheer-top{padding:8px 14px;flex-wrap:nowrap}
+.kd-line.kd-cheer-top svg{width:22px;height:22px;flex:none;color:var(--pri)}
+.kd-line.kd-cheer-top[hidden]{display:none}
 </style>
 <style id="sarang-game">/* 게임 1차: 학습 탭 '오늘 놀이' 카드 + 놀이 화면(#gmView) (src/game.js, 2026-10-10) */
 #app.gm-on > :not(#gmView){display:none!important}
@@ -5984,6 +6005,75 @@ html.db-lock,html.db-lock body{overflow:hidden}
 @media (max-width:359px){.wr-acts{gap:6px}.wr-act{font-size:13px}.wr-act small{font-size:11px}}
 @media (max-width:300px){.wr-acts,.wr-acts.two{grid-template-columns:minmax(0,1fr)}.wr-act{min-height:48px;flex-direction:row;gap:6px}}
 </style>
+<style id="sarang-pop">/* ===== 안내 팝업 (src/pop.js, 2026-10-11) — D안 색 변수만 씀 ===== */
+.spop{position:fixed;top:0;right:0;bottom:0;left:0;z-index:3000;display:flex;align-items:center;justify-content:center;box-sizing:border-box;padding:16px;padding-top:max(16px,env(safe-area-inset-top,0px));padding-bottom:max(16px,env(safe-area-inset-bottom,0px));background:rgba(15,20,18,.45);overscroll-behavior:contain}
+.spop[hidden]{display:none}
+.spop-card{display:flex;flex-direction:column;gap:14px;box-sizing:border-box;width:min(360px,100%);max-height:100%;overflow:hidden;padding:20px 18px 16px;border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);box-shadow:0 10px 30px rgba(0,0,0,.2)}
+.spop-t{flex:0 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;margin:0;font-size:15.5px;line-height:1.65;font-weight:600;word-break:keep-all;overflow-wrap:anywhere;white-space:pre-line}
+.spop-t.spop-more{-webkit-mask-image:linear-gradient(#000 calc(100% - 28px),transparent);mask-image:linear-gradient(#000 calc(100% - 28px),transparent)}
+.spop-btns{flex:none;display:flex;justify-content:flex-end}
+.spop-btns button{flex:1 1 auto;min-height:48px;padding:8px 16px;border:0;border-radius:12px;background:var(--pri);color:var(--pri-ink);font:inherit;font-size:16px;font-weight:800;cursor:pointer}
+.spop-btns button:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+</style>
+<script>/* ==================== 안내 팝업 (2026-10-11 대표 "작게 뜨는 메세지는 고객이 보기 어려울 수 있으니, 팝업 방식으로 변경하고 확인 누르면 꺼지게") ====================
+   목록·결정: handoff/토스트_틀린문제_목록_1011/목록.md, 대표 10:35 카드 ①·②.
+   SARANG_POP.say(글): 화면 가운데 팝업 + '확인'. '확인'(또는 Esc·Enter)으로만 닫힘, 바깥을 눌러도 닫히지 않음.
+   여러 개가 이어 오면 차례로 (같은 글이 이미 떠 있거나 기다리면 한 번만). 닫으면 전에 누르던 단추로 초점을 돌려줌.
+   뒤 화면 스크롤은 막지 않음(막으면 PC 스크롤 막대가 사라졌다 생기며 화면이 옆으로 움직임) — 팝업 칸이 화면을 덮어 손가락이 닿지 않음.
+   그대로 두는 것(대표 결정): 진도 막기 안내(위 고정 줄 강조, src/hub-ui.js), 게임 연속 칭찬(src/game.js), 'PDF 만드는 중…' 같은 진행 글, 화면 공부 채점 글. */
+window.SARANG_POP = (function(){
+  let box = null, q = [], back = null, backSel = '';
+  const $ = id => document.getElementById(id);
+  function mount(){
+    if (box || !document.body) return;
+    box = document.createElement('div'); box.className = 'spop'; box.id = 'sarangPop'; box.hidden = true;
+    box.innerHTML = '<div class="spop-card" role="alertdialog" aria-modal="true" aria-describedby="popT"><p class="spop-t" id="popT"></p><div class="spop-btns"><button type="button" class="pri" id="popOk">확인</button></div></div>';
+    document.body.appendChild(box);
+    $('popOk').addEventListener('click', next);
+    box.addEventListener('keydown', e => {
+      if (e.key === 'Escape' || e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); next(); }
+      else if (e.key === 'Tab') { e.preventDefault(); $('popOk').focus(); }   // 초점은 '확인' 하나에만
+    });
+    /* 팝업이 떠 있는 동안 스크롤 키는 늘 막고(뒤 화면이 움직이지 않게, 창구 P85 v3), 글이 넘칠 때만 글을 내림 (창구 P85 v2). 스페이스는 '확인' 누름으로 둠 */
+    document.addEventListener('keydown', e => {
+      if (!box || box.hidden || !/^(ArrowDown|ArrowUp|PageDown|PageUp|Home|End)$/.test(e.key)) return;
+      e.preventDefault(); const p = $('popT'); if (p.scrollHeight <= p.clientHeight) return;
+      if (e.key === 'Home') p.scrollTop = 0; else if (e.key === 'End') p.scrollTop = p.scrollHeight;
+      else p.scrollBy(0, (/Down$/.test(e.key) ? 1 : -1) * (/^Page/.test(e.key) ? p.clientHeight - 24 : 40));
+    }, true);
+    $('popT').addEventListener('scroll', fade, { passive: true });
+    box.addEventListener('touchmove', e => { if (!e.target.closest('.spop-card')) e.preventDefault(); }, { passive: false });   // 팝업 밖을 끌어도 뒤 화면이 움직이지 않게
+    box.addEventListener('wheel', e => { if (!e.target.closest('.spop-card')) e.preventDefault(); }, { passive: false });
+  }
+  /* 초점을 돌려줄 단추를 다시 찾을 이름: id, 없으면 data-* 하나 */
+  function selOf(el){ if (el.id) return '#' + CSS.escape(el.id); const a = [...el.attributes].find(x => /^data-/.test(x.name) && x.value && x.value.length < 60); return a ? `${el.tagName.toLowerCase()}[${a.name}="${CSS.escape(a.value)}"]` : ''; }
+  /* 글이 더 있으면 아래를 흐리게 (스크롤된다는 표시) */
+  function fade(){ const p = $('popT'); if (p) p.classList.toggle('spop-more', p.scrollHeight - p.clientHeight - p.scrollTop > 2); }
+  function show(){
+    $('popT').textContent = q[0];
+    if (box.hidden) { back = document.activeElement && document.activeElement !== document.body ? document.activeElement : null; backSel = back ? selOf(back) : ''; box.hidden = false; }
+    $('popT').scrollTop = 0; fade();   // 앞 글을 끝까지 내린 자리가 다음 글로 넘어오지 않게 (창구 P85 v2 [하] 260×280 261px)
+    try { $('popOk').focus({ preventScroll: true }); } catch (e) { $('popOk').focus(); }
+  }
+  function next(){
+    q.shift();
+    if (q.length) return show();
+    box.hidden = true;
+    let b = back; back = null;
+    if (b && !b.isConnected && backSel) try { b = document.querySelector(backSel); } catch (e) { b = null; }   // 그사이 칸을 새로 그렸으면 같은 단추를 다시 찾음
+    if (b && b.isConnected && b.getClientRects().length) try { b.focus({ preventScroll: true }); } catch (e) {}
+  }
+  function say(t){
+    t = String(t == null ? '' : t).trim(); if (!t) return;
+    mount(); if (!box) { document.addEventListener('DOMContentLoaded', () => say(t), { once: true }); return; }
+    if (q.includes(t)) return;
+    q.push(t); if (q.length === 1) show();
+  }
+  /* 진행 글을 쓰던 줄(el)은 비우고 끝난 결과는 팝업 (PDF·학습지 저장 결과 등, 대표 10-11 카드 ②) */
+  function fin(el, t){ if (el && el.textContent) el.textContent = ''; say(t); }
+  return { say, fin, get open(){ return !!box && !box.hidden; }, get text(){ return q[0] || ''; } };
+})();
+</script>
 <style id="sarang-pwa">/* PC 바탕화면 앱 바로가기 묻는 창 (src/pwa.js, 2026-10-04) */
 .pwa-ask{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:16px;background:rgba(10,14,22,.45)}
 .pwa-box{width:min(380px,100%);background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);padding:24px 22px 18px;text-align:center;word-break:keep-all}
@@ -11574,7 +11664,7 @@ function renderDays(){
 /* 연간 계획: 아이 학년(지금 단원의 학년) 단원을 학기별로. 지금 Day(두 Day를 함께 하면 둘 다)·학교 자리 표시 */
 function mathSchoolAt(g){
   try {
-    if (localStorage.getItem('hub_pace') === 'free' || !window.HUB_TODAY || !HUB_TODAY.ssh || !HUB_TODAY.ssh.termFrac) return null;
+    if (!window.HUB_TODAY || !HUB_TODAY.ssh || !HUB_TODAY.ssh.termFrac) return null;   // 2026-10-11: 학교 자리는 모든 아이에게 참고로
     const S = HUB_TODAY.ssh.termFrac(), us = semUnits(g, S.sem); if (!us.length) return null;
     let k = Math.floor(S.f * us.reduce((n, i) => n + UNITS[i].days.length, 0));
     for (const i of us) { const n = UNITS[i].days.length; if (k < n) return [i, k]; k -= n; }
@@ -13140,10 +13230,10 @@ document.querySelectorAll('[data-pdf]').forEach(b => b.addEventListener('click',
     const setPart = `_세트${getSet()}`;
     const name = `수학_${unit().file}_${dayTag('-')}번째_${TYPE_NAME[type]}${setPart}.pdf`;
     const res = await savePdf(makePdf(canvases), name);
-    $('#status').textContent = res.msg;
+    SARANG_POP.fin($('#status'), res.msg);
     if (res.ok) { donePrint(); if (window.SARANG_TODAY && HUB_TODAY.math && HUB_TODAY.math.available() && !HUB_TODAY.math.hasGuide()) SARANG_TODAY.paper(['math']); }
   } catch (e) {
-    $('#status').textContent = 'PDF를 만들지 못했습니다. 다시 눌러 주세요.';
+    SARANG_POP.fin($('#status'), 'PDF를 만들지 못했습니다. 다시 눌러 주세요.');
   } finally {
     btns.forEach(x => x.disabled = false);
     renderDays();
@@ -13496,7 +13586,7 @@ function gradeStart(){
 const semUnits = (g, sem) => UNITS.map((u, i) => i).filter(i => UNITS[i].g === g && UNITS[i].grade === g + '-' + sem);
 function schoolStart(g){
   let pace = null; try { pace = localStorage.getItem('hub_pace'); } catch (e) {}
-  const S = pace !== 'free' && window.HUB_TODAY && HUB_TODAY.ssh && HUB_TODAY.ssh.termFrac ? HUB_TODAY.ssh.termFrac() : null;
+  const S = window.HUB_TODAY && HUB_TODAY.ssh && HUB_TODAY.ssh.termFrac ? HUB_TODAY.ssh.termFrac() : null;   // 2026-10-11: 진도를 정하지 않았으면 학교 진도쯤에서 (방식 하나)
   const us = S ? semUnits(g, S.sem) : [];
   if (!us.length) return false;
   let k = Math.floor(S.f * us.reduce((n, i) => n + UNITS[i].days.length, 0));
@@ -13620,7 +13710,10 @@ function vEarly(){ const s = JSON.stringify(vSeen['유아초2'] || null); if (vK
   levelWords('유아초2').forEach((w, i) => { if (HUB_SEEN.has(vSeen['유아초2'], i)) (vKnown[w.w.toLowerCase()] = vKnown[w.w.toLowerCase()] || []).push(w.m); }); return vKnown; }
 const vTok = m => String(m).split(',').map(s => s.trim());
 const isKnown = (lv, w) => lv !== '유아초2' && (vEarly()[w.w.toLowerCase()] || []).some(m => vTok(m).some(t => vTok(w.m).includes(t)));
-const vMark = (lv, list) => list.map(w => isKnown(lv, w) ? Object.assign({}, w, { k: 1 }) : w);   // k: 철자 쓰기로만
+/* 기초(초3~4) 겹친 228단어의 문장 빈칸 (2026-10-11, handoff/영단어_단계겹침_1011/예문_228_최종.json d295766d, 모음77 검수 반영): 단어 → [빈칸 문장, 정답, 우리말, 예문] */
+const VSENT = {};
+const vMark = (lv, list) => list.map(w => isKnown(lv, w) ? Object.assign({}, w, { k: 1 }, lv === '기초' && VSENT[w.w] ? { s: VSENT[w.w] } : {}) : w);   // k: 철자 쓰기로만, s: 문장 빈칸도 (기초만)
+const vSent = () => currentDay().filter(w => w.s);   // 오늘 묶음의 문장 빈칸
 function currentDay(){ return vRest ? [] : vMark(state.level, dayChunks()[state.day] || []); }
 const vFresh = () => currentDay().filter(w => !w.k);   // 새 단어 (원본·쓰기 연습·뜻 가리기)
 /* 초3·4가 초3~4 단계(기초)를 다 배우면: 저절로 넘어가지 않고 복습만, 부모가 고르면 초5~6 예습 (2026-10-11 대표) */
@@ -13659,7 +13752,7 @@ function renderLevels(){
   const d = LV_DESC[state.level], box = $('#v-lvDesc');
   const kn = state.level === '유아초2' ? 0 : levelWords(state.level).filter(w => isKnown(state.level, w)).length;   // 6세~초2에서 배운 단어 (철자 쓰기로만)
   vPrePaint();
-  if (box) box.innerHTML = d ? `<b>${esc(lvName(state.level))} · ${levelWords(state.level).length}개${kn ? ` (새 단어 ${levelWords(state.level).length - kn} · 철자 쓰기 ${kn})` : ''}</b><span>${esc(d[0])}</span><span>${esc(d[1])}</span><small lang="en">예: ${esc(d[2])}</small>` : '';
+  if (box) box.innerHTML = d ? `<b>${esc(lvName(state.level))} · ${levelWords(state.level).length}개${kn ? ` (새 단어 ${levelWords(state.level).length - kn} · ${state.level === '기초' && Object.keys(VSENT).length ? '철자·문장' : '철자 쓰기'} ${kn})` : ''}</b><span>${esc(d[0])}</span><span>${esc(d[1])}</span><small lang="en">예: ${esc(d[2])}</small>` : '';
 }
 function renderDays(){
   const chunks = dayChunks();
@@ -13781,6 +13874,38 @@ function drawSheet(type){
   return c;
 }
 
+function drawSentSheet(){
+  const items = vSent(), n = items.length, c = document.createElement('canvas');
+  c.width = 210 * PX; c.height = 297 * PX;
+  const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); ctx.fillStyle = '#000'; ctx.strokeStyle = '#000';
+  const M = 10 * PX, W = 190 * PX, headBottom = M + 14 * PX, fy = headBottom - 3 * PX;
+  ctx.textBaseline = 'alphabetic'; ctx.font = `800 ${13 * PT}px ${FONT}`;
+  const title = `${lvTitle(state.level)} · ${vRange()}`; ctx.fillText(title, M, fy);
+  const tw = ctx.measureText(title).width; ctx.font = `600 ${10 * PT}px ${FONT}`; ctx.fillText(`문장 빈칸 · ${n}문장`, M + tw + 3 * PX, fy);
+  ctx.font = `400 ${9.5 * PT}px ${FONT}`; ctx.textAlign = 'right';
+  let x = M + W;
+  const field = (label, lineMm) => { ctx.beginPath(); ctx.lineWidth = 0.25 * PX; ctx.moveTo(x - lineMm * PX, fy + 0.8 * PX); ctx.lineTo(x, fy + 0.8 * PX); ctx.stroke(); x -= lineMm * PX + 1 * PX; ctx.fillText(label, x, fy); x -= ctx.measureText(label).width + 3 * PX; };
+  ctx.fillText(`/ ${n}`, x, fy); x -= ctx.measureText(`/ ${n}`).width + 1.5 * PX; field('점수', 14); field('날짜', 22); field('이름', 22);
+  ctx.textAlign = 'left'; ctx.beginPath(); ctx.lineWidth = 0.45 * PX; ctx.moveTo(M, headBottom); ctx.lineTo(M + W, headBottom); ctx.stroke();
+  ctx.font = `400 ${8.5 * PT}px ${FONT}`; ctx.fillStyle = '#333'; ctx.textBaseline = 'top';
+  ctx.fillText('6세~초2에서 배운 단어예요. 우리말 뜻을 보고 빈칸에 알맞은 단어를 쓰세요.', M, headBottom + 2 * PX); ctx.fillStyle = '#000';
+  const top = headBottom + 8 * PX, rowH = Math.min((297 * PX - M - top) / Math.max(n, 1), 22 * PX), noW = 8 * PX, tx = M + noW, tw2 = W - noW;
+  items.forEach((w, i) => {
+    const [bl, ans, ko] = w.s, y0 = top + i * rowH, parts = bl.split('___'), gap = Math.max(18, ans.length * 4.2 + 8) * PX;
+    ctx.textBaseline = 'alphabetic'; ctx.fillStyle = '#444'; ctx.font = `400 ${8.5 * PT}px ${FONT}`; ctx.fillText(String(i + 1), M, y0 + 7 * PX); ctx.fillStyle = '#000';
+    let s = 12; ctx.font = `600 ${s * PT}px ${FONT}`;
+    const need = () => ctx.measureText(parts[0]).width + gap + ctx.measureText(parts[1] || '').width;
+    while (need() > tw2 && s > 8) { s -= 0.5; ctx.font = `600 ${s * PT}px ${FONT}`; }
+    let cx = tx; ctx.fillText(parts[0], cx, y0 + 7 * PX); cx += ctx.measureText(parts[0]).width;
+    ctx.beginPath(); ctx.lineWidth = 0.3 * PX; ctx.moveTo(cx + 1 * PX, y0 + 7.8 * PX); ctx.lineTo(cx + gap - 1 * PX, y0 + 7.8 * PX); ctx.stroke();
+    ctx.fillText(parts[1] || '', cx + gap, y0 + 7 * PX);
+    ctx.font = `400 ${9 * PT}px ${FONT}`; ctx.fillStyle = '#333';
+    const hint = `힌트: 첫 글자 ${ans[0]} · ${ans.length}글자`;
+    ctx.fillText(ko, tx, y0 + 13 * PX); ctx.textAlign = 'right'; ctx.fillText(hint, M + W, y0 + 13 * PX); ctx.textAlign = 'left'; ctx.fillStyle = '#000';
+    if (i < n - 1) { ctx.beginPath(); ctx.strokeStyle = '#999'; ctx.lineWidth = 0.18 * PX; ctx.moveTo(M, y0 + rowH - 1 * PX); ctx.lineTo(M + W, y0 + rowH - 1 * PX); ctx.stroke(); ctx.strokeStyle = '#000'; }
+  });
+  return c;
+}
 const PR_ROW = 15 * PX, PR_TOP = 10 * PX + 14 * PX + 3 * PX, PR_PER = Math.floor((297 * PX - 10 * PX - PR_TOP) / PR_ROW);
 const practiceCount = () => Math.ceil(vFresh().length / PR_PER);
 function drawPractice(pg){
@@ -13899,10 +14024,10 @@ document.querySelectorAll('[data-vpdf]').forEach(b => b.addEventListener('click'
     const blob = type === 'set' ? makePdfPages(HUB_TODAY.vocab.pages().map(f => f())) : more.length ? makePdfPages([sheet, ...more]) : makePdf(sheet);
     const name = `영단어_${lvName(state.level)}_${state.day * state.count + 1}번부터_${TYPE_NAME[type].replace(/ /g, '')}.pdf`;
     const res = await savePdf(blob, name);
-    $('#v-status').textContent = res.msg;
+    SARANG_POP.fin($('#v-status'), res.msg);
     if (res.ok) { if (type === 'set') HUB_TODAY.vocab.done(); else { rememberPrint(type); renderDays(); } if (window.SARANG_TODAY) SARANG_TODAY.paper(['vocab']); }
   } catch (e) {
-    $('#v-status').textContent = 'PDF를 만들지 못했습니다. 다시 눌러 주세요.';
+    SARANG_POP.fin($('#v-status'), 'PDF를 만들지 못했습니다. 다시 눌러 주세요.');
   } finally { btns.forEach(x => x.disabled = false); renderReviewBtn(); }
 }));
 
@@ -14086,7 +14211,7 @@ function drawReviewSheet(){
 (window.HUB_TODAY = window.HUB_TODAY || {}).vocab = {
   info: () => { if (vRest) return `\u2063${lvName(state.level)} 복습\u2063 · 다 배운 단어\u2064 · 복습 ${reviewWords().q1.length + reviewWords().q2.length}단어`; const w = currentDay(); return `\u2063${lvName(state.level)} ${state.day + 1}/${dayChunks().length}\u2063 · ${vFew(w)}\u2064 · ${vRange()} 단어 ${w.length}개`; },
   days: () => [state.day + 1, state.day + 1],   // 속 묶음 번호 (검사용)
-  pages: () => vRest ? (hasReview() ? [drawReviewSheet] : []) : [...(vFresh().length ? [() => drawSheet('original'), ...Array.from({ length: practiceCount() }, (_, k) => () => drawPractice(k)), () => drawSheet('meaning')] : []), () => drawSheet('word'), ...(hasReview() ? [drawReviewSheet] : [])],   // 새 단어가 없는 묶음은 단어 가리기부터   // 원본 다음에 쓰기 연습 (2026-10-04)
+  pages: () => vRest ? (hasReview() ? [drawReviewSheet] : []) : [...(vFresh().length ? [() => drawSheet('original'), ...Array.from({ length: practiceCount() }, (_, k) => () => drawPractice(k)), () => drawSheet('meaning')] : []), () => drawSheet('word'), ...(vSent().length ? [drawSentSheet] : []), ...(hasReview() ? [drawReviewSheet] : [])],   // 새 단어가 없는 묶음은 단어 가리기부터, 겹친 단어 문장 빈칸은 단어 가리기 다음   // 원본 다음에 쓰기 연습 (2026-10-04)
   done: () => { if (window.SARANG_LISTEN) SARANG_LISTEN.record(currentDay(), lvTitle(state.level) + ' ' + vRange()); rememberPrint('original'); renderDays(); }   // 영어 듣기에서 다시 들을 오늘 단어 (src/listen-today.js)
 };
 
@@ -14410,9 +14535,9 @@ renderLevels(); renderDays();
       var i = state.stage, d = curDay(i);
       await dayFonts();
       var res = await savePdf(makePdf(dayPages().map(function(f){ return f(); })), '한자_' + STAGES[i].name.replace(/\s/g, '') + '_' + d + '번째.pdf');
-      msg(res.msg);
+      SARANG_POP.fin($('hj-msg'), res.msg);
       if (res.ok) { markDone(); if (window.SARANG_TODAY) SARANG_TODAY.paper(['hanja']); }
-    } catch (e) { msg('PDF를 만들지 못했습니다. 다시 눌러 주세요.'); }
+    } catch (e) { SARANG_POP.fin($('hj-msg'), 'PDF를 만들지 못했습니다. 다시 눌러 주세요.'); }
     finally { btn.disabled = false; }
   }
   /* '오늘의 학습'에서 쓰는 연결 */
@@ -14843,8 +14968,7 @@ function termFrac(){
   const t = schoolYmd(), T = SCH.TERMS.filter(x => x.id === 'sem1' || x.id === 'sem2'), term = T.find(x => t <= x.end) || T[T.length - 1], d = SCH.termDays(term);
   return { sem: term.id === 'sem1' ? 1 : 2, f: d.length ? Math.min(1, d.filter(x => x < t).length / d.length) : 0 };
 }
-/* 자유 학습(hub_pace 'free')에서 아직 진도를 정하지 않은 과목·학년은 Day 1부터 (2026-10-09 대표 "자유과목·학년 선택 후 아무 조건 기입 없을 시
-   항상 그 가장 처음 진도에서 시작"). 오늘의 학습에서 자유 학습으로 넘어갈 때는 keepPos 로 과목 자리를 먼저 적어 둠 (hub-ui setPace) */
+/* 진도를 정하지 않은 과목은 학교 진도쯤에서 시작 (2026-10-11 진도 방식 하나, 위 curDay). 2026-10-09 자유 학습은 Day 1부터였음. keepPos 는 학습 관리 저장 등에서 지금 자리를 적어 둠 */
 const freePace = () => { try { return localStorage.getItem('hub_pace') === 'free'; } catch (e) { return false; } };
 function keepPos(){
   let subs = []; try { subs = (JSON.parse(localStorage.getItem('hub_child')) || {}).subs || []; } catch (e) {}
@@ -14852,7 +14976,7 @@ function keepPos(){
 function curDay(subj){
   const L = dayList(subj); if (!L.length) return 0;
   let d = st.pos[pkey(subj)];
-  if (!d) d = ahead(subj) || freePace() ? 1 : schoolDay(subj);   // 처음에는 학교 진도에서 시작, 예습 과목·자유 학습은 처음부터
+  if (!d) d = ahead(subj) ? 1 : schoolDay(subj);   // 진도를 정하지 않은 과목은 학교 진도쯤에서 시작, 예습 과목은 처음부터 (2026-10-11 진도 방식 하나 '자유 진도', 첫 시작 자리 = 추천안 '학교 진도쯤': 대표 카드 1시간 무응답 규칙, 10-09 '처음부터'를 바꿈)
   const last = st.last[pkey(subj)];
   if (last && last.day === d && last.ymd !== todayYmd()) d++;   // 출력한 날이 지나면 다음 Day
   return Math.min(Math.max(d, 1), L.length);
@@ -16616,7 +16740,7 @@ function paperDone(subj){
   SARANG_TODAY.paper([k]);
 }
 async function printPane(subj){
-  const p = subj, btn = $(p + '-print'), msg = t => { $(p + '-msg').textContent = t; };
+  const p = subj, btn = $(p + '-print'), msg = t => { $(p + '-msg').textContent = t; }, fin = t => SARANG_POP.fin($(p + '-msg'), t);   // 끝난 결과는 팝업 (src/pop.js, 2026-10-11)
   const n = curDay(subj);
   btn.dataset.busy = '1'; btn.disabled = true; msg('PDF를 만드는 중입니다…');
   try {
@@ -16624,7 +16748,7 @@ async function printPane(subj){
     await fontsReady();
     await new Promise(r => setTimeout(r, 30));
     const pages = pagesFor(subj, n, 'student');
-    if (!pages.length) { msg('이 학습지는 아직 준비 중이에요.'); return; }
+    if (!pages.length) { fin('이 학습지는 아직 준비 중이에요.'); return; }
     const u = upos(subj, n), base = `${SUBJ[subj].name}_${SHORT[G(subj)]}_${u.no}단원_${u.k}`;
     const res = await HUB_TODAY.savePdf(toPdf(pages), base + '.pdf');
     let text = res.msg;
@@ -16633,9 +16757,9 @@ async function printPane(subj){
       const gp = pagesFor(subj, n, 'guide');
       if (gp.length) { msg('부모님 가이드 PDF를 만드는 중입니다…'); const g = await HUB_TODAY.savePdf(toPdf(gp), base + '_부모가이드.pdf'); text = g.ok ? '학습지와 부모님 가이드 PDF를 저장했습니다.' : '학습지는 저장했고, 가이드는 ' + g.msg; }
     }
-    msg(text);
+    fin(text);
   } catch (e) {
-    msg('PDF를 만들지 못했습니다. 다시 눌러 주세요.');
+    fin('PDF를 만들지 못했습니다. 다시 눌러 주세요.');
   } finally {
     delete btn.dataset.busy; btn.dataset.keep = '1'; renderPane(subj); delete btn.dataset.keep;
   }
@@ -16785,17 +16909,17 @@ function renderEngBook(){
 }
 const BOOK_HINT = '단어집은 학습지를 불러오면 만들 수 있어요.';
 async function printBook(all){
-  const msg = t => { $('eng-bookmsg').textContent = t; };
+  const msg = t => { $('eng-bookmsg').textContent = t; }, fin = t => SARANG_POP.fin($('eng-bookmsg'), t);   // 끝난 결과는 팝업 (2026-10-11)
   $('eng-bookall').dataset.busy = '1'; $('eng-bookone').disabled = $('eng-bookall').disabled = true; msg('단어집 PDF를 만드는 중입니다…');
   try {
     await loadPack(pg('eng'), true);
     const units = engBook(), u = units[+$('eng-bookunit').value] || units[0];
-    if (!units.length) { msg('아직 단어집을 만들 학습지가 없어요.'); return; }
+    if (!units.length) { fin('아직 단어집을 만들 학습지가 없어요.'); return; }
     const list = all ? units : [u];
     const name = `영어단어집_${SHORT[G('eng')]}${all ? '' : '_' + u.unit.split('.')[0] + '단원'}.pdf`;
     const res = await HUB_TODAY.savePdf(toPdf(bookPages(list, all ? `${SHORT[G('eng')]} 새 단어 모음` : u.unit)), name);
-    msg(res.ok ? `단어집 PDF를 저장했습니다 (단어 ${list.reduce((a, x) => a + x.words.length, 0)}개).` : res.msg);
-  } catch (e) { msg('단어집 PDF를 만들지 못했습니다. 다시 눌러 주세요.'); }
+    fin(res.ok ? `단어집 PDF를 저장했습니다 (단어 ${list.reduce((a, x) => a + x.words.length, 0)}개).` : res.msg);
+  } catch (e) { fin('단어집 PDF를 만들지 못했습니다. 다시 눌러 주세요.'); }
   finally { delete $('eng-bookall').dataset.busy; renderEngBook(); }
 }
 
@@ -17097,7 +17221,7 @@ function renderExam(){
   if (!btn.dataset.busy) btn.disabled = !plan.subs.some(x => x.ok || x.ps === 'fail');
 }
 async function printExam(){
-  const btn = $('examPrint'), m = $('examMsg'), msg = t => { m.textContent = t; };
+  const btn = $('examPrint'), m = $('examMsg'), msg = t => { m.textContent = t; }, fin = t => SARANG_POP.fin(m, t);   // 끝난 결과는 팝업 (2026-10-11)
   if (btn.dataset.busy) return;
   const sel = examSel();
   m.style.minHeight = m.offsetHeight ? m.offsetHeight + 'px' : '';   // 알림 칸이 줄지 않게 (화면 맨 아래에서 누를 때 스크롤이 튀지 않게)
@@ -17106,16 +17230,16 @@ async function printExam(){
     await Promise.all(examSubjects().filter(subj => subj !== 'e3math').map(subj => loadForDraw(subj)));   // 자료 칸 그림(src img)까지
     await fontsReady();
     const plan = examPlan(sel.term, sel.kind, true), doc = examDoc(plan);
-    if (!doc.use.length) { msg(plan.subs.some(x => x.ps === 'fail') ? '학습지 내용을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.' : '범위 안 문제가 아직 모자라 모의시험을 만들 수 없어요. 한 과목에 20문제 이상 모이면 만들 수 있어요.'); return; }
+    if (!doc.use.length) { fin(plan.subs.some(x => x.ps === 'fail') ? '학습지 내용을 불러오지 못했어요. 인터넷 연결을 확인하고 다시 눌러 주세요.' : '범위 안 문제가 아직 모자라 모의시험을 만들 수 없어요. 한 과목에 20문제 이상 모이면 만들 수 있어요.'); return; }
     msg(`모의시험 PDF를 만드는 중입니다… (0 / ${doc.parts.total}쪽)`);
     await new Promise(r => setTimeout(r, 30));
     const blob = await toPdfAsync(doc.pages, (k, n) => msg(`모의시험 PDF를 만드는 중입니다… (${k} / ${n}쪽)`));
     const res = await HUB_TODAY.savePdf(blob, `모의시험_${SHORT[doc.grade]}_${EXAM_TERM[plan.term]}_${EXAM_KIND[plan.kind]}.pdf`);
     const left = (list, why) => list.length ? ` ${why} ${list.join('·')}${josa(list[list.length - 1], '은', '는')} 빠졌어요.` : '';
     const fail = plan.subs.filter(x => !x.ok && x.ps === 'fail').map(x => SUBJ[x.subj].name), short = plan.subs.filter(x => !x.ok && x.ps !== 'fail').map(x => SUBJ[x.subj].name);
-    msg(res.ok ? `${doc.title} 모의시험 PDF를 저장했습니다 (${doc.use.map(x => `${SUBJ[x.subj].name} ${x.qs.length}`).join(' · ')}문제, ${doc.parts.total}쪽).${left(short, '문제가 모자란')}${left(fail, '학습지를 불러오지 못한')}` : res.msg);
+    fin(res.ok ? `${doc.title} 모의시험 PDF를 저장했습니다 (${doc.use.map(x => `${SUBJ[x.subj].name} ${x.qs.length}`).join(' · ')}문제, ${doc.parts.total}쪽).${left(short, '문제가 모자란')}${left(fail, '학습지를 불러오지 못한')}` : res.msg);
   } catch (e) {
-    msg('모의시험 PDF를 만들지 못했습니다. 다시 눌러 주세요.');
+    fin('모의시험 PDF를 만들지 못했습니다. 다시 눌러 주세요.');
   } finally {
     delete btn.dataset.busy; renderExam();
   }
@@ -17365,7 +17489,7 @@ document.addEventListener('click', e => {
   const m = document.getElementById('wkMsg') || document.getElementById('todayMsg');
   const nm = (document.querySelector(`#week [data-sub="${s}"]`) || {}).textContent || '';
   const still = shortList().some(o => o.s === s);   // 매일 넣어도 못 끝내는 과목 (학년 끝 무렵, 판 62 1차 검수 [상])
-  if (m) m.textContent = n ? `${nm}${josa(nm, '을', '를')} 시간표에 ${n}번 더 넣었어요. ${still ? '남은 날이 적어 다 끝내지는 못하니 할 수 있는 만큼 해요.' : '이제 1년치를 끝낼 수 있어요.'}` : '';
+  if (n) SARANG_POP.fin(m, `${nm}${josa(nm, '을', '를')} 시간표에 ${n}번 더 넣었어요. ${still ? '남은 날이 적어 다 끝내지는 못하니 할 수 있는 만큼 해요.' : '이제 1년치를 끝낼 수 있어요.'}`); else if (m) m.textContent = '';   // 결과는 팝업 (2026-10-11)
 });
 
 /* ---------- '오늘의 학습'에서 쓰는 연결 (t: 오늘의 학습이면 주 횟수에 맞춘 묶음, 아니면 지금 Day 하나) ---------- */
@@ -20422,15 +20546,15 @@ async function renderPreview(p, c, day){
   });
 }
 async function printPane(p){
-  const c = courseOf(p), day = dayOf(c), btn = $(p + '-print'), msg = t => { $(p + '-msg').textContent = t; };
+  const c = courseOf(p), day = dayOf(c), btn = $(p + '-print'), msg = t => { $(p + '-msg').textContent = t; }, fin = t => SARANG_POP.fin($(p + '-msg'), t);   // 끝난 결과는 팝업 (2026-10-11)
   btn.disabled = true; msg('PDF를 만드는 중입니다…');
   try {
     const m = model(c, day); await ready(m);
     const cvs = drawsFor(m).map(fn => () => canvasFor(fn, 10));   // 한 쪽씩 그려 JPEG로 바꾼 뒤 바로 버림 (A4 캔버스 7~8장을 한꺼번에 들고 있지 않게)
     const res = await HUB_TODAY.savePdf(HUB_TODAY.ssh.toPdf(cvs), `${c.group}_${c.label}_${day}번째.pdf`);
-    msg(res.ok ? `${c.group} ${c.label} 학습지를 저장했습니다. ${day < c.total ? `다음에는 ‘${nameOf(c, day + 1)}’ 차례예요.` : c.id === 'j8' ? '다음부터 한자 7급을 시작해요.' : '이 과정을 모두 마쳤어요.'}` : res.msg);
+    fin(res.ok ? `${c.group} ${c.label} 학습지를 저장했습니다. ${day < c.total ? `다음에는 ‘${nameOf(c, day + 1)}’ 차례예요.` : c.id === 'j8' ? '다음부터 한자 7급을 시작해요.' : '이 과정을 모두 마쳤어요.'}` : res.msg);
     if (res.ok) { advance(c); if (window.SARANG_TODAY && (p !== 'kor' || korMode() === 'hangul')) SARANG_TODAY.paper([p]); }   // 오늘 줄 '다 했어요 · 프린트'·공부 시작 알림 끔 (검수 v29 R13, 오늘의 학습 인쇄와 한 길)
-  } catch (e) { msg('PDF를 만들지 못했습니다. 다시 눌러 주세요.'); }
+  } catch (e) { fin('PDF를 만들지 못했습니다. 다시 눌러 주세요.'); }
   finally { btn.disabled = false; }
 }
 function advance(c){
@@ -20912,14 +21036,14 @@ async function preview(){
   slot.textContent = ''; slot.appendChild(cv);
 }
 async function printPane(){
-  const n = dayNo(), btn = $('phon-print'), msg = t => { $('phon-msg').textContent = t; };
+  const n = dayNo(), btn = $('phon-print'), msg = t => { $('phon-msg').textContent = t; }, fin = t => SARANG_POP.fin($('phon-msg'), t);   // 끝난 결과는 팝업 (2026-10-11)
   btn.disabled = true; msg('PDF를 만드는 중입니다…');
   try {
     await ready();
     const res = await HUB_TODAY.savePdf(HUB_TODAY.ssh.toPdf([() => canvasFor(n, 10)]), `파닉스_${tag(n).replace(/[ /]/g, '_')}.pdf`);
-    msg(res.ok ? `파닉스 학습지를 저장했습니다. ${n < TOTAL ? `다음에는 ‘${nameOf(n + 1)}’ 차례예요.` : '파닉스 과정을 모두 마쳤어요.'}` : res.msg);
+    fin(res.ok ? `파닉스 학습지를 저장했습니다. ${n < TOTAL ? `다음에는 ‘${nameOf(n + 1)}’ 차례예요.` : '파닉스 과정을 모두 마쳤어요.'}` : res.msg);
     if (res.ok) { advance(); if (window.SARANG_TODAY) SARANG_TODAY.paper(['phon']); }
-  } catch (e) { msg('PDF를 만들지 못했습니다. 다시 눌러 주세요.'); }
+  } catch (e) { fin('PDF를 만들지 못했습니다. 다시 눌러 주세요.'); }
   finally { btn.disabled = false; }
 }
 /* 초3~6 부록: 시간표에 넣기·빼기 (아이 과목 목록 + 월~금 시간표). 경로는 이 단추 하나 */
@@ -21093,7 +21217,11 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   const mode = () => 'today';
   let view = 'home';
   /* 진도 방식 (2026-09-29 주인): 'school' 오늘의 학습(정규 교과 과정 일정에 맞춰 감) · 'free' 자유 학습(부모님이 정한 진도부터). 전부터 쓰던 기기는 'school' */
-  const PACE = 'hub_pace', pace = () => load(PACE) === 'free' ? 'free' : 'school';
+  /* 2026-10-11 대표 "기본 셋팅값이 자유진도설정", "학교진도대로 버튼을 삭제": 방식은 하나('free'). 'school' 이던 기기도 'free' 로 적음 — 진도를 정하지 않은 과목은
+     어느 쪽이든 학교 진도쯤에서 시작하므로(ssh-module curDay) 자리는 그대로. 학교 진도는 부모 참고 표시로만 (과목 화면·현황판) */
+  const PACE = 'hub_pace', pace = () => 'free';
+  try { if (localStorage.getItem(PACE) !== 'free') localStorage.setItem(PACE, 'free'); } catch (e) {}
+  document.addEventListener('hub:child', () => { try { if (localStorage.getItem(PACE) !== 'free') localStorage.setItem(PACE, 'free'); } catch (e) {} });   // 아이를 바꾸면 그 아이 기록으로
 
   /* ---------- 아이 학년과 과목 ----------
      유아(초등 입학 전, 8세 미만): 부모가 국어(한글)·수학·영어·한자 중에서 고름
@@ -21323,12 +21451,11 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   /* 시간표 칸(#week, 오늘의 학습 카드 맨 아래)은 가입 3단계에서만 가입 칸 안으로 옮겨 씀 */
   function parkWeek(){ const wk = $('week'), home = $('weekBox') || $('today'); if (wk.parentNode !== home && !(window.SARANG_WEEK && SARANG_WEEK.isOpen && SARANG_WEEK.isOpen())) { wk.hidden = true; home.append(wk); } }   // 학습 관리 1단계에 편 동안은 그대로   // 시간표 칸의 집: 시간표 설정 화면(src/week-page.js #weekBox)
   /* 단계: 학년 → 진도 방식(처음 가입만, 2026-09-29 주인) → 과목 → 시간표. 다시 고르기는 방식 단계 없이(방식은 오늘 카드의 단추로 바꿈). 유아 놀이(2~4세)는 나이만 고르면 끝 */
-  const obKinds = o => (o.askName ? ['name'] : []).concat(isTod(o.grade) ? ['grade'] : o.first ? ['grade', 'pace', 'subs', 'week'] : ['grade', 'subs', 'week']);   // name: 자녀 별명·번호 (처음 가입·자녀 추가, 2026-10-02 대표)
+  const obKinds = o => (o.askName ? ['name'] : []).concat(isTod(o.grade) ? ['grade'] : ['grade', 'subs', 'week']);   // 진도 방식 고르기 단계는 없앰 (2026-10-11, 방식 하나)   // name: 자녀 별명·번호 (처음 가입·자녀 추가, 2026-10-02 대표)
   const KIDS_ = () => window.SARANG_KIDS || null;
   const needName = () => !!(KIDS_() && !KIDS_().name());
   const obTotal = o => obKinds(o).length;
   const obKind = o => obKinds(o)[o.step - 1];
-  const PACES = [['school', '오늘의 학습', '정규 교과 과정 일정에 따라 맞춰 가는 방식입니다. (미묘하게 차이가 있을 수 있어요)'], ['free', '자유 학습', '부모님께서 지정한 진도부터 시작하는 방식입니다.']];
   function renderOnboard(){
     const box = $('onboard'), o = ob, T = obTotal(o), kind = obKind(o);
     if (window.TOD_THEME) TOD_THEME.set(TOD_THEME.stage(o.lv), { preview: true });   // 고른 단계 색 미리 보기 (캐릭터 없음, src/tod-theme.js). 안 골랐으면 기본 초록
@@ -21342,11 +21469,6 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
         <label class="ob-field"><span>별명</span><input type="text" id="obName" maxlength="10" autocomplete="off" enterkeyhint="done" placeholder="예: 민준이" value="${esc(o.nm)}"></label>
         <p class="ob-err" id="obErr" role="alert" hidden></p>
         <div class="actions a2 ob-nav">${more ? '<button type="button" data-ob="kidcancel">취소</button>' : ''}<button type="button" class="wide pri" data-ob="next" ${o.nm.trim() ? '' : 'disabled'}>다음</button></div>`;
-    } else if (kind === 'pace') {
-      box.innerHTML = dots + `<h2>진도를 어떻게 정할까요?</h2>
-        <div class="info">나중에 '오늘의 학습' 카드 위 단추로 언제든 바꿀 수 있어요.</div>
-        <div class="hub-mode ob-pace">${PACES.map(([k, t, d]) => `<button type="button" data-pace="${k}" class="${o.pace === k ? 'on' : ''}" aria-pressed="${o.pace === k}"><b>${t}</b><span>${d}</span></button>`).join('')}</div>
-        <div class="actions a2 ob-nav"><button type="button" data-ob="back">이전</button><button type="button" class="wide pri" data-ob="next" ${o.pace ? '' : 'disabled'}>다음</button></div>`;
     } else if (kind === 'grade') {
       box.innerHTML = dots + `<h2>아이의 나이와 학년을 알려주세요</h2>
         <div class="info">학년에 맞춰 과목과 학습 범위를 정해 드려요. 나이는 한국 나이 기준이며, 초등·중학생은 현재 학년을 기준으로 골라 주세요.</div>
@@ -21443,12 +21565,11 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   }
   /* 가입·다시 고르기를 마치면 '오늘'. 처음 가입에서 '자유 학습'을 골랐으면 과목마다 진도를 정하는 '진도 설정' 칸 */
   let kidAsk = false;   // 처음 가입 직후 '아이 폰도 지금 연결할까요?'를 물을 차례: 그동안 첫 안내(tour)는 기다림 (안내 풍선이 그 창을 가리던 것, 2026-10-09 대표 지적 뒤 따라가 보기)
-  const obEnd = () => { const free = ob && ob.first && ob.pace === 'free' && !isTod(ob.grade), first = !!(ob && ob.first); ob = null; kidAsk = first; tab = free ? 'subj' : 'today'; show('home'); window.scrollTo(0, 0);
+  const obEnd = () => { const free = false, first = !!(ob && ob.first); ob = null; kidAsk = first; tab = free ? 'subj' : 'today'; show('home'); window.scrollTo(0, 0);
     if (first) setTimeout(() => { document.dispatchEvent(new CustomEvent('hub:kid-new')); kidAsk = false; }, 300); };   // 새 아이 가입을 마침 → 아이 폰을 바로 연결할지 묻기 (src/kidmode.js, 2026-10-05 대표)
   $('onboard').addEventListener('click', e => {
     const o = ob; if (!o || e.target.closest('#week')) return;   // 시간표 칸은 오늘의 학습 쪽이 받음
-    const lv = e.target.closest('[data-lv]'), g = e.target.closest('[data-g]'), sb = e.target.closest('[data-sub]'), nav = e.target.closest('[data-ob]'), pc = e.target.closest('[data-pace]');
-    if (pc) { o.pace = pc.dataset.pace; renderOnboard(); return; }
+    const lv = e.target.closest('[data-lv]'), g = e.target.closest('[data-g]'), sb = e.target.closest('[data-sub]'), nav = e.target.closest('[data-ob]');
     if (e.target.closest('[data-mid="wait"]')) { store(MIDWAIT, JSON.stringify({ at: Date.now() })); renderOnboard(); return; }
     if (lv) {
       o.lv = lv.dataset.lv;
@@ -21475,7 +21596,6 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
         if (!nm) return;
         if (K) K.set(K.cur(), { name: nm });
       }
-      if (k === 'pace') { if (!o.pace) return; store(PACE, o.pace); }
       if (k === 'subs') { finishChild(); o.saved = true; }   // 고른 과목으로 기본 시간표를 채운 뒤 시간표 단계 
       o.step++; renderOnboard(); window.scrollTo(0, 0);
     }
@@ -21638,10 +21758,17 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   /* 2026-10-03 대표: 날짜를 '오늘의 학습/자유 학습' 바로 아래에, 같은 크기·글꼴로 (제목은 조금 위로). 날짜 글은 legacy 가 #todayDate 에 넣음 */
   { const lb = $('today').querySelector('.today-head .label'), dt = $('todayDate');
     if (lb && dt) { const w = document.createElement('div'); w.className = 'td-titles'; lb.before(w); w.append(lb, dt); } }
-  $('today').querySelector('.today-head').insertAdjacentHTML('afterend', '<div class="pace-ask" id="paceAsk" hidden><p id="paceAskT"></p><small id="paceAskN"></small><div class="pace-ask-btns"><button type="button" class="linkbtn" id="paceNo">그대로 두기</button><button type="button" class="pri" id="paceGo">맞추기</button></div></div>');
-  const toast = document.createElement('div'); toast.className = 'hub-toast'; toast.id = 'hubToast'; toast.hidden = true; toast.setAttribute('role', 'status'); document.body.append(toast);
-  let toastT = 0;
-  function say(t){ toast.textContent = t; toast.hidden = false; clearTimeout(toastT); toastT = setTimeout(() => { toast.hidden = true; }, 3800); }
+  /* 2026-10-11 대표 "작게 뜨는 메세지는 … 팝업 방식으로 변경하고 확인 누르면 꺼지게": 안내는 팝업(src/pop.js). 진도 막기 안내만은 누를 때마다 떠서
+     팝업 대신 위 '진도는 현황판의 학습 관리에서 바꿔요' 줄(#paceLock)을 잠깐 화면 위에 붙여 강조 (대표 10:35 카드 ①) */
+  let pinT = 0;
+  function lockFlash(){
+    const n = $('paceLock'); if (!n || n.hidden || !n.getClientRects().length) return;
+    const sb = $('subbar'), top = sb && sb.getClientRects().length ? Math.max(0, Math.round(sb.getBoundingClientRect().bottom)) : 0;
+    n.style.top = top + 'px';   // 줄이 화면 위로 지나갔으면 과목 머리 줄 바로 아래에 붙음 (sticky: 제자리 칸은 그대로라 화면이 밀리지 않음)
+    n.classList.remove('pace-flash'); void n.offsetWidth; n.classList.add('pace-pin', 'pace-flash');
+    clearTimeout(pinT); pinT = setTimeout(() => { n.classList.remove('pace-pin', 'pace-flash'); n.style.top = ''; }, 2600);
+  }
+  function say(t){ if (t === LOCK_MSG) return lockFlash(); if (window.SARANG_POP) SARANG_POP.say(t); }
   /* 학교 진도가 있는 과목(ssh-module 교과 과정): 교과 국어·영어 학년 과정·수학 초4~·사회·과학·한국사·세계사. 없는 과목 이름은 확인 글에 */
   function schoolSubs(){
     const H = window.HUB_TODAY || {}, out = [], keep = [];
@@ -21654,17 +21781,13 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     if (has('hanja') || has('yhan')) keep.push('한자');
     return { out, keep: [...new Set(keep)] };
   }
-  /* '학교 진도대로'·'자유 진도설정' 두 단추를 위아래로, 지금 쓰는 방식 쪽은 회색 (2026-10-06 대표)
-     학교 진도대로 → 맞출지 묻기(맞추기·그대로 두기), 오늘의 학습이면 못 누름. 자유 진도설정 → 현황판 학습 관리(시간표 → 과목 진도), 자유 학습이어도 회색인 채 누를 수 있음 */
-  $('paceBtn').insertAdjacentHTML('beforebegin', '<button type="button" class="linkbtn" id="paceSchool" aria-controls="paceAsk">학교 진도대로</button>');
+  /* 오늘 카드 머리 단추 두 개를 위아래로 (2026-10-11 대표 "아이 휴대폰 연결 /해제 버튼을 학교진도대로 버튼이 있는 곳으로 이동하고, 학교진도대로 버튼을 삭제하고,
+     자유진도설정 버튼을 아이 진도변경 버튼으로 수정"): 위 '아이 폰 연결'·'아이 폰 연결 해제'(#kdPill, 글·누름은 src/kidmode.js, 입구는 여기 하나) · 아래 '아이 진도변경' → 현황판 학습 관리 */
+  $('paceBtn').insertAdjacentHTML('beforebegin', '<button type="button" class="linkbtn" id="kdPill" hidden>아이 폰 연결</button>');
   function paceUi(){
-    const f = pace() === 'free', t = f ? '자유 학습' : '오늘의 학습';
-    if ($('todayTitle') && $('todayTitle').textContent !== t) $('todayTitle').textContent = t;
-    if ($('paceBtn').textContent !== '자유 진도설정') $('paceBtn').textContent = '자유 진도설정';
-    if (!f && !$('paceAsk').hidden) $('paceAsk').hidden = true;
-    [['paceSchool', !f], ['paceBtn', f]].forEach(([id, on]) => { const e = $(id); e.classList.toggle('pace-now', on); e.setAttribute('aria-pressed', String(on)); });
-    $('paceSchool').disabled = !f;   // 오늘의 학습이면 '학교 진도대로'는 할 일이 없어 못 누름. '자유 진도설정'은 자유 학습이어도 회색인 채 누르면 학습 관리로 (10-06 대표)
-    $('paceSchool').setAttribute('aria-expanded', String(!$('paceAsk').hidden));
+    if ($('todayTitle') && $('todayTitle').textContent !== '오늘의 학습') $('todayTitle').textContent = '오늘의 학습';
+    if ($('paceBtn').textContent !== '아이 진도변경') $('paceBtn').textContent = '아이 진도변경';
+    $('paceBtn').removeAttribute('aria-controls');   // 묻는 창 #paceAsk 는 없어짐 (창구 P85 ①)
     if (lockReady) lockUi();   // 아래 '진도 막기'를 준비한 뒤부터
   }
   var lockReady = false;
@@ -21674,39 +21797,24 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     if (p === 'free' && pace() === 'school') { try { const H = window.HUB_TODAY || {}; if (H.ssh && H.ssh.keepPos) H.ssh.keepPos(); if (H.math && H.math.keep) H.math.keep(); } catch (e) {} }
     store(PACE, p); paceUi();
   }
-  function paceAsk(on){
-    if (on) {
-      const { out, keep } = schoolSubs();
-      $('paceAskT').textContent = out.length ? '모든 과목 진도를 학교 진도에 맞출까요? 지금 진도는 바뀌어요.' : '학교 진도가 있는 과목이 없어요. 오늘의 학습으로 바꿀까요? 지금 진도는 그대로예요.';
-      $('paceAskN').textContent = out.length && keep.length ? `${keep.join('·')}${(keep[keep.length - 1].charCodeAt(keep[keep.length - 1].length - 1) - 0xAC00) % 28 ? '은' : '는'} 학교 진도가 없어 지금 진도 그대로예요.` : '';
-      $('paceAskN').hidden = !$('paceAskN').textContent;
-      $('paceGo').textContent = out.length ? '맞추기' : '바꾸기';
-    }
-    $('paceAsk').hidden = !on; paceUi();
-    if (on) $('paceNo').focus({ preventScroll: true });
-  }
   $('paceBtn').addEventListener('click', () => {   // 2026-10-04 대표: 현황판 '학습 관리' ① 시간표 → ② 과목 진도 (저장해야 자유 학습)
     if (window.SARANG_DASH && SARANG_DASH.manage) { SARANG_DASH.manage('week'); return; }
     if (pace() === 'school') { setPace('free'); setTab('subj'); say('자유 학습으로 바꿨어요. 과목을 눌러 진도를 정해 주세요.'); }
   });
-  $('paceSchool').addEventListener('click', () => { if (pace() === 'free') paceAsk($('paceAsk').hidden); });
-  $('paceNo').addEventListener('click', () => { paceAsk(false); $('paceSchool').focus({ preventScroll: true }); });
   function toSchoolAll(){
     const { out } = schoolSubs();
     if (out.length && HUB_TODAY.ssh && HUB_TODAY.ssh.toSchool) HUB_TODAY.ssh.toSchool(out);
-    setPace('school');
-    if (out.includes('math') && HUB_TODAY.math && HUB_TODAY.math.toSchool) HUB_TODAY.math.toSchool();   // 학교 진도로 바꾼 뒤(초2·3 수학은 hub_pace 를 보고 자리를 셈)
-    paceAsk(false); paceSnap();
+    if (out.includes('math') && HUB_TODAY.math && HUB_TODAY.math.toSchool) HUB_TODAY.math.toSchool();
+    paceSnap();   // 2026-10-11: 자리만 옮기고 방식은 그대로(방식 하나)
     document.dispatchEvent(new CustomEvent('hub:refresh'));
-    say(out.length ? '학교 진도에 맞췄어요. 이제 오늘의 학습이에요.' : '오늘의 학습으로 바꿨어요.');
+    say(out.length ? '학교 진도쯤으로 맞췄어요.' : '학교 진도가 있는 과목이 없어 그대로예요.');
   }
   /* 학습 관리 2단계 '모든 과목을 학교 진도에 맞추기'의 물음 글 (src/dash.js) */
   function schoolInfo(){
     const { out, keep } = schoolSubs();
-    return { ok: out.length > 0, t: '모든 과목 진도를 학교 진도에 맞출까요? 지금 진도는 바뀌고, 오늘의 학습(학교 진도대로)으로 바뀌어요.',
+    return { ok: out.length > 0, t: '모든 과목 진도를 학교 진도쯤으로 맞출까요? 지금 진도는 바뀌어요. 학교 진도는 우리 단원을 학기 날짜에 나눈 짐작이라 실제 학교와 다를 수 있어요.',
       n: keep.length ? `${keep.join('·')}${(keep[keep.length - 1].charCodeAt(keep[keep.length - 1].length - 1) - 0xAC00) % 28 ? '은' : '는'} 학교 진도가 없어 지금 진도 그대로예요.` : '', go: '맞추기' };
   }
-  $('paceGo').addEventListener('click', () => { toSchoolAll(); $('paceBtn').focus({ preventScroll: true }); });   // 맞춘 뒤 '학교 진도대로'는 회색이라 옆 단추로
   /* 진도가 옮겨졌는지: 과목마다 지금 Day 글(학습지 묶음을 읽는 중 표시는 뺌) */
   const PKEYS = ['kor', 'eng', 'phon', 'math', 'ymath', 'hanja', 'yhan', 'soc', 'sci', 'his', 'wh'];
   const progress = () => PKEYS.map(k => { try { const m = (window.HUB_TODAY || {})[k]; return m && m.info ? String(m.info(false)).replace(/ \((불러오는 중|불러오지 못함|내용 준비 중)\)$/, '') : ''; } catch (e) { return ''; } }).join('|');
@@ -21807,8 +21915,8 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     b.disabled = true; m.textContent = '시간표 PDF를 만드는 중입니다…';
     try {
       const res = await HUB_TODAY.savePdf(HUB_TODAY.ssh.toPdf([timetableCanvas(week)]), '공부시간표.pdf');
-      m.textContent = res.ok ? '시간표 PDF를 저장했습니다.' : res.msg;
-    } catch (er) { m.textContent = '시간표 PDF를 만들지 못했습니다. 다시 눌러 주세요.'; }
+      SARANG_POP.fin(m, res.ok ? '시간표 PDF를 저장했습니다.' : res.msg);
+    } catch (er) { SARANG_POP.fin(m, '시간표 PDF를 만들지 못했습니다. 다시 눌러 주세요.'); }
     finally { b.disabled = false; }
   });
 
@@ -21840,9 +21948,8 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   const vis = e => !!e && (e.offsetParent !== null || (!e.hidden && getComputedStyle(e).position === 'fixed'));   // 아래 메뉴(붙은 칸)는 offsetParent 가 없음
   /* 스마트(과목 줄)·뽑아서 풀기는 같은 무게로 소개 (2026-09-29 주인, 큰 '바로 풀기'는 2026-10-02 없앰). '다른 과목 더 하기'는 보일 때만 */
   const TOUR = [
-    { el: () => [$('paceSchool'), $('paceBtn')], t: '시간표 · 진도', d: () => (pace() === 'free' ? "지금은 부모님이 정한 진도부터 가는 '자유 학습'이에요. " : "지금은 학교 진도에 맞춰 가는 '오늘의 학습'이에요. ")
-      + '지금 쓰는 방식의 단추는 회색이에요. ' + (pace() === 'free' ? "'학교 진도대로'를 누르면 모든 과목을 학교 진도에 맞춰요. '자유 진도설정'을 누르면 학습 관리에서 시간표·진도를 다시 정해요."
-        : "'자유 진도설정'을 누르면 현황판의 학습 관리에서 ① 요일마다 할 과목(시간표) ② 과목마다 시작할 곳(진도)을 차례로 정해요.") },   // 2026-10-04 대표: 시간표·진도 바꾸는 길은 학습 관리 하나
+    { el: () => [$('kdPill'), $('paceBtn')].filter(e => e && !e.hidden), t: '아이 폰 · 진도', d: () => (vis($('kdPill')) ? "'아이 폰 연결'로 아이 폰을 이어 스마트 학습을 아이 폰에서 하게 할 수 있어요. " : '')
+      + "'아이 진도변경'을 누르면 현황판의 학습 관리에서 ① 요일마다 할 과목(시간표) ② 과목마다 시작할 곳(진도)을 차례로 정해요. 정하지 않은 과목은 학교 진도쯤에서 시작해요." },   // 2026-10-11 대표: 방식 하나, 단추 정리
     { el: () => [$('todayList')], t: '오늘의 학습', d: () => '시간표대로 오늘 할 과목과 배울 내용이 모여 있어요. 과목 줄을 누르면 그 과목의 진도·미리보기·교과 과정을 보고, 다 하면 ✓ 표시가 붙어요.' },
     { el: () => [$('todayWays')], t: '스마트 · 전체 뽑아서 풀기', d: () => "스마트 학습도, 프린트 학습도 좋아요. 과목 줄의 '스마트'는 그 과목을 화면에서 풀고 바로 채점해요. '전체 뽑아서 풀기'는 오늘 과목을 PDF 한 파일로 받아 인쇄해요." + (vis($('hubGuideRow')) ? " 옆의 '가이드 PDF 함께 출력'을 켜면 정답과 해설이 든 부모님용 가이드도 한 파일 더 받아요." : '') },
     { el: () => [$('todayPaper')], t: '프린트 출력 가이드', d: () => "프린터가 있을 때와 없을 때 뽑는 방법을 여기서 펴 보세요." },   // 2026-10-03 대표: '프린트 학습할 때' 제목 지우고 이름을 '프린트 출력 가이드'로
@@ -21988,7 +22095,8 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
       try { finishChild(); } finally { ob = null; }
       nyMsg = `새 학년도라 ${nm} 학년을 올렸어요 (${GNAME[n.from]} → ${GNAME[n.to]}). 설정에서 바꿀 수 있어요.`;
     }
-    say(nyMsg);
+    if (document.documentElement.classList.contains('lg-gated')) return;   // 로그인 첫 화면이 덮고 있으면 걷힌 뒤에 한 번만 (팝업이 두 번 뜨지 않게, 2026-10-11)
+    say(nyMsg); nyMsg = '';
   }
   document.addEventListener('sarang:gate', e => { if (nyMsg && !(e.detail && e.detail.on)) { say(nyMsg); nyMsg = ''; } });   // 로그인 첫 화면이 걷힌 뒤에도 한 번 더
   const liveCards = () => { cardsLive = true; newYear(); if (view === 'home' && !ob) { renderHome(); tourMaybe(); } paceSnap(); setTimeout(notify, 400); };   // 오늘 목록을 그리고 안내가 뜰지 정한 뒤
@@ -22086,6 +22194,8 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   /* 뽑아서 풀기: 오늘 과목 전부. 줄의 '프린트'·'다른 과목 더 하기'는 HUB_TODAY.printSubs([과목], t) (t=false 는 오늘 묶음이 아닌 지금 Day) */
   $('todayPrint').addEventListener('click', () => printSubs(todays(), true));
   HUB_TODAY.printSubs = (list, t) => printSubs(list, t);
+  /* 끝난 결과(저장했어요·못 했어요)는 팝업 + '확인' (2026-10-11 대표 카드 ②, src/pop.js). 'PDF를 만드는 중입니다…' 같은 진행 글만 이 줄에 */
+  const fin = m => { if (window.SARANG_POP) SARANG_POP.fin($('todayMsg'), m); else $('todayMsg').textContent = m; };
   async function printSubs(list, t){
     if (!list.length || busy) return;
     busy = true; render(); $('todayMsg').textContent = 'PDF를 만드는 중입니다…';
@@ -22114,11 +22224,11 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
       const part = (n, one = 1) => n > one ? ` (쪽이 많아 ${n}개 파일로 나눠 저장했어요)` : '';
       const tried = [], sheets = {};   // 쪽을 만들어 본 과목 (취소로 멈추면 뒤 과목은 안 만듦) / 과목마다 뽑은 쪽 수 (현황판 '뽑아서 푼 학습지 n장')
       const sv = await saveParts(t ? '오늘의학습' : '학습지', list, async s => { tried.push(s); const m = HUB_TODAY[s]; if (m.prepare) await m.prepare(); const p = m.pages(t); if (p.length) { used.push(s); sheets[s] = p.length; } return p; });   // 오늘의 학습: 주 횟수에 맞춘 k Day 묶음 (t=false: 지금 Day)
-      if (!sv.files && !sv.fail) { $('todayMsg').textContent = '오늘 출력할 학습지가 아직 준비 중이에요.'; return; }
+      if (!sv.files && !sv.fail) { fin('오늘 출력할 학습지가 아직 준비 중이에요.'); return; }
       const res = sv.res, saved = sv.saved;
       const skip = tried.filter(s => !used.includes(s)).map(s => NAME[s]), note = skip.length ? ` (학습지가 아직 준비 중이라 빠진 과목: ${skip.join('·')})` : '';   // 말없이 빠지지 않게
       const miss = list.filter(s => !saved.includes(s) && !(tried.includes(s) && !used.includes(s))).map(s => NAME[s]);   // 저장 안 된 파일의 과목 + 멈춰서 못 만든 과목
-      $('todayMsg').textContent = res.ok ? res.msg + part(sv.files) + note
+      const msg = res.ok ? res.msg + part(sv.files) + note
         : sv.files ? `PDF ${sv.files}개는 저장했고 ${sv.fail}개는 저장하지 못했어요 (${res.msg.replace(/\.$/, '')}). 저장한 ${saved.map(s => NAME[s]).join('·')}만 오늘 한 공부로 적었어요. 저장하지 못한 과목(${miss.join('·')})은 줄의 ‘프린트’로 다시 저장해 주세요.` + note
         : res.msg;
       /* 종이로 했음(저장된 과목만): 진도·복습 이력(done) → 줄에 '다 했어요 · 프린트'·9시·1시 알림 끔 (src/screen-frame.js 한 길) */
@@ -22129,10 +22239,10 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
       if (res.ok && HUB_TODAY.ssh.guideOn() && gsubs.length) {
         $('todayMsg').textContent = '부모님 가이드 PDF를 만드는 중입니다…';
         const g = await saveParts('부모가이드', gsubs, s => HUB_TODAY[s].guidePages(t));
-        $('todayMsg').textContent = (g.res.ok ? '학습지와 부모님 가이드 PDF를 저장했습니다.' + part(sv.files + g.files, 2) : `학습지는 저장했고, 가이드는 ${g.files ? `PDF ${g.files}개만 저장했어요. ` : ''}` + g.res.msg) + note;
-      }
+        fin((g.res.ok ? '학습지와 부모님 가이드 PDF를 저장했습니다.' + part(sv.files + g.files, 2) : `학습지는 저장했고, 가이드는 ${g.files ? `PDF ${g.files}개만 저장했어요. ` : ''}` + g.res.msg) + note);
+      } else fin(msg);
     } catch (e) {
-      $('todayMsg').textContent = 'PDF를 만들지 못했습니다. 다시 눌러 주세요.';
+      fin('PDF를 만들지 못했습니다. 다시 눌러 주세요.');
     } finally { busy = false; render(); }
   }
   /* 과목 화면에서 단원·Day를 바꾸면 오늘의 학습 안내도 바로 바뀜 */
@@ -23220,7 +23330,7 @@ if (window.SARANG_SCREEN) reg(); else document.addEventListener('DOMContentLoade
 
 /* ===== 화면 공부: 영단어 (개발 3) — 설명은 docs/화면공부/vocab.md =====
    그날 학습지(원본·뜻 가리기·단어 가리기·복습지)와 같은 단어로: 단어 익히기(듣기·가리기) → 따라 쓰기(공용 펜, 영어 4줄)
-   → 뜻 고르기 → 철자 쓰기 → 복습(① 뜻 고르기 ② 철자). '다 풀었어요'에 채점, '공부 끝'에 ctx.done(result) */
+   → 뜻 고르기 → 철자 쓰기 → 문장 빈칸(6세~초2에서 배운 단어, 기초 단계) → 복습(① 뜻 고르기 ② 철자). '다 풀었어요'에 채점, '공부 끝'에 ctx.done(result) */
 (function(){
 const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const shuffle = a => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
@@ -23247,10 +23357,11 @@ function open(ctx){
   /* k = 6세~초2에서 배운 단어 (2026-10-11 대표): 익히기·따라 쓰기·뜻 고르기 없이 철자 쓰기만. 단어가 없는 날(복습만)은 복습만 */
   const fresh = words.filter(w => !w.k), kn = words.length - fresh.length;
   const R = D.review && D.review.q1 && D.review.q1.length ? D.review : null;
-  /* 문항: c = 뜻 고르기, s = 철자 쓰기 (복습 ①은 뜻 고르기, ②는 철자) */
+  /* 문항: c = 뜻 고르기, s = 철자 쓰기, b = 문장 빈칸 (6세~초2에서 배운 단어 중 문장이 있는 것, w.s = [빈칸 문장, 정답, 우리말, 예문], 2026-10-11) (복습 ①은 뜻 고르기, ②는 철자) */
   const Q = [
     ...shuffle(fresh).map(w => ({ k: 'c', part: 'choice', w, ch: choices(w, pool) })),
     ...shuffle(words).map(w => ({ k: 's', part: 'spell', w })),
+    ...shuffle(words.filter(w => w.s)).map(w => ({ k: 'b', part: 'sent', w })),
     ...(R ? [...R.q1.map(w => ({ k: 'c', part: 'review', w, ch: choices(w, D.pool && D.pool.length >= 8 ? D.pool : [...R.q1, ...R.q2, ...pool]) })), ...R.q2.map(w => ({ k: 's', part: 'review', w }))] : [])
   ];
   Q.forEach((q, i) => { q.i = i; q.pick = null; q.val = ''; });
@@ -23258,7 +23369,14 @@ function open(ctx){
   const sound = () => !!(T && T.ok());
   const say = (t, key) => T && T.ok() && T.run(key || 'sv', [{ t }]);
   const spk = (t, lbl) => `<button type="button" class="sv-spk" data-svsay="${esc(t)}" aria-label="${esc(lbl || t)} 듣기">${SPK}</button>`;
-  const qhtml = q => q.k === 'c'
+  const sent = words.filter(w => w.s).length;
+  /* 문장 빈칸: 문장(빈칸은 밑줄)·우리말·힌트(첫 글자·글자 수) 아래에 쓰는 칸. 대소문자는 가리지 않음 */
+  const bhtml = q => { const [bl, ans, ko, ex] = q.w.s, p = bl.split('___');
+    return `<div class="sv-q sv-bq" data-svq="${q.i}"><div class="sv-qh"><b class="sv-no">${q.n}</b><span class="sv-bs" lang="en">${esc(p[0])}<span class="sv-blank" aria-label="빈칸">${'\u00a0'.repeat(Math.max(4, ans.length + 2))}</span>${esc(p[1] || '')}</span>${spk(ex, q.n + '번 문장')}<i class="sv-mark"></i></div>`
+      + `<div class="sv-bko">${esc(ko)}<small>힌트: 첫 글자 <b lang="en">${esc(ans[0])}</b> · ${ans.length}글자</small></div>`
+      + `<input type="text" class="sv-in" data-svq="${q.i}" lang="en" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="next" aria-label="${q.n}번 빈칸에 들어갈 영어 단어">`
+      + `<div class="sv-ans" hidden>정답: <b lang="en">${esc(ans)}</b></div></div>`; };
+  const qhtml = q => q.k === 'b' ? bhtml(q) : q.k === 'c'
     ? `<div class="sv-q" data-svq="${q.i}"><div class="sv-qh"><b class="sv-no">${q.n}</b><span class="sv-w" lang="en">${esc(q.w.w)}</span>${spk(q.w.w)}<i class="sv-mark"></i></div>`
       + `<div class="sv-ch">${q.ch.map((c, k) => `<button type="button" data-svq="${q.i}" data-svk="${k}">${esc(c.m)}</button>`).join('')}</div></div>`
     : `<div class="sv-q" data-svq="${q.i}"><div class="sv-qh"><b class="sv-no">${q.n}</b><span class="sv-m">${esc(q.w.m)}</span>${spk(q.w.w, q.n + '번 단어')}<i class="sv-mark"></i></div>`
@@ -23280,6 +23398,7 @@ function open(ctx){
       <div class="sv-pad" data-svpad></div><div class="sv-pcount" data-svpc></div></section>` : ''}
     ${fresh.length ? sec(num() + '뜻 고르기', '단어에 맞는 뜻을 누르세요', part('choice')) : ''}
     ${words.length ? sec(num() + '철자 쓰기', '뜻을 보고(소리를 듣고) 영어 단어를 쓰세요' + (kn ? ` · 6세~초2에서 배운 ${kn}단어는 바로 쓰기로만` : ''), part('spell')) : ''}
+    ${sent ? sec(num() + '문장 빈칸', '6세~초2에서 배운 단어를 문장 속에 써 보세요', part('sent')) : ''}
     ${R ? sec(num() + '복습', esc(R.from) + ' 단어 · ① 뜻 고르기 ② 철자 쓰기', part('review')) : ''}
     <section class="card sv-card sv-end"><div class="sv-res" data-svres hidden></div><div class="sv-msg" data-svmsg role="status"></div>
       <div class="sv-btns"><button type="button" class="sv-go" data-svgrade>다 풀었어요</button><button type="button" data-svretry hidden>틀린 것 다시 풀기</button><button type="button" class="sv-go" data-svfinish hidden>공부 끝</button><button type="button" class="sv-listen" data-svlisten hidden>오늘 배운 것을 다시 한 번 들으면서 공부해 봐요 (영어 듣기)</button></div></section>
@@ -23300,7 +23419,7 @@ function open(ctx){
   pen();
 
   const answered = q => q.k === 'c' ? q.pick != null : !!q.val.trim();
-  const right = q => q.k === 'c' ? q.ch[q.pick] === q.w : norm(q.val) === norm(q.w.w);
+  const right = q => q.k === 'c' ? q.ch[q.pick] === q.w : norm(q.val) === norm(q.k === 'b' ? q.w.s[1] : q.w.w);
   function mark(){
     Q.forEach(q => {
       const box = $(`.sv-q[data-svq="${q.i}"]`), g = st.graded || q.done === false, ok = g && right(q);
@@ -23327,13 +23446,13 @@ function open(ctx){
     if (first) {
       const cnt = p => { const l = part(p); return [l.filter(right).length, l.length]; };
       st.result = { subj: 'vocab', level: D.level, day: D.day, score: Q.filter(right).length, total: Q.length,
-        parts: { choice: cnt('choice'), spell: cnt('spell'), review: cnt('review') },
+        parts: { choice: cnt('choice'), spell: cnt('spell'), sent: cnt('sent'), review: cnt('review') },
         wrong: [...new Set(Q.filter(q => !right(q)).map(q => q.w))].map(w => ({ w: w.w, m: w.m })) };
     }
     const r = st.result, now = Q.filter(right).length;
     $('[data-svres]').hidden = false;
     $('[data-svres]').innerHTML = `<div class="sv-score"><b>${r.score}</b> / ${r.total}${now !== r.score ? ` <small>(다시 풀어 ${now}개 맞음)</small>` : ''}</div>`
-      + `<div class="sv-parts">${[fresh.length ? `뜻 고르기 ${r.parts.choice.join('/')}` : '', words.length ? `철자 ${r.parts.spell.join('/')}` : '', R ? `복습 ${r.parts.review.join('/')}` : ''].filter(Boolean).join(' · ')}</div>`
+      + `<div class="sv-parts">${[fresh.length ? `뜻 고르기 ${r.parts.choice.join('/')}` : '', words.length ? `철자 ${r.parts.spell.join('/')}` : '', sent ? `문장 ${r.parts.sent.join('/')}` : '', R ? `복습 ${r.parts.review.join('/')}` : ''].filter(Boolean).join(' · ')}</div>`
       + (r.wrong.length ? `<div class="sv-wrong"><div class="label">틀린 단어 ${r.wrong.length}개</div>${r.wrong.map(w => `<div><b lang="en">${esc(w.w)}</b><span>${esc(w.m)}</span></div>`).join('')}</div>` : '<div class="info">모두 맞혔어요!</div>');
     $('[data-svmsg]').textContent = '';
     $('[data-svgrade]').hidden = true; $('[data-svfinish]').hidden = false; $('[data-svlisten]').hidden = false; $('[data-svretry]').hidden = !Q.some(q => !right(q));
@@ -26964,7 +27083,7 @@ window.DONATE_CORE = (function(){
     const list = all(); list.push(item);
     if (!ok || !save(list)) {
       busy = false; renderSend();
-      $('dnMsg').className = 'status dn-done bad'; $('dnMsg').textContent = ok ? '이 기기에 저장하지 못했어요. 저장 공간을 확인하고 다시 눌러 주세요.' : '그림을 저장하지 못했어요. 그림을 빼고 다시 보내 주세요.';
+      SARANG_POP.fin($('dnMsg'), ok ? '이 기기에 저장하지 못했어요. 저장 공간을 확인하고 다시 눌러 주세요.' : '그림을 저장하지 못했어요. 그림을 빼고 다시 보내 주세요.');   // 결과는 팝업 (2026-10-11)
       return;
     }
     /* 보낸 뒤: 문제 칸은 비우고(과목·학년·단원·틀은 그대로), 동의는 다음 문제에서 다시 */
@@ -26980,11 +27099,12 @@ window.DONATE_CORE = (function(){
     const dy = $('dnSend').getBoundingClientRect().top - keepAt; if (Math.abs(dy) > 0.5) scrollBy(0, dy);
     /* 안내: 서버 응답을 받은 뒤에만 '보냈어요' (검수 v29 R08). 전송기가 없는 시험판은 이 기기에 저장만 */
     const say = t => { $('dnMsg').className = 'status dn-done good'; $('dnMsg').textContent = t; };
-    if (!uploader) { say(`이 기기에 저장했어요. ${LOCAL_NOTE}`); sync(); return; }
+    const fin = t => SARANG_POP.fin($('dnMsg'), t);   // 끝난 결과는 팝업 + '확인' (2026-10-11 대표), '보내는 중이에요…'만 줄에
+    if (!uploader) { fin(`이 기기에 저장했어요. ${LOCAL_NOTE}`); sync(); return; }
     say('이 기기에 저장했어요. 사랑교육으로 보내는 중이에요…');
     await sync();
     const y = all().find(z => z.id === id);
-    if (state && $('dnMsg').textContent.startsWith('이 기기에 저장했어요. 사랑교육으로')) say(y && y.sync === 'sent' ? '보냈어요, 검수 후 학습지에 들어갈 수 있어요' : '이 기기에 저장했어요. 인터넷이 연결되면 사랑교육으로 보내요.');
+    if (state && $('dnMsg').textContent.startsWith('이 기기에 저장했어요. 사랑교육으로')) fin(y && y.sync === 'sent' ? '보냈어요, 검수 후 학습지에 들어갈 수 있어요' : '이 기기에 저장했어요. 인터넷이 연결되면 사랑교육으로 보내요.');
   }
 
   /* ---------- 열기·닫기 (화면 공부 틀과 같은 방식) ---------- */
@@ -27535,10 +27655,7 @@ window.DONATE_CORE = (function(){
 
   /* ---------- 설정 맨 위 '계정' 칸 ---------- */
   function openSettings(){ const s = $('settings'), b = $('setBtnHub'); if (s && s.hidden && b) b.click(); }
-  function toast(t){
-    let el = $('lgToast'); if (!el) { el = document.createElement('div'); el.id = 'lgToast'; el.className = 'lg-toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
-    el.textContent = t; el.hidden = false; clearTimeout(el._t); el._t = setTimeout(() => { el.hidden = true; }, 6000);
-  }
+  function toast(t){ if (window.SARANG_POP) SARANG_POP.say(t); }   // 2026-10-11 대표: 작게 떴다 사라지는 글 → 팝업 + '확인' (src/pop.js). acct·school 도 이걸 씀
   /* ---------- 첫 화면: 가입·로그인 먼저 (2026-10-01 대표: "앱 설치 후 최초에 바로 진도 설정하는 것이 아니라 회원가입/로그인부터", 로그인정책서 v2 3절) ----------
      로그인할 수 있는 주소(HOST_OK)에서 이 기기에 로그인 기록(sarang_sync.uid)이 없으면 다른 칸을 모두 가리고 이 화면만 보임(html.lg-gated, login.css).
      구글로 시작 → 가입 마무리(동의 3개) → 계정에 아이 정보가 있으면 받아 와 바로 오늘의 학습(settle → apply), 없으면 학년·과목·진도·시간표(가입 칸).
@@ -27688,7 +27805,7 @@ window.DONATE_CORE = (function(){
      빌드 때 넣음. 키가 없거나 브라우저가 못 하면 단추를 보이지 않음. 알림 글은 sw.js 가 고정 문구로 띄움(서버는 글을 안 보냄) —
      sw.js 가 아이 별명·보낸 사람을 알 수 있게 이 기기 캐시(sarang-push)에 작은 설정을 둠.
    - 응원(웹 푸시를 못 받는 기기도): 아이 폰을 열 때 아이 문서 cheer.lastId → cheers/{id} 하나를 읽어 처음 보는 응원이면 첫 화면 위 한 줄.
-     부모: 현황판 맨 위 아이 폰 줄 아래 '오늘 ○○에게 응원을 보냈어요' (src/kidmode.js 가 SARANG_ACCT.cheerLine 을 부름). */
+     부모: 현황판 맨 위 한 줄 '오늘 ○○에게 응원을 보냈어요' (src/kidmode.js 가 SARANG_ACCT.cheerLine 을 부름). */
 (function(){
   const L = () => window.SARANG_LOGIN, $ = id => document.getElementById(id);
   const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
@@ -28180,10 +28297,18 @@ window.DONATE_CORE = (function(){
   const josa = (w, a, b) => { const c = String(w || '').charCodeAt(String(w || '').length - 1) - 0xAC00; return c >= 0 && c <= 11171 && c % 28 ? a : b; };   // 받침: 이/가
   const kidDev = () => L() && L().kidDev ? L().kidDev() : null;
   const isKid = () => document.documentElement.classList.contains('kid-dev') && !!kidDev();
-  function toast(t){
-    let el = $('lgToast'); if (!el) { el = document.createElement('div'); el.id = 'lgToast'; el.className = 'lg-toast'; el.setAttribute('role', 'status'); document.body.appendChild(el); }
-    el.textContent = t; el.hidden = false; clearTimeout(el._t); el._t = setTimeout(() => { el.hidden = true; }, 5000);
+  function toast(t){ if (window.SARANG_POP) SARANG_POP.say(t); }   // 2026-10-11 대표: 작게 떴다 사라지는 글 → 팝업 + '확인' (src/pop.js)
+  /* 아이 폰을 연결한 아이의 부모 폰: 과목 화면·알림 줄의 '바로 풀기' 단추 글을 '스마트 학습은 아이 폰에서 해요'로 늘 바꿔 둠, 처음 한 번만 팝업 (대표 10-11 10:35 카드 ①).
+     오늘 카드 과목 줄은 전부터 '아이 폰 스마트' 글 (src/screen-frame.js act) */
+  const KP_SEEN = 'sarang_kpnote', KP_TXT = '스마트 학습은 아이 폰에서 해요';
+  function kpLabels(){
+    const on = !isKid() && !!(K() && linkedOf(K().cur()));
+    document.querySelectorAll('#app [data-scr]:not(.td-go):not(.scr-go-next), #app [data-nb="scr"]').forEach(b => {
+      if (on) { if (b.dataset.kpl == null) b.dataset.kpl = b.textContent; if (b.textContent !== KP_TXT) b.textContent = KP_TXT; b.classList.add('kp-off'); b.setAttribute('aria-disabled', 'true'); }
+      else if (b.dataset.kpl != null) { b.textContent = b.dataset.kpl; delete b.dataset.kpl; b.classList.remove('kp-off'); b.removeAttribute('aria-disabled'); }
+    });
   }
+  document.addEventListener('hub:refresh', () => setTimeout(kpLabels, 0));
   /* 창 하나 (가운데 카드). Esc·바깥 누름 = 닫기 (닫을 수 있을 때만) */
   function dialog(id, label){
     let d = $(id);
@@ -28228,7 +28353,7 @@ window.DONATE_CORE = (function(){
     linkedNow: () => !isKid() && !!(K() && linkedOf(K().cur())),
     hwOk: () => hwAge(),   // 지금 고른 아이에게 숙제를 보낼 수 있는 학년인지 (src/dash.js 메뉴, src/wrong.js 보내기)
     hwWaiting: () => !isKid() && hwKid !== null && hwList === null && !hwFail,   // 부모 폰이 보낸 숙제를 읽는 중 (src/game.js 카드 글, 창구 G7 대조 2)
-    note(){ const n = K() ? K().label(K().now()) : '아이'; toast(`${n}${josa(n, '은', '는')} 아이 폰에서 스마트 학습을 해요. 부모 폰에서는 프린트·진도 설정·현황판을 쓸 수 있어요.`); },
+    note(){ kpLabels(); let seen = false; try { seen = localStorage.getItem(KP_SEEN) === '1'; localStorage.setItem(KP_SEEN, '1'); } catch (e) {} if (seen) return; const n = K() ? K().label(K().now()) : '아이'; toast(`${n}${josa(n, '은', '는')} 아이 폰에서 스마트 학습을 해요. 부모 폰에서는 프린트·진도 설정·현황판을 쓸 수 있어요.`); },
     get devices(){ return devs; },
     /* 틀린 문제 모음에서 숙제로 보내기 (src/wrong.js, 2026-10-08): 과목(서버 키)마다 한 칸, 문제는 떼어 둔 그대로 글(qj)로 (Firestore 겹 배열 피함) */
     sendState: () => !hwAge() ? 'young' : !L() || !L().hostOk || !parentReady() ? 'nologin' : !(K() && linkedOf(K().cur())) ? 'nolink' : 'ok',
@@ -28246,13 +28371,19 @@ window.DONATE_CORE = (function(){
     }
   };
 
-  /* ---------- 현황판 맨 위 '아이 폰' 줄 (연결·끊기 입구는 여기 하나, 2026-10-05 대표 "설정이 아닌 현황판 상단으로") ----------
-     지금 보는 아이가 연결 안 됨: '아이 폰을 아직 연결하지 않으셨나요?' → 누르면 연결 창. 연결됨: 한 줄 + 연결 끊기(한 번 더 물음).
-     목록에서 뺀 아이의 폰이 아직 연결돼 있으면(서버 removeChild 배포 전에 뺀 아이) 그 줄 + 연결 끊기 */
+  /* 아이 폰 연결·해제: 오늘 카드 머리 '아이 폰 연결'/'아이 폰 연결 해제' 단추(#kdPill, src/hub-ui.js) 하나가 입구 (2026-10-11 대표, 전에는 현황판 맨 위 줄 10-05).
+     끊기 물음·목록에서 뺀 아이의 폰 줄은 머리 바로 아래 칸(#kdSet)에 필요할 때만 */
   function mountSet(){
-    const box = $('dbTop'); if (!box || box.dataset.kd || isKid()) return;
-    box.dataset.kd = '1';
-    box.insertAdjacentHTML('afterbegin', '<div id="kdSet" class="kd-top"></div>');
+    const head = $('today') && $('today').querySelector('.today-head'), pill = $('kdPill');
+    if (!head || !pill || $('kdSet') || isKid()) return;
+    head.insertAdjacentHTML('afterend', '<div id="kdSet" class="kd-top kd-under" hidden></div>');
+    pill.addEventListener('click', () => {
+      const k = K() && K().now && K().now(); if (!k) return;
+      const d = linkedOf(k.id);
+      if (!d) { if (!parentReady()) return toast('설정 › 계정에서 로그인하고 가입을 마치면 아이 폰을 연결할 수 있어요.'); return openInvite(k.id); }
+      cutAsk = cutAsk === d.id ? null : d.id; renderSet();
+      const b = $('kdSet').querySelector(`[data-kdkeep]`); if (cutAsk && b) b.focus({ preventScroll: true });
+    });
     $('kdSet').addEventListener('click', e => {
       const a = e.target.closest('[data-kdlink]'), c = e.target.closest('[data-kdcut]');
       if (a) {
@@ -28270,14 +28401,14 @@ window.DONATE_CORE = (function(){
   }
   const PHONE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg>';
   function renderSet(){
-    const box = $('kdSet'); if (!box) return;
-    let h = '';
+    const box = $('kdSet'), pill = $('kdPill'); if (!box || !pill) return;
+    let h = '', pt = '';
     const k = K() && K().now && K().now();
-    if (L() && L().hostOk && k && !(parentReady() && devs === null)) {
+    if (L() && L().hostOk && k && !isKid() && !(parentReady() && devs === null)) {
       const n = esc(K().label(k)), d = linkedOf(k.id);
-      if (!d) h = `<button type="button" class="kd-ask-top" data-kdlink="${esc(k.id)}">${PHONE}<span><b>아이 폰을 아직 연결하지 않으셨나요?</b><small>${n}${josa(K().label(k), '이', '가')} 아이 폰으로 ${what(k.id)}${josa(what(k.id), '을', '를')} 하게 해 보세요.</small></span><i aria-hidden="true">›</i></button>`;
-      else if (cutAsk === d.id) h = `<div class="kd-line kd-ask">${PHONE}<span><b>${n} 폰 연결을 끊을까요?</b><small>끊으면 그 폰은 첫 화면으로 돌아가고, 부모 폰에서 다시 모두 쓸 수 있어요.</small></span><div class="kd-ask-btns"><button type="button" class="linkbtn" data-kdkeep>그대로 두기</button><button type="button" class="linkbtn kd-cut" data-kdcut="${esc(d.id)}">연결 끊기</button></div></div>`;
-      else h = `<div class="kd-line">${PHONE}<span><b>${n} 폰 <em class="kd-on">연결됨</em></b><small>${esc(d.label || '아이 폰')}${ms(d.linkedAt) ? ` · ${md(ms(d.linkedAt))} 연결` : ''} · ${what(k.id)}${josa(what(k.id), '은', '는')} 아이 폰에서 해요</small>${cheerOf(k.id) ? `<small class="kd-cheerln">${esc(cheerOf(k.id))}</small>` : ''}</span><button type="button" class="linkbtn" data-kdcut="${esc(d.id)}">연결 끊기</button></div>`;
+      pt = d ? '아이 폰 연결 해제' : '아이 폰 연결';
+      if (d && cutAsk === d.id) h = `<div class="kd-line kd-ask">${PHONE}<span><b>${n} 폰 연결을 끊을까요?</b><small>${esc(d.label || '아이 폰')}${ms(d.linkedAt) ? ` · ${md(ms(d.linkedAt))} 연결` : ''}. 끊으면 그 폰은 첫 화면으로 돌아가고, 부모 폰에서 다시 모두 쓸 수 있어요.</small></span><div class="kd-ask-btns"><button type="button" class="linkbtn" data-kdkeep>그대로 두기</button><button type="button" class="linkbtn kd-cut" data-kdcut="${esc(d.id)}">연결 끊기</button></div></div>`;
+      else if (d && cutAsk && cutAsk !== d.id && !(devs || []).some(x => x.id === cutAsk)) cutAsk = null;
       /* 목록에 없는 아이의 폰 (뺀 아이) */
       const ids = new Set(K().list().map(x => x.id));
       (devs || []).filter(x => !ids.has(x.childId)).forEach(x => {
@@ -28287,10 +28418,33 @@ window.DONATE_CORE = (function(){
       });
     }
     if (box.dataset.h !== h) { box.dataset.h = h; box.innerHTML = h; box.hidden = !h; }
+    if (pill.textContent !== (pt || '아이 폰 연결')) pill.textContent = pt || '아이 폰 연결';
+    if (pill.hidden === !!pt) pill.hidden = !pt;
+    pill.setAttribute('aria-expanded', String(!!h));
+    cheerTop();
+  }
+  /* 현황판 맨 위: 오늘 응원 한마디가 갔으면 그 한 줄만 (연결·끊기 단추는 오늘 카드 머리로 옮김, 2026-10-11) */
+  function cheerTop(){
+    const top = $('dbTop'); if (!top) return;
+    const k = K() && K().now && K().now(), d = k && !isKid() && L() && L().hostOk ? linkedOf(k.id) : null, t = d ? cheerOf(k.id) : '';
+    let el = $('kdCheer');
+    const show = !!t, now = !!el && !el.hidden;
+    if (!show && !now) return;
+    const a = top.nextElementSibling || top, y = a.getBoundingClientRect().top, st = document.documentElement.style;   // 늦게 붙거나 빠져도 보던 자리는 그대로 (오늘 공부 알림과 같음)
+    st.overflowAnchor = 'none';
+    if (!show) el.hidden = true;
+    else {
+      if (!el) { top.insertAdjacentHTML('afterbegin', `<div id="kdCheer" class="kd-line kd-cheer-top">${PHONE}<span><small class="kd-cheerln"></small></span></div>`); el = $('kdCheer'); }
+      const sm = el.querySelector('small'); if (sm.textContent !== t) sm.textContent = t;
+      if (el.hidden) el.hidden = false;
+    }
+    if (scrollY > 0 && a.offsetParent) window.scrollBy(0, a.getBoundingClientRect().top - y);
+    st.overflowAnchor = '';
   }
   /* 오늘 보낸 응원 한 줄 (응원 한마디, 서버 cheerDaily → 아이 문서 cheer.sentAt). 현황판을 열 때 아이마다 한 번 읽음 (src/acct.js cheerLine) */
   let cheerAt = {};
   document.addEventListener('db:mounted', () => { cheerAt = {}; mountSet(); renderSet(); });
+  document.addEventListener('hub:refresh', () => { if (!$('kdSet')) { mountSet(); renderSet(); } });   // 오늘 카드 머리가 늦게 생겨도
   function cheerOf(id){
     if (cheerAt[id] !== undefined || !parentReady() || !window.SARANG_ACCT) return cheerAt[id] || '';
     cheerAt[id] = '';
@@ -28304,7 +28458,7 @@ window.DONATE_CORE = (function(){
     const n = K().label(k), d = dialog('kdNewDlg', '아이 폰 연결');
     fill(d, `<h3>${esc(n)} 폰도 지금 연결할까요?</h3>
       <p class="kd-p">연결하면 ${esc(n)}${josa(n, '은', '는')} 아이 폰에서 ${what(k.id)}${josa(what(k.id), '을', '를')} 하고, 부모 폰에서는 프린트·진도 설정·현황판을 써요.</p>
-      <p class="kd-p kd-later">나중에 하려면 현황판 맨 위 '아이 폰을 아직 연결하지 않으셨나요?'를 눌러 주세요.</p>
+      <p class="kd-p kd-later">나중에 하려면 '오늘의 학습' 카드 위 '아이 폰 연결'을 눌러 주세요.</p>
       <div class="kd-btns"><button type="button" class="kd-b" data-kdnew="later">나중에</button><button type="button" class="kd-b pri" data-kdnew="now">지금 연결하기</button></div>`, '[data-kdnew="now"]');
     d.querySelector('.kd-card').onclick = e => { const b = e.target.closest('[data-kdnew]'); if (!b) return; d.close(); if (b.dataset.kdnew === 'now') openInvite(k.id); };
     d.open();
@@ -28497,7 +28651,7 @@ window.DONATE_CORE = (function(){
   }
   async function hwClick(e){
     const b = e.target.closest('button'); if (!b) return;
-    if (b.dataset.hwset !== undefined) { const h = $('kdHwDlg'); if (h && !h.hidden) h.close(); openInvite(K().cur()); return; }   // 연결 입구는 현황판 맨 위로 옮겨져 설정에는 연결 칸이 없음: 그 자리에서 바로 연결 창
+    if (b.dataset.hwset !== undefined) { const h = $('kdHwDlg'); if (h && !h.hidden) h.close(); openInvite(K().cur()); return; }   // 연결 입구는 오늘 카드 머리 '아이 폰 연결'(10-11, 전에는 현황판 맨 위)로 옮겨져 설정에는 연결 칸이 없음: 그 자리에서 바로 연결 창
     if (b.dataset.hwfrom) { hwFrom = b.dataset.hwfrom; try { sessionStorage.setItem('sarang_hwfrom', hwFrom); } catch (er) {} return paintHw(hwEl); }
     if (b.dataset.hwq) { hwMsg = b.dataset.hwq; return paintHw(hwEl); }
     if (b.dataset.hwtype) { hwType = b.dataset.hwtype; hwErr = ''; return paintHw(hwEl); }
@@ -28527,7 +28681,7 @@ window.DONATE_CORE = (function(){
       try {
         await A().homework.send(K().cur(), { from: hwFrom, message: hwMsg.trim(), dateKey: ymd(), items });
         hwMsg = ''; hwPick = null; hxPick = null; toast('숙제를 보냈어요. 아이 폰에서 열면 여기에 바로 떠요.');
-      } catch (er) { console.warn('숙제 보내기 실패', er && er.code); hwErr = '숙제를 보내지 못했어요. 인터넷을 확인하고 다시 눌러 주세요.'; }
+      } catch (er) { console.warn('숙제 보내기 실패', er && er.code); toast('숙제를 보내지 못했어요. 인터넷을 확인하고 다시 눌러 주세요.'); }
       hwBusy = false; paintHw(hwEl);
     }
   }
@@ -28546,7 +28700,7 @@ window.DONATE_CORE = (function(){
       m.insertAdjacentHTML('afterend', `<button type="button" class="wr-entry kd-hwgo" id="kdHwGo"><span class="wr-ic">${SEND}</span><span class="wr-t"><b id="kdHwGoT"></b><small>오늘 학습 · 모의시험 · 영단어 퀴즈를 아이 폰으로</small></span><i class="wr-go" aria-hidden="true">›</i></button>`);
       b = $('kdHwGo'); b.addEventListener('click', hwSheet);
     }
-    const w = $('wrEntry'); if (w && b.nextElementSibling !== w) w.before(b);   // 늘 '틀린 문제 모음' 바로 위
+    if (m.nextElementSibling !== b) m.after(b);   // 늘 '전체 뽑아서 풀기' 글 줄 바로 아래
     b.hidden = false;
     const t = `${K() ? K().label(K().now()) : '아이'}에게 숙제 보내기`; if ($('kdHwGoT').textContent !== t) $('kdHwGoT').textContent = t;
   }
@@ -29472,13 +29626,13 @@ window.DONATE_CORE = (function(){
       flash('저장했어요.');
     } catch (e) {
       console.warn('학교 저장 실패', e && (e.code || e.message)); if (L().gone && L().gone(e)) return;
-      F.busy = false; F.msg = srv(e) || '저장하지 못했어요. 인터넷을 확인하고 다시 눌러 주세요.'; F.bad = true; paint();
+      F.busy = false; F.msg = ''; F.bad = false; paint(); flash(srv(e) || '저장하지 못했어요. 인터넷을 확인하고 다시 눌러 주세요.');   // 결과는 팝업 (2026-10-11)
     }
   }
   async function clearAll(){
     F.busy = true; paint();
     try { await fn('setChildSchool', { childId: cid(), school: null }); F.busy = false; mode = 'home'; S.info = null; S.at = 0; await load(true); flash('학교 정보를 지웠어요.'); }
-    catch (e) { console.warn('학교 지우기 실패', e && (e.code || e.message)); if (L().gone && L().gone(e)) return; F.busy = false; F.askClear = false; F.msg = srv(e) || '지우지 못했어요. 인터넷을 확인하고 다시 해 주세요.'; F.bad = true; paint(); }
+    catch (e) { console.warn('학교 지우기 실패', e && (e.code || e.message)); if (L().gone && L().gone(e)) return; F.busy = false; F.askClear = false; F.msg = ''; F.bad = false; paint(); flash(srv(e) || '지우지 못했어요. 인터넷을 확인하고 다시 해 주세요.'); }
   }
   /* 학교생활 화면의 하교 알림 스위치: 지금 값 그대로 + notify 만 바꿔 저장 */
   async function toggleNotify(on, input){
@@ -29495,7 +29649,7 @@ window.DONATE_CORE = (function(){
     try { await navigator.clipboard.writeText(v); done = true; } catch (e) {
       try { const x = document.createElement('textarea'); x.value = v; x.setAttribute('readonly', ''); x.style.cssText = 'position:fixed;top:0;left:0;opacity:0'; document.body.appendChild(x); x.select(); done = document.execCommand('copy'); x.remove(); } catch (er) {}
     }
-    copyMsg = done ? `복사했어요: ${v}` : '번호를 길게 눌러 복사해 주세요.';
+    copyMsg = ''; flash(done ? `복사했어요: ${v}` : '번호를 길게 눌러 복사해 주세요.');   // 결과는 팝업 (2026-10-11)
     const m = $('scCopyMsg'); if (m) m.textContent = copyMsg;
   }
 
@@ -29578,7 +29732,7 @@ window.DONATE_CORE = (function(){
    - 0~4세 놀이(k2~k4, 2026-10-04 대표 "0~4세에도 넣어야지"): 과목·진도·복습·틀린 단원 대신 놀이 기록
      play_log { 날짜: { p: 뽑은 장, s: 화면으로 끝낸 장 } } (play-module.js, 그 전 기록은 play_printed·play_done 의 마지막 날짜로 셈), 화면 놀이 시간 = hub_study_time 'play'
    - 왼쪽 메뉴 '학습 관리'(2026-10-04 12:28 KST 대표): 과목 카드를 누르면 그 과목 화면에서 시작 범위를 정하고, 다 정하면 '저장'.
-     메인 '자유 진도설정'도 여기로 옴. 저장 전에는 바꾼 진도가 학습에 반영되지 않음: 들어올 때 아이 기록(진도·방식)을 sessionStorage 'hub_mgmt' 에 찍어 두고,
+     메인 '아이 진도변경'도 여기로 옴. 저장 전에는 바꾼 진도가 학습에 반영되지 않음: 들어올 때 아이 기록(진도·방식)을 sessionStorage 'hub_mgmt' 에 찍어 두고,
      '취소'·'되돌리기'면 그대로 되돌린 뒤 새로 켬. 바꾸고 저장 없이 다른 메뉴로 가면 저장할지 물음. 0~4세 놀이에는 없음
    hub-ui.js 가 화면을 바꿀 때마다 SARANG_DASH.show(현황판인지) 를 부름 */
 (function(){
@@ -29641,18 +29795,17 @@ window.DONATE_CORE = (function(){
     const h = H(), m = h[s], P = parseInfo((() => { try { return m.info(false); } catch (e) { return ''; } })());
     const id = sshId(s), S = h.ssh, out = { s, name: NAME[s] || s, tag: P.tag, title: P.title, rest: P.rest, pct: null, st: 'free', gap: 0 };
     let n = null; try { n = m.days ? m.days(false)[0] : null; } catch (e) {}
-    if (NAV().pace() === 'school') out.st = 'school';   // 오늘의 학습: 모든 과목이 학교 진도대로 (진도를 옮기면 자유 학습으로 바뀜)
     if (id && S && S.schoolDay && S.dayCount) {
       const cnt = S.dayCount(id);
       if (cnt && n) {
         out.pct = Math.round((n - 1) / cnt * 100);
         if (S.ahead && S.ahead(id)) out.st = 'pre';   // 예습 과목(아이 학년보다 높은 학년)은 학교 진도와 견주지 않음 (2026-10-08)
-        else if (NAV().pace() !== 'school') { out.gap = n - S.schoolDay(id); out.st = out.gap === 0 ? 'same' : out.gap > 0 ? 'ahead' : 'late'; }
+        else { out.gap = n - S.schoolDay(id); out.st = out.gap === 0 ? 'same' : out.gap > 0 ? 'ahead' : 'late'; }
       }
     }
     return out;
   }
-  const PILL = { school: ['ok', '학교 진도대로'], same: ['ok', '학교와 같음'], ahead: ['ahead', g => `${g}개 앞섬`], late: ['late', g => `${-g}개 늦음`], free: ['free', '자유 진도'], pre: ['free', '예습'] };
+  const PILL = { same: ['ok', '학교와 같음'], ahead: ['ahead', g => `${g}개 앞섬`], late: ['late', g => `${-g}개 늦음`], free: ['free', '자유 진도'], pre: ['free', '예습'] };
   function pill(r){ const p = PILL[r.st], t = typeof p[1] === 'function' ? p[1](r.gap) : p[1]; return `<span class="db-pill ${p[0]}"${r.st === 'ahead' || r.st === 'late' ? ` title="학교 진도보다 학습지 ${Math.abs(r.gap)}개 ${r.st === 'late' ? '뒤' : '앞'}"` : ''}>${t}</span>`; }
 
   /* 프린트 기록을 '공부한 날'로 셀지 (2026-10-10 판 82, 아이 폰 도장·놀이와 같은 규칙): 부모가 맞은 개수를 적은 것만. 예전 판에서 뽑은 기록(v 없음)은 뽑은 것만으로 (src/screen-frame.js paperDone) */
@@ -29826,7 +29979,7 @@ window.DONATE_CORE = (function(){
       </div>`;
     $('sarangDashboard').append(root);
     repSettings();
-    document.dispatchEvent(new CustomEvent('db:mounted'));   // 맨 위 칸(#dbTop): 아이 폰 줄(src/kidmode.js)·오늘 공부 알림(src/hub-ui.js)
+    document.dispatchEvent(new CustomEvent('db:mounted'));   // 맨 위 칸(#dbTop): 오늘 공부 알림(src/hub-ui.js)
     root.addEventListener('click', e => {
       const b = e.target.closest('button'); if (!b) { if (e.target.id === 'dbScrim') setDrawer(false); return; }
       if (b.id === 'dbHamb') return setDrawer(!drawer);
@@ -29920,7 +30073,7 @@ window.DONATE_CORE = (function(){
     root.classList.toggle('allsubj', allSubj);
     const late = root.querySelectorAll('#dbSubj tr.late').length, n = root.querySelectorAll('#dbSubj tr').length;
     root.classList.toggle('nolate', !late);
-    $('dbSubjNote').innerHTML = (late || allSubj ? '' : `<p class="db-empty">${NAV() && NAV().pace() === 'school' ? '모든 과목이 학교 진도대로 가고 있어요.' : '학교 진도보다 늦은 과목이 없어요.'}</p>`)
+    $('dbSubjNote').innerHTML = (late || allSubj ? '' : `<p class="db-empty">학교 진도보다 늦은 과목이 없어요.</p>`)
       + (n ? `<button type="button" class="db-more" id="dbAllSubj" aria-expanded="${allSubj}">${allSubj ? '늦은 과목만 보기' : `전체 ${n}과목 보기`}</button>` : '');
     $('dbSubjSmall').textContent = narrow() && !allSubj ? '학교 진도보다 늦은 과목' : '학교 진도와 비교';
   }
@@ -30348,7 +30501,7 @@ window.DONATE_CORE = (function(){
     weekOff();
     const o = mgRead(), ch = new Set(mgChanged()), subs = subjects(), N = NAV();
     $('dbMgLead').textContent = o ? (ch.size ? `${ch.size}과목을 바꿨어요. 다 정했으면 저장을 눌러 주세요.` : '과목을 눌러 시작할 곳을 정한 뒤 저장을 눌러 주세요.')
-      : N && N.pace && N.pace() === 'school' ? '지금은 학교 진도대로 가요. 과목을 누르면 시작할 곳을 바꿀 수 있어요.' : '과목을 누르면 시작할 곳을 바꿀 수 있어요.';
+      : '과목을 누르면 시작할 곳을 바꿀 수 있어요.';
     $('dbMgList').innerHTML = subs.length ? subs.map(s => { const r = row(s);
       return `<button type="button" class="db-mg-row${ch.has(s) ? ' ch' : ''}" data-mg="${s}"><span class="db-mg-top"><b>${esc(r.name)}</b>${ch.has(s) ? '<span class="db-pill ahead">바꿈</span>' : pill(r)}</span>`
         + `<span class="db-mg-at">${r.tag ? `<em>${esc(r.tag)}</em>` : ''}${esc(r.title)}</span>${r.rest ? `<small>${esc(r.rest)}</small>` : ''}<i class="db-mg-go" aria-hidden="true">›</i></button>`; }).join('')
@@ -30362,7 +30515,7 @@ window.DONATE_CORE = (function(){
   }
   /* 취소로 새로 켠 뒤 알림 */
   document.addEventListener('DOMContentLoaded', () => setTimeout(() => { let u = null; try { u = sessionStorage.getItem('hub_mgmt_undo'); sessionStorage.removeItem('hub_mgmt_undo'); } catch (e) {} if (u && NAV() && NAV().say) NAV().say('바꾼 진도를 되돌렸어요.'); }, 300));
-  /* 메인 '자유 진도설정'·왼쪽 메뉴 '학습 관리': 1단계(시간표)부터. st='subj' 면 2단계로 (과목 화면의 '학습 관리로 가기') */
+  /* 메인 '아이 진도변경'·왼쪽 메뉴 '학습 관리': 1단계(시간표)부터. st='subj' 면 2단계로 (과목 화면의 '학습 관리로 가기') */
   function manage(st){ mount(); mgStart(); padOff(); step = st === 'subj' ? 'subj' : 'week'; const N = NAV(); if (N) N.tab('dash'); setView('mgmt');
     window.scrollTo(0, innerHeight <= 520 && root ? Math.max(0, Math.round(root.getBoundingClientRect().top + scrollY - 8)) : 0); }   // 가로 폰: 왼쪽 메뉴 '학습 관리'·'숙제'가 아래 메뉴에 가리지 않게 현황판 칸 위까지 내림 (판 53 1차 검수 2번)
 
@@ -30505,31 +30658,17 @@ window.SARANG_WRONG = (function(){
   const subjOf = x => NAME[x.s] ? x.s : 'kor';
   const where = x => { const a = [x.g && GS[x.g], x.dl || (x.d ? `Day ${x.d}` : ''), plain(x.u).replace(/&amp;/g, '&')].filter(Boolean); if (x.n) a.length ? a[a.length - 1] += `\u00a0·\u00a0${x.n}번` : a.push(`${x.n}번`); return a.join(' · '); };
 
-  /* ---------- 학습 탭 단추 · 현황판 칸 아래 ---------- */
+  /* ---------- 현황판 '많이 틀린 단원' 칸 아래 (학습 탭 줄 #wrEntry 는 없앰: 2026-10-11 대표 "틀린문제 모음은 현황판 안에서만 볼 수 있게") ---------- */
   const ICON = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><path d="M9.5 12.5l5 5M14.5 12.5l-5 5"/></svg>';
   function counts(L){ const c = {}; L.forEach(x => { const s = subjOf(x); c[s] = (c[s] || 0) + 1; }); return ORDER.filter(s => c[s]).map(s => [s, c[s]]); }
-  function mountEntry(){
-    if ($('wrEntry') || !$('todayMsg')) return;
-    $('todayMsg').insertAdjacentHTML('afterend', `<button type="button" class="wr-entry" id="wrEntry" hidden><span class="wr-ic">${ICON}</span><span class="wr-t"><b>틀린 문제 모음</b><small id="wrEntrySub"></small></span><span class="wr-n" id="wrEntryN"></span><i class="wr-go" aria-hidden="true">›</i></button>`);
-    $('wrEntry').addEventListener('click', () => open());
-  }
   function mountDash(){
     const box = $('dbWeak'); if ($('wrDash') || !box) return;
     box.insertAdjacentHTML('afterend', '<button type="button" class="wr-dash" id="wrDash" hidden></button>');
     $('wrDash').addEventListener('click', () => open());
   }
   function paint(){
-    mountEntry(); mountDash();
+    mountDash();
     const L = kidDev() || tod() ? [] : list(), off = kidDev() || tod() || (!L.length && !feeds()), c = counts(L), n = L.length;
-    const e = $('wrEntry');
-    if (e) {
-      if (e.hidden !== off) e.hidden = off;
-      const sub = n ? c.map(([s, k]) => `${NAME[s]} ${k}`).join(' · ') : '바로 풀기에서 틀린 문제가 여기에 모여요';
-      if ($('wrEntrySub').textContent !== sub) $('wrEntrySub').textContent = sub;
-      const nt = n ? `${n}<small>문제</small>` : '';
-      if ($('wrEntryN').innerHTML !== nt) $('wrEntryN').innerHTML = nt;
-      e.setAttribute('aria-label', `틀린 문제 모음, ${n ? n + '문제' : '아직 없음'}`);
-    }
     const db = $('wrDash');
     if (db) { if (db.hidden !== off) db.hidden = off; const t = n ? `틀린 문제 모음 ${n}문제 보기 ›` : '틀린 문제 모음 보기 ›'; if (db.textContent !== t) db.textContent = t; }
     if ($('wrongView') && !$('wrongView').hidden) render();
@@ -30626,7 +30765,7 @@ window.SARANG_WRONG = (function(){
     const KL = window.SARANG_KIDLINK, st = KL && KL.sendState ? KL.sendState() : 'nologin';
     let inner;
     if (st === 'nologin') inner = `<p>아이 폰으로 보내기는 lovedu.kr 앱에서 로그인하고 아이 폰을 연결하면 쓸 수 있어요.</p>`;
-    else if (st === 'nolink') inner = `<p>${esc(nm)} 폰을 연결하면 틀린 문제를 숙제로 보낼 수 있어요. 연결은 현황판 맨 위 '아이 폰' 줄에서 해요.</p><div class="wr-btns"><button type="button" class="wr-mini" data-wra="dash">현황판으로 가기</button></div>`;
+    else if (st === 'nolink') inner = `<p>${esc(nm)} 폰을 연결하면 틀린 문제를 숙제로 보낼 수 있어요. 연결은 학습 탭 '오늘의 학습' 카드 위 '아이 폰 연결'에서 해요.</p><div class="wr-btns"><button type="button" class="wr-mini" data-wra="dash">현황판으로 가기</button></div>`;
     else {
       const from = KL.from(), FROM = KL.froms();
       inner = `<p>${R.length}문제를 ${esc(nm)} 폰에 숙제로 보내요. 아이가 풀면 현황판 '숙제'에 다 했는지와 점수가 떠요.</p>`
@@ -30655,21 +30794,23 @@ window.SARANG_WRONG = (function(){
     S.openTask({ hub: s, title: '틀린 문제 다시 풀기', fin: '틀린 문제를 다시 풀었어요.', note: '맞힌 문제는 모음에 맞힌 날을 적었어요. 다른 날 한 번 더 맞히면 빠져요.', wsrc: src || 'redo', wlist: L,
       open: ctx => runCtx(ctx, L), done: () => {} });
   }
+  /* 끝난 결과는 팝업 + '확인' (2026-10-11 대표 카드 ②, src/pop.js). 'PDF를 만드는 중이에요…' 진행 글만 .wr-msg 줄에 */
+  function out(t){ msg = ''; if (window.SARANG_POP) SARANG_POP.say(t); else msg = t; }
   async function pdf(L){
     const H = window.HUB_TODAY || {}, S = H.ssh && H.ssh.wr; if (!S) return;
     const P = L.filter(x => x.q.kind !== 'm13'), skip = L.length - P.length;
     busy = 'pdf'; msg = 'PDF를 만드는 중이에요…'; render();
     try {
       const r = await S.pdf(P, { grade: /^[em]\d$/.test(grade()) ? grade() : (P[0] && P[0].g) || 'e3', tick: (k, n) => { msg = `PDF를 만드는 중이에요… (${k} / ${n}쪽)`; const m = document.querySelector('.wr-msg'); if (m) m.textContent = msg; } });
-      msg = r && r.ok ? `틀린 문제 ${P.length}개를 PDF로 저장했어요 (${r.pages}쪽, 뒤쪽 ${'정답과 해설'}).${skip ? ` 초1~3 수학 그림 문제 ${skip}개는 화면 다시 풀기로만 풀 수 있어요.` : ''}` : (r && r.msg) || 'PDF를 저장하지 못했어요.';
-    } catch (e) { msg = 'PDF를 만들지 못했어요. 다시 눌러 주세요.'; }
+      out(r && r.ok ? `틀린 문제 ${P.length}개를 PDF로 저장했어요 (${r.pages}쪽, 뒤쪽 ${'정답과 해설'}).${skip ? ` 초1~3 수학 그림 문제 ${skip}개는 화면 다시 풀기로만 풀 수 있어요.` : ''}` : (r && r.msg) || 'PDF를 저장하지 못했어요.');
+    } catch (e) { out('PDF를 만들지 못했어요. 다시 눌러 주세요.'); }
     busy = ''; render();
   }
   async function send(L){
     const KL = window.SARANG_KIDLINK; if (!KL || !KL.sendWrong || busy) return;
     busy = 'send'; msg = ''; render();
-    try { await KL.sendWrong(L); sendOpen = false; msg = `${L.length}문제를 아이 폰에 숙제로 보냈어요. 현황판 '숙제'에서 푼 결과를 볼 수 있어요.`; }
-    catch (e) { msg = '보내지 못했어요. 인터넷을 확인하고 다시 눌러 주세요.'; }
+    try { await KL.sendWrong(L); sendOpen = false; out(`${L.length}문제를 아이 폰에 숙제로 보냈어요. 현황판 '숙제'에서 푼 결과를 볼 수 있어요.`); }
+    catch (e) { out('보내지 못했어요. 인터넷을 확인하고 다시 눌러 주세요.'); }
     busy = ''; render();
   }
   function onClick(e){
@@ -30679,7 +30820,7 @@ window.SARANG_WRONG = (function(){
     if (b.dataset.wrask) { const f = keepY(); ask = b.dataset.wrask; render(); f(); const k = $('wrBody').querySelector(`[data-wrkeep="${ask}"]`); if (k) k.focus({ preventScroll: true }); return; }
     if (b.dataset.wrkeep) { const f = keepY(); ask = null; render(); f(); return; }
     if (b.dataset.wrdel) {
-      ask = null; remove([b.dataset.wrdel]); msg = '모음에서 뺐어요.';
+      ask = null; remove([b.dataset.wrdel]); out('모음에서 뺐어요.');
       const m = document.querySelector('.wr-msg'); if (m) m.textContent = msg;
       return;
     }
