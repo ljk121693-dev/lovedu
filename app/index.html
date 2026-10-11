@@ -5130,6 +5130,7 @@ html.lg-gated #app.has-tabs{padding-bottom:calc(24px + env(safe-area-inset-botto
 html:not(.kid-dev):not(.lg-gated):has(#app.has-tabs:not(.set-open):not(.wr-on)) .lg-toast{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
 </style>
 <style id="sarang-vlvdesc">.v-lvdesc{display:grid;gap:3px;margin:10px 0 0;padding:10px 12px;border-radius:12px;background:var(--soft);color:var(--ink);font-size:14px;line-height:1.55;word-break:keep-all;overflow-wrap:anywhere}.v-lvdesc:empty{display:none}.v-lvdesc b{font-size:14.5px;color:var(--pri)}.v-lvdesc small{color:var(--sub);font-size:12.5px}</style>
+<style id="sarang-vpre">.v-pre{display:grid;gap:8px;margin:10px 0 0;padding:12px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:14px;line-height:1.5;word-break:keep-all;overflow-wrap:anywhere}.v-pre[hidden]{display:none}.v-pre p{margin:0}.v-pre-b{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.v-pre-b button{min-height:44px;padding:6px 8px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink);font:inherit;font-size:14px;font-weight:600;cursor:pointer;word-break:keep-all}.v-pre-b button[aria-pressed=true]{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}@media (max-width:300px){.v-pre-b{grid-template-columns:minmax(0,1fr)}}</style>
 <style id="sarang-listen">/* 영어 듣기 = 오늘 배운 영단어 다시 듣기 (src/listen-today.js, 2026-10-04) */
 .hear-card .hear-sub{margin:4px 0 12px;color:var(--sub);font-size:14px;line-height:1.55;word-break:keep-all}
 .hear-card .hear-empty{margin:6px 0 12px;color:var(--sub);font-size:14.5px;line-height:1.6;word-break:keep-all}
@@ -5822,6 +5823,7 @@ html.db-lock,html.db-lock body{overflow:hidden}
 /* ===== 학습 관리 (2026-10-04 대표): 과목 카드 → 과목 화면에서 시작 범위 → 저장 ===== */
 .db-mg-lead{margin:0;font-size:14.5px;color:var(--sub);line-height:1.5;word-break:keep-all}
 .db-mg-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(250px,100%),1fr));gap:12px;min-width:0}
+.db-mg-list .db-vpre{grid-column:1/-1;margin:0}   /* 영단어 예습 고르기 칸은 한 줄 전체 (2026-10-11) */
 .db-mg-row{position:relative;display:grid;align-content:start;gap:6px;min-width:0;min-height:96px;box-sizing:border-box;padding:16px 40px 16px 18px;border:1px solid var(--line);border-radius:15px;background:var(--card);color:var(--ink);font:inherit;text-align:left;cursor:pointer;box-shadow:0 2px 10px rgba(0,0,0,.04)}
 .db-mg-row:hover{border-color:var(--pri)}
 .db-mg-row.ch{border-color:var(--pri);box-shadow:0 0 0 1px var(--pri) inset}
@@ -5934,6 +5936,7 @@ html.db-lock,html.db-lock body{overflow:hidden}
 .wr-chip.on small{color:var(--pri)}
 .wr-chip:focus-visible,.wr-act:focus-visible,.wr-mini:focus-visible,.wr-x:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
 .wr-acts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.wr-acts.two{grid-template-columns:repeat(2,minmax(0,1fr))}   /* 7세 이하: 숙제로 보내기 없음 (2026-10-11) */
 .wr-act{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-width:0;min-height:56px;padding:6px 4px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-size:14px;font-weight:800;line-height:1.25;text-align:center;cursor:pointer;word-break:keep-all}
 .wr-act small{font-size:11.5px;font-weight:600;color:var(--sub)}
 .wr-act.pri{border-color:var(--pri);background:var(--pri);color:var(--pri-ink)}
@@ -5979,7 +5982,7 @@ html.db-lock,html.db-lock body{overflow:hidden}
 .wr-ask{display:flex;flex-direction:column;gap:4px}
 .wr-ask .wr-mini{min-width:44px;min-height:44px;padding:4px 10px;font-size:12.5px}
 @media (max-width:359px){.wr-acts{gap:6px}.wr-act{font-size:13px}.wr-act small{font-size:11px}}
-@media (max-width:300px){.wr-acts{grid-template-columns:minmax(0,1fr)}.wr-act{min-height:48px;flex-direction:row;gap:6px}}
+@media (max-width:300px){.wr-acts,.wr-acts.two{grid-template-columns:minmax(0,1fr)}.wr-act{min-height:48px;flex-direction:row;gap:6px}}
 </style>
 <style id="sarang-pwa">/* PC 바탕화면 앱 바로가기 묻는 창 (src/pwa.js, 2026-10-04) */
 .pwa-ask{position:fixed;inset:0;z-index:90;display:grid;place-items:center;padding:16px;background:rgba(10,14,22,.45)}
@@ -6640,6 +6643,7 @@ html.kid-dev #app #today .td-go[data-scr]{border:0;background:var(--pri);color:v
   <div class="card">
     <div class="card-head"><div class="label">단계</div><button type="button" class="linkbtn" data-lt="vocab">레벨테스트</button></div>
     <div class="seg" id="v-levels"></div>
+    <div class="v-pre" id="v-pre" hidden></div>
     <div class="v-lvdesc" id="v-lvDesc" aria-live="polite"></div>
   </div>
 
@@ -13581,9 +13585,11 @@ function startDay(){
   state.level = cur; levelCount(cur);
   if (!lp || !lp.count) return;          // 레벨테스트로 정한 단계 (아직 출력 전) → Day 1
   state.day = Math.floor(lp.start / state.count);
+  if (cur === '기초' && lp.start >= levelWords(cur).length) { vRest = true; return; }   // 복습만 하는 날 (그날 이미 복습을 뽑음)
   if (lp.ymd === today()) return;
   const next = lp.start + lp.count;
   if (next < levelWords(cur).length) state.day = Math.floor(next / state.count);
+  else if (cur === '기초' && /^e[34]$/.test(vGrade()) && !vPreOn()) { vRest = true; state.day = vRestDay(); }
   else if (LEVELS.indexOf(cur) + 1 < LEVELS.length) { state.level = LEVELS[LEVELS.indexOf(cur) + 1]; state.day = 0; levelCount(state.level); }
 }
 
@@ -13608,17 +13614,56 @@ function dayChunks(){
   for (let i = 0; i < list.length; i += n) out.push(list.slice(i, i + n));
   return out;
 }
-function currentDay(){ return dayChunks()[state.day] || []; }
+/* 6세~초2에서 Day로 배운 단어: 위 단계에서는 철자 쓰기로만 (2026-10-11 대표, 같은 단어·같은 뜻일 때. May '5월'처럼 뜻이 다르면 새 단어) */
+let vKnownAt = null, vKnown = {};
+function vEarly(){ const s = JSON.stringify(vSeen['유아초2'] || null); if (vKnownAt === s) return vKnown; vKnownAt = s; vKnown = {};
+  levelWords('유아초2').forEach((w, i) => { if (HUB_SEEN.has(vSeen['유아초2'], i)) (vKnown[w.w.toLowerCase()] = vKnown[w.w.toLowerCase()] || []).push(w.m); }); return vKnown; }
+const vTok = m => String(m).split(',').map(s => s.trim());
+const isKnown = (lv, w) => lv !== '유아초2' && (vEarly()[w.w.toLowerCase()] || []).some(m => vTok(m).some(t => vTok(w.m).includes(t)));
+const vMark = (lv, list) => list.map(w => isKnown(lv, w) ? Object.assign({}, w, { k: 1 }) : w);   // k: 철자 쓰기로만
+function currentDay(){ return vRest ? [] : vMark(state.level, dayChunks()[state.day] || []); }
+const vFresh = () => currentDay().filter(w => !w.k);   // 새 단어 (원본·쓰기 연습·뜻 가리기)
+/* 초3·4가 초3~4 단계(기초)를 다 배우면: 저절로 넘어가지 않고 복습만, 부모가 고르면 초5~6 예습 (2026-10-11 대표) */
+let vRest = false;   // 복습만 하는 중
+const PRE_KEY = 'vocab_pre';
+const vGrade = () => { try { return (JSON.parse(localStorage.getItem('hub_child')) || {}).grade || ''; } catch (e) { return ''; } };
+const vPreOn = () => { try { return localStorage.getItem(PRE_KEY) === '1'; } catch (e) { return false; } };
+const vBaseDone = () => { const lp = lastPrint['기초']; return !!(lp && lp.count && lp.start + lp.count >= levelWords('기초').length); };
+const vAsk = () => /^e[34]$/.test(vGrade()) && vBaseDone();   // 예습 고르기를 보일 때
+function vRestDay(){ const lp = lastPrint['기초'], n = dayChunks().length; return lp && lp.ymd !== today() ? Math.max(n, Math.floor((lp.start + lp.count) / state.count)) : Math.max(n, lp ? Math.floor(lp.start / state.count) : n); }
+function vPreSet(on){
+  try { localStorage.setItem(PRE_KEY, on ? '1' : '0'); } catch (e) {}
+  if (on && state.level === '기초' && vBaseDone()) { vRest = false; state.level = '초5~6'; levelCount(state.level); const lp = lastPrint['초5~6']; state.day = lp && lp.count ? Math.floor(lp.start / state.count) : 0; try { localStorage.setItem('vocab_cur', '초5~6'); } catch (e) {} }
+  else if (!on && vAsk() && state.level !== '기초' && state.level !== '유아초2') { state.level = '기초'; levelCount('기초'); vRest = true; state.day = vRestDay(); try { localStorage.setItem('vocab_cur', '기초'); } catch (e) {} }
+  renderLevels(); renderDays(); document.dispatchEvent(new CustomEvent('hub:refresh'));
+}
 
+/* 예습 고르기 칸 (부모 폰만): 지금 고른 것을 눌린 단추로 */
+function vPrePaint(){
+  const b = $('#v-pre'); if (!b) return;
+  const on = vAsk() && !document.documentElement.classList.contains('kid-dev'); b.hidden = !on; if (!on) { b.innerHTML = ''; return; }
+  const pre = vPreOn() && state.level !== '기초';
+  b.innerHTML = `<p><b>초3~4학년 영단어를 다 배웠어요.</b> 4학년이 끝나기 전에 초5~6 단어를 미리 배울지 골라 주세요.</p>`
+    + `<div class="v-pre-b" role="group" aria-label="초3~4학년을 다 배운 뒤"><button type="button" data-vpre="0" aria-pressed="${!pre}">복습만 하기</button><button type="button" data-vpre="1" aria-pressed="${pre}">초5~6 미리 배우기</button></div>`
+    + `<p class="v-pre-now">${pre ? '지금은 초5~6 단어를 미리 배우고 있어요.' : '지금은 배운 단어를 복습하고 있어요.'}</p>`;   // 바뀌는 글은 단추 아래 (두 글 모두 짧아 줄 수가 같음)
+}
+document.addEventListener('click', e => { const b = e.target.closest('[data-vpre]'); if (!b) return;   // 영단어 단계 칸·현황판 학습 관리 둘 다
+  const box = b.closest('.db-vpre') ? '#dbMgList .db-vpre' : '#v-pre', v = b.dataset.vpre, y = b.getBoundingClientRect().top, de = document.documentElement, oa = de.style.overflowAnchor;
+  de.style.overflowAnchor = 'none'; vPreSet(v === '1');
+  const keep = () => { const n = document.querySelector(`${box} [data-vpre="${v}"]`); if (!n || !n.getClientRects().length) return; const d = n.getBoundingClientRect().top - y; if (Math.abs(d) >= 1) window.scrollBy(0, d); };   // 누른 단추를 그 자리에 (위쪽 과목 줄·설명 글이 바뀌어 줄 수가 달라져도, 창구 H4 [하] 260px 10-11)
+  keep(); requestAnimationFrame(() => { keep(); setTimeout(() => { keep(); de.style.overflowAnchor = oa; }, 120); });
+});
 function renderLevels(){
   $('#v-levels').innerHTML = LEVELS.map(lv =>
     `<button class="${lv===state.level?'on':''}" data-lv="${esc(lv)}">${esc(lvName(lv))} <small>(${levelWords(lv).length})</small></button>`).join('');
   const d = LV_DESC[state.level], box = $('#v-lvDesc');
-  if (box) box.innerHTML = d ? `<b>${esc(lvName(state.level))} · ${levelWords(state.level).length}개</b><span>${esc(d[0])}</span><span>${esc(d[1])}</span><small lang="en">예: ${esc(d[2])}</small>` : '';
+  const kn = state.level === '유아초2' ? 0 : levelWords(state.level).filter(w => isKnown(state.level, w)).length;   // 6세~초2에서 배운 단어 (철자 쓰기로만)
+  vPrePaint();
+  if (box) box.innerHTML = d ? `<b>${esc(lvName(state.level))} · ${levelWords(state.level).length}개${kn ? ` (새 단어 ${levelWords(state.level).length - kn} · 철자 쓰기 ${kn})` : ''}</b><span>${esc(d[0])}</span><span>${esc(d[1])}</span><small lang="en">예: ${esc(d[2])}</small>` : '';
 }
 function renderDays(){
   const chunks = dayChunks();
-  if (state.day >= chunks.length) state.day = chunks.length - 1;
+  if (state.day >= chunks.length && !vRest) state.day = chunks.length - 1;
   let start = 1;
   const last = lastPrint[state.level];
   const lastDay = last ? Math.floor(last.start / state.count) : -1;
@@ -13632,6 +13677,7 @@ function renderDays(){
   nav.querySelector('[data-step="1"]').disabled = state.day >= chunks.length - 1;
   start = state.day * state.count + 1;
   const d = currentDay();
+  if (vRest) { const R = reviewWords(); $('#v-dayInfo').textContent = `${lvTitle(state.level)}를 다 배웠어요 · 지금은 복습만 해요 (오늘 복습 ${R.q1.length + R.q2.length}단어)`; renderReviewBtn(); return; }
   $('#v-dayInfo').textContent = `${lvTitle(state.level)} · ${start}~${start + d.length - 1}번 단어 ${d.length}개 (${vFew(d)}) · ${state.day + 1}/${chunks.length}`
     + (last ? ` · 마지막 출력: ${last.start + 1}번부터 (${last.type}, ${last.date})` : '');
   renderReviewBtn();
@@ -13639,13 +13685,14 @@ function renderDays(){
 
 $('#v-levels').addEventListener('click', e => {
   const b = e.target.closest('button[data-lv]'); if (!b) return;
-  state.level = b.dataset.lv; state.day = 0; levelCount(state.level); renderLevels(); renderDays();
+  vRest = false; state.level = b.dataset.lv; state.day = 0; levelCount(state.level); renderLevels(); renderDays();
 });
 $('#v-days').addEventListener('click', e => {
   const b = e.target.closest('button[data-step]'); if (!b) return;
+  if (vRest) { vRest = false; state.day = dayChunks().length; renderLevels(); }
   state.day += +b.dataset.step; renderDays();
 });
-$('#v-days').addEventListener('change', e => { state.day = +e.target.value; renderDays(); });
+$('#v-days').addEventListener('change', e => { if (vRest) { vRest = false; renderLevels(); } state.day = +e.target.value; renderDays(); });
 $('#v-count').addEventListener('input', e => {
   state.count = +e.target.value; vCountSet = true; $('#v-countVal').textContent = state.count; state.day = 0; renderDays();
   try { localStorage.setItem(COUNT_KEY, state.count); } catch (e) {}
@@ -13673,7 +13720,7 @@ function wrapLines(ctx, text, maxW){
   return lines;
 }
 function drawSheet(type){
-  const words = currentDay(), n = words.length, perCol = Math.ceil(n / 2);
+  const words = type === 'word' ? currentDay() : vFresh(), n = words.length, perCol = Math.ceil(n / 2);
   const c = document.createElement('canvas');
   c.width = 210 * PX; c.height = 297 * PX;
   const ctx = c.getContext('2d');
@@ -13735,9 +13782,9 @@ function drawSheet(type){
 }
 
 const PR_ROW = 15 * PX, PR_TOP = 10 * PX + 14 * PX + 3 * PX, PR_PER = Math.floor((297 * PX - 10 * PX - PR_TOP) / PR_ROW);
-const practiceCount = () => Math.ceil(currentDay().length / PR_PER);
+const practiceCount = () => Math.ceil(vFresh().length / PR_PER);
 function drawPractice(pg){
-  const words = currentDay(), pages = practiceCount(), M = 10 * PX, W = 190 * PX, headBottom = M + 14 * PX;
+  const words = vFresh(), pages = practiceCount(), M = 10 * PX, W = 190 * PX, headBottom = M + 14 * PX;
   const c = document.createElement('canvas'); c.width = 210 * PX; c.height = 297 * PX;
   const ctx = c.getContext('2d');
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); ctx.fillStyle = '#000'; ctx.strokeStyle = '#000';
@@ -13935,6 +13982,8 @@ function vShuffle(arr, r){ const a = arr.slice(); for (let i = a.length - 1; i >
 const RV_PER_DAY = 10;   // (복습 2번일 때 Day마다 고르던 단어 수)
 const RV_Q = [8, 6, 2, 2, 2];   // 복습 5번 (2026-10-08): D+1·7·14·21·28 Day마다 고르는 단어 수 (반은 ①, 반은 ②)
 function reviewWords(){
+  if (vRest) { const lv = state.level, all = levelWords(lv).filter((w, i) => HUB_SEEN.has(vSeen[lv], i)), r = vRng(`vrest|${lv}|${state.day}`), pick = vShuffle(all, r).slice(0, RV_Q.reduce((a, b) => a + b, 0)), h = Math.ceil(pick.length / 2);
+    return { q1: pick.slice(0, h), q2: pick.slice(h), from: `${lvName(lv)} 전체` }; }
   /* 1·7·14·21·28 Day 전 가운데 본 단어만 (다 못 봤으면 그 Day는 빠짐). 복습 5번: Day마다 RV_Q개, 빈 몫은 D+1·D+7부터 (총 20개 그대로) */
   const li = LEVELS.indexOf(state.level), all = HUB_REV.K.map(k => vBack(li, state.day, k))
     .map(p => p ? [p[0], p[1], chunksOf(LEVELS[p[0]])[p[1]].filter((w, i) => HUB_SEEN.has(vSeen[LEVELS[p[0]]], p[1] * state.count + i))] : null);
@@ -14035,15 +14084,16 @@ function drawReviewSheet(){
 
 /* '오늘의 학습'에서 쓰는 연결: 원본·뜻 가리기·단어 가리기 3장 + 복습지 */
 (window.HUB_TODAY = window.HUB_TODAY || {}).vocab = {
-  info: () => { const w = currentDay(); return `\u2063${lvName(state.level)} ${state.day + 1}/${dayChunks().length}\u2063 · ${vFew(w)}\u2064 · ${vRange()} 단어 ${w.length}개`; },
+  info: () => { if (vRest) return `\u2063${lvName(state.level)} 복습\u2063 · 다 배운 단어\u2064 · 복습 ${reviewWords().q1.length + reviewWords().q2.length}단어`; const w = currentDay(); return `\u2063${lvName(state.level)} ${state.day + 1}/${dayChunks().length}\u2063 · ${vFew(w)}\u2064 · ${vRange()} 단어 ${w.length}개`; },
   days: () => [state.day + 1, state.day + 1],   // 속 묶음 번호 (검사용)
-  pages: () => [() => drawSheet('original'), ...Array.from({ length: practiceCount() }, (_, k) => () => drawPractice(k)), ...['meaning', 'word'].map(t => () => drawSheet(t)), ...(hasReview() ? [drawReviewSheet] : [])],   // 원본 다음에 쓰기 연습 (2026-10-04)
+  pages: () => vRest ? (hasReview() ? [drawReviewSheet] : []) : [...(vFresh().length ? [() => drawSheet('original'), ...Array.from({ length: practiceCount() }, (_, k) => () => drawPractice(k)), () => drawSheet('meaning')] : []), () => drawSheet('word'), ...(hasReview() ? [drawReviewSheet] : [])],   // 새 단어가 없는 묶음은 단어 가리기부터   // 원본 다음에 쓰기 연습 (2026-10-04)
   done: () => { if (window.SARANG_LISTEN) SARANG_LISTEN.record(currentDay(), lvTitle(state.level) + ' ' + vRange()); rememberPrint('original'); renderDays(); }   // 영어 듣기에서 다시 들을 오늘 단어 (src/listen-today.js)
 };
 
 /* 지금 묶음의 단어 번호 '16~30번' (Day 번호 대신) */
 function vRange(){ const a = state.day * state.count + 1; return `${a}~${a + currentDay().length - 1}번`; }
 HUB_TODAY.vocab.screen = () => ({ level: state.level, name: lvTitle(state.level), day: state.day, count: state.count, words: currentDay(), pool: levelWords(state.level), review: hasReview() ? reviewWords() : null });
+HUB_TODAY.vocab.pre = { ask: () => vAsk(), on: () => vPreOn() && state.level !== '기초', set: vPreSet };   // 현황판 학습 관리의 예습 고르기 (src/dash.js)
 startDay();
 renderLevels(); renderDays();
 
@@ -21125,7 +21175,8 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   const EXTRAS = [
     { k: 'vocab', t: '영단어', d: '단계별 단어 학습지와 플래시카드', ok: () => has('vocab'), ic: '<path d="M4 6h9M4 10h7M4 14h5"/><rect x="13" y="11" width="8" height="9" rx="1.5"/><path d="M15.5 17.5l1.5-4 1.5 4M16 16.3h2"/>' },
     { k: 'listen', t: '영어 듣기', d: '오늘 배운 영단어를 다시 들어요', ok: () => has('listen'), ic: '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>' },
-    { k: 'phon', t: '파닉스', d: '영어 소리와 글자 · 시간표에 넣으면 오늘의 학습에 나와요', ok: () => { const c = child(); return !!c && PHON_EXTRA.includes(c.grade); }, ic: '<path d="M4 18l4-12 4 12M5.5 14h5"/><path d="M15 9.5a3 3 0 1 1 0 5M19.5 8a6 6 0 0 1 0 8"/>' }   // 초3~6만 (6세~초2는 과목)
+    { k: 'phon', t: '파닉스', d: '영어 소리와 글자 · 시간표에 넣으면 오늘의 학습에 나와요', ok: () => { const c = child(); return !!c && PHON_EXTRA.includes(c.grade); }, ic: '<path d="M4 18l4-12 4 12M5.5 14h5"/><path d="M15 9.5a3 3 0 1 1 0 5M19.5 8a6 6 0 0 1 0 8"/>' },   // 초3~6만 (6세~초2는 과목)
+    { k: 'gram', t: '영문법 사전', d: '학교 영어에서 배운 문법을 모아 봐요 · 읽기만 해요', ok: () => has('eng') && !!(window.SARANG_GRAM && SARANG_GRAM.ok()), go: () => window.SARANG_GRAM && SARANG_GRAM.open(), ic: '<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z"/><path d="M6.5 8h2.5M6.5 11h2.5M15 8h2.5M15 11h2.5"/>' }   // 2026-10-11 대표: 따로 된 화면(src/gram.js), 진도·기록과 상관없음
   ];
   const extras = () => tod() ? [] : EXTRAS.filter(x => { try { return x.ok(); } catch (e) { return false; } });
   const tabsNow = () => tod() ? TABS_T : TABS.filter(x => (x[0] !== 'exam' || examOk()) && (x[0] !== 'extra' || extras().length));   // 현황판은 늘 있음 → 유아 5~7세도 현황판 · 학습 (영어를 고르면 + 부록)
@@ -21141,7 +21192,7 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
     const html = extras().map(x => `<button type="button" class="ex-item" data-ex="${x.k}"><span class="ex-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${x.ic}</svg></span><span class="ex-t"><b>${x.t}</b><small>${x.d}</small></span><i class="ex-go" aria-hidden="true">›</i></button>`).join('');
     if ($('extraList').innerHTML !== html) $('extraList').innerHTML = html;
   }
-  $('extraList').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; backTo = 'extra'; backY = Math.round(scrollY); smooth(() => open(b.dataset.ex)); });
+  $('extraList').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; const x = EXTRAS.find(v => v.k === b.dataset.ex); if (x && x.go) return x.go(); backTo = 'extra'; backY = Math.round(scrollY); smooth(() => open(b.dataset.ex)); });
   $('sarangDashboard').insertAdjacentHTML('beforeend', '<section class="card exam-none" id="examNone"><div class="label">모의시험</div><div class="info">아이 학년에는 아직 모의시험을 만들 교과(국어·수학·사회·과학·한국사 등 시험 범위가 있는 과목)가 없어요.</div></section>');
   /* 아이 기기(html.kid-dev): 현황판·놀이 모음·모의시험·부록 칸으로 가지 않음 (2026-10-08 대표 PC 사진: 같은 탭에서 부모가 보던 현황판이 아이 기기에 남음) */
   function setTab(t){ if (t === 'screen') t = 'today'; if (document.documentElement.classList.contains('kid-dev') && t !== 'today' && t !== 'pscreen') t = tod() ? 'pscreen' : 'today'; if (!tabsNow().some(x => x[0] === t) && !(t === 'subj' && !tod())) return; tab = t; setOpen(false); show('home'); window.scrollTo(0, 0); }
@@ -23191,12 +23242,14 @@ const SPK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h
 function open(ctx){
   const el = ctx.el, D = ctx.data || (window.HUB_TODAY && HUB_TODAY.vocab && HUB_TODAY.vocab.screen && HUB_TODAY.vocab.screen());
   if (!el) return;
-  if (!D || !D.words || !D.words.length) { el.innerHTML = '<div class="sv"><div class="card"><div class="info">영단어를 불러오지 못했어요.</div></div></div>'; return; }
+  if (!D || !D.words || (!D.words.length && !(D.review && D.review.q1 && D.review.q1.length))) { el.innerHTML = '<div class="sv"><div class="card"><div class="info">영단어를 불러오지 못했어요.</div></div></div>'; return; }
   const T = window.SARANG_TTS, PEN = window.SARANG_PEN, words = D.words, pool = (D.pool && D.pool.length >= 8 ? D.pool : words);
+  /* k = 6세~초2에서 배운 단어 (2026-10-11 대표): 익히기·따라 쓰기·뜻 고르기 없이 철자 쓰기만. 단어가 없는 날(복습만)은 복습만 */
+  const fresh = words.filter(w => !w.k), kn = words.length - fresh.length;
   const R = D.review && D.review.q1 && D.review.q1.length ? D.review : null;
   /* 문항: c = 뜻 고르기, s = 철자 쓰기 (복습 ①은 뜻 고르기, ②는 철자) */
   const Q = [
-    ...shuffle(words).map(w => ({ k: 'c', part: 'choice', w, ch: choices(w, pool) })),
+    ...shuffle(fresh).map(w => ({ k: 'c', part: 'choice', w, ch: choices(w, pool) })),
     ...shuffle(words).map(w => ({ k: 's', part: 'spell', w })),
     ...(R ? [...R.q1.map(w => ({ k: 'c', part: 'review', w, ch: choices(w, D.pool && D.pool.length >= 8 ? D.pool : [...R.q1, ...R.q2, ...pool]) })), ...R.q2.map(w => ({ k: 's', part: 'review', w }))] : [])
   ];
@@ -23213,34 +23266,35 @@ function open(ctx){
       + `<div class="sv-ans" hidden>정답: <b lang="en">${esc(q.w.w)}</b></div></div>`;
   const sec = (title, sub, list) => { let n = 0; list.forEach(q => { q.n = ++n; }); return `<section class="card sv-card"><div class="sv-h"><b>${title}</b><small>${sub}</small></div>${list.map(qhtml).join('')}</section>`; };
   const part = p => Q.filter(q => q.part === p);
-  const first = words[0].w;   // 따라 쓰기 첫 단어 (위 머리 글은 단어 차례가 섞여 있어 앞 두 단어, 2026-10-02)
+  const first = fresh.length ? fresh[0].w : '';
+  let no = 0; const num = () => ++no + '. ';   // 칸 번호 (없는 칸은 건너뜀)   // 따라 쓰기 첫 단어 (위 머리 글은 단어 차례가 섞여 있어 앞 두 단어, 2026-10-02)
   el.innerHTML = `<div class="sv">
-    <div class="sv-top"><b>${esc(D.name || '영단어 · ' + D.level)} ${D.day * D.count + 1}~${D.day * D.count + words.length}번</b><small>${words.length}단어 (${esc(words.slice(0, 2).map(w => w.w).join(' · '))}${words.length > 2 ? ' …' : ''})</small></div>
+    <div class="sv-top">${words.length ? `<b>${esc(D.name || '영단어 · ' + D.level)} ${D.day * D.count + 1}~${D.day * D.count + words.length}번</b><small>${words.length}단어 (${esc(words.slice(0, 2).map(w => w.w).join(' · '))}${words.length > 2 ? ' …' : ''})</small>` : `<b>${esc(D.name || '영단어 · ' + D.level)} 복습</b><small>새 단어 없이 배운 단어만 복습해요</small>`}</div>
     <div class="sv-note" data-svnote hidden>이 기기에서는 소리를 낼 수 없어요. 부모님이 읽어 주세요.</div>
-    <section class="card sv-card"><div class="sv-h"><b>1. 단어 익히기</b><button type="button" class="sv-all" data-svall>${SPK}<span>전체 듣기</span></button></div>
+    ${fresh.length ? `<section class="card sv-card"><div class="sv-h"><b>${num()}단어 익히기</b><button type="button" class="sv-all" data-svall>${SPK}<span>전체 듣기</span></button></div>
       <div class="sv-seg" role="group" aria-label="가리기"><button type="button" data-svhide="" aria-pressed="true">모두 보기</button><button type="button" data-svhide="m" aria-pressed="false">뜻 가리기</button><button type="button" data-svhide="w" aria-pressed="false">단어 가리기</button></div>
-      <div class="sv-list">${words.map((w, i) => `<div class="sv-row" data-i="${i}">${spk(w.w)}<button type="button" class="sv-word" data-svpeek="w" aria-pressed="false" aria-label="${esc(w.w)} 단어 칸, 누르면 가리거나 보이기"><b lang="en">${esc(w.w)}</b><small>${esc(w.p)}</small></button><button type="button" class="sv-mean" data-svpeek="m" aria-pressed="false" aria-label="${esc(w.m)} 뜻 칸, 누르면 가리거나 보이기">${esc(w.m)}</button></div>`).join('')}</div>
-      <div class="info">단어나 뜻을 누르면 그 칸만 가려져요. 가린 칸을 다시 누르면 보여요.</div></section>
-    ${PEN ? `<section class="card sv-card"><div class="sv-h"><b>2. 따라 쓰기</b><small>흐린 글자 위에 손가락이나 펜으로</small></div>
+      <div class="sv-list">${fresh.map((w, i) => `<div class="sv-row" data-i="${i}">${spk(w.w)}<button type="button" class="sv-word" data-svpeek="w" aria-pressed="false" aria-label="${esc(w.w)} 단어 칸, 누르면 가리거나 보이기"><b lang="en">${esc(w.w)}</b><small>${esc(w.p)}</small></button><button type="button" class="sv-mean" data-svpeek="m" aria-pressed="false" aria-label="${esc(w.m)} 뜻 칸, 누르면 가리거나 보이기">${esc(w.m)}</button></div>`).join('')}</div>
+      <div class="info">단어나 뜻을 누르면 그 칸만 가려져요. 가린 칸을 다시 누르면 보여요.</div></section>` : ''}
+    ${PEN && fresh.length ? `<section class="card sv-card"><div class="sv-h"><b>${num()}따라 쓰기</b><small>흐린 글자 위에 손가락이나 펜으로</small></div>
       <div class="sv-pnav"><button type="button" data-svpen="-1" aria-label="이전 단어">‹</button><div class="sv-pw"><b lang="en" data-svpw></b><small data-svpm></small></div>${spk(first, '이 단어').replace('data-svsay', 'data-svpensay data-svsay')}<button type="button" data-svpen="1" aria-label="다음 단어">›</button></div>
       <div class="sv-pad" data-svpad></div><div class="sv-pcount" data-svpc></div></section>` : ''}
-    ${sec((PEN ? 3 : 2) + '. 뜻 고르기', '단어에 맞는 뜻을 누르세요', part('choice'))}
-    ${sec((PEN ? 4 : 3) + '. 철자 쓰기', '뜻을 보고(소리를 듣고) 영어 단어를 쓰세요', part('spell'))}
-    ${R ? sec((PEN ? 5 : 4) + '. 복습', esc(R.from) + ' 단어 · ① 뜻 고르기 ② 철자 쓰기', part('review')) : ''}
+    ${fresh.length ? sec(num() + '뜻 고르기', '단어에 맞는 뜻을 누르세요', part('choice')) : ''}
+    ${words.length ? sec(num() + '철자 쓰기', '뜻을 보고(소리를 듣고) 영어 단어를 쓰세요' + (kn ? ` · 6세~초2에서 배운 ${kn}단어는 바로 쓰기로만` : ''), part('spell')) : ''}
+    ${R ? sec(num() + '복습', esc(R.from) + ' 단어 · ① 뜻 고르기 ② 철자 쓰기', part('review')) : ''}
     <section class="card sv-card sv-end"><div class="sv-res" data-svres hidden></div><div class="sv-msg" data-svmsg role="status"></div>
       <div class="sv-btns"><button type="button" class="sv-go" data-svgrade>다 풀었어요</button><button type="button" data-svretry hidden>틀린 것 다시 풀기</button><button type="button" class="sv-go" data-svfinish hidden>공부 끝</button><button type="button" class="sv-listen" data-svlisten hidden>오늘 배운 것을 다시 한 번 들으면서 공부해 봐요 (영어 듣기)</button></div></section>
   </div>`;
   const root = el.firstElementChild, $ = s => root.querySelector(s), $$ = s => [...root.querySelectorAll(s)];
-  const syncSound = () => { if (!root.isConnected) return false; const ok = sound(); root.classList.toggle('sv-mute', !ok); $('[data-svnote]').hidden = ok; const a = $('[data-svall]'); const on = T && T.busy === 'svall'; a.classList.toggle('on', on); a.lastChild.textContent = on ? '멈추기' : '전체 듣기'; if (!on) $$('.sv-row.on').forEach(r => r.classList.remove('on')); };
+  const syncSound = () => { if (!root.isConnected) return false; const ok = sound(); root.classList.toggle('sv-mute', !ok); $('[data-svnote]').hidden = ok; const a = $('[data-svall]'); const on = T && T.busy === 'svall'; if (a) { a.classList.toggle('on', on); a.lastChild.textContent = on ? '멈추기' : '전체 듣기'; } if (!on) $$('.sv-row.on').forEach(r => r.classList.remove('on')); };
   if (T) T.on(syncSound); syncSound();
 
   /* 따라 쓰기: 한 번에 한 단어 (캔버스를 여러 개 두지 않음) */
   const pen = () => {
     if (!PEN) return;
-    const w = words[st.pen]; if (st.pad) st.pad.destroy();
+    const w = fresh[st.pen]; if (!w) return; if (st.pad) st.pad.destroy();
     $('[data-svpw]').textContent = w.w; $('[data-svpm]').textContent = w.m; $('[data-svpensay]').dataset.svsay = w.w;
-    $('[data-svpc]').textContent = `${st.pen + 1} / ${words.length}`;
-    $('[data-svpen="-1"]').disabled = st.pen === 0; $('[data-svpen="1"]').disabled = st.pen === words.length - 1;
+    $('[data-svpc]').textContent = `${st.pen + 1} / ${fresh.length}`;
+    $('[data-svpen="-1"]').disabled = st.pen === 0; $('[data-svpen="1"]').disabled = st.pen === fresh.length - 1;
     st.pad = PEN.create($('[data-svpad]'), { kind: 'eng', model: w.w, label: w.w + ' 따라 쓰기 칸' });
   };
   pen();
@@ -23279,7 +23333,7 @@ function open(ctx){
     const r = st.result, now = Q.filter(right).length;
     $('[data-svres]').hidden = false;
     $('[data-svres]').innerHTML = `<div class="sv-score"><b>${r.score}</b> / ${r.total}${now !== r.score ? ` <small>(다시 풀어 ${now}개 맞음)</small>` : ''}</div>`
-      + `<div class="sv-parts">뜻 고르기 ${r.parts.choice.join('/')} · 철자 ${r.parts.spell.join('/')}${R ? ` · 복습 ${r.parts.review.join('/')}` : ''}</div>`
+      + `<div class="sv-parts">${[fresh.length ? `뜻 고르기 ${r.parts.choice.join('/')}` : '', words.length ? `철자 ${r.parts.spell.join('/')}` : '', R ? `복습 ${r.parts.review.join('/')}` : ''].filter(Boolean).join(' · ')}</div>`
       + (r.wrong.length ? `<div class="sv-wrong"><div class="label">틀린 단어 ${r.wrong.length}개</div>${r.wrong.map(w => `<div><b lang="en">${esc(w.w)}</b><span>${esc(w.m)}</span></div>`).join('')}</div>` : '<div class="info">모두 맞혔어요!</div>');
     $('[data-svmsg]').textContent = '';
     $('[data-svgrade]').hidden = true; $('[data-svfinish]').hidden = false; $('[data-svlisten]').hidden = false; $('[data-svretry]').hidden = !Q.some(q => !right(q));
@@ -23297,11 +23351,11 @@ function open(ctx){
   root.addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     if (b.dataset.svsay != null) { const row = b.closest('.sv-row'); say(b.dataset.svsay); if (row) { $$('.sv-row.on').forEach(r => r.classList.remove('on')); row.classList.add('on'); } return; }
-    if (b.hasAttribute('data-svall')) { if (!T) return; const rows = $$('.sv-row'); T.toggle('svall', words.map(w => ({ t: w.w, pause: 900 })), i => rows.forEach((r, k) => r.classList.toggle('on', k === i))); return; }
+    if (b.hasAttribute('data-svall')) { if (!T) return; const rows = $$('.sv-row'); T.toggle('svall', fresh.map(w => ({ t: w.w, pause: 900 })), i => rows.forEach((r, k) => r.classList.toggle('on', k === i))); return; }
     if (b.dataset.svhide != null) { st.hide = b.dataset.svhide; $$('[data-svhide]').forEach(x => x.setAttribute('aria-pressed', x === b)); $$('.sv-row').forEach(r => { [['.sv-word', 'w'], ['.sv-mean', 'm']].forEach(([s, k]) => { const c = r.querySelector(s); c.classList.toggle('hid', st.hide === k); c.setAttribute('aria-pressed', String(st.hide === k)); }); }); return; }
     /* 단어·뜻 칸을 누르면 그 칸만 가리거나 다시 보임 (2026-10-06 대표: 위 '뜻 가리기·단어 가리기'와 함께 하나씩도). 단어를 다시 보이면 소리도 */
-    if (b.dataset.svpeek) { const h = !b.classList.contains('hid'); b.classList.toggle('hid', h); b.setAttribute('aria-pressed', String(h)); if (!h && b.dataset.svpeek === 'w') say(words[+b.closest('.sv-row').dataset.i].w); return; }
-    if (b.dataset.svpen) { st.pen = Math.max(0, Math.min(words.length - 1, st.pen + +b.dataset.svpen)); pen(); return; }
+    if (b.dataset.svpeek) { const h = !b.classList.contains('hid'); b.classList.toggle('hid', h); b.setAttribute('aria-pressed', String(h)); if (!h && b.dataset.svpeek === 'w') say(fresh[+b.closest('.sv-row').dataset.i].w); return; }
+    if (b.dataset.svpen) { st.pen = Math.max(0, Math.min(fresh.length - 1, st.pen + +b.dataset.svpen)); pen(); return; }
     if (b.dataset.svk != null) { const q = Q[+b.dataset.svq]; if (st.graded || q.done === false) return; st.warned = false; q.pick = +b.dataset.svk; mark(); return; }
     if (b.hasAttribute('data-svgrade')) return grade();
     if (b.hasAttribute('data-svretry')) return retry();
@@ -25212,7 +25266,8 @@ if (window.SARANG_SCREEN) reg(); else document.addEventListener('DOMContentLoade
   if (!pane) return;
   const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const KEY = 'vocab_flash';
-  const data = () => { try { return window.HUB_TODAY && HUB_TODAY.vocab && HUB_TODAY.vocab.screen ? HUB_TODAY.vocab.screen() : null; } catch (e) { return null; } };
+  /* 6세~초2에서 배운 단어(k)는 카드로 뜻을 다시 외우지 않음 (2026-10-11 대표: 위 단계에서는 철자 쓰기로만) */
+  const data = () => { try { const D = window.HUB_TODAY && HUB_TODAY.vocab && HUB_TODAY.vocab.screen ? HUB_TODAY.vocab.screen() : null; return D && D.words ? Object.assign({}, D, { n: D.words.length, words: D.words.filter(w => !w.k) }) : D; } catch (e) { return null; } };
   const pref = (() => { try { const o = JSON.parse(localStorage.getItem(KEY)); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } })();
   const keep = () => { try { localStorage.setItem(KEY, JSON.stringify({ mix: !!pref.mix, rev: !!pref.rev })); } catch (e) {} };
   const SPK = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4z" fill="currentColor"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>';
@@ -25354,7 +25409,7 @@ if (window.SARANG_SCREEN) reg(); else document.addEventListener('DOMContentLoade
     if (!box) build();
     opener = document.activeElement;
     const a = D.day * D.count + 1;
-    $('fcT').textContent = `${D.name || '영단어'} · ${a}~${a + D.words.length - 1}번`;
+    $('fcT').textContent = `${D.name || '영단어'} · ${a}~${a + (D.n || D.words.length) - 1}번`;
     S = { all: D.words.slice(), list: [], i: 0, flip: false, mark: [], end: false, px: null, swiped: false };
     box.hidden = false; document.documentElement.classList.add('fc-lock');
     try { history.pushState(Object.assign({}, history.state || {}, { sarangFlash: 1 }), ''); pushed = true; } catch (e) {}
@@ -25402,7 +25457,7 @@ if (window.SARANG_SCREEN) reg(); else document.addEventListener('DOMContentLoade
 
   /* 할 일 목록: 확인(chk) 먼저, 그다음 익히기(learn) */
   function plan() {
-    const D = data(), words = D && D.words ? D.words : [];
+    const D = data(), words = D && D.words ? D.words.filter(w => !w.k) : [];   // 6세~초2에서 배운 단어(k)는 익히기에 넣지 않음 (2026-10-11, 위 단계에서는 철자 쓰기로만)
     const chk = shuffle(M.due()).flatMap(x => x.left.map(dir => ({ kind: 'chk', w: { w: x.w, m: x.m, p: x.p }, dir, st: x.st })));
     const seen = new Set(), learn = [];
     [...words, ...M.learning()].forEach(w => { const k = M.key(w.w); if (seen.has(k) || M.state(w.w).st !== 0) return; seen.add(k); learn.push({ w: w.w, m: w.m, p: w.p || '' }); });
@@ -27928,7 +27983,7 @@ window.DONATE_CORE = (function(){
     '쉬는 날 잘 쉬었지? 오늘은 바로 풀기 하나 해 보자!',
     '조금씩 해도 괜찮아. 오늘 한 장이면 충분해.',
     '{이름}! 오늘 배운 것 저녁에 {보낸이}한테 알려 줄래?',
-    "숙제를 마치고 '다 했어요'를 누르면 스티커를 받을 수 있어! 천천히 해 보자.",
+    '오늘 공부를 다 마치면 스티커를 받을 수 있어! 천천히 해 보자.',   // 전에는 "숙제를 마치고 '다 했어요'를…" (2026-10-11 숙제는 초등부터: 7세 이하에게도 뽑혀서. 서버는 번호만 보냄, 알림 글은 build.py 가 sw.js 에 그대로)
     '천천히 해도 돼. {보낸이}의 응원은 늘 이어져!'
   ];
   /* {이름} = 별명 + 아/야 (받침 있으면 '아'). 별명이 없으면 그 자리를 뺌 */
@@ -28152,6 +28207,9 @@ window.DONATE_CORE = (function(){
   let devs = null, stopDev = null, cutAsk = null;
   const parentReady = () => { const l = L(); return !!(l && l.user && !l.user.child && l.agreed && l.auth); };
   const linkedOf = id => devs ? devs.find(d => d.childId === id) || null : null;
+  /* 숙제는 초1~중3만 (2026-10-11 대표 "숙제는 초등부터", "0~7세 아이를 연결한 부모 폰에서는 숙제 보내기 단추를 볼 수 없게"). 지금 고른 아이는 hub_child 학년, 다른 아이는 목록 학년 */
+  const hwAge = id => { let g = ''; try { g = (!id || (K() && id === K().cur()) ? (JSON.parse(localStorage.getItem('hub_child')) || {}).grade : ((K() && K().list().find(k => k.id === id)) || {}).grade) || ''; } catch (e) {} return /^(e[1-6]|m[1-3])$/.test(g); };
+  const what = id => hwAge(id) ? '스마트 학습과 숙제' : '스마트 학습';   // 아이 폰에서 하는 것
   function syncLogin(){
     if (isKid()) return;
     if (parentReady() && !stopDev) {
@@ -28168,14 +28226,15 @@ window.DONATE_CORE = (function(){
   }
   window.SARANG_KIDLINK = {
     linkedNow: () => !isKid() && !!(K() && linkedOf(K().cur())),
+    hwOk: () => hwAge(),   // 지금 고른 아이에게 숙제를 보낼 수 있는 학년인지 (src/dash.js 메뉴, src/wrong.js 보내기)
     hwWaiting: () => !isKid() && hwKid !== null && hwList === null && !hwFail,   // 부모 폰이 보낸 숙제를 읽는 중 (src/game.js 카드 글, 창구 G7 대조 2)
     note(){ const n = K() ? K().label(K().now()) : '아이'; toast(`${n}${josa(n, '은', '는')} 아이 폰에서 스마트 학습을 해요. 부모 폰에서는 프린트·진도 설정·현황판을 쓸 수 있어요.`); },
     get devices(){ return devs; },
     /* 틀린 문제 모음에서 숙제로 보내기 (src/wrong.js, 2026-10-08): 과목(서버 키)마다 한 칸, 문제는 떼어 둔 그대로 글(qj)로 (Firestore 겹 배열 피함) */
-    sendState: () => !L() || !L().hostOk || !parentReady() ? 'nologin' : !(K() && linkedOf(K().cur())) ? 'nolink' : 'ok',
+    sendState: () => !hwAge() ? 'young' : !L() || !L().hostOk || !parentReady() ? 'nologin' : !(K() && linkedOf(K().cur())) ? 'nolink' : 'ok',
     from: () => hwFrom, froms: () => FROM.slice(), setFrom(f){ if (FROM.includes(f)) { hwFrom = f; try { sessionStorage.setItem('sarang_hwfrom', f); } catch (e) {} } },
     async sendWrong(list){
-      if (!parentReady() || !K() || !linkedOf(K().cur()) || !list || !list.length) throw new Error('not-ready');
+      if (!hwAge() || !parentReady() || !K() || !linkedOf(K().cur()) || !list || !list.length) throw new Error('not-ready');
       const items = {}, by = {};
       list.forEach(x => { const k = SERVER[x.s] || SERVER[x.ss]; if (k) (by[k] = by[k] || []).push(x); });
       Object.entries(by).forEach(([k, l], i) => {
@@ -28216,9 +28275,9 @@ window.DONATE_CORE = (function(){
     const k = K() && K().now && K().now();
     if (L() && L().hostOk && k && !(parentReady() && devs === null)) {
       const n = esc(K().label(k)), d = linkedOf(k.id);
-      if (!d) h = `<button type="button" class="kd-ask-top" data-kdlink="${esc(k.id)}">${PHONE}<span><b>아이 폰을 아직 연결하지 않으셨나요?</b><small>${n}${josa(K().label(k), '이', '가')} 아이 폰으로 스마트 학습과 숙제를 하게 해 보세요.</small></span><i aria-hidden="true">›</i></button>`;
+      if (!d) h = `<button type="button" class="kd-ask-top" data-kdlink="${esc(k.id)}">${PHONE}<span><b>아이 폰을 아직 연결하지 않으셨나요?</b><small>${n}${josa(K().label(k), '이', '가')} 아이 폰으로 ${what(k.id)}${josa(what(k.id), '을', '를')} 하게 해 보세요.</small></span><i aria-hidden="true">›</i></button>`;
       else if (cutAsk === d.id) h = `<div class="kd-line kd-ask">${PHONE}<span><b>${n} 폰 연결을 끊을까요?</b><small>끊으면 그 폰은 첫 화면으로 돌아가고, 부모 폰에서 다시 모두 쓸 수 있어요.</small></span><div class="kd-ask-btns"><button type="button" class="linkbtn" data-kdkeep>그대로 두기</button><button type="button" class="linkbtn kd-cut" data-kdcut="${esc(d.id)}">연결 끊기</button></div></div>`;
-      else h = `<div class="kd-line">${PHONE}<span><b>${n} 폰 <em class="kd-on">연결됨</em></b><small>${esc(d.label || '아이 폰')}${ms(d.linkedAt) ? ` · ${md(ms(d.linkedAt))} 연결` : ''} · 스마트 학습과 숙제는 아이 폰에서 해요</small>${cheerOf(k.id) ? `<small class="kd-cheerln">${esc(cheerOf(k.id))}</small>` : ''}</span><button type="button" class="linkbtn" data-kdcut="${esc(d.id)}">연결 끊기</button></div>`;
+      else h = `<div class="kd-line">${PHONE}<span><b>${n} 폰 <em class="kd-on">연결됨</em></b><small>${esc(d.label || '아이 폰')}${ms(d.linkedAt) ? ` · ${md(ms(d.linkedAt))} 연결` : ''} · ${what(k.id)}${josa(what(k.id), '은', '는')} 아이 폰에서 해요</small>${cheerOf(k.id) ? `<small class="kd-cheerln">${esc(cheerOf(k.id))}</small>` : ''}</span><button type="button" class="linkbtn" data-kdcut="${esc(d.id)}">연결 끊기</button></div>`;
       /* 목록에 없는 아이의 폰 (뺀 아이) */
       const ids = new Set(K().list().map(x => x.id));
       (devs || []).filter(x => !ids.has(x.childId)).forEach(x => {
@@ -28244,7 +28303,7 @@ window.DONATE_CORE = (function(){
     const k = K() && K().now(); if (!k || linkedOf(k.id)) return;
     const n = K().label(k), d = dialog('kdNewDlg', '아이 폰 연결');
     fill(d, `<h3>${esc(n)} 폰도 지금 연결할까요?</h3>
-      <p class="kd-p">연결하면 ${esc(n)}${josa(n, '은', '는')} 아이 폰에서 스마트 학습과 숙제를 하고, 부모 폰에서는 프린트·진도 설정·현황판을 써요.</p>
+      <p class="kd-p">연결하면 ${esc(n)}${josa(n, '은', '는')} 아이 폰에서 ${what(k.id)}${josa(what(k.id), '을', '를')} 하고, 부모 폰에서는 프린트·진도 설정·현황판을 써요.</p>
       <p class="kd-p kd-later">나중에 하려면 현황판 맨 위 '아이 폰을 아직 연결하지 않으셨나요?'를 눌러 주세요.</p>
       <div class="kd-btns"><button type="button" class="kd-b" data-kdnew="later">나중에</button><button type="button" class="kd-b pri" data-kdnew="now">지금 연결하기</button></div>`, '[data-kdnew="now"]');
     d.querySelector('.kd-card').onclick = e => { const b = e.target.closest('[data-kdnew]'); if (!b) return; d.close(); if (b.dataset.kdnew === 'now') openInvite(k.id); };
@@ -28315,7 +28374,7 @@ window.DONATE_CORE = (function(){
     const x = linkedOf(inv.cid); if (!x || ms(x.linkedAt) < inv.at - 60000) return;
     inv.done = true;
     const n = K().label(K().list().find(k => k.id === inv.cid));
-    fill(d, `<h3>연결됐어요</h3><p class="kd-ok">${esc(n)} 폰(${esc(x.label || '아이 폰')})이 연결됐어요. 이제 ${esc(n)}${josa(n, '은', '는')} 아이 폰에서 스마트 학습과 숙제를 하고, 부모 폰에서는 프린트·진도 설정·현황판을 써요.</p>
+    fill(d, `<h3>연결됐어요</h3><p class="kd-ok">${esc(n)} 폰(${esc(x.label || '아이 폰')})이 연결됐어요. 이제 ${esc(n)}${josa(n, '은', '는')} 아이 폰에서 ${what(inv.cid)}${josa(what(inv.cid), '을', '를')} 하고, 부모 폰에서는 프린트·진도 설정·현황판을 써요.</p>
       <div class="kd-btns"><button type="button" class="kd-b pri" data-kdx>확인</button></div>`, '[data-kdx]');
   }
 
@@ -28356,6 +28415,7 @@ window.DONATE_CORE = (function(){
     let h;
     if (!L() || !L().hostOk) h = `<section class="card db-box kd-hw-box"><h3 class="db-h">숙제</h3><p class="kd-p">숙제 보내기는 lovedu.kr 앱에서 로그인하고 아이 폰을 연결하면 쓸 수 있어요.</p></section>`;
     else if (!parentReady()) h = `<section class="card db-box kd-hw-box"><h3 class="db-h">숙제</h3><p class="kd-p">로그인하고 가입을 마친 뒤 아이 폰을 연결하면 숙제를 보낼 수 있어요.</p></section>`;
+    else if (!hwAge()) h = `<section class="card db-box kd-hw-box"><h3 class="db-h">숙제</h3><p class="kd-p">숙제는 초등학생부터 보낼 수 있어요.</p></section>`;   // 메뉴에서 빠지지만 혹시 열려도 (2026-10-11 대표)
     else if (devs === null) h = `<section class="card db-box kd-hw-box"><p class="kd-p">아이 폰 연결 상태를 불러오는 중이에요…</p></section>`;
     else if (!linkedOf(cid)) h = `<section class="card db-box kd-hw-box"><h3 class="db-h">${esc(n)}에게 숙제 보내기</h3><p class="kd-p">${esc(n)} 폰을 연결하면 숙제를 보낼 수 있어요. 아이가 아이 폰에서 풀면 여기에 과목마다 다 했는지와 점수가 떠요.</p>
         <div class="kd-btns l"><button type="button" class="kd-b pri" data-hwset>${esc(n)} 폰 연결하기</button></div></section>`;
@@ -28479,7 +28539,7 @@ window.DONATE_CORE = (function(){
      아이 폰이 아직 없으면 그 창에서 바로 연결 창으로. 아이 폰(자녀 모드)에는 없음 */
   const SEND = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 3 3 10.5l7 3 3 7z"/><path d="m10 13.5 5-5"/></svg>';
   function hwGo(){
-    if (isKid()) { const x = $('kdHwGo'); if (x) x.hidden = true; return; }
+    if (isKid() || !hwAge()) { const x = $('kdHwGo'); if (x) x.hidden = true; return; }   // 7세 이하는 숙제 없음 (2026-10-11 대표)
     const m = $('todayMsg'); if (!m) return;
     let b = $('kdHwGo');
     if (!b) {
@@ -28527,7 +28587,7 @@ window.DONATE_CORE = (function(){
         d.canClose = true;
         if (!p || p.status !== 'ok') return r.code ? codeStep('번호가 맞지 않거나 시간이 지났어요. 부모님께 새 번호를 받아 주세요.', r.code) : codeStep('이 링크는 더 쓸 수 없어요. 이미 쓴 링크이거나 24시간이 지났어요. 부모님께 새 번호를 받아 주세요.');
         const nick = p.nickname || '우리 아이', g = gname(p.grade);
-        fill(d, `<h3>${esc(nick)} 공부 폰으로 연결할까요?</h3><p class="kd-p">${g ? `${esc(g)} · ` : ''}연결하면 이 폰은 ${esc(nick)} 전용이 돼요. 부모님이 정한 스마트 학습과 보낸 숙제를 여기서 풀어요.</p>
+        fill(d, `<h3>${esc(nick)} 공부 폰으로 연결할까요?</h3><p class="kd-p">${g ? `${esc(g)} · ` : ''}연결하면 이 폰은 ${esc(nick)} 전용이 돼요. 부모님이 정한 스마트 학습${/^[em]/.test(p.grade || '') ? '과 보낸 숙제' : ''}를 여기서 풀어요.</p>
           <p class="kd-err" role="alert"></p>
           <div class="kd-btns"><button type="button" class="kd-b" data-kjback>다른 번호</button><button type="button" class="kd-b pri" data-kjgo>연결하기</button></div>`, '[data-kjgo]');
         d.querySelector('[data-kjgo]').onclick = () => go(r, nick);
@@ -28629,7 +28689,7 @@ window.DONATE_CORE = (function(){
   window.SARANG_KIDDAY = () => {
     if (isKid()) return kidHw !== null ? dayDone() : null;
     if (!parentReady() || !A() || !K() || !devs) return null;
-    const cid = K().cur(); if (!linkedOf(cid)) return null;
+    const cid = K().cur(); if (!linkedOf(cid) || !hwAge()) return null;   // 7세 이하는 숙제를 읽지 않고 시간표만 (기다림 10초도 없음)
     hwWatch(cid);
     if (hwFail) return null;
     if (hwList === null) return false;
@@ -28721,6 +28781,7 @@ window.DONATE_CORE = (function(){
       box.dataset.h = h; box.innerHTML = h;
       if (f) { const b = box.querySelector(`[data-calm="${f}"]`); if (b && !b.disabled) b.focus({ preventScroll: true }); }
     }
+    if (window.SARANG_GRAM) SARANG_GRAM.kidEntry();   // 달력 아래 '영문법 사전' 한 줄 (src/gram.js)
   }
   document.addEventListener('hub:refresh', () => setTimeout(stampCheck, 0));
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') stampCheck(); });   // 날이 바뀐 뒤 다시 열 때
@@ -28773,6 +28834,7 @@ window.DONATE_CORE = (function(){
   function start(){
     if (isKid()) { kidMount(); kidWatch(); calPaint(); return; }
     mountSet(); hwGo(); setTimeout(hwGo, 600);   // '틀린 문제 모음' 줄(src/wrong.js)이 늦게 붙어도 그 위로
+    document.addEventListener('hub:refresh', hwGo);   // 설정에서 학년을 7세 이하 ↔ 초등으로 바꾸면 줄을 숨기거나 다시 보임
     /* 끊긴 아이 폰: 첫 화면에 한 번 알림 */
     let cut = null; try { cut = localStorage.getItem('sarang_kidcut'); } catch (e) {}
     if (cut) { try { localStorage.removeItem('sarang_kidcut'); } catch (e) {} setTimeout(() => toast('부모님이 이 폰 연결을 끊었어요. 다시 쓰려면 부모님께 새 번호를 받아 주세요.'), 400); }
@@ -29536,6 +29598,7 @@ window.DONATE_CORE = (function(){
   const NAV = () => window.HUB_NAV;
   const GNAME = { k2: '2세', k3: '3세', k4: '4세', k5: '5세', k6: '6세', k7: '7세', e1: '초1', e2: '초2', e3: '초3', e4: '초4', e5: '초5', e6: '초6', m1: '중1', m2: '중2', m3: '중3' };
   const isTod = () => ['k2', 'k3', 'k4'].includes(J('hub_child').grade);
+  const hwOk = () => /^(e[1-6]|m[1-3])$/.test(J('hub_child').grade || '');   // 왼쪽 메뉴 '숙제': 초1~중3만 (2026-10-11 대표 "숙제는 초등부터", src/kidmode.js hwAge 와 같은 기준)
   const scOk = () => /^[em][1-6]$/.test(J('hub_child').grade || '') && !!window.SARANG_SCHOOL;   // 왼쪽 메뉴 '학교생활' (src/school.js, 판 76 후보)
   const Wd = () => isTod() ? { p: '뽑아서', s: '화면', u: '장', act: '놀이', did: '논' } : { p: '프린트', s: '스마트', u: '과목', act: '공부', did: '공부한' };
   /* 놀이 기록: { 'Y-M-D': { p, s } } — play_log 에 없는 날은 play_printed·play_done(장마다 마지막 날)로 셈 */
@@ -29707,7 +29770,7 @@ window.DONATE_CORE = (function(){
         <div class="db-sub" id="dbSub" role="group" aria-label="학습 현황 나누어 보기"><button type="button" class="db-sub-i" data-dbsub="time">시간</button><button type="button" class="db-sub-i" data-dbsub="perf">교육 성과</button></div>
         <button type="button" class="db-nav-i" data-dbnav="mgmt">${svg(ICON.mgmt)}<span>학습 관리</span></button>
         <button type="button" class="db-nav-i" data-dbnav="rep">${svg(ICON.rep)}<span>리포트</span></button>
-        <button type="button" class="db-nav-i" data-dbnav="hw">${svg(ICON.hw)}<span>숙제</span></button>
+        <button type="button" class="db-nav-i" data-dbnav="hw"${hwOk() ? '' : ' hidden'}>${svg(ICON.hw)}<span>숙제</span></button>
         <button type="button" class="db-nav-i" data-dbnav="school"${scOk() ? '' : ' hidden'}>${svg(ICON.school)}<span>학교생활</span></button>
         <div class="db-nav-slot">새 기능은 이 아래로 추가돼요</div>
       </nav>
@@ -29830,6 +29893,7 @@ window.DONATE_CORE = (function(){
     if (v !== 'stat' && v !== 'rep' && v !== 'mgmt' && v !== 'hw' && v !== 'school') return;
     if (v === 'mgmt' && isTod()) v = 'stat';
     if (v === 'school' && !scOk()) v = 'stat';
+    if (v === 'hw' && !hwOk()) v = 'stat';
     if (v !== 'rep' && rep) closeRep(true);
     if (v !== 'mgmt') { weekOff(); padOff(); }
     view = v;
@@ -29864,6 +29928,7 @@ window.DONATE_CORE = (function(){
   function render(){
     if (!root) return;
     { const sb = root.querySelector('[data-dbnav="school"]'); if (sb) sb.hidden = !scOk(); }   // 학교생활: 초1~중3 아이만 (아이를 바꾸면 다시 봄)
+    { const hb = root.querySelector('[data-dbnav="hw"]'); if (hb) hb.hidden = !hwOk(); }   // 숙제도 같게
     const now = new Date(), today = day0(now), rec = studied(), subs = subjects();
     $('dbDate').textContent = `${now.getMonth() + 1}월 ${now.getDate()}일 ${WD[now.getDay()]}요일`;
     /* D안 (2026-10-05 대표 확정): 학습 현황 맨 위 날짜 + "○○의 하루, 차근차근." + 손그림 해 (날짜는 머리줄 대신 여기) */
@@ -30288,6 +30353,8 @@ window.DONATE_CORE = (function(){
       return `<button type="button" class="db-mg-row${ch.has(s) ? ' ch' : ''}" data-mg="${s}"><span class="db-mg-top"><b>${esc(r.name)}</b>${ch.has(s) ? '<span class="db-pill ahead">바꿈</span>' : pill(r)}</span>`
         + `<span class="db-mg-at">${r.tag ? `<em>${esc(r.tag)}</em>` : ''}${esc(r.title)}</span>${r.rest ? `<small>${esc(r.rest)}</small>` : ''}<i class="db-mg-go" aria-hidden="true">›</i></button>`; }).join('')
       : '<p class="db-empty">고른 과목이 없어요.</p>';
+    { const V = window.HUB_TODAY && HUB_TODAY.vocab && HUB_TODAY.vocab.pre, pre = V && V.ask() ? V.on() : null;   // 초3·4가 초3~4 영단어를 다 배웠을 때 예습 고르기 (2026-10-11 대표, 영단어 단계 칸과 같은 칸)
+      if (pre !== null) $('dbMgList').insertAdjacentHTML('beforeend', `<div class="v-pre db-vpre"><p><b>영단어: 초3~4학년 단어를 다 배웠어요.</b> 4학년이 끝나기 전에 초5~6 단어를 미리 배울지 골라 주세요.</p><div class="v-pre-b" role="group" aria-label="영단어 초3~4학년을 다 배운 뒤"><button type="button" data-vpre="0" aria-pressed="${!pre}">복습만 하기</button><button type="button" data-vpre="1" aria-pressed="${pre}">초5~6 미리 배우기</button></div><p class="v-pre-now">${pre ? '지금은 초5~6 단어를 미리 배우고 있어요.' : '지금은 배운 단어를 복습하고 있어요.'}</p></div>`); }   // 바뀌는 글은 단추 아래 (창구 H4 [하], 10-11)
     $('dbMgBar').hidden = !o;
     $('dbMgSave').textContent = ch.size ? `저장 (${ch.size}과목)` : '저장';
     $('dbMgSchool').hidden = !(N && N.schoolInfo && N.schoolInfo().ok);   // 학교 진도가 있는 과목이 있을 때만
@@ -30310,7 +30377,7 @@ window.DONATE_CORE = (function(){
     if (back && !mgRead() && (view !== 'stat' || sub !== 'time')) { sub = 'time'; subOpen = true; setView('stat', true); }
     try { if (on) sessionStorage.setItem(KEEP, '1'); else sessionStorage.removeItem(KEEP); } catch (e) {}
     if (!on) { if (drawer) setDrawer(false); if (rep) closeRep(true); weekOff(); padOff(); return; }
-    if ((view === 'mgmt' && isTod()) || (view === 'school' && !scOk())) setView('stat');
+    if ((view === 'mgmt' && isTod()) || (view === 'school' && !scOk()) || (view === 'hw' && !hwOk())) setView('stat');
     fitW(); if (view === 'rep') paintRep(); else if (view === 'mgmt') { render(); paintMgmt(); } else render(); if (view === 'hw' && window.SARANG_HW) SARANG_HW.paint($('dbHw')); if (view === 'school' && window.SARANG_SCHOOL) SARANG_SCHOOL.paint($('dbSchool')); paintOpen();
   }
   document.addEventListener('hub:refresh', () => { if (!on) return; if (view === 'rep') paintRep(); else render(); if (view === 'mgmt') paintMgmt(); });
@@ -30517,11 +30584,12 @@ window.SARANG_WRONG = (function(){
     }
     if (c.length > 1) h += `<div class="wr-chips" role="radiogroup" aria-label="과목">${[['all', '전체', all.length], ...c.map(([s, n]) => [s, NAME[s], n])].map(([k, t, n]) => `<button type="button" role="radio" class="wr-chip${flt === k ? ' on' : ''}" aria-checked="${flt === k}" data-wrf="${k}">${t} <small>${n}</small></button>`).join('')}</div>`;
     const R = runSet(L), pdfN = L.filter(x => x.q.kind !== 'm13').length;
-    const kp = linked();
-    h += `<div class="wr-acts">`
-      + (kp ? `<span class="wr-na" title="아이 폰과 연결된 아이는 아이 폰에서 풀어요">다시 풀기는<br>아이 폰에서</span>` : `<button type="button" class="wr-act pri" data-wra="run"${busy ? ' disabled' : ''}>다시 풀기<small>${R.length}문제${L.length > R.length ? ` (${RUN_MAX}개씩)` : ''}</small></button>`)
+    const kp = linked(), hw = hwOk();   // 아이 폰을 연결한 5~7세는 숙제를 못 받으니 부모 폰에서 다시 풀기 (대표 10-11 10:18 '(나)')
+    if (!hw) sendOpen = false;
+    h += `<div class="wr-acts${hw ? '' : ' two'}">`
+      + (kp && hw ? `<span class="wr-na" title="아이 폰과 연결된 아이는 아이 폰에서 풀어요">다시 풀기는<br>아이 폰에서</span>` : `<button type="button" class="wr-act pri" data-wra="run"${busy ? ' disabled' : ''}>다시 풀기<small>${R.length}문제${L.length > R.length ? ` (${RUN_MAX}개씩)` : ''}</small></button>`)
       + `<button type="button" class="wr-act" data-wra="pdf"${busy || !pdfN ? ' disabled' : ''}>${busy === 'pdf' ? 'PDF 만드는 중…' : '뽑기'}<small>${pdfN ? `PDF · ${pdfN}문제` : '뽑을 문제 없음'}</small></button>`
-      + `<button type="button" class="wr-act" data-wra="send" aria-expanded="${sendOpen}"${busy ? ' disabled' : ''}>아이 폰으로<small>숙제로 보내기</small></button></div>`;
+      + (hw ? `<button type="button" class="wr-act" data-wra="send" aria-expanded="${sendOpen}"${busy ? ' disabled' : ''}>아이 폰으로<small>숙제로 보내기</small></button>` : '') + '</div>';
     h += `<p class="wr-msg" role="status">${esc(msg)}</p>`;
     if (sendOpen) h += sendHtml(R, nm);
     /* 과목별 → 날짜별 */
@@ -30551,6 +30619,8 @@ window.SARANG_WRONG = (function(){
       op.forEach(k => { const b = body.querySelector(`[data-wrask="${k}"],[data-wrdel="${k}"]`); if (b) b.closest('.wr-i').querySelector('details').open = true; });   // 펼쳐 둔 문제는 그대로
     }
   }
+  /* 숙제는 초1~중3만 (2026-10-11 대표 "숙제는 초등부터"): 7세 이하는 '아이 폰으로 · 숙제로 보내기' 단추를 빼고 두 칸으로 (src/kidmode.js hwAge 와 같은 기준) */
+  const hwOk = () => /^(e[1-6]|m[1-3])$/.test((child() || {}).grade || '');
   /* 보내기 칸: 보내는 사람 + 보내기 (현황판 '숙제'와 같은 흐름, src/kidmode.js SARANG_KIDLINK.sendWrong) */
   function sendHtml(R, nm){
     const KL = window.SARANG_KIDLINK, st = KL && KL.sendState ? KL.sendState() : 'nologin';
