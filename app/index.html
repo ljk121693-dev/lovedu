@@ -1837,6 +1837,26 @@ textarea.scr-in{resize:vertical}
 .scr-img{text-align:center}
 .scr-img img{display:block;margin:0 auto;max-width:100%;height:auto;max-height:340px;width:auto;border-radius:8px;border:1px solid var(--line);background:#fff}
 .scr-img figcaption{margin-top:6px;font-size:13px;font-weight:700}
+/* 프린트 '다 풀었어요' (2026-10-10): 뽑은 뒤 부모가 맞은 개수를 적어야 끝난 날로 셈 */
+.td-pw{grid-column:1;border-style:solid;background:var(--soft)}
+.td-go.td-chk{grid-column:2}
+html.kid-dev .td-pw{grid-column:1/-1}
+@media (max-width:300px){.td-go.td-chk svg{display:none}.td-go.td-chk{padding:4px 2px}}   /* 260×280 플립 바깥 화면: 글이 단추 밖으로 나가지 않게 (창구 판 82 대조) */
+.pc-row{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);align-items:end;gap:8px;margin:12px 0 0}
+.pc-row label{display:flex;flex-direction:column;gap:4px;min-width:0;color:var(--sub);font-size:13.5px;font-weight:700}
+.pc-row .kd-err,.pc-row .kd-btns{grid-column:1/-1}
+.pc-sl{padding-bottom:12px;color:var(--sub);font-size:22px}
+.pc-in{letter-spacing:0;-moz-appearance:textfield;appearance:textfield}
+.pc-in::-webkit-outer-spin-button,.pc-in::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+/* 어제 뽑은 프린트 (2026-10-10 창구 판 82 대조: 저녁에 뽑고 다음 날 아침 채점하는 집) — 오늘 목록 위, 부모 기기만 */
+.pc-late{margin:0 0 12px;padding:10px 12px 12px;border:1px solid var(--line);border-radius:12px;background:var(--soft)}
+.pc-late[hidden]{display:none}
+.pc-late-t{margin:0}
+.pc-late-t b{display:block;font-size:14.5px;font-weight:800;color:var(--ink)}
+.pc-late-t small{display:block;margin-top:2px;color:var(--sub);font-size:12.5px;line-height:1.45}
+.pc-late-l{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.td-go.pc-late-b{flex:0 1 auto;padding:4px 12px;white-space:normal;text-align:left}
+@media (max-width:300px){.td-go.pc-late-b{flex:1 1 100%;justify-content:flex-start}}
 /* ===== 공용 펜 (src/screen/pen.js) ===== */
 .sp-pen{--pen-bg:var(--card,#fff);--pen-ink:var(--ink,#1d2330);--pen-grid:var(--sub,#8a8f99);--pen-model:var(--sub,#8a8f99);max-width:100%}
 .sp-pen.sp-paper{--pen-bg:#fff;--pen-ink:#2b2b2b;--pen-grid:#9a9a9a;--pen-model:#9a9a9a}
@@ -5321,6 +5341,123 @@ div.kd-wrl{padding-left:12px}
 .kd-sheet .kd-hw-box{padding:0;border:0;border-radius:0;background:none;box-shadow:none}
 .kd-sheet .kd-hw-box + .kd-hw-box{margin-top:16px;padding-top:16px;border-top:1px solid var(--line)}
 @media (min-width:600px){.kd-dlg.kd-sheet{align-items:center;padding:16px}.kd-dlg.kd-sheet .kd-card{border-radius:16px}}
+</style>
+<style id="sarang-game">/* 게임 1차: 학습 탭 '오늘 놀이' 카드 + 놀이 화면(#gmView) (src/game.js, 2026-10-10) */
+#app.gm-on > :not(#gmView){display:none!important}
+.gm-card{--gm-sun:#e9b949;margin:12px 0 4px;padding:14px;border:1px solid var(--line);border-radius:16px;background:var(--card);color:var(--ink);display:grid;gap:12px}
+.gm-card[hidden]{display:none}
+.gm-top{display:flex;align-items:flex-start;gap:10px;min-width:0}
+.gm-top p{margin:0;min-width:0;display:grid;gap:2px}
+.gm-top b{font-size:15.5px;line-height:1.4;word-break:keep-all}
+.gm-top small{color:var(--sub);font-size:13px;line-height:1.5;word-break:keep-all}
+.gm-ic{flex:none;display:grid;place-items:center;width:38px;height:38px;border-radius:12px;background:var(--soft);color:var(--sub)}
+.gm-ic svg{width:21px;height:21px}
+.gm-ic.gm-on{background:color-mix(in srgb,var(--gm-sun) 22%,var(--card));color:#c79a1e}
+.gm-row{display:flex;align-items:center;gap:10px;min-width:0}
+.gm-row .gm-b{flex:none;width:auto;padding:0 16px}
+.gm-btns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.gm-prog{flex:1 1 auto;min-width:40px;height:8px;border-radius:99px;background:color-mix(in srgb,var(--line) 80%,var(--card));overflow:hidden}
+.gm-prog i{display:block;height:100%;border-radius:99px;background:var(--pri)}
+.gm-cnt{flex:none;color:var(--sub);font-size:12.5px;font-variant-numeric:tabular-nums}
+.gm-b{display:inline-flex;align-items:center;justify-content:center;gap:6px;width:100%;min-height:46px;padding:0 12px;border:1.5px solid var(--pri);border-radius:14px;background:var(--pri);color:var(--pri-ink);font:inherit;font-size:15px;font-weight:800;cursor:pointer;white-space:nowrap}
+.gm-b.gm-ghost{background:var(--card);color:var(--pri)}
+.gm-b:focus-visible,.gm-c:focus-visible,.gm-ib:focus-visible,.gm-tabs button:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
+@media (max-width:300px){.gm-btns{grid-template-columns:minmax(0,1fr)}.gm-row{flex-wrap:wrap}.gm-row .gm-b{width:100%}}
+
+/* 놀이 화면 */
+.gm-view{--gm-sun:#e9b949;max-width:560px;margin:0 auto;padding:0 0 calc(24px + env(safe-area-inset-bottom,0px));color:var(--ink)}
+.gm-view[hidden]{display:none}
+.gm-head{position:sticky;top:0;z-index:3;display:flex;align-items:center;gap:8px;padding:8px 0;background:var(--bg)}
+.gm-tabs{flex:1 1 auto;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;min-width:0;padding:3px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.gm-tabs button{min-height:44px;padding:0 6px;border:0;border-radius:10px;background:transparent;color:var(--sub);font:inherit;font-size:14.5px;font-weight:700;cursor:pointer;white-space:nowrap}
+.gm-tabs button[aria-selected="true"]{background:var(--pri);color:var(--pri-ink)}
+/* 260×280 플립 바깥 화면: 탭 글이 단추 안에 들도록 틀을 없애고 글을 줄임 (창구 판 82 대조. 위 기본 규칙 뒤에 두어야 이김) */
+@media (max-width:300px){.gm-head{gap:4px}.gm-tabs{gap:4px;padding:0;border:0;background:none}.gm-tabs button{padding:0 1px;border:1px solid var(--line);border-radius:12px;background:var(--card);font-size:12px;letter-spacing:-.05em}.gm-tabs button[aria-selected="true"]{border-color:var(--pri);background:var(--pri)}}
+.gm-ib{flex:none;display:grid;place-items:center;width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);cursor:pointer}
+.gm-ib svg{width:22px;height:22px}
+.gm-pane{padding:6px 0 0}
+.gm-pane[hidden]{display:none}
+.gm-wait{margin:30px 0;color:var(--sub);text-align:center}
+.gm-bar{display:flex;align-items:center;gap:6px 14px;flex-wrap:wrap}
+.gm-pips{display:flex;gap:6px;margin-right:auto}
+.gm-pips i{width:12px;height:12px;border-radius:50%;border:2px solid var(--pri)}
+.gm-pips i.gm-on{background:var(--pri)}
+.gm-pips i.gm-now{background:color-mix(in srgb,var(--pri) 35%,transparent)}
+.gm-stat{color:var(--sub);font-size:13px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.gm-stat b{color:var(--ink);font-size:15px}
+.gm-theme{margin:10px 0 12px;color:var(--sub);font-size:14px}
+.gm-theme b{margin-right:6px;color:var(--d-dot,#ca6044);font-size:16px}
+.gm-board{position:relative;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+@media (max-width:300px){.gm-board{grid-template-columns:repeat(3,minmax(0,1fr))}.gm-board.gm-few{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.gm-c{position:relative;aspect-ratio:3/4;min-height:44px;padding:0;border:0;background:transparent;cursor:pointer;perspective:700px;-webkit-tap-highlight-color:transparent}
+.gm-c .gm-in{position:absolute;inset:0;transition:transform .42s cubic-bezier(.3,.8,.3,1.1);transform-style:preserve-3d}
+.gm-c.gm-open .gm-in,.gm-c.gm-got .gm-in{transform:rotateY(180deg)}
+.gm-c .gm-fc{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;overflow:hidden;border-radius:12px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.gm-c .gm-bk{background:radial-gradient(rgba(255,255,255,.18) 1.3px,transparent 1.4px) 0 0/12px 12px,linear-gradient(160deg,#2c7a66,#246553);box-shadow:0 1px 2px rgba(0,0,0,.08),0 3px 10px rgba(0,0,0,.08)}
+.gm-c .gm-bk svg{width:44%;height:auto}
+.gm-c .gm-fr{transform:rotateY(180deg);padding:5px;border:2px solid var(--line);background:var(--card)}
+.gm-c .gm-fr img{width:88%;height:auto;max-height:78%;object-fit:contain;border-radius:8px}
+.gm-c .gm-fr img.gm-mini{width:62%;max-height:50%}
+.gm-c .gm-w{color:var(--ink);font-size:clamp(15px,4.6vw,22px);font-weight:800;line-height:1.15;text-align:center;word-break:keep-all;overflow-wrap:break-word;max-width:100%}
+.gm-c .gm-w.gm-en{letter-spacing:.01em}
+.gm-c .gm-w.gm-han{font-family:"Noto Serif KR","Noto Serif CJK KR","Batang",serif;font-size:clamp(28px,9vw,40px);font-weight:700}
+.gm-c .gm-w.gm-alt{color:var(--pri)}
+.gm-c .gm-s{color:var(--sub);font-size:11px;line-height:1.2;text-align:center}
+.gm-c.gm-got .gm-fr{border-color:var(--pri);background:var(--soft)}
+.gm-c.gm-got .gm-fr::after{content:"";position:absolute;right:5px;top:5px;width:18px;height:18px;border-radius:50%;background:var(--pri) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Cpath d='M5 10.5l3.2 3L15 7' fill='none' stroke='white' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/14px no-repeat}
+.gm-c.gm-miss .gm-in{animation:gm-wob .4s}
+@keyframes gm-wob{25%{transform:rotateY(180deg) translateX(-3px)}75%{transform:rotateY(180deg) translateX(3px)}}
+.gm-c.gm-pop .gm-fr{animation:gm-pop .5s}
+@keyframes gm-pop{40%{transform:rotateY(180deg) scale(1.07)}}
+.gm-toast{position:absolute;left:50%;top:0;z-index:2;padding:6px 14px;border-radius:999px;background:var(--d-dot,#ca6044);color:#fff;font-size:15px;font-weight:800;white-space:nowrap;pointer-events:none;opacity:0;transform:translate(-50%,-30%);transition:opacity .2s,transform .2s}
+.gm-toast.gm-show{opacity:1;transform:translate(-50%,-60%)}
+.gm-hint{margin:12px 0 0;color:var(--sub);font-size:13px;line-height:1.55;word-break:keep-all}
+
+/* 한 판 끝 */
+.gm-over{position:fixed;inset:0;z-index:96;display:flex;align-items:center;justify-content:center;padding:16px;overflow:auto;background:color-mix(in srgb,var(--bg) 78%,transparent);overscroll-behavior:contain}
+.gm-over[hidden]{display:none}
+.gm-res{width:100%;max-width:340px;margin:auto;padding:20px 16px;border:1.5px solid var(--line);border-radius:20px;background:var(--card);box-shadow:0 18px 50px rgba(0,0,0,.18);text-align:center;display:grid;gap:12px}
+.gm-res h2{margin:0;font-size:21px;line-height:1.35;word-break:keep-all}
+.gm-res p{margin:0;color:var(--sub);font-size:14px;line-height:1.6;word-break:keep-all}
+.gm-res .gm-best{color:var(--d-dot,#ca6044);font-weight:800}
+.gm-res .gm-end{color:var(--ink);font-weight:800}
+.gm-stars{display:flex;justify-content:center;gap:6px}
+.gm-stars svg{width:44px;height:44px}
+.gm-stars svg path{fill:var(--gm-sun)}
+.gm-stars svg.gm-off path{fill:var(--line)}
+.gm-stars svg.gm-on{animation:gm-star .5s backwards}
+.gm-stars svg.gm-on:nth-child(2){animation-delay:.18s}.gm-stars svg.gm-on:nth-child(3){animation-delay:.36s}
+@keyframes gm-star{from{transform:scale(.2) rotate(-40deg);opacity:0}}
+.gm-peek{display:flex;justify-content:center;gap:8px}
+.gm-peek img{width:46px;height:46px;border-radius:12px;background:var(--soft);filter:blur(3px) grayscale(.3);opacity:.8}
+
+/* 스티커판 */
+.gm-note{position:relative;padding:16px 14px 18px 28px;border:1.5px solid var(--line);border-radius:6px 18px 18px 6px;background:var(--card)}
+.gm-note::before{content:"";position:absolute;left:12px;top:14px;bottom:14px;border-left:2px dashed color-mix(in srgb,var(--d-dot,#ca6044) 35%,transparent)}
+.gm-note-h{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.gm-note-h b{font-size:17px}
+.gm-note-h span{margin-left:auto;color:var(--sub);font-size:13px;font-variant-numeric:tabular-nums}
+.gm-prog.gm-big{display:block;margin:10px 0 14px}
+.gm-slots{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px}
+.gm-sl{position:relative;aspect-ratio:1;display:grid;place-items:center;border:1.5px dashed var(--line);border-radius:50%}
+.gm-sl svg{width:86%;height:86%}
+.gm-sl .gm-st-bg{fill:var(--card);stroke:var(--line);stroke-width:1}
+.gm-sl.gm-fill{border:0;box-shadow:0 0 0 2px var(--pri)}
+.gm-sl.gm-fill.gm-p{box-shadow:0 0 0 2px var(--d-dot,#ca6044)}
+.gm-sl .gm-d{position:absolute;right:-6px;bottom:-5px;padding:0 3px;border-radius:7px;background:var(--card);color:var(--sub);font-size:9.5px;line-height:13px;font-variant-numeric:tabular-nums}
+.gm-sl.gm-next svg{opacity:.22;filter:grayscale(1)}
+.gm-sl.gm-new svg{animation:gm-stick .7s cubic-bezier(.2,1.4,.4,1) backwards}
+@keyframes gm-stick{from{transform:translateY(-36px) scale(1.5) rotate(-25deg);opacity:0}}
+.gm-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:14px;color:var(--sub);font-size:12.5px}
+.gm-legend i{display:inline-block;width:10px;height:10px;margin-right:4px;border-radius:50%;vertical-align:-1px;box-shadow:0 0 0 2px var(--pri)}
+.gm-legend i.gm-p{box-shadow:0 0 0 2px var(--d-dot,#ca6044)}
+.gm-pages p{margin:16px 0 6px;color:var(--sub);font-size:13px}
+.gm-pgs{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.gm-pg{flex:none;width:84px;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--sub);font-size:11px;text-align:center}
+.gm-pg .gm-mini{display:grid;grid-template-columns:repeat(5,1fr);gap:2px;margin-bottom:4px}
+.gm-pg .gm-mini i{aspect-ratio:1;border-radius:50%;background:var(--pri)}
+@media (max-width:300px){.gm-note{padding:12px 10px 14px 20px}.gm-note::before{left:8px}.gm-slots{gap:6px}.gm-sl .gm-d{display:none}}
+@media (prefers-reduced-motion:reduce){.gm-c .gm-in{transition:none}.gm-c.gm-miss .gm-in,.gm-c.gm-pop .gm-fr,.gm-stars svg.gm-on,.gm-sl.gm-new svg{animation:none}}
 </style>
 <style id="sarang-school">/* 우리 아이 학교생활 (src/school.js, 판 76 후보). 색·모양은 B안 그대로 (테두리 --line, 바탕 --card, 노란 메모 = 오늘 공부 알림 띠와 같은 모양) */
 #app .db-sc{gap:12px}
@@ -21829,6 +21966,7 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   try { const w = JSON.parse(localStorage.getItem(KEY)); if (w && typeof w === 'object') week = w; } catch (e) {}
   const todays = () => ORDER.filter(s => HUB_NAV.inWeek(s) && (!HUB_TODAY[s] || !HUB_TODAY[s].available || HUB_TODAY[s].available()) && (week[new Date().getDay()] || []).includes(s));
   HUB_TODAY.todays = () => todays();   // 화면 공부 칸(src/screen-frame.js)이 읽는 오늘 과목
+  HUB_TODAY.todaysOn = d => ORDER.filter(s => HUB_NAV.inWeek(s) && (!HUB_TODAY[s] || !HUB_TODAY[s].available || HUB_TODAY[s].available()) && (week[d.getDay()] || []).includes(s));   // 그 요일 시간표 과목 (어제 뽑은 프린트를 오늘 채점했을 때 어제 스티커·도장, src/game.js·kidmode.js)
 
   function render(){
     const d = new Date(), list = todays();
@@ -22122,7 +22260,8 @@ window.SARANG_SCREEN = (function(){
   const NAME = { kor: '국어', eng: '영어', phon: '파닉스', math: '수학', ymath: '수학', vocab: '영단어', hanja: '한자', yhan: '한자', listen: '영어 듣기', soc: '사회', sci: '과학', his: '한국사', wh: '세계사' };
   const SSH = { kor: 'ekor', math: 'emath', eng: 'eng', soc: 'soc', sci: 'sci', his: 'his', wh: 'wh' };   // 교과 화면(ssh-module)
   const T = () => window.HUB_TODAY || {};
-  const ymd = () => { const d = new Date(); return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`; };
+  const ymd = (d = new Date()) => `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+  const yday = () => { const d = new Date(); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() - 1); return d; };
   const avail = d => !!d && (!d.available || !!d.available());
   let cur = null;
 
@@ -22184,6 +22323,27 @@ window.SARANG_SCREEN = (function(){
     if (doneToday(t ? t.hub : s)) w.push('스마트');
     if (doneIn(PAPER, s)) w.push('프린트');
     return w;
+  }
+  /* 프린트 확인 (2026-10-10 대표 "출력만 했을 때 열리게 하는건 안돼는거잖아"): 뽑은 것만으로는 '끝난 날'이 아님.
+     부모가 '다 풀었어요'에 맞은 개수를 넣으면 hub_paper_done[오늘][과목] 에 ok(맞은 개수)·of(문제 수)·chk(적은 때). 연속 공부 도장(kidmode)·놀이 보상은 checked 를 봄 */
+  const paperRec = s => { const x = (doneMap(PAPER)[ymd()] || {})[s]; return same(x, s) && typeof x === 'object' ? x : null; };
+  const paperChecked = s => { const x = paperRec(s); return !!(x && typeof x.ok === 'number'); };
+  const checked = s => doneToday(s) || paperChecked(s);
+  /* 그날(Date) 그 과목을 끝냈나: 스마트로 했거나 프린트에 맞은 개수가 적힘 (어제 뽑고 오늘 채점한 것, src/game.js·kidmode.js 어제 스티커·도장) */
+  const paperOn = (s, d) => { const x = (doneMap(PAPER)[ymd(d)] || {})[s]; return !!(x && typeof x === 'object' && typeof x.ok === 'number'); };
+  const checkedOn = (s, d) => { const k = ymd(d), x = (doneMap(PAPER)[k] || {})[s]; return !!(doneMap(DONE)[k] || {})[s] || !!(x && typeof x === 'object' && typeof x.ok === 'number'); };
+  /* 현황판(src/dash.js)이 '공부한 날'로 셀 프린트 기록: 맞은 개수가 적힌 것. 이 판(82)부터 뽑은 기록에는 v: 2 를 붙이고, v 가 없는 기록(그 전 판에서 뽑음)은 예전처럼 뽑은 것만으로 셈.
+     기기마다 날짜를 정하지 않아 동기화 순서와 상관없음 (창구 G6 대조 (b)) */
+  const paperDone = (k, x) => !!x && (typeof x !== 'object' || typeof x.ok === 'number' || !x.v);
+  /* 어제 뽑고 아직 맞은 개수를 안 적은 과목 (그날 스마트로 한 과목은 뺌) — 저녁에 뽑아 다음 날 아침 채점하는 집 (창구 판 82 대조) */
+  const lateList = () => { const k = ymd(yday()), P = doneMap(PAPER)[k] || {}, S = doneMap(DONE)[k] || {}; return Object.keys(P).filter(s => P[s] && typeof P[s] === 'object' && P[s].v && typeof P[s].ok !== 'number' && !S[s]); };   // 예전 판 기록(v 없음)은 이미 셈이라 묻지 않음
+  function paperCheck(s, ok, of, late){
+    const m = doneMap(PAPER), d = late ? ymd(yday()) : ymd(), x = (m[d] || {})[s];
+    if (!x || typeof x !== 'object' || (!late && !same(x, s))) return false;
+    Object.assign(x, { ok, of, chk: Date.now() });
+    try { localStorage.setItem(PAPER, JSON.stringify(m)); } catch (e) { return false; }
+    document.dispatchEvent(new CustomEvent('hub:refresh'));
+    return true;
   }
   async function finish(c, r){
     if (c.fin || c !== cur) return; c.fin = true;
@@ -22386,6 +22546,7 @@ window.SARANG_SCREEN = (function(){
   const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   const ICON = {
     scr: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4M10 8.5l4 1.8-4 1.8z"/></svg>',
+    chk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>',
     paper: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7V3h10v4M7 17H4V9h16v8h-3M7 14h10v7H7z"/></svg>'
   };
   const paperOk = s => { const m = T()[s]; return !!(m && m.pages && (!m.available || m.available())); };
@@ -22397,6 +22558,10 @@ window.SARANG_SCREEN = (function(){
   /* 줄의 오른쪽(좁으면 과목·Day 아래): 한 길이 있으면 '다 했어요', 없으면 '스마트'·'프린트'. 글자는 CSS(data-l)로 그려 줄 글(textContent)은 진도 글만 */
   function act(s, from, busy){
     const w = ways(s), n = NAME[s] || s;
+    if (w.length === 1 && w[0] === '프린트' && !paperChecked(s)) return document.documentElement.classList.contains('kid-dev')
+      ? `<div class="td-act"><span class="td-na td-pw" data-l="프린트 · 부모님 확인 전" title="${n}: 다 풀면 부모님이 '다 풀었어요'를 눌러요"></span></div>`
+      : `<div class="td-act"><span class="td-na td-pw" data-l="뽑았어요"></span><button type="button" class="td-go td-chk" data-pchk="${s}" data-l="다 풀었어요" aria-label="${n} 프린트 다 풀었어요 (맞은 개수 적기)">${ICON.chk}</button></div>`;
+    if (w.includes('프린트') && !w.includes('스마트')) { const x = paperRec(s); return `<div class="td-act"><span class="td-done" role="img" aria-label="${n} 다 했어요 (프린트 ${x.ok}/${x.of})" data-w="프린트 ${x.ok}/${x.of}"></span></div>`; }
     if (w.length) return `<div class="td-act"><span class="td-done" role="img" aria-label="${n} 다 했어요 (${w.join('·')})" data-w="${w.join('·')}"></span></div>`;
     const scr = target(s, false), pap = paperOk(s), kp = scr && onKidPhone();
     return '<div class="td-act">'
@@ -22410,6 +22575,7 @@ window.SARANG_SCREEN = (function(){
   function dayOf(s, today){ const H = T(); try { const t = H[s].info(today); return H.daySplit ? H.daySplit(t) : ['', t]; } catch (e) { return ['', '']; } }
   function refresh(){
     if (!$('todayFin')) return;
+    lateBox();
     const td = todays(), all = td.length && td.every(s => ways(s).length);   /* 큰 '바로 풀기'는 없앰 (2026-10-02 대표: 과목을 묶어 화면으로 이어 풀면 쉴 틈 없이 늘어짐 → 과목 줄의 '스마트'로 하나씩) */
     if ($('todayFin').hidden === !!all) $('todayFin').hidden = !all;
     /* 다른 과목 더 하기 */
@@ -22418,7 +22584,48 @@ window.SARANG_SCREEN = (function(){
     const html = o.map(s => { const [d, t] = dayOf(s, false); return `<li data-s="${s}" tabindex="0"><b>${NAME[s] || s}</b><i class="td-day">${esc(d)}</i><span>${T().nameHtml ? T().nameHtml(t) : esc(t)}</span>${act(s, 'list', false)}</li>`; }).join('');
     if (ul.dataset.h !== html) { ul.innerHTML = html; ul.dataset.h = html; }
   }
+  /* 어제 뽑은 프린트 줄 (부모 기기만, 오늘 목록 위): 과목마다 '다 풀었어요' → 맞은 개수 → 어제 공부로 셈 */
+  function lateBox(){
+    const list = $('todayList'); if (!list) return;
+    const kid = document.documentElement.classList.contains('kid-dev'), l = kid ? [] : lateList();
+    let b = $('pcLate');
+    if (!l.length) { if (b && !b.hidden) { b.hidden = true; b.innerHTML = ''; b.dataset.h = ''; } return; }
+    if (!b) { b = document.createElement('div'); b.id = 'pcLate'; b.className = 'pc-late'; b.setAttribute('role', 'group'); b.setAttribute('aria-labelledby', 'pcLateH'); list.before(b); }
+    const h = `<p class="pc-late-t"><b id="pcLateH">어제 뽑은 프린트</b><small>채점했으면 맞은 개수를 적어 주세요. 어제 공부로 셈해요.</small></p>`
+      + `<div class="pc-late-l">${l.map(s => `<button type="button" class="td-go pc-late-b" data-pchk="${s}" data-plate="1" aria-label="어제 뽑은 ${NAME[s] || s} 프린트 다 풀었어요 (맞은 개수 적기)">${ICON.chk}<span>${esc(NAME[s] || s)} 다 풀었어요</span></button>`).join('')}</div>`;
+    if (b.dataset.h !== h) { b.innerHTML = h; b.dataset.h = h; }
+    if (b.hidden) b.hidden = false;
+  }
+  /* '다 풀었어요' 창: 맞은 개수 / 문제 수 (문제 수는 그 과목에 지난번 적은 값을 미리 넣음) */
+  function askCheck(s, late){
+    const n = NAME[s] || s, last = (() => { const m = doneMap(PAPER); for (const d of Object.keys(m).sort((a, b) => new Date(b) - new Date(a))) { const x = (m[d] || {})[s]; if (x && typeof x.of === 'number') return x.of; } return ''; })();
+    let d = $('pcDlg');
+    if (!d) {
+      d = document.createElement('div'); d.id = 'pcDlg'; d.className = 'kd-dlg'; d.hidden = true;
+      d.innerHTML = '<div class="kd-card pc-card" role="dialog" aria-modal="true" aria-labelledby="pcH"></div>';
+      document.body.append(d);
+      d.close = () => { if (d.hidden) return; d.hidden = true; document.documentElement.classList.remove('kd-lock'); if (d.back && d.back.isConnected) try { d.back.focus({ preventScroll: true }); } catch (e) {} };
+      d.addEventListener('click', e => { if (e.target === d || e.target.closest('[data-pc="x"]')) d.close(); });
+      d.addEventListener('keydown', e => { if (e.key === 'Escape') { e.preventDefault(); d.close(); } });
+    }
+    d.querySelector('.kd-card').innerHTML = (late ? `<h3 id="pcH">어제 뽑은 ${esc(n)} 프린트를 다 풀었어요</h3><p class="kd-exp">채점한 뒤 맞은 개수를 적어 주세요. 적으면 어제 공부로 셈해요.</p>` : `<h3 id="pcH">${esc(n)} 프린트를 다 풀었어요</h3><p class="kd-exp">채점한 뒤 맞은 개수를 적어 주세요. 적으면 오늘 공부를 끝낸 날로 셈해요.</p>`)
+      + `<form class="pc-row" novalidate><label>맞은 개수<input class="kd-in pc-in" name="ok" type="number" inputmode="numeric" min="0" max="300" step="1" required></label><span class="pc-sl" aria-hidden="true">/</span><label>문제 수<input class="kd-in pc-in" name="of" type="number" inputmode="numeric" min="1" max="300" step="1" value="${last}" required></label>`
+      + '<p class="kd-err" role="alert"></p><div class="kd-btns"><button type="button" class="kd-b" data-pc="x">닫기</button><button type="submit" class="kd-b pri">적기</button></div></form>';
+    const f = d.querySelector('form'), err = d.querySelector('.kd-err');
+    f.onsubmit = e => {
+      e.preventDefault();
+      const ok = Number(f.ok.value), of = Number(f.of.value);
+      if (f.ok.value === '' || f.of.value === '' || !Number.isInteger(ok) || !Number.isInteger(of) || of < 1 || of > 300 || ok < 0) { err.textContent = '맞은 개수와 문제 수를 숫자로 적어 주세요.'; return; }
+      if (ok > of) { err.textContent = '맞은 개수가 문제 수보다 많아요.'; return; }
+      if (!paperCheck(s, ok, of, late)) { err.textContent = late ? '어제 뽑은 기록을 찾지 못했어요.' : '오늘 뽑은 기록을 찾지 못했어요. 다시 뽑은 뒤 적어 주세요.'; return; }
+      d.close();
+    };
+    d.back = document.activeElement; d.hidden = false; document.documentElement.classList.add('kd-lock');
+    f.ok.focus({ preventScroll: true });
+  }
   document.addEventListener('click', e => {
+    const c = e.target.closest('[data-pchk]');
+    if (c) { askCheck(c.dataset.pchk, c.dataset.plate === '1'); return; }
     const p = e.target.closest('[data-paper]');
     if (p) { if (!p.disabled && T().printSubs) T().printSubs([p.dataset.paper], p.dataset.from === 'today'); return; }
     const b = e.target.closest('[data-scr]'); if (!b) return;
@@ -22430,9 +22637,13 @@ window.SARANG_SCREEN = (function(){
   document.addEventListener('hub:child', () => setTimeout(refresh, 0));
   document.addEventListener('DOMContentLoaded', () => { mount(); watch(); refresh(); document.dispatchEvent(new CustomEvent('hub:refresh')); });
   window.SARANG_TODAY = {
-    act, start, ways, others, refresh,
+    act, start, ways, others, refresh, checked, paperCheck, checkedOn, paperOn, paperDone, lateList,
     /* 종이로 한 과목(오늘 카드 '프린트'·'뽑아서 풀기', 과목 화면 PDF): 저장된 과목만, 그 과목 done 뒤에 */
-    paper(list, pages){ complete(PAPER, list, null, pages && typeof pages === 'object' ? Object.fromEntries(Object.entries(pages).filter(([, n]) => n > 0).map(([s, n]) => [s, { n }])) : null); },   // pages: { 과목: 뽑은 쪽 수 } (오늘의 학습 인쇄만 넘김)
+    paper(list, pages){   // pages: { 과목: 뽑은 쪽 수 } (오늘의 학습 인쇄만 넘김). 같은 Day를 다시 뽑아도 적어 둔 맞은 개수(ok·of·chk)는 그대로
+      const each = {};
+      (list || []).forEach(s => { const x = paperRec(s), o = { v: 2 }; if (x && typeof x.ok === 'number') Object.assign(o, { ok: x.ok, of: x.of, chk: x.chk }); const n = pages && typeof pages === 'object' ? pages[s] : 0; if (n > 0) o.n = n; each[s] = o; });
+      complete(PAPER, list, null, each);
+    },
     started: () => { const d = ymd(); return [DONE, PAPER].some(k => Object.keys(doneMap(k)[d] || {}).length); }
   };
   return {
@@ -27957,6 +28168,7 @@ window.DONATE_CORE = (function(){
   }
   window.SARANG_KIDLINK = {
     linkedNow: () => !isKid() && !!(K() && linkedOf(K().cur())),
+    hwWaiting: () => !isKid() && hwKid !== null && hwList === null && !hwFail,   // 부모 폰이 보낸 숙제를 읽는 중 (src/game.js 카드 글, 창구 G7 대조 2)
     note(){ const n = K() ? K().label(K().now()) : '아이'; toast(`${n}${josa(n, '은', '는')} 아이 폰에서 스마트 학습을 해요. 부모 폰에서는 프린트·진도 설정·현황판을 쓸 수 있어요.`); },
     get devices(){ return devs; },
     /* 틀린 문제 모음에서 숙제로 보내기 (src/wrong.js, 2026-10-08): 과목(서버 키)마다 한 칸, 문제는 떼어 둔 그대로 글(qj)로 (Firestore 겹 배열 피함) */
@@ -28108,6 +28320,15 @@ window.DONATE_CORE = (function(){
   }
 
   /* ---------- 현황판 '숙제' (부모) ---------- */
+  let hwFail = false, hwWait = 0;
+  /* 부모 폰의 오늘 보낸 숙제 (숙제 칸과 놀이 스티커가 같이 씀: 아이 폰이 연결된 아이는 숙제까지 끝나야 스티커, src/game.js · 창구 판 82 대조) */
+  function hwWatch(cid){
+    if (hwKid === cid) return;
+    hwKid = cid; hwList = null; hwPick = null; hwFail = false; if (hwStop) hwStop();
+    clearTimeout(hwWait); hwWait = setTimeout(() => { if (hwKid === cid && hwList === null && !hwFail) { hwFail = true; console.warn('숙제 읽기 늦음: 놀이는 시간표만 봄'); document.dispatchEvent(new CustomEvent('hub:refresh')); } }, 10000);   // 답도 오류도 없으면 10초 뒤 시간표만 (창구 G6 대조 (a)), 늦게 오면 그때 다시
+    hwStop = A().homework.watch(cid, ymd(), l => { hwList = l; hwFail = false; clearTimeout(hwWait); if (hwEl && !hwEl.hidden) paintHw(hwEl); document.dispatchEvent(new CustomEvent('hub:refresh')); },
+      e => { console.warn('숙제 읽기 실패', e && e.code); hwErr = '숙제를 불러오지 못했어요.'; hwFail = true; if (hwEl) paintHw(hwEl); document.dispatchEvent(new CustomEvent('hub:refresh')); });
+  }
   let hwEl = null, hwStop = null, hwKid = null, hwList = null, hwFrom = '엄마', hwMsg = '', hwPick = null, hwBusy = false, hwErr = '', hwDrop = null;
   /* 숙제 종류 (2026-10-05 대표 "과목별 모의고사 생성 발송 또는 영단어 퀴즈 등 … 문제풀이·암기를 할 수 있는 것으로"):
      day = 오늘 학습(지금 Day, 스마트 학습) · exam = 과목별 모의시험(부모 폰이 문제를 골라 보냄, 화면에서 풂) · vocab = 영단어 '외웠는지 확인'.
@@ -28139,7 +28360,7 @@ window.DONATE_CORE = (function(){
     else if (!linkedOf(cid)) h = `<section class="card db-box kd-hw-box"><h3 class="db-h">${esc(n)}에게 숙제 보내기</h3><p class="kd-p">${esc(n)} 폰을 연결하면 숙제를 보낼 수 있어요. 아이가 아이 폰에서 풀면 여기에 과목마다 다 했는지와 점수가 떠요.</p>
         <div class="kd-btns l"><button type="button" class="kd-b pri" data-hwset>${esc(n)} 폰 연결하기</button></div></section>`;
     else {
-      if (hwKid !== cid) { hwKid = cid; hwList = null; hwPick = null; if (hwStop) hwStop(); hwStop = A().homework.watch(cid, ymd(), l => { hwList = l; if (hwEl && !hwEl.hidden) paintHw(hwEl); }, e => { console.warn('숙제 읽기 실패', e && e.code); hwErr = '숙제를 불러오지 못했어요.'; paintHw(hwEl); }); }
+      hwWatch(cid);
       const subs = hwSubjects();
       if (!hwPick) hwPick = new Set(subs.filter(x => x.on).map(x => x.s));
       const exOk = !!(HX() && H().ssh.examOk && H().ssh.examOk()), voOk = vqOk();
@@ -28250,7 +28471,7 @@ window.DONATE_CORE = (function(){
       hwBusy = false; paintHw(hwEl);
     }
   }
-  document.addEventListener('hub:child', () => { hwKid = null; hwList = null; hwPick = null; hxPick = null; hxLoad = null; hwWrong = null; if (hwStop) { hwStop(); hwStop = null; } });
+  document.addEventListener('hub:child', () => { hwKid = null; hwList = null; hwPick = null; hwFail = false; hxPick = null; hxLoad = null; hwWrong = null; if (hwStop) { hwStop(); hwStop = null; } });
   window.SARANG_HW = { paint: paintHw };
 
   /* ---------- 학습 탭에서 바로 숙제 보내기 (2026-10-09 대표 카드 'A안 학습 화면') ----------
@@ -28387,7 +28608,7 @@ window.DONATE_CORE = (function(){
     stampCheck();
   }
   /* ---------- 아이 폰 아래 '연속 공부' 달력 (2026-10-05 대표 "아이 폰 하단에, 연속 공부 캘린더를 두고, 과업을 마친날엔 다했어요 도장") ----------
-     그날 할 일 = 오늘 시간표 과목 + 오늘 받은 숙제. 둘 다 끝나면(스마트·프린트 어느 쪽이든) 그날에 '다 했어요' 도장 (hub_stamp { 'YYYY-MM-DD': 1 }, 기록과 함께 올라감).
+     그날 할 일 = 오늘 시간표 과목 + 오늘 받은 숙제. 둘 다 끝나면(스마트, 또는 프린트를 뽑고 부모가 맞은 개수를 적은 것) 그날에 '다 했어요' 도장 (hub_stamp { 'YYYY-MM-DD': 1 }, 기록과 함께 올라감).
      한 번 찍은 도장은 지우지 않음. 연속 일수 = 오늘(아직 안 끝났으면 어제)부터 거꾸로 도장이 이어진 날 수. 지금 시간표에 과목이 없는 요일(쉬는 날)은 끊지 않고 건너뜀 */
   const STAMP = 'hub_stamp';
   const stamps = () => { try { const m = JSON.parse(localStorage.getItem(STAMP)); return m && typeof m === 'object' ? m : {}; } catch (e) { return {}; } };
@@ -28402,8 +28623,22 @@ window.DONATE_CORE = (function(){
     let td = []; try { td = H().todays ? H().todays() : []; } catch (e) {}
     const hw = (kidHw || []).flatMap(w => Object.values(w.items || {}));
     if (!td.length && !hw.length) return false;
-    return td.every(s => T.ways(s).length) && hw.every(x => x.state === 'done');
+    return td.every(s => T.checked ? T.checked(s) : T.ways(s).length) && hw.every(x => x.state === 'done');   // 프린트는 뽑기만 해서는 안 셈: 부모가 '다 풀었어요'+맞은 개수를 적은 뒤 (2026-10-10 대표, src/screen-frame.js checked)
   }
+  /* 놀이 보상(src/game.js): 숙제까지 끝낸 날만. 아이 폰은 받은 숙제, 부모 폰은 아이 폰이 연결된 아이일 때 보낸 숙제를 봄(읽는 중엔 false, 못 읽으면 null = 시간표만). 아이 폰이 없는 아이는 null */
+  window.SARANG_KIDDAY = () => {
+    if (isKid()) return kidHw !== null ? dayDone() : null;
+    if (!parentReady() || !A() || !K() || !devs) return null;
+    const cid = K().cur(); if (!linkedOf(cid)) return null;
+    hwWatch(cid);
+    if (hwFail) return null;
+    if (hwList === null) return false;
+    const T = window.SARANG_TODAY; if (!T) return false;
+    let td = []; try { td = H().todays ? H().todays() : []; } catch (e) {}
+    const hw = hwList.flatMap(w => Object.values(w.items || {}));
+    if (!td.length && !hw.length) return false;
+    return td.every(s => T.checked ? T.checked(s) : T.ways(s).length) && hw.every(x => x.state === 'done');
+  };
   /* D안 아이 폰: 묶음 머리 '오늘의 스마트 학습  0/3' (시간표 과목 중 오늘 한 과목 수) */
   function cntPaint(){
     const t = $('todayTitle'), box = t && t.closest('.td-titles'); if (!box) return;
@@ -28418,6 +28653,7 @@ window.DONATE_CORE = (function(){
   function stampCheck(){
     if (isKid()) cntPaint();
     if (!isKid() || kidHw === null) return;   // 숙제를 읽기 전에는 판단하지 않음
+    lateStamp();
     const k = ymd(), m = stamps();
     if (!m[k] && dayDone()) {
       m[k] = 1;
@@ -28425,6 +28661,27 @@ window.DONATE_CORE = (function(){
       try { localStorage.setItem(STAMP, JSON.stringify(m)); } catch (e) {}
     }
     calPaint();
+  }
+  /* 어제 뽑은 프린트를 오늘 부모가 채점하면(src/screen-frame.js '어제 뽑은 프린트') 어제 도장: 어제 시간표 과목이 다 끝났고 어제 받은 숙제도 다 했을 때 (2026-10-10 창구 판 82 대조) */
+  let lateKey = '';
+  function lateStamp(){
+    const T = window.SARANG_TODAY, a = A(), k0 = kidDev();
+    if (!T || !T.checkedOn || !H().todaysOn || !a || !k0) return;
+    const d = new Date(); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() - 1);
+    const k = ymd(d); if (stamps()[k] || lateKey === k) return;
+    let td = []; try { td = H().todaysOn(d); } catch (e) {}
+    if (!td.length || !td.every(s => T.checkedOn(s, d)) || !td.some(s => T.paperOn(s, d))) return;
+    lateKey = k;
+    let stop = null, seen = false;
+    const fin = l => {
+      if (seen) return; seen = true; if (stop) stop(); else setTimeout(() => { if (stop) stop(); }, 0);
+      const hw = (l || []).flatMap(w => Object.values(w.items || {}));
+      if (!hw.every(x => x.state === 'done')) return;
+      const m = stamps(); if (m[k]) return; m[k] = 1;
+      try { localStorage.setItem(STAMP, JSON.stringify(m)); } catch (e) {}
+      calPaint();
+    };
+    try { stop = a.homework.watch(k0.childId, k, fin, e => { console.warn('어제 숙제 읽기 실패', e && e.code); lateKey = ''; seen = true; if (stop) stop(); }); } catch (e) { lateKey = ''; }
   }
   function streak(m){
     const d = new Date(); d.setHours(12, 0, 0, 0);
@@ -28529,6 +28786,350 @@ window.DONATE_CORE = (function(){
     syncLogin();
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();
+</script>
+<script>/* 게임 1차: 짝 맞추기 카드 + 수첩 스티커판 (2026-10-10 대표 "ㅇㅋㄷㅋ 그렇게하자", handoff/게임1차_1010/기획.md)
+   - 공부를 끝내야 열리는 보상. 그날 할 일(오늘 시간표 과목, 아이 폰이면 받은 숙제까지)이 모두 '확인된 끝남'일 때만:
+     스마트로 끝냄, 또는 프린트를 뽑고 부모가 '다 풀었어요'+맞은 개수를 적음 (src/screen-frame.js checked, 대표 "출력만 했을 때 열리게 하는건 안돼는거잖아")
+   - 그날 스티커 1장(hub_sticker { 'YYYY-MM-DD': 's'(스마트만) | 'p'(프린트 확인 포함) }), 짝 맞추기 하루 판 수: 유아기~초2 3판, 초3 이상 1판 (대표 10-10 10:23)
+   - 캐릭터·광고·구매·뽑기·순위·초읽기 없음. 지난번의 나와만 비교(hub_game_best). 설정 › '놀이 보상'으로 아이마다 끔(hub_game = 'off')
+   - 카드 그림은 학습지 낱말 그림 그대로 (packs/gamepic.js, build.py 가 만듦). 못 읽으면 그림 자리에 낱말 글 */
+(() => {
+  const PICS = {"file": "packs/gamepic.js?v=c9b40eaf3e"};
+  const $ = id => document.getElementById(id);
+  const esc = t => String(t == null ? '' : t).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+  const J = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k)); return v == null ? d : v; } catch (e) { return d; } };
+  const put = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+  const pad = n => String(n).padStart(2, '0');
+  const ymd = (d = new Date()) => `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+  const dayNo = () => { const d = new Date(); return Math.floor((Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()) - Date.UTC(2026, 0, 1)) / 864e5); };
+  const reduce = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const STK = 'hub_sticker', PLAY = 'hub_game_day', BEST = 'hub_game_best', OFF = 'hub_game', SND = 'gm_snd', PER_PAGE = 20;
+
+  /* ---------- 카드 재료 ---------- */
+  const SETS = {
+    tod: [['사과', '토끼', '바나나', '나비'], ['기차', '우산', '자동차', '모자'], ['강아지', '고양이', '물고기', '가방'], ['포도', '딸기', '수박', '오리'], ['거북이', '코끼리', '기린', '사자'], ['비행기', '버스', '의자', '연필'], ['나무', '구름', '우유', '양말']],
+    low: [['사과', '토끼', '바나나', '나비', '강아지', '고양이'], ['기차', '우산', '자동차', '모자', '가방', '물고기'], ['포도', '딸기', '수박', '오리', '거북이', '코끼리'], ['기린', '사자', '비행기', '버스', '의자', '연필'], ['나무', '구름', '우유', '양말', '토끼', '기차']],
+    en: [[['ball', '공'], ['bird', '새'], ['book', '책'], ['sun', '해'], ['zebra', '얼룩말'], ['robot', '로봇']], [['rain', '비'], ['clock', '시계'], ['shoe', '신발'], ['house', '집'], ['violin', '바이올린'], ['water', '물']],
+      [['hand', '손'], ['foot', '발'], ['nose', '코'], ['ear', '귀'], ['eye', '눈'], ['tooth', '이']], [['bread', '빵'], ['pen', '펜'], ['desk', '책상'], ['door', '문'], ['king', '왕'], ['queen', '여왕']]],
+    han: [[['一', '한 일'], ['二', '두 이'], ['三', '석 삼'], ['四', '넉 사'], ['五', '다섯 오'], ['六', '여섯 륙']], [['七', '일곱 칠'], ['八', '여덟 팔'], ['九', '아홉 구'], ['十', '열 십'], ['人', '사람 인'], ['大', '큰 대']],
+      [['山', '메 산'], ['水', '물 수'], ['火', '불 화'], ['木', '나무 목'], ['金', '쇠 금'], ['土', '흙 토']], [['日', '날 일'], ['月', '달 월'], ['上', '윗 상'], ['下', '아래 하'], ['中', '가운데 중'], ['小', '작을 소']]]
+  };
+  const NAME = { tod: '그림과 낱말', low: '그림과 낱말', en: '영단어와 뜻', han: '한자와 음·뜻' };
+
+  /* ---------- 아이·오늘 ---------- */
+  const child = () => J('hub_child', {}) || {};
+  function age(){
+    const g = String(child().grade || '');
+    if (window.SARANG_MID && SARANG_MID.locked(g)) return null;
+    return /^k[567]$/.test(g) ? 'tod' : /^e[12]$/.test(g) ? 'low' : /^(e[3-6]|m[123])$/.test(g) ? 'up' : null;   // 영아기(2~4세)는 시간표가 없어 뺌
+  }
+  const perDay = a => a === 'up' ? 1 : 3;
+  function mat(a){
+    if (a !== 'up') return a;
+    const s = child().subs || [], en = s.includes('eng') || s.includes('vocab'), hj = s.includes('hanja');
+    return en && hj ? (dayNo() % 2 ? 'han' : 'en') : en ? 'en' : hj ? 'han' : 'low';
+  }
+  const on = () => localStorage.getItem(OFF) !== '"off"' && localStorage.getItem(OFF) !== 'off';
+  const todays = () => { try { return window.HUB_TODAY && HUB_TODAY.todays ? HUB_TODAY.todays() : []; } catch (e) { return []; } };
+  /* 오늘 할 일을 다 끝냈나: 아이 폰은 숙제까지 (src/kidmode.js SARANG_KIDDAY) */
+  function dayDone(){
+    const T = window.SARANG_TODAY; if (!T || !T.checked) return false;
+    const k = window.SARANG_KIDDAY ? SARANG_KIDDAY() : null;
+    if (k === true || k === false) return k;
+    const td = todays();
+    return td.length > 0 && td.every(s => T.checked(s));
+  }
+  const waitPaper = () => { const T = window.SARANG_TODAY; return !!T && todays().some(s => { const w = T.ways(s); return w.length === 1 && w[0] === '프린트' && !T.checked(s); }); };
+  const waitHw = () => { const T = window.SARANG_TODAY, td = todays(); return !!T && td.length > 0 && td.every(s => T.checked(s)) && window.SARANG_KIDDAY && SARANG_KIDDAY() === false; };   // 시간표는 끝났는데 숙제가 남음 (src/kidmode.js)
+  const hwWait = () => !!(window.SARANG_KIDLINK && SARANG_KIDLINK.hwWaiting && SARANG_KIDLINK.hwWaiting());
+  const stickers = () => { const m = J(STK, {}); return m && typeof m === 'object' ? m : {}; };
+  /* 그날 처음 다 끝냈을 때 스티커 1장 (한 번 붙인 것은 지우지 않음) */
+  function award(){
+    if (!on() || !age() || !dayDone()) return false;
+    const m = stickers(), k = ymd(); if (m[k]) return false;
+    const T = window.SARANG_TODAY, paper = todays().some(s => !T.ways(s).includes('스마트'));
+    m[k] = paper ? 'p' : 's'; put(STK, m);
+    try { sessionStorage.setItem('gm_new', k); } catch (e) {}
+    return true;
+  }
+  /* 어제 뽑은 프린트를 오늘 채점했을 때(src/screen-frame.js '어제 뽑은 프린트') 어제 스티커 1장. 어제 시간표 과목이 모두 끝났고 그중 채점한 프린트가 있을 때만 (게임이 없던 날을 거슬러 채우지 않게) */
+  function awardLate(){
+    const T = window.SARANG_TODAY, H = window.HUB_TODAY;
+    if (!on() || !age() || !T || !T.checkedOn || !H || !H.todaysOn) return false;
+    const d = new Date(); d.setHours(12, 0, 0, 0); d.setDate(d.getDate() - 1);
+    const k = ymd(d), m = stickers(); if (m[k]) return false;
+    let td = []; try { td = H.todaysOn(d); } catch (e) {}
+    const late = T.lateList ? T.lateList() : [];
+    if (!td.length || !td.every(s => T.checkedOn(s, d)) || !td.some(s => T.paperOn && T.paperOn(s, d))) return false;
+    if (late.some(s => td.includes(s))) return false;
+    m[k] = 'p'; put(STK, m);
+    return true;
+  }
+  const played = () => { const p = J(PLAY, {}); return p && p.d === ymd() ? +p.n || 0 : 0; };
+  const left = () => { const a = age(); return a ? Math.max(0, perDay(a) - played()) : 0; };
+
+  /* ---------- 학습 탭 카드 ---------- */
+  function card(){
+    let c = $('gmCard');
+    const list = $('todayList');
+    if (!list) return null;
+    if (!c) { c = document.createElement('section'); c.id = 'gmCard'; c.className = 'gm-card'; c.setAttribute('aria-label', '오늘 놀이'); list.insertAdjacentElement('afterend', c); }
+    return c;
+  }
+  function paint(){
+    const c = card(); if (!c) return;
+    const a = age(), show = on() && !!a && todays().length > 0;
+    if (c.hidden === show) c.hidden = !show;
+    if (!show) return;
+    awardLate(); award();
+    const n = Object.keys(stickers()).length, cur = n % PER_PAGE, done = dayDone(), l = left(), nm = esc(kidName());
+    const prog = `<span class="gm-prog" aria-label="스티커 ${cur}칸 / ${PER_PAGE}칸"><i style="width:${cur / PER_PAGE * 100}%"></i></span><span class="gm-cnt">${n >= PER_PAGE && !cur ? PER_PAGE : cur} / ${PER_PAGE}</span>`;
+    let h;
+    if (!done) h = `<div class="gm-top"><span class="gm-ic" aria-hidden="true">${ICON.lock}</span><p><b>오늘 공부를 끝내면 열려요</b><small>스티커 1장${a ? ` · 짝 맞추기 ${perDay(a)}판` : ''}${waitPaper() ? ". 프린트는 부모님이 '다 풀었어요'를 눌러야 셈해요" : waitHw() ? (hwWait() ? '. 오늘 보낸 숙제를 확인하고 있어요' : '. 오늘 보낸 숙제까지 끝내면 열려요') : ''}</small></p></div>`
+      + `<div class="gm-row">${prog}<button type="button" class="gm-b gm-ghost" data-gm="stk">스티커판</button></div>`;
+    else if (l > 0) h = `<div class="gm-top"><span class="gm-ic gm-on" aria-hidden="true">${ICON.star}</span><p><b>${nm} 오늘 할 일을 다 했어요!</b><small>스티커 1장을 받았어요. 짝 맞추기 ${l}판이 남았어요.</small></p></div>`
+      + `<div class="gm-btns"><button type="button" class="gm-b" data-gm="play">짝 맞추기</button><button type="button" class="gm-b gm-ghost" data-gm="stk">스티커판</button></div>`;
+    else h = `<div class="gm-top"><span class="gm-ic gm-on" aria-hidden="true">${ICON.star}</span><p><b>오늘 놀이 끝! 내일 또 만나요</b><small>스티커 ${n}장을 모았어요.</small></p></div>`
+      + `<div class="gm-row">${prog}<button type="button" class="gm-b gm-ghost" data-gm="stk">스티커판</button></div>`;
+    if (c.dataset.h !== h) {   // 카드 윗부분이 화면 위쪽 밖에 있을 때 높이가 바뀌면 아래 칸이 밀리지 않게 맞춤 (창구 G7 대조 3)
+      const r0 = c.getBoundingClientRect(), ref = r0.height > 0 && r0.top < 0 ? after(c) : null;
+      if (!ref) { c.innerHTML = h; c.dataset.h = h; return; }
+      /* 높이 차이로 셈하지 않고 카드 아래 요소가 실제로 움직인 만큼만 되돌림: 크롬 자동 맞춤과 겹치지 않게 잠깐 끄고, 맨 아래에서 페이지가 줄어 스크롤이 먼저 줄어든 경우도 덮음 (창구 G8 대조 1·2) */
+      const st = document.documentElement.style, y0 = ref.getBoundingClientRect().top;   // src/hub-ui.js 알림 줄과 같은 방식
+      st.overflowAnchor = 'none'; c.innerHTML = h; c.dataset.h = h;
+      const d = ref.getBoundingClientRect().top - y0;
+      if (d) window.scrollBy(0, d);
+      st.overflowAnchor = '';
+    }
+  }
+  function after(el){ for (let e = el; e && e !== document.body; e = e.parentElement) { let n = e.nextElementSibling; while (n && !n.getClientRects().length) n = n.nextElementSibling; if (n) return n; } return null; }   // 카드 다음에 보이는 첫 요소
+  function kidName(){ const K = window.SARANG_KIDS; try { const n = K ? K.label(K.now()) : ''; return n ? n + (/[가-힣]$/.test(n) && (n.charCodeAt(n.length - 1) - 0xAC00) % 28 ? '이' : '') + '는' : '오늘'; } catch (e) { return '오늘'; } }
+
+  /* ---------- 그림 묶음 ---------- */
+  let PIC = null, picP = null;
+  function pics(){
+    if (picP) return picP;
+    if (!PICS.file) return (picP = Promise.resolve());
+    picP = new Promise(res => {
+      const s = document.createElement('script'); s.src = PICS.file; s.async = true;
+      s.onload = () => { PIC = window.SARANG_GAMEPICS || {}; delete window.SARANG_GAMEPICS; res(); };
+      s.onerror = () => { picP = null; res(); };   // 못 읽으면 이번엔 글로, 다음에 다시
+      document.head.appendChild(s);
+    });
+    return picP;
+  }
+  const pic = k => PIC && PIC[k] ? PIC[k] : '';
+
+  /* ---------- 소리 (TTS·짧은 종소리). 실패 소리는 없음 ---------- */
+  const sound = () => localStorage.getItem(SND) !== '0';
+  function speak(t, en){ if (!sound() || !window.speechSynthesis) return; try { speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(t); u.lang = en ? 'en-US' : 'ko-KR'; u.rate = .9; speechSynthesis.speak(u); } catch (e) {} }
+  let ac = null;
+  function chime(){ if (!sound()) return; try { ac = ac || new (window.AudioContext || window.webkitAudioContext)(); const t = ac.currentTime; [0, .09].forEach((d, i) => { const o = ac.createOscillator(), g = ac.createGain(); o.type = 'sine'; o.frequency.value = [660, 880][i]; g.gain.setValueAtTime(0, t + d); g.gain.linearRampToValueAtTime(.12, t + d + .02); g.gain.exponentialRampToValueAtTime(.001, t + d + .3); o.connect(g).connect(ac.destination); o.start(t + d); o.stop(t + d + .32); }); } catch (e) {} }
+
+  const ICON = {
+    lock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8.5 10.5V8a3.5 3.5 0 0 1 7 0v2.5"/></svg>',
+    star: '<svg viewBox="0 0 24 24"><path d="M12 2.8l2.8 6 6.5.8-4.8 4.4 1.3 6.4L12 17.2l-5.8 3.2 1.3-6.4-4.8-4.4 6.5-.8z" fill="currentColor"/></svg>',
+    x: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    sndOn: '<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+    sndOff: '<svg viewBox="0 0 24 24"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16.5 9.5l5 5M21.5 9.5l-5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>',
+    book: '<svg viewBox="0 0 40 40" aria-hidden="true"><path d="M6 9c4-1.5 9-1.5 14 1.5C25 7.5 30 7.5 34 9v22c-4-1.5-9-1.5-14 1.5C15 29.5 10 29.5 6 31z" fill="rgba(255,255,255,.95)"/><path d="M20 10.5v22" stroke="rgba(0,0,0,.18)" stroke-width="1.2"/><path d="M20 26s-6-3.6-6-7.6c0-2 1.5-3.3 3.2-3.3 1.3 0 2.3.8 2.8 1.8.5-1 1.5-1.8 2.8-1.8 1.7 0 3.2 1.3 3.2 3.3 0 4-6 7.6-6 7.6z" fill="#ca6044"/></svg>',
+    bigStar: on => `<svg class="${on ? 'gm-on' : 'gm-off'}" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l5.9 12.6 13.8 1.6-10.2 9.4 2.8 13.6L24 34.4l-12.3 6.8 2.8-13.6L4.3 18.2l13.8-1.6z"/></svg>`
+  };
+  /* 스티커 (캐릭터 아님: 앱 색의 단순한 물건 그림) */
+  const ST = [
+    ['하트책', '<path d="M8 13c6-2 12-2 16 2 4-4 10-4 16-2v24c-6-2-12-2-16 2-4-4-10-4-16-2z" fill="#236b59"/><path d="M24 31s-6-3.5-6-7.3c0-1.9 1.4-3.2 3-3.2 1.3 0 2.4.8 3 1.8.6-1 1.7-1.8 3-1.8 1.6 0 3 1.3 3 3.2 0 3.8-6 7.3-6 7.3z" fill="#f6c9b8"/>'],
+    ['별', '<path d="M24 7l5 10.6 11.6 1.4-8.6 7.9 2.4 11.5L24 32.6l-10.4 5.8L16 26.9l-8.6-7.9L19 17.6z" fill="#e9b949"/>'],
+    ['꽃', '<g fill="#ca6044"><circle cx="24" cy="14" r="7"/><circle cx="33.5" cy="21" r="7"/><circle cx="30" cy="32" r="7"/><circle cx="18" cy="32" r="7"/><circle cx="14.5" cy="21" r="7"/></g><circle cx="24" cy="24" r="6" fill="#e9b949"/>'],
+    ['나뭇잎', '<path d="M10 38C10 20 20 10 39 9c0 19-10 29-27 29z" fill="#4c9a6e"/><path d="M12 36L32 16" stroke="#d9efe1" stroke-width="2.2" stroke-linecap="round"/>'],
+    ['무지개', '<path d="M6 34a18 18 0 0 1 36 0" fill="none" stroke="#ca6044" stroke-width="5"/><path d="M12 34a12 12 0 0 1 24 0" fill="none" stroke="#e9b949" stroke-width="5"/><path d="M18 34a6 6 0 0 1 12 0" fill="none" stroke="#4c9a6e" stroke-width="5"/>'],
+    ['달', '<path d="M30 8a16 16 0 1 0 10 26A13 13 0 0 1 30 8z" fill="#e9b949"/>'],
+    ['구름', '<path d="M14 34a8 8 0 0 1 1-16 10 10 0 0 1 19-2 8 8 0 0 1 1 18z" fill="#8fc3dc"/>'],
+    ['연필', '<path d="M12 36l3-9 17-17 6 6-17 17z" fill="#e9b949"/><path d="M12 36l3-9 6 6z" fill="#f2d7b5"/><path d="M32 10l6 6 2-2a3 3 0 0 0 0-4l-2-2a3 3 0 0 0-4 0z" fill="#ca6044"/>'],
+    ['사과', '<path d="M24 16c-3-3-12-3-13 6-1 8 5 17 9 17 2 0 3-1 4-1s2 1 4 1c4 0 10-9 9-17-1-9-10-9-13-6z" fill="#d1584a"/><path d="M24 16c0-4 2-7 5-8" stroke="#6b4a2a" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M26 12c3-3 7-2 8 0-3 2-6 2-8 0z" fill="#4c9a6e"/>'],
+    ['해', '<circle cx="24" cy="24" r="9" fill="#e9b949"/><g stroke="#e9b949" stroke-width="3" stroke-linecap="round"><path d="M24 6v5M24 37v5M6 24h5M37 24h5M11 11l3.5 3.5M33.5 33.5L37 37M37 11l-3.5 3.5M14.5 33.5L11 37"/></g>']
+  ];
+  const stSvg = i => `<svg viewBox="0 0 48 48" role="img" aria-label="${ST[i % ST.length][0]} 스티커"><circle cx="24" cy="24" r="23" class="gm-st-bg"/>${ST[i % ST.length][1]}</svg>`;
+
+  /* ---------- 놀이 화면 (#app 안 #gmView: 다른 칸을 가리고 창 스크롤, 뒤로 가기 = 닫기) ---------- */
+  let st = null;   // { y, pushed, closing, tab }
+  function view(){
+    let v = $('gmView'); if (v) return v;
+    v = document.createElement('section'); v.id = 'gmView'; v.className = 'gm-view'; v.hidden = true; v.setAttribute('aria-label', '오늘 놀이');
+    v.innerHTML = '<div class="gm-head"><div class="gm-tabs" role="tablist" aria-label="놀이"><button type="button" role="tab" id="gmT1" data-gmt="play" aria-controls="gmPlay">짝 맞추기</button><button type="button" role="tab" id="gmT2" data-gmt="stk" aria-controls="gmStk">스티커판</button></div>'
+      + `<button type="button" class="gm-ib" id="gmSnd"></button><button type="button" class="gm-ib" id="gmX" aria-label="닫기">${ICON.x}</button></div>`
+      + '<div class="gm-pane" id="gmPlay" role="tabpanel" aria-labelledby="gmT1"></div><div class="gm-pane" id="gmStk" role="tabpanel" aria-labelledby="gmT2" hidden></div>'
+      + '<div class="gm-over" id="gmOver" hidden><div class="gm-res" role="dialog" aria-modal="true" aria-labelledby="gmResH"></div></div>';
+    $('app').appendChild(v);
+    v.addEventListener('click', e => {
+      const t = e.target.closest('[data-gmt]'); if (t) { tab(t.dataset.gmt); return; }
+      if (e.target.closest('#gmX')) { close(); return; }
+      if (e.target.closest('#gmSnd')) { try { localStorage.setItem(SND, sound() ? '0' : '1'); } catch (er) {} if (!sound() && window.speechSynthesis) try { speechSynthesis.cancel(); } catch (er) {} sndPaint(); return; }
+      if (e.target.closest('[data-gm="again"]')) { $('gmOver').hidden = true; game(); return; }
+      if (e.target.closest('[data-gm="tostk"]')) { $('gmOver').hidden = true; tab('stk'); return; }
+      const c = e.target.closest('.gm-c'); if (c) flip(c);
+    });
+    v.addEventListener('keydown', e => {
+      if (e.key === 'Escape') { e.preventDefault(); if (!$('gmOver').hidden) { $('gmOver').hidden = true; tab('stk'); } else close(); return; }
+      if (/^Arrow(Left|Right)$/.test(e.key) && e.target.closest('[data-gmt]')) { e.preventDefault(); const o = e.target.dataset.gmt === 'play' ? 'stk' : 'play'; tab(o); $(o === 'play' ? 'gmT1' : 'gmT2').focus({ preventScroll: true }); }
+    });
+    addEventListener('popstate', () => { if (st && !st.closing) shut(); });
+    return v;
+  }
+  function sndPaint(){ const b = $('gmSnd'); if (!b) return; const s = sound(); b.innerHTML = s ? ICON.sndOn : ICON.sndOff; b.setAttribute('aria-pressed', String(s)); b.setAttribute('aria-label', s ? '소리 끄기' : '소리 켜기'); }
+  function open(t){
+    const v = view();
+    if (!st) {
+      if (window.SARANG_SCREEN && SARANG_SCREEN.current) SARANG_SCREEN.close();
+      st = { y: window.scrollY };
+      $('app').classList.add('gm-on'); v.hidden = false;
+      try { history.pushState(Object.assign({}, history.state || {}, { sarangGame: 1 }), ''); st.pushed = true; } catch (e) {}
+      window.scrollTo(0, 0);
+    }
+    sndPaint();
+    tab(t === 'play' && left() > 0 ? 'play' : 'stk');
+    $('gmX').focus({ preventScroll: true });
+  }
+  function shut(){
+    if (!st) return;
+    const y = st.y; st = null; G = null;
+    if (window.speechSynthesis) try { speechSynthesis.cancel(); } catch (e) {}
+    $('gmOver').hidden = true; $('gmView').hidden = true; $('app').classList.remove('gm-on');
+    window.scrollTo(0, y);
+    paint();
+    const c = document.querySelector('#gmCard [data-gm]'); if (c) try { c.focus({ preventScroll: true }); } catch (e) {}
+  }
+  function close(){
+    if (st && st.pushed && history.state && history.state.sarangGame) { st.closing = true; history.back(); setTimeout(shut, 0); return; }
+    shut();
+  }
+  function tab(t){
+    if (t === 'play' && left() <= 0 && !G) t = 'stk';
+    ['play', 'stk'].forEach((k, i) => { const b = $('gmT' + (i + 1)); b.setAttribute('aria-selected', String(k === t)); b.tabIndex = k === t ? 0 : -1; });
+    $('gmPlay').hidden = t !== 'play'; $('gmStk').hidden = t !== 'stk';
+    if (st) st.tab = t;
+    if (t === 'play') { if (!G) game(); } else board();
+  }
+
+  /* ---------- 짝 맞추기 ---------- */
+  let G = null;   // { m, name, cards, open:[], flips, got, pairs, run, lock, done }
+  function deck(m, k){
+    const list = SETS[m], s = list[((k % list.length) + list.length) % list.length], out = [];
+    s.forEach((p, i) => {
+      if (m === 'tod' || m === 'low') { const src = pic('ko:' + p); out.push(src ? { id: i, kind: 'pic', src, say: p } : { id: i, kind: 'word', text: p, say: p, alt: 1 }); out.push({ id: i, kind: 'word', text: p, say: p }); }
+      else if (m === 'en') { out.push({ id: i, kind: 'en', text: p[0], say: p[0], en: true }); out.push({ id: i, kind: 'mean', text: p[1], src: pic('en:' + p[0]), say: p[1] }); }
+      else { out.push({ id: i, kind: 'han', text: p[0], say: p[1] }); out.push({ id: i, kind: 'mean', text: p[1], say: p[1] }); }
+    });
+    for (let i = out.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [out[i], out[j]] = [out[j], out[i]]; }
+    return { cards: out, pairs: s.length };
+  }
+  const face = (c, a) => c.kind === 'pic' ? `<img src="${c.src}" alt="">`
+    : c.kind === 'word' ? `<span class="gm-w${c.alt ? ' gm-alt' : ''}">${esc(c.text)}</span>${a === 'tod' && !c.alt ? '<span class="gm-s">눌러서 들어요</span>' : ''}`
+    : c.kind === 'en' ? `<span class="gm-w gm-en" lang="en">${esc(c.text)}</span>`
+    : c.kind === 'han' ? `<span class="gm-w gm-han" lang="zh-Hani">${esc(c.text)}</span>`
+    : (c.src ? `<img class="gm-mini" src="${c.src}" alt="">` : '') + `<span class="gm-w">${esc(c.text)}</span>`;
+  async function game(){
+    const a = age(), box = $('gmPlay'); if (!a || !box) return;
+    if (left() <= 0) { G = null; tab('stk'); return; }
+    box.innerHTML = '<p class="gm-wait" role="status">카드를 섞고 있어요…</p>';
+    await pics();
+    if (!st) return;
+    const m = mat(a), k = dayNo() * perDay(a) + played(), d = deck(m, k), best = (J(BEST, {}) || {})[m];
+    G = { a, m, cards: d.cards, pairs: d.pairs, open: [], flips: 0, got: 0, run: 0, lock: false, done: false, best };
+    const n = perDay(a), p = played();
+    box.innerHTML = `<div class="gm-bar"><span class="gm-pips" role="img" aria-label="오늘 ${n}판 중 ${p + 1}번째">${Array.from({ length: n }, (_, i) => `<i class="${i < p ? 'gm-on' : i === p ? 'gm-now' : ''}"></i>`).join('')}</span>`
+      + `<span class="gm-stat">뒤집기 <b id="gmFlips">0</b></span><span class="gm-stat">내 최고 <b>${best ? best + '번' : '-'}</b></span></div>`
+      + `<p class="gm-theme"><b>${NAME[m]}</b>${d.pairs}쌍을 찾아요</p>`
+      + `<div class="gm-board${d.cards.length <= 8 ? ' gm-few' : ''}" id="gmBoard"><div class="gm-toast" id="gmToast" aria-hidden="true"></div>${d.cards.map((c, i) => `<button type="button" class="gm-c" data-i="${i}" aria-label="카드 ${i + 1}, 덮여 있음"><span class="gm-in"><span class="gm-fc gm-bk">${ICON.book}</span><span class="gm-fc gm-fr">${face(c, a)}</span></span></button>`).join('')}</div>`
+      + `<p class="gm-hint" id="gmLive" role="status">${a === 'tod' ? '그림과 낱말이 같은 짝을 찾아요. 두 장씩 뒤집어요.' : '같은 짝을 찾아 두 장씩 뒤집어요.'}</p>`;
+  }
+  function toast(t){ const e = $('gmToast'); if (!e) return; e.textContent = t; e.classList.add('gm-show'); clearTimeout(e._t); e._t = setTimeout(() => e.classList.remove('gm-show'), 1100); }
+  function flip(el){
+    if (!G || G.lock || G.done) return;
+    const i = +el.dataset.i, c = G.cards[i];
+    if (el.classList.contains('gm-got') || el.classList.contains('gm-open')) { if (G.a === 'tod' && c.kind === 'word') speak(c.say); return; }
+    el.classList.add('gm-open'); el.setAttribute('aria-label', `카드 ${i + 1}, ${c.say}`); G.open.push(i);
+    if (G.a === 'tod' && c.kind === 'word') speak(c.say);
+    if (G.open.length < 2) return;
+    G.flips++; $('gmFlips').textContent = G.flips;
+    const [a, b] = G.open, A = G.cards[a], B = G.cards[b], ea = $('gmBoard').querySelector(`[data-i="${a}"]`), eb = el;
+    if (A.id === B.id) {
+      G.open = []; G.got++; G.run++;
+      [ea, eb].forEach(x => { x.classList.remove('gm-open'); x.classList.add('gm-got', 'gm-pop'); x.setAttribute('aria-label', `${x.getAttribute('aria-label')}, 짝 찾음`); });
+      chime();
+      const en = A.en ? A : B.en ? B : null, hj = A.kind === 'han' ? A : B.kind === 'han' ? B : null;
+      speak(en ? en.say : hj ? hj.say : A.say, !!en);
+      $('gmLive').textContent = `짝을 찾았어요: ${en ? en.say + ' ' : ''}${(en ? (en === A ? B : A) : A).say}. ${G.pairs - G.got}쌍 남았어요.`;
+      if (G.run >= 2) toast(G.run >= 3 ? `${G.run}쌍 연속! 대단해요` : '연속으로 맞혔어요!');
+      if (G.got === G.pairs) { G.done = true; setTimeout(finish, reduce() ? 200 : 700); }
+    } else {
+      G.run = 0; G.lock = true;
+      setTimeout(() => { [ea, eb].forEach(x => x.classList.add('gm-miss')); }, 380);
+      setTimeout(() => { [ea, eb].forEach((x, j) => { x.classList.remove('gm-open', 'gm-miss'); x.setAttribute('aria-label', `카드 ${(j ? b : a) + 1}, 덮여 있음`); }); G.open = []; G.lock = false; }, 1050);
+    }
+  }
+  function finish(){
+    if (!G || !st) return;
+    const p = G.pairs, f = G.flips, s = f <= p + 1 ? 3 : f <= Math.round(p * 1.75) ? 2 : 1, best = G.best, nb = !best || f < best;
+    const bm = J(BEST, {}) || {}; if (nb) { bm[G.m] = f; put(BEST, bm); }
+    const pd = J(PLAY, {}), n = (pd && pd.d === ymd() ? +pd.n || 0 : 0) + 1; put(PLAY, { d: ymd(), n });
+    const l = left(), a = G.a;
+    let msg = `${f}번 만에 ${p}쌍을 찾았어요.` + (best && nb ? `<br><span class="gm-best">지난번 ${best}번보다 ${best - f}번 적게 뒤집었어요!</span>` : !best ? '<br>이번 기록이 내 첫 기록이에요.' : `<br>내 최고 기록은 ${best}번이에요. 다음엔 깰 수 있어요!`);
+    let peek = '';
+    if (l <= 0) {
+      const nx = deck(mat(a), (dayNo() + 1) * perDay(a));
+      const im = nx.cards.filter(c => c.src).slice(0, 3);
+      peek = im.length ? `<div class="gm-peek" aria-hidden="true">${im.map(c => `<img src="${c.src}" alt="">`).join('')}</div>` : '';
+      msg += `<br>${peek ? '내일은 이런 카드가 나와요.' : '내일은 새 카드가 나와요.'}`;
+    }
+    $('gmOver').querySelector('.gm-res').innerHTML = `<div class="gm-stars" role="img" aria-label="별 ${s}개">${[0, 1, 2].map(i => ICON.bigStar(i < s)).join('')}</div>`
+      + `<h2 id="gmResH">${s === 3 ? '별 3개! 정말 잘했어요' : s === 2 ? '잘했어요!' : '다 찾았어요!'}</h2><p>${msg}</p>${peek}`
+      + (l > 0 ? `<button type="button" class="gm-b" data-gm="again">한 판 더 (남은 ${l}판)</button>` : '<p class="gm-end">오늘 놀이 끝! 내일 또 만나요</p>')
+      + `<button type="button" class="gm-b gm-ghost" data-gm="tostk">스티커판 보기</button>`;
+    G = null;
+    { const t = $('gmToast'); if (t) { clearTimeout(t._t); t.style.transition = 'none'; t.classList.remove('gm-show'); void t.offsetWidth; t.style.transition = ''; } }   // 연속 알림이 결과 창 뒤에 비치지 않게
+    $('gmOver').hidden = false;
+    const f1 = $('gmOver').querySelector('button'); if (f1) f1.focus({ preventScroll: true });
+    paint();
+  }
+
+  /* ---------- 스티커판 ---------- */
+  function board(){
+    const box = $('gmStk'); if (!box) return;
+    const m = stickers(), days = Object.keys(m).sort(), n = days.length, pg = Math.floor(n / PER_PAGE), cur = n - pg * PER_PAGE;
+    let nw = ''; try { nw = sessionStorage.getItem('gm_new') || ''; sessionStorage.removeItem('gm_new'); } catch (e) {}
+    const slots = Array.from({ length: PER_PAGE }, (_, i) => {
+      const idx = pg * PER_PAGE + i, d = days[idx];
+      if (i < cur) { const [, mo, dd] = d.split('-'); return `<div class="gm-sl gm-fill ${m[d] === 'p' ? 'gm-p' : 'gm-s'}${d === nw && !reduce() ? ' gm-new' : ''}" role="listitem" aria-label="${+mo}월 ${+dd}일, ${m[d] === 'p' ? '프린트를 부모님이 확인한 날' : '스마트로 끝낸 날'}, ${ST[idx % ST.length][0]} 스티커">${stSvg(idx)}<span class="gm-d" aria-hidden="true">${+mo}/${+dd}</span></div>`; }
+      if (i === cur) return `<div class="gm-sl gm-next" role="listitem" aria-label="다음에 받을 ${ST[idx % ST.length][0]} 스티커">${stSvg(idx)}</div>`;
+      return '<div class="gm-sl" role="listitem" aria-label="빈 칸"></div>';
+    }).join('');
+    const pages = pg ? `<div class="gm-pages" aria-label="다 채운 수첩 장"><p>다 채운 장 ${pg}장</p><div class="gm-pgs">${Array.from({ length: pg }, (_, j) => { const a = days[j * PER_PAGE].split('-'), b = days[j * PER_PAGE + PER_PAGE - 1].split('-'); return `<div class="gm-pg"><span class="gm-mini" aria-hidden="true">${'<i></i>'.repeat(PER_PAGE)}</span>${j + 1}장 · ${+a[1]}/${+a[2]}~${+b[1]}/${+b[2]}</div>`; }).join('')}</div></div>` : '';
+    box.innerHTML = `<div class="gm-note"><div class="gm-note-h"><b>작은 공부 수첩 ${pg + 1}장</b><span>${cur} / ${PER_PAGE}</span></div>`
+      + `<span class="gm-prog gm-big" aria-hidden="true"><i style="width:${cur / PER_PAGE * 100}%"></i></span>`
+      + `<div class="gm-slots" role="list" aria-label="스티커 칸">${slots}</div>`
+      + `<div class="gm-legend"><span><i class="gm-s"></i>스마트로 끝낸 날</span><span><i class="gm-p"></i>프린트를 부모님이 확인한 날</span></div></div>`
+      + `<p class="gm-hint">흐린 칸은 다음에 받을 '${ST[n % ST.length][0]}' 스티커예요. 오늘 할 일을 다 끝낸 날마다 한 칸씩 붙어요.${PER_PAGE - cur < PER_PAGE ? ` ${PER_PAGE - cur}칸 더 채우면 새 장이 열려요.` : ''}</p>${pages}`;
+  }
+
+  /* ---------- 설정 › 놀이 보상 (아이마다) ---------- */
+  function setRow(){
+    const s = $('settings'); if (!s || $('gameOn')) return;
+    const at = s.querySelector('.set-notify');
+    const h = '<label class="set-child set-game"><span><b>놀이 보상</b><small>그날 할 일을 다 끝낸 날만 스티커 1장과 짝 맞추기가 열려요. 유아기~초2는 하루 3판, 초3 이상은 1판이에요. 프린트는 부모님이 \'다 풀었어요\'를 눌러야 셈해요.</small></span><input type="checkbox" class="set-switch" id="gameOn" role="switch"></label>';
+    if (at) at.insertAdjacentHTML('afterend', h); else s.insertAdjacentHTML('beforeend', h);
+    $('gameOn').addEventListener('change', e => { try { e.target.checked ? localStorage.removeItem(OFF) : localStorage.setItem(OFF, 'off'); } catch (er) {} paint(); });
+    setPaint();
+  }
+  function setPaint(){ const b = $('gameOn'); if (!b) return; b.checked = on(); const row = b.closest('.set-game'); if (row) row.hidden = !age(); }
+
+  document.addEventListener('click', e => { const b = e.target.closest('#gmCard [data-gm]'); if (b) open(b.dataset.gm); });
+  const later = () => setTimeout(() => { paint(); setPaint(); }, 0);
+  ['hub:refresh', 'hub:child', 'sarang:screen-done'].forEach(t => document.addEventListener(t, later));
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) later(); });
+  document.addEventListener('DOMContentLoaded', () => { setRow(); later(); });
+  if (document.readyState !== 'loading') { setRow(); later(); }
+  window.SARANG_GAME = { paint, open, close, dayDone, award, left, age, mat, ids: () => G ? G.cards.map(c => c.id) : null };   // ids: 검사용 (카드 짝 번호)
 })();
 </script>
 <script>/* ==================== 우리 아이 학교생활 (판 76 후보, 대표 카드 '베타 전' 10-09 12:21, 시안 보고 "작업 진행해줘") ====================
@@ -28991,15 +29592,18 @@ window.DONATE_CORE = (function(){
   const PILL = { school: ['ok', '학교 진도대로'], same: ['ok', '학교와 같음'], ahead: ['ahead', g => `${g}개 앞섬`], late: ['late', g => `${-g}개 늦음`], free: ['free', '자유 진도'], pre: ['free', '예습'] };
   function pill(r){ const p = PILL[r.st], t = typeof p[1] === 'function' ? p[1](r.gap) : p[1]; return `<span class="db-pill ${p[0]}"${r.st === 'ahead' || r.st === 'late' ? ` title="학교 진도보다 학습지 ${Math.abs(r.gap)}개 ${r.st === 'late' ? '뒤' : '앞'}"` : ''}>${t}</span>`; }
 
+  /* 프린트 기록을 '공부한 날'로 셀지 (2026-10-10 판 82, 아이 폰 도장·놀이와 같은 규칙): 부모가 맞은 개수를 적은 것만. 예전 판에서 뽑은 기록(v 없음)은 뽑은 것만으로 (src/screen-frame.js paperDone) */
+  const pDone = (k, x) => { const T = window.SARANG_TODAY; return T && T.paperDone ? T.paperDone(k, x) : !!x; };
   /* 날짜별 한 공부: { 'YYYY-M-D': { p: [과목], s: [과목] } } */
   function studied(){
     const out = {};
     if (isTod()) { Object.entries(playDays()).forEach(([d, v]) => { out[d] = { p: Array(v.p).fill('play'), s: Array(v.s).fill('play') }; }); return out; }   // 0~4세: 장 수만큼
     const P = J('hub_paper_done'), S = J('hub_screen_done');
-    Object.entries(P).forEach(([d, v]) => { (out[d] = out[d] || { p: [], s: [] }).p = Object.keys(v || {}); });
+    Object.entries(P).forEach(([d, v]) => { const l = Object.keys(v || {}).filter(s => pDone(d, v[s])); if (l.length) (out[d] = out[d] || { p: [], s: [] }).p = l; });
     Object.entries(S).forEach(([d, v]) => { (out[d] = out[d] || { p: [], s: [] }).s = Object.keys(v || {}); });
     return out;
   }
+  const stickerN = () => { const m = J('hub_sticker'); return window.SARANG_GAME && SARANG_GAME.age && SARANG_GAME.age() ? Object.keys(m || {}).length : 0; };   // 놀이 스티커 (src/game.js hub_sticker, 놀이가 없는 나이는 0)
   const scheduled = d => { const w = J('hub_week'); const l = w[d.getDay()]; return Array.isArray(l) && l.length > 0; };
   function streak(rec, today){
     let n = 0;
@@ -29035,12 +29639,15 @@ window.DONATE_CORE = (function(){
   /* 기간 [a, b] (날짜, b 포함) 모아 보기: 공부한 날·바로 풀기 시간·뽑은 장 수·정답률·단원별 정답·한 학습지 */
   function stats(a, b){
     const P = J('hub_paper_done'), S = J('hub_screen_done'), T = J('hub_study_time');
-    const o = { days: 0, sec: 0, tDays: 0, sheets: 0, pN: 0, sN: 0, ok: 0, total: 0, hok: 0, subj: {}, day: {}, units: {}, tasks: [], any: false };   // hok: 힌트 보고 맞힌 문제 수 (화면 공부 '도와주세요')
+    const o = { days: 0, sec: 0, tDays: 0, sheets: 0, pN: 0, sN: 0, ok: 0, total: 0, hok: 0, pok: 0, ptotal: 0, subj: {}, day: {}, units: {}, tasks: [], any: false };   // hok: 힌트 보고 맞힌 문제 수 (화면 공부 '도와주세요')
     const inR = k => { const d = ymdOf(k); return d >= a && d <= b; };
     const studiedDay = {};
     if (isTod()) Object.entries(playDays()).forEach(([k, v]) => { if (!inR(k) || !(v.p + v.s)) return; studiedDay[k] = 1; o.pN += v.p; o.sN += v.s; o.sheets += v.p; (o.day[k] = o.day[k] || { sec: 0, sh: 0 }).sh += v.p; });
     else Object.entries(P).forEach(([k, v]) => { if (!inR(k) || !v) return; Object.entries(v).forEach(([s, x]) => {
-      const n = x && typeof x === 'object' && x.n > 0 ? x.n : 1; o.sheets += n; o.pN++; studiedDay[k] = 1; (o.day[k] = o.day[k] || { sec: 0, sh: 0 }).sh += n;
+      const n = x && typeof x === 'object' && x.n > 0 ? x.n : 1; o.sheets += n; (o.day[k] = o.day[k] || { sec: 0, sh: 0 }).sh += n;   // 뽑은 장 수는 뽑은 대로
+      if (!pDone(k, x)) return;   // 끝낸 학습지·공부한 날은 부모가 맞은 개수를 적은 것만
+      o.pN++; studiedDay[k] = 1;
+      if (x && typeof x.ok === 'number' && x.of > 0) { o.pok += Math.min(x.ok, x.of); o.ptotal += x.of; }   // 프린트 정답률 (기획: 프린트 맞은 개수는 현황판 기록에 더함)
       if (x && x.task) o.tasks.push({ k, s, task: x.task }); }); });
     if (!isTod()) Object.entries(S).forEach(([k, v]) => { if (!inR(k) || !v) return; Object.entries(v).forEach(([s, x]) => {
       o.sN++; studiedDay[k] = 1; if (!x || typeof x !== 'object') return;
@@ -29287,10 +29894,13 @@ window.DONATE_CORE = (function(){
       cal(rec, today); chart(); timeBox(today);
       return;
     }
-    $('dbTiles').classList.toggle('n2', sub !== 'perf'); $('dbTiles').classList.toggle('n1', sub === 'perf');   // 시간: 공부한 날·연속 / 교육 성과: 완료율
+    const pw = stats(addD(today, -6), today), stk = stickerN();   // 프린트 정답률(최근 7일, 부모가 적은 맞은 개수)·놀이 스티커 수 (2026-10-10 게임 1차 기획 ②)
+    const two = sub !== 'perf' || pw.ptotal > 0;
+    $('dbTiles').classList.toggle('n2', two); $('dbTiles').classList.toggle('n1', !two);   // 시간: 공부한 날·연속 / 교육 성과: 완료율 (+ 프린트 정답률)
     $('dbTiles').innerHTML = sub !== 'perf' ? tile('이번 주 공부한 날', week, `/${past}일`, `${WD[1]}요일부터 오늘까지`)
-      + tile('연속 공부', streak(rec, today), '일', '쉬는 요일은 빼고 셈')
-      : tile('스마트 학습 완료율', fin[0] ? Math.round(fin[1] / fin[0] * 100) : '-', fin[0] ? '%' : '', fin[0] ? `최근 7일 ${fin[0]}번 중 ${fin[1]}번 끝까지` : '스마트 학습 기록이 아직 없어요');
+      + tile('연속 공부', streak(rec, today), '일', stk ? `모은 스티커 ${stk}장 · 쉬는 요일은 빼고 셈` : '쉬는 요일은 빼고 셈')
+      : tile('스마트 학습 완료율', fin[0] ? Math.round(fin[1] / fin[0] * 100) : '-', fin[0] ? '%' : '', fin[0] ? `최근 7일 ${fin[0]}번 중 ${fin[1]}번 끝까지` : '스마트 학습 기록이 아직 없어요')
+        + (pw.ptotal > 0 ? tile('프린트 정답률', Math.round(pw.pok / pw.ptotal * 100), '%', `최근 7일 ${pw.ptotal}문제 · 부모님이 적은 맞은 개수`) : '');
     /* 과목별 진도 */
     const rows = subs.map(row);
     $('dbSubj').innerHTML = rows.length ? rows.map(r => `<tr class="${r.st === 'late' ? 'late' : 'ok'}"><td class="db-s">${esc(r.name)}</td><td class="db-u"><b>${esc(r.title)}</b><small>${esc([r.tag, r.rest].filter(Boolean).join(' · '))}</small></td><td class="db-cp">${r.pct == null ? '<span class="db-na">-</span>' : `<div class="db-bar" role="img" aria-label="이번 학기 ${r.pct}%"><i style="width:${r.pct}%"></i></div>`}</td><td>${pill(r)}</td></tr>`).join('')
@@ -29572,8 +30182,8 @@ window.DONATE_CORE = (function(){
 
   /* ---------- 학습 관리 (2026-10-04 대표): 과목마다 시작 범위 정하고 저장 ---------- */
   const MG = 'hub_mgmt';
-  /* 되돌리지 않는 것: 공부 기록·현황판 기록·부모 설정·기기 것·시간표(1단계는 누르면 바로 바뀜) (진도·방식·과목 상태만 되돌림) */
-  const MG_KEEP = [/^hub_(week|study_time|paper_done|screen_done|dash_pct|dash_on|report|kids|kid_|tour|notify|printer|subject)/, /^(play_log|play_printed|play_done|vocab_mem|vocab_flash|scr_rate|el-settings)$/, /^sarang_/, /^firebase/, /^donate_/];
+  /* 되돌리지 않는 것: 공부 기록·현황판 기록·놀이 스티커(src/game.js)·부모 설정·기기 것·시간표(1단계는 누르면 바로 바뀜) (진도·방식·과목 상태만 되돌림) */
+  const MG_KEEP = [/^hub_(week|study_time|paper_done|screen_done|dash_pct|dash_on|report|kids|kid_|tour|notify|printer|subject|sticker|game)/, /^(play_log|play_printed|play_done|vocab_mem|vocab_flash|scr_rate|el-settings|gm_snd)$/, /^sarang_/, /^firebase/, /^donate_/];
   const mgKeep = k => MG_KEEP.some(r => r.test(k));
   function mgRead(){ try { const o = JSON.parse(sessionStorage.getItem(MG)); return o && o.snap ? o : null; } catch (e) { return null; } }
   function mgWrite(o){ try { if (o) sessionStorage.setItem(MG, JSON.stringify(o)); else sessionStorage.removeItem(MG); } catch (e) {} }
@@ -30092,7 +30702,7 @@ const store = (k, v) => { try { localStorage.setItem(k, v); } catch (e) {} };
 const grade = () => { try { return (JSON.parse(load('hub_child')) || {}).grade || ''; } catch (e) { return ''; } };
 const forKid = () => AGES.includes(grade());
 const on = () => load('hub_bgm') !== '0';
-const blocked = () => document.documentElement.classList.contains('lg-gated') || !!($('app') && $('app').classList.contains('dn-on')) || document.hidden;
+const blocked = () => document.documentElement.classList.contains('lg-gated') || !!($('app') && ($('app').classList.contains('dn-on') || $('app').classList.contains('gm-on'))) || document.hidden;
 
 let audio = null, ctx = null, gain = null, order = null, idx = 0, armed = false, ducked = false, want = false;
 function shuffle(){ const a = TRACKS.map((_, i) => i); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; }
