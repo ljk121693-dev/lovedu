@@ -6255,6 +6255,7 @@ html.lg-gated .dn-top{display:none}
 .lg-pick{display:grid;gap:2px;text-align:left;width:100%;min-height:44px;padding:8px 12px;border:1px solid var(--line);border-radius:10px;background:var(--card);color:var(--ink)}
 .lg-pick b{font-size:14px}
 .lg-pick small{font-size:12px;font-weight:400;color:var(--sub);line-height:1.4}
+.lg-pick b,.lg-pick small{min-width:0;white-space:normal;word-break:keep-all;overflow-wrap:anywhere}   /* 좁은 폰(320)에서 설명이 칸 밖으로 나가지 않게 (보안 R07 세 갈래, 2026-10-12) */
 .lg-toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:60;max-width:min(420px,calc(100vw - 32px));padding:10px 14px;border-radius:12px;background:var(--ink);color:var(--card);font-size:13.5px;line-height:1.45;box-shadow:0 4px 16px rgba(0,0,0,.18)}
 .lg-toast[hidden]{display:none}
 .lg-box{margin-bottom:14px}
@@ -28556,7 +28557,7 @@ window.DONATE_CORE = (function(){
   const HOSTS = ['lovedu.kr', 'www.lovedu.kr', 'localhost', '127.0.0.1', 'lovedu-dev.web.app', 'lovedu-dev.firebaseapp.com'];
   const HOST_OK = HOSTS.includes(location.hostname);
   const EMU = HOST_OK && /^(localhost|127\.0\.0\.1)$/.test(location.hostname) && /[?&]emu=1(&|$)/.test(location.search);   // 검사: Firebase 에뮬레이터
-  const FILES = {"auth": "./packs/sarang-auth.js?v=3a1ce14b35", "sdk": "./packs/sarang-auth-sdk.js?v=94c6591f5c"};
+  const FILES = {"auth": "./packs/sarang-auth.js?v=de9b7cbcb1", "sdk": "./packs/sarang-auth-sdk.js?v=94c6591f5c"};
   const META = 'sarang_sync';
   /* 아이 폰 (자녀 모드, 2026-10-04 대표 결정): 부모가 준 6자리 번호·링크로 연결한 폰. 로그인 없이 함수가 준 아이 전용 토큰으로 들어옴.
      sarang_kiddev = { owner, childId, deviceId, nick } (기기 것, 서버에 안 올림). 이 폰은 그 아이의 '기기 하나'로 학습 기록(app·과목 묶음)을 주고받고,
@@ -28578,6 +28579,7 @@ window.DONATE_CORE = (function(){
 
   const BOOT = Date.now();   // 켤 때 앱이 스스로 고쳐 쓰는 기록은 '이 기기에서 바꾼 것'으로 치지 않음 (아래 settle)
   let A = null, loading = null, user = null, busy = false, applying = false, stopped = false, timer = null;
+  let gen = 0;   // 이 기기 기록을 지울 때마다 1 늘림: 지우기 전에 시작한 저장이 늦게 끝나 지운 기록·기준을 되살리지 않게 (보안 R07)
   let agreed = null;   // 이 계정의 가입 동의: null 모름(읽는 중) / false 아직 / true 함
   let ui = { msg: '', ask: false, err: '' };
   let kakaoBusy = false, sameMail = null;   // 카카오에서 돌아와 로그인 마무리 중 / 같은 이메일로 가입한 다른 방식(['google.com'])
@@ -28598,7 +28600,7 @@ window.DONATE_CORE = (function(){
      base 는 sarang_syncbase (기기 것, 서버에 안 올림): 받거나 올린 직후의 기록 */
   const BASE = 'sarang_syncbase';
   const base = () => { try { const o = JSON.parse(LS.getItem(BASE)); return o && typeof o === 'object' ? o : {}; } catch (e) { return {}; } };
-  const setBase = d => { try { rawSet.call(LS, BASE, JSON.stringify(d)); } catch (e) { try { rawRemove.call(LS, BASE); } catch (er) {} } };
+  const setBase = d => { if (stopped) return; try { rawSet.call(LS, BASE, JSON.stringify(d)); } catch (e) { try { rawRemove.call(LS, BASE); } catch (er) {} } };
   const flat = snap => Object.assign({}, ...Object.values(snap || {}));
   const group = d => { const out = { app: {} }; Object.entries(d).forEach(([k, v]) => { const g = groupOf(k); if (g) (out[g] = out[g] || {})[k] = v; }); return out; };
   const obj = v => { if (typeof v !== 'string' || v[0] !== '{') return null; try { const o = JSON.parse(v); return o && typeof o === 'object' && !Array.isArray(o) ? o : null; } catch (e) { return null; } };
@@ -28650,6 +28652,7 @@ window.DONATE_CORE = (function(){
     if (!A || !user || !agreed || applying || stopped) return false;   // 가입 동의 전에는 올리지 않음
     if (busy) { schedule(1500); return false; }
     busy = true; paint('저장하는 중이에요…');
+    const g = gen;
     try {
       let snap = snapshot(), reload = false;
       const m = meta() || {};
@@ -28658,6 +28661,7 @@ window.DONATE_CORE = (function(){
       /* 올리기 전에 계정 기록을 봄: 다른 기기(부모 폰 ↔ 아이 폰, 폰 ↔ PC)가 그사이 바꿨으면 덮어쓰지 않고 합침 (2026-10-04 아이 폰 연결과 함께) */
       if (m.rev || user.child) {
         const cl = await cloud(id).catch(() => null);
+        if (g !== gen) return false;   // 읽는 사이 이 기기 기록을 지움 (로그아웃·계정 바꾸기)
         if (cl && cl.rev && cl.rev !== m.rev) {
           const L0 = flat(snap), M = merge3(base(), L0, cl.data);
           reload = putLocal(L0, M);
@@ -28675,6 +28679,7 @@ window.DONATE_CORE = (function(){
       await Promise.all(GROUP.map(([g]) => A.progress.save(id, g, { data: JSON.stringify(snap[g] || {}) })));
       if (user.child) await A.children.save(id, Object.assign(study.last ? { lastStudyDate: study.last } : {}, { app: JSON.stringify(snap.app), rev, at }));   // 아이 폰: 학습 기록과 마지막 공부한 날만 (별명·학년·쉬는 요일은 부모 것)
       else await A.children.save(id, Object.assign(kidMeta(id, prev), childInfo(), study.last ? { lastStudyDate: study.last } : {}, study.rest ? { restDays: study.rest } : {}, { app: JSON.stringify(snap.app), rev, at }));
+      if (g !== gen || stopped) return false;   // 저장하는 사이 이 기기 기록을 지움: 기준·로그인 정보를 되살리지 않고 실패로 셈
       setMeta(Object.assign(meta() || m, { uid: ownerUid(), rev, dirty: false, pending: false }));
       setBase(flat(snap));
       ui.err = ''; paint('계정에 저장했어요.');
@@ -28688,13 +28693,32 @@ window.DONATE_CORE = (function(){
     } finally { busy = false; }
   }
   /* 이 기기의 아이 기록을 모두 지움 (기기 설정·로그인 정보 DENY 는 둠). 계정을 바꾸거나 로그아웃할 때 다른 계정 기록이 섞이지 않게 */
+  /* 보안 R07 (2026-10-12): DENY 에 걸려 남던 그 계정 것도 지움 — 합치기 기준(sarang_syncbase), 알림 켬 표시(sarang_push), 응원 본 것·보낸 사람(sarang_cheer*),
+     sw.js 가 읽는 알림 설정 캐시(sarang-push: 아이 별명·보낸 사람). 공용 기기에서 다음 사람이 앞 아이의 기록·별명을 보지 않게.
+     기기에 남기는 것: 화면 밝기·첫 화면·프린터·목소리·그림놀이 설정과 그림(이 기기 것), 탈퇴 접수 번호(lovedu_delete_receipt), 아이 폰 연결 표시(지우는 곳에서 따로) */
+  const ACCT_KEYS = ['sarang_syncbase', 'sarang_push', 'sarang_cheerseen', 'sarang_cheerfrom'];
   function wipeLocal(){
+    gen++;
     const drop = [];
-    for (let i = 0; i < LS.length; i++) { const k = LS.key(i); if (k && !DENY.some(r => r.test(k))) drop.push(k); }
+    for (let i = 0; i < LS.length; i++) { const k = LS.key(i); if (k && (!DENY.some(r => r.test(k)) || ACCT_KEYS.includes(k))) drop.push(k); }
     drop.forEach(k => rawRemove.call(LS, k));
+    try { if ('caches' in window) caches.delete('sarang-push'); } catch (e) {}
   }
-  /* '모든 기록 지우기': 그림놀이 그림(sarang-art)도 지움 (10-12). 로그아웃 때는 지우지 않음 — 그림은 계정·아이별로 따로 두어 다른 계정에 보이지 않음(src/screen/art.js), 지울지는 방침 A/B 대표 결정 뒤 */
-  function wipeArt(){ try { if (window.indexedDB) indexedDB.deleteDatabase('sarang-art'); } catch (e) {} }
+  /* '모든 기록 지우기': 위에 더해 그림놀이 그림(sarang-art)·문제 기부 그림(sarang_donate)도 지움 (10-12).
+     로그아웃 때는 두 가지를 지우지 않음 — 그림은 계정·아이별로, 기부 목록은 계정(setUser)별로 보여 다른 계정에 안 보임. 지울지는 방침 A/B 대표 결정 뒤 */
+  function wipeStores(){
+    try { if ('caches' in window) caches.delete('sarang-push'); } catch (e) {}
+    try { if (window.indexedDB) indexedDB.deleteDatabase('sarang-art'); } catch (e) {}
+    try { if (window.SARANG_DONATE) Promise.resolve(SARANG_DONATE.wipe()).catch(() => {}); } catch (e) {}
+  }
+  /* 로그아웃·계정 바꾸기 전: 이 기기에서 알림을 켰으면 끔. server: 아직 그 계정으로 로그인해 있을 때만 계정의 기기 알림 칸도 지움. 늦어도 4초까지만 기다림 */
+  async function dropPush(server){
+    let on = false; try { on = !!(JSON.parse(LS.getItem('sarang_push')) || {}).on; } catch (e) {}
+    const sdk = window.SARANG_LOGIN && SARANG_LOGIN._sdk; if (!on || !A) return;
+    const wait = p => Promise.race([p, new Promise(r => setTimeout(r, 4000))]);
+    if (server) try { await wait(A.savePush(null)); } catch (e) {}
+    try { if (sdk) await wait(sdk.deleteToken(sdk.getMessaging(A.firebaseApp))); } catch (e) {}
+  }
   /* 별명 (src/kids.js). 서버 규칙: 별명 1~20자.
      아이 휴대폰 번호 칸은 없앰 (2026-10-04 대표 결정). 서버 규칙이 phone 을 빈 값만 받으므로 늘 '' 로 보내
      예전에 저장된 번호도 지움 (save 는 merge 라서 안 보내면 옛 번호가 남아 저장이 막힘) */
@@ -28841,7 +28865,7 @@ window.DONATE_CORE = (function(){
   /* 기록이 바뀌는 곳은 여러 모듈이라 localStorage 쓰기를 한곳에서 봄 */
   SP.setItem = function(k, v){ const mine = this === LS && groupOf(String(k)), old = mine ? this.getItem(k) : null; rawSet.call(this, k, v); if (mine && old !== String(v)) touch(); };   // 같은 값 다시 쓰기는 변경 아님
   SP.removeItem = function(k){ const mine = this === LS && groupOf(String(k)), had = mine && this.getItem(k) !== null; rawRemove.call(this, k); if (had) touch(); };
-  SP.clear = function(){ if (this === LS) { stopped = true; clearTimeout(timer); wipeArt(); } return rawClear.call(this); };   // '모든 기록 지우기': 더 올리지 않음
+  SP.clear = function(){ if (this === LS) { stopped = true; clearTimeout(timer); wipeStores(); } return rawClear.call(this); };   // '모든 기록 지우기': 더 올리지 않음
   const flush = () => { const m = meta(); if (user && agreed && m && m.dirty && !busy) upload(); };
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'hidden') flush(); });
   window.addEventListener('pagehide', flush);
@@ -28852,17 +28876,25 @@ window.DONATE_CORE = (function(){
       try { agreed = await A.hasConsent(); }
       catch (e) { console.warn('가입 동의 확인 실패', e && (e.code || e.message)); agreed = null; ui.err = '계정 정보를 읽지 못했어요. 인터넷을 확인해 주세요.'; paint(); return; }
       if (!user) return;
-      if (!agreed) { paint(); joinOpen(); return; }
+      if (!agreed) {
+        /* 이미 아이 프로필이 있는 계정 = 예전 앱에서 동의한 분: 동의를 서버가 적게 바뀌어 한 번 더 받음 (보안 수정 R06, 10-12. 문구 = 소개 화면 2안 '기록 방식만 바뀔 때', 대표 확인 전).
+           창을 열기 전에 알아 둠: 연 뒤에 글이 생기면 창 안이 아래로 밀림 */
+        let again = false; try { again = await A.hasCloudData(); } catch (e) {}
+        if (!user || agreed) return;
+        joinAgain = again; paint(); joinOpen(); return;
+      }
     }
     settle();
   }
   async function joinAgree(){
-    await A.saveConsent({ termsVersion: TERMS_V, privacyVersion: PRIVACY_V });   // users/{uid}.consent, parentAgreedAt 은 서버 시각
+    await A.saveConsent({ termsVersion: TERMS_V, privacyVersion: PRIVACY_V });   // 서버 함수 recordConsent 가 users/{uid}.consent 를 적음(serverAt, 보안 수정 R06 10-12)
     agreed = true; joinShut(); paint('가입했어요.'); settle();
   }
   /* 가입 마무리 창 */
   let JOIN = null;
+  let joinAgain = false;   // 다시 동의(예전 앱에서 동의한 계정): 창을 다시 열어도 같은 안내
   function joinOpen(){
+    const again = joinAgain;
     if (JOIN || !user) return;
     const box = document.createElement('div');
     box.className = 'lg-join'; box.id = 'lgJoin';
@@ -28870,6 +28902,7 @@ window.DONATE_CORE = (function(){
       <h2 id="lgJoinT">가입 마무리</h2>
       <p id="lgJoinD"><b>${esc(user.email || user.name || (isKakao(user) ? '카카오' : '구글'))}</b> 계정으로 사랑교육에 가입해요. 아래 내용을 읽고 동의해 주세요.</p>
       <p class="lg-same" id="lgSame" hidden></p>
+      <p class="lg-same" id="lgAgain"${again ? '' : ' hidden'}>동의 기록을 더 안전하게 바꾸었어요. 한 번만 다시 동의해 주세요.</p>
       <label class="lg-chk lg-all"><input type="checkbox" id="lgAll"><span>모두 동의해요</span></label>
       <div class="lg-items">
         <div class="lg-item"><label class="lg-chk"><input type="checkbox" class="lg-req" data-k="terms"><span><em>필수</em> 이용약관에 동의해요</span></label><a class="lg-see" href="${TERMS_URL}" target="_blank" rel="noopener">전문 보기</a></div>
@@ -28920,6 +28953,7 @@ window.DONATE_CORE = (function(){
     if (m.uid !== user.uid && m.last === user.uid && hasLocal()) {   // 다른 기기에 밀려났던 같은 계정: 남은 기록을 이어 씀
       m.uid = user.uid; delete m.last; setMeta(m);
     } else if (m.uid !== user.uid && m.last && hasLocal()) {   // 다른 계정이 남긴 기록: 지우고 이 계정 기록을 받음 (계정끼리 덮어쓰지 않음)
+      await dropPush(false);   // 앞 계정에서 켠 알림 (지금은 이 계정으로 로그인해 있어 계정 칸은 못 지움 → 이 기기 토큰만 끔)
       applying = true; try { wipeLocal(); } finally { applying = false; }
       if (cl) return apply(cl);
       setMeta({ uid: user.uid, dirty: true }); location.reload(); return;
@@ -29041,6 +29075,10 @@ window.DONATE_CORE = (function(){
       if (ui.ask) h += '<div class="lg-ask" id="lgAsk"><p>이 계정에 저장된 기록이 있어요. 어느 쪽을 쓸까요?</p>'
         + '<button type="button" class="linkbtn lg-pick" id="lgUseCloud"><b>계정 기록 쓰기</b><small>다른 기기에서 하던 학년·진도로 바뀌어요.</small></button>'
         + '<button type="button" class="linkbtn lg-pick" id="lgUseLocal"><b>이 기기 기록 쓰기</b><small>계정에 있던 기록을 이 기기 기록으로 바꿔요.</small></button></div>';
+      if (ui.outAsk) h += '<div class="lg-ask" id="lgOutAsk"><p>계정에 아직 저장하지 못한 기록이 있어요. 어떻게 할까요?</p>'
+        + '<button type="button" class="linkbtn lg-pick" id="lgOutRetry"><b>다시 저장하고 로그아웃</b><small>인터넷이 이어졌는지 확인한 뒤 눌러 주세요.</small></button>'
+        + '<button type="button" class="linkbtn lg-pick" id="lgOutWipe"><b>저장하지 않고 로그아웃</b><small>계정에 못 올린 기록은 사라지고, 이 기기 기록을 지워요.</small></button>'
+        + '<button type="button" class="linkbtn lg-pick" id="lgOutNo"><b>로그아웃 취소</b><small>이 기기 기록을 그대로 두고 나중에 다시 해요.</small></button></div>';
     }
     if (box.dataset.h !== h) { box.innerHTML = h; box.dataset.h = h; }
     obSync();
@@ -29053,7 +29091,7 @@ window.DONATE_CORE = (function(){
     new MutationObserver(obSync).observe(ob, { attributes: true, attributeFilter: ['hidden'] }); obSync();
   }
   document.addEventListener('click', async e => {
-    const t = e.target.closest('#lgIn, #lgIn2, #lgIn3, #lgK, #lgK2, #lgK3, #lgOut, #lgJoin2, #lgUseCloud, #lgUseLocal'); if (!t) return;
+    const t = e.target.closest('#lgIn, #lgIn2, #lgIn3, #lgK, #lgK2, #lgK3, #lgOut, #lgOutRetry, #lgOutWipe, #lgOutNo, #lgJoin2, #lgUseCloud, #lgUseLocal'); if (!t) return;
     if (/^lgK/.test(t.id)) {
       ui.err = ''; sameMail = null; const m = meta() || {}; setMeta(Object.assign(m, { pending: true })); paint();
       try {
@@ -29072,10 +29110,16 @@ window.DONATE_CORE = (function(){
         await A.signInGoogle();
       } catch (er) { if (!user) { const mm = meta(); if (mm && !mm.uid) { delete mm.pending; setMeta(mm.last ? mm : null); } } ui.err = '로그인하지 못했어요. 다시 해 주세요.'; paint(); }
     }
-    if (t.id === 'lgOut') {   // 계정에 다 올린 뒤 이 기기 기록을 지우고 로그아웃 (못 올리면 멈춤: 기록을 잃지 않게)
+    if (t.id === 'lgOutNo') { ui.outAsk = false; ui.err = ''; paint(); return; }   // 로그아웃 취소: 이 기기 기록 그대로
+    if (t.id === 'lgOut' || t.id === 'lgOutRetry' || t.id === 'lgOutWipe') {
+      /* 계정에 다 올린 뒤 이 기기 기록을 지우고 로그아웃. 못 올리면 멈추고 세 갈래 (보안 R07): 다시 저장하고 로그아웃 / 저장하지 않고 이 기기 기록 지우고 로그아웃 / 취소.
+         '지우고 로그아웃'은 부모가 고른 때만 — 조용히 버리지 않음 */
       t.disabled = true; clearTimeout(timer);
-      while (busy) await new Promise(r => setTimeout(r, 200));
-      if (agreed && !(await upload())) { t.disabled = false; ui.err = '기록을 계정에 저장하지 못해 로그아웃을 멈췄어요. 인터넷을 확인하고 다시 눌러 주세요.'; paint(); return; }
+      const wipe = t.id === 'lgOutWipe', end = Date.now() + 20000;   // 인터넷이 끊기면 저장이 끝나지 않고 기다리기만 할 수 있어 20초까지만 봄 (늦게 끝나도 gen 으로 막음)
+      if (!wipe) while (busy && Date.now() < end) await new Promise(r => setTimeout(r, 200));
+      const saved = wipe || !agreed || (!busy && await Promise.race([upload(), new Promise(r => setTimeout(() => r(false), Math.max(1000, end - Date.now())))]));
+      if (!saved) { t.disabled = false; ui.outAsk = true; ui.err = '기록을 계정에 저장하지 못해 로그아웃을 멈췄어요.'; paint(); return; }
+      await dropPush(true);
       stopped = true; clearTimeout(timer); wipeLocal(); rawRemove.call(LS, META);
       ui = { msg: '', ask: false, err: '' }; agreed = null; sameMail = null;
       try { await A.signOut(); } catch (e) {}
@@ -29115,7 +29159,7 @@ window.DONATE_CORE = (function(){
 
   window.SARANG_LOGIN = {
     hostOk: HOST_OK, load, upload, snapshot, groupOf, gated, kidSwitch, kidDone, kidRemove, kidSaved, kidDev, kidCut, gone, srvMsg, toast, emu: EMU, bye,
-    get user(){ return user; }, get auth(){ return A; }, get agreed(){ return agreed; },
+    get user(){ return user; }, get auth(){ return A; }, get agreed(){ return agreed; }, get stopped(){ return stopped; },
     /* 검사용 (에뮬레이터): 가짜 구글 토큰으로 로그인 */
     async _emuSignIn(sub, email){
       if (!EMU) throw new Error('에뮬레이터에서만');
@@ -29382,6 +29426,7 @@ window.DONATE_CORE = (function(){
     if (kd) kids[kd.childId] = String(kd.nick || kids[kd.childId] || '').slice(0, 10);
     let from = '부모님'; try { from = LS.getItem('sarang_cheerfrom') || '부모님'; } catch (e) {}
     const cfg = { me: kd ? 'child' : 'parent', kids, from };
+    if (lg.stopped) return;   // 로그아웃하며 지운 뒤 늦게 온 부름 (보안 R07)
     try { const c = await caches.open('sarang-push'); await c.put('./push-cfg', new Response(JSON.stringify(cfg), { headers: { 'content-type': 'application/json' } })); } catch (e) {}
   }
   document.addEventListener('hub:child', () => { if (pushOn()) pushCfg(); });
@@ -30093,7 +30138,7 @@ window.DONATE_CORE = (function(){
         const x = await A().kidDevice.redeem(r, { label, platform: plat });
         if (!x || x.status !== 'ok') { d.canClose = true; return codeStep('번호가 맞지 않거나 시간이 지났어요. 부모님께 새 번호를 받아 주세요.'); }
         /* 그다음은 src/login.js kidAfter: 이 폰 기록을 지우고 그 아이 기록을 받아 새로 켬 */
-        setTimeout(() => { if (!d.hidden) fill(d, `<h3>${esc(nick)} 공부 폰으로 연결했어요</h3><p class="kd-p">부모님 폰에서 아직 학년·진도를 정하지 않았다면, 정한 뒤 이 화면을 새로 열어 주세요.</p><div class="kd-btns"><button type="button" class="kd-b pri" onclick="location.reload()">새로 열기</button></div>`); }, 15000);
+        setTimeout(() => { if (!d.hidden) { fill(d, `<h3>${esc(nick)} 공부 폰으로 연결했어요</h3><p class="kd-p">부모님 폰에서 아직 학년·진도를 정하지 않았다면, 정한 뒤 이 화면을 새로 열어 주세요.</p><div class="kd-btns"><button type="button" class="kd-b pri" data-kdreload="1">새로 열기</button></div>`); const rb = d.querySelector('[data-kdreload]'); if (rb) rb.addEventListener('click', () => location.reload()); } }, 15000);   // 인라인 onclick 없이 (보안 R14·R18: 강제 CSP 앞, 10-12)
       } catch (e) { d.canClose = true; console.warn('연결 실패', e && (e.code || e.message)); codeStep(srvMsg(e) || '연결하지 못했어요. 인터넷을 확인하고 다시 해 주세요.'); }
     };
     d.querySelector('.kd-card').onclick = e => { if (e.target.closest('[data-kjx]')) d.close(); if (e.target.closest('[data-kjnext]')) next(); if (e.target.closest('[data-kjback]')) codeStep(); };
@@ -30303,7 +30348,8 @@ window.DONATE_CORE = (function(){
     const a = A(), k = kidDev(), x = e.detail || {}, subj = SERVER[x.s]; if (!a || !k || !subj) return;
     const r = x.r || {}, right = [r.score, r.ok, r.right].find(v => typeof v === 'number'), total = typeof r.total === 'number' ? r.total : null;
     if (Number.isInteger(x.day) && x.day > 0 && x.s !== 'phon') a.kidDevice.markSeen(subj, x.day).catch(er => console.warn('복습 기록 실패', er && er.code));   // 파닉스 Day 는 서버 과목 eng 를 함께 써서 영어 과정 복습 기록과 섞이지 않게 뺌
-    a.recordSolve(k.childId, subj, Number.isInteger(x.day) ? x.day : (x.task || null), Object.assign({ via: 'kid' }, total != null && right != null ? { score: right, total } : {})).catch(er => console.warn('풀이 기록 실패', er && er.code));
+    /* 점수는 맞힌 수·문제 수 정수(0~1000)일 때만 (서버 규칙 C02, 보안 수정 10-12) */
+    a.recordSolve(k.childId, subj, Number.isInteger(x.day) ? x.day : (x.task || null), Object.assign({ via: 'kid' }, Number.isInteger(right) && Number.isInteger(total) && right >= 0 && total <= 1000 && right <= total ? { score: right, total } : {})).catch(er => console.warn('풀이 기록 실패', er && er.code));
     (kidHw || []).forEach(w => {
       const it = w.items && w.items[subj];
       if (it && it.state !== 'done' && !it.kind && (!it.app || it.app === x.s)) {   // 모의시험·영단어 퀴즈 숙제는 그 화면에서만

@@ -79,7 +79,8 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
   async function ensureUserDoc(u) {
     const ref = sdk.doc(db, 'users', u.uid);
     const snap = await sdk.getDoc(ref);
-    if (!snap.exists()) await sdk.setDoc(ref, { email: u.email || null, createdAt: sdk.serverTimestamp() });
+    // 이메일 원문은 계정 문서에 두지 않음 (보안 수정 R08, 10-12: 서버는 Firebase Auth의 이메일만 씀)
+    if (!snap.exists()) await sdk.setDoc(ref, { createdAt: sdk.serverTimestamp() });
   }
 
   // 이 기기 자리(phone 또는 pc)를 차지하고, 다른 기기가 같은 자리를 가져가면 로그아웃한다.
@@ -187,11 +188,12 @@ export function createSarangAuth({ sdk, config = LOVEDU_DEV, name = 'sarang', em
     // 가입 동의 (약관·개인정보처리방침 버전). 동의 전이면 앱이 '가입 마무리' 화면을 보여 준다.
     async hasConsent() {
       const s = await sdk.getDoc(userRef());
-      return !!(s.exists() && s.data().consent && s.data().consent.parentAgreedAt);
+      // 서버가 기록한 동의(serverAt)만 인정 (보안 수정 R06). 옛 앱이 직접 쓴 동의는 다시 동의를 받음
+      return !!(s.exists() && s.data().consent && s.data().consent.serverAt);
     },
     saveConsent({ termsVersion, privacyVersion }) {
       if (!termsVersion || !privacyVersion) throw new Error('약관·개인정보처리방침 버전이 필요해요.');
-      return sdk.setDoc(userRef(), { consent: { parentAgreedAt: sdk.serverTimestamp(), termsVersion, privacyVersion } }, { merge: true });
+      return call('recordConsent', { termsVersion: String(termsVersion), privacyVersion: String(privacyVersion), agree: true });
     },
 
     // 체험 기록 이관 판단용: 계정에 이미 아이 프로필이 있는지 (있으면 앱이 "어느 쪽을 쓸까요?"를 묻는다)
