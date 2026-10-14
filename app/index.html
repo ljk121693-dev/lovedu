@@ -7431,6 +7431,15 @@ html,body{overscroll-behavior-y:contain}
 .bgm-cred ul{margin:0 0 6px;padding-left:18px;line-height:1.6}
 .bgm-cred p{margin:0;line-height:1.5;font-size:12px;overflow-wrap:anywhere}
 .bgm-part[hidden]{display:none!important}
+/* 약관·사업자 정보 (2026-10-12) */
+#settings .set-doc .linkbtn{text-decoration:none;color:var(--pri)}
+#settings .set-biz{display:grid;gap:6px;margin:6px 0 2px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:13.5px;line-height:1.5}
+#settings .set-biz>div{display:grid;grid-template-columns:minmax(0,9.5em) minmax(0,1fr);gap:10px}
+#settings .set-biz dt{color:var(--sub);word-break:keep-all}
+#settings .set-biz dd{margin:0;color:var(--ink);word-break:keep-all;overflow-wrap:anywhere}
+#settings .set-biz .nw{white-space:nowrap}
+#settings .set-biz .set-biz-empty{color:var(--sub)}
+@media (max-width:400px){#settings .set-biz>div{grid-template-columns:minmax(0,1fr);gap:0}}
 </style>
 <style id="sarang-d">/* ===== D안 "하루 한 장, 작은 공부 수첩" (2026-10-05 대표 확정, design 묶음 사랑교육_D안_확정묶음_1005.zip) =====
    기준: D안_색상값.csv · D안_모양값.csv · 시안D.html · PNG 18장. 맨 마지막에 넣어 앞 파일들의 색·모양을 덮음 (build.py).
@@ -23356,6 +23365,15 @@ window.SARANG_PHON = { mount, renderPane, setDay, day: dayNo, total: TOTAL, canv
   $('notifyOn').checked = load('hub_notify') !== '0';
   $('notifyOn').addEventListener('change', e => { store('hub_notify', e.target.checked ? '1' : '0'); notify(); });
   /* ---------- 처음부터 다시: 이 기기에 저장한 아이 정보·시간표·진도·출력 기록을 모두 지우고 가입부터 (2026-09-28 주인 요청) ---------- */
+  /* ---------- 약관·사업자 정보 (2026-10-12 조정자 부탁, handoff/사업장주소_1012/00_바꾼곳_목록.md 앱 절): 약관 3조 1항 '앱 설정 화면에 게시, 사업자 정보 함께 표시'.
+     값은 홈페이지 맨 아래와 같음(저장소 index.html). 주소·신고번호는 통신판매업 신고증(10-14 대표 올림) 표기, 소개 화면 후보와 같음(신고 기관 이름 함께). 약관·방침 주소는 동의 화면과 같음(src/login.js TERMS_URL·PRIVACY_URL) */
+  $('settings').insertAdjacentHTML('beforeend', '<div class="label set-gap">약관·사업자 정보</div>'
+    + '<div class="set-child set-doc"><span><b>이용약관</b></span><a class="linkbtn" href="https://lovedu.kr/terms" target="_blank" rel="noopener">보기</a></div>'
+    + '<div class="set-child set-doc"><span><b>개인정보처리방침</b></span><a class="linkbtn" href="https://lovedu.kr/privacy" target="_blank" rel="noopener">보기</a></div>'
+    + '<dl class="set-biz" aria-label="사업자 정보"><div><dt>상호</dt><dd>우주 Ai Lab</dd></div><div><dt>대표자</dt><dd>이수정</dd></div><div><dt>사업자등록번호</dt><dd>880-70-00700</dd></div>'
+    + '<div><dt>통신판매업 신고번호</dt><dd><span class="nw">제2026-대구동구-1165호</span> <span class="nw">(대구광역시 동구청)</span></dd></div>'
+    + '<div><dt>주소</dt><dd>대구광역시 동구 <span class="nw">효신로16길 5,</span> <span class="nw">1동 202호</span> <span class="nw">(효목동)</span></dd></div>'
+    + '<div><dt>고객 문의</dt><dd><span class="nw">wooojuailab@gmail.com</span><br>010-7551-8127</dd></div></dl>');
   $('settings').insertAdjacentHTML('beforeend', '<div class="label set-gap">처음부터 다시</div><div class="set-child set-reset" id="resetRow"><span><b>모든 기록 지우기</b><small>아이 정보·시간표·진도·출력 기록을 모두 지우고 가입부터 다시 시작해요.</small></span><button type="button" class="linkbtn" id="resetAsk">지우기</button></div>'
     + '<div class="set-child set-reset-ask" id="resetConfirm" hidden><span><b>정말 모두 지울까요?</b><small>되돌릴 수 없어요.</small></span><div class="set-reset-btns"><button type="button" class="linkbtn" id="resetNo">취소</button><button type="button" class="linkbtn set-reset-go" id="resetGo">지우기</button></div></div>');
   /* 묻는 줄이 지우기 줄 자리에 들어섬. 높이가 달라 맨 아래에서 화면이 튀지 않게, 새로 보이는 줄은 앞 줄 높이보다 작아지지 않음 */
