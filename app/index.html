@@ -7212,31 +7212,55 @@ html.db-lock,html.db-lock body{overflow:hidden}
 html:not(.kid-dev) #todayFin{display:none!important}   /* '오늘 공부를 다 했어요'는 요약 줄이 말함 (두 번 나오지 않게) */
 html.kid-dev .td-sum{display:none!important}   /* 아이 폰은 예전 화면 그대로 (요약 줄·한 줄 목록은 학부모 화면) */
 /* ① 오늘 목록: 한 과목 한 줄 (부모 기기. 아이 폰 목록은 그대로) */
-html:not(.kid-dev) #app #today #todayList:has(li[data-s]){display:flex;flex-direction:column;gap:0;margin:0 0 14px;border:1px solid var(--b-gline,var(--line));border-radius:16px;overflow:hidden;background:var(--card)}
-html:not(.kid-dev) #app #today #todayList li[data-s]{display:grid;grid-template-columns:auto auto minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:6px;row-gap:1px;align-items:center;min-height:64px;margin:0 0 -1px;padding:8px 10px 8px 14px;border:0;border-bottom:1px solid var(--b-gline,var(--line));border-radius:0;box-shadow:none;background:transparent}
-html:not(.kid-dev) #app #today #todayList li[data-s]:first-child{border-top:0}
-html:not(.kid-dev) #app #today #todayList li[data-s]::before{display:none}
-html:not(.kid-dev) #app #today #todayList li[data-s]>b{grid-column:1;grid-row:1;align-self:end;margin:0;padding:0;border:0;background:none;color:var(--pri);font-size:12px;font-weight:700;line-height:1.4}
-html:not(.kid-dev) #app #today #todayList li[data-s]>.td-day{grid-column:2;grid-row:1;align-self:end;justify-self:start;margin:0;padding:0;border:0;background:none;color:var(--pri);font-size:12px;font-weight:700;line-height:1.4}
-html:not(.kid-dev) #app #today #todayList li[data-s]>.td-day:not(:empty)::before{content:'· ';color:var(--sub);font-weight:400}
-html:not(.kid-dev) #app #today #todayList li[data-s]>.td-day::after{display:none}
-html:not(.kid-dev) #app #today #todayList li[data-s]>span{grid-column:1/4;grid-row:2;align-self:start;min-width:0}
-html:not(.kid-dev) #app #today #todayList .td-name{display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:15px;font-weight:700;line-height:1.45;letter-spacing:-.02em}
-html:not(.kid-dev) #app #today #todayList .td-ctx{display:none}   /* 단원 부제는 줄에서 뺌 (요청서 1번) */
-html:not(.kid-dev) #app #today #todayList .pace-warn{display:block;font-size:11.5px;line-height:1.4;white-space:normal}
-html:not(.kid-dev) #app #today #todayList li[data-s]>.td-act{grid-column:4;grid-row:1/span 2;display:flex;gap:6px;align-self:center;margin:0}
-html:not(.kid-dev) #app #today #todayList li[data-s]>:not(span):not(b):not(.td-day):not(.td-act){grid-column:1/-1}
-html:not(.kid-dev) #app #today #todayList .td-go{min-width:58px;min-height:44px;padding:0 9px;gap:4px;font-size:13px}
-html:not(.kid-dev) #app #today #todayList .td-na{min-height:44px}
+html:not(.kid-dev) #app #today #todayList:has(li[data-s]),html:not(.kid-dev) #app #today #todayOther:has(li[data-s]){display:flex;flex-direction:column;gap:0;margin:0 0 14px;border:1px solid var(--b-gline,var(--line));border-radius:16px;overflow:hidden;background:var(--card)}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]{display:grid;grid-template-columns:auto auto auto minmax(0,1fr) auto;grid-template-rows:auto auto;column-gap:6px;row-gap:1px;align-items:center;min-height:64px;margin:0 0 -1px;padding:8px 10px 8px 14px;border:0;border-bottom:1px solid var(--b-gline,var(--line));border-radius:0;box-shadow:none;background:transparent}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]:first-child{border-top:0}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]::before{content:var(--bl,'') / '';grid-column:1;grid-row:1/span 2;align-self:center;display:grid;place-items:center;width:36px;height:36px;margin:0 4px 0 0;border-radius:10px;background:var(--sc,var(--pri));color:var(--card,#fffdf6);font-size:16px;font-weight:800;line-height:1;position:static;inset:auto;transform:none;box-shadow:none}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]>b{grid-column:2;grid-row:1;align-self:end;margin:0;padding:0;border:0;background:none;color:var(--sc,var(--pri));font-size:12px;font-weight:700;line-height:1.4}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]>.td-day{grid-column:3;grid-row:1;align-self:end;justify-self:start;margin:0;padding:0;border:0;background:none;color:var(--pri);font-size:12px;font-weight:700;line-height:1.4}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]>.td-day:not(:empty)::before{content:'· ';color:var(--sub);font-weight:400}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]>.td-day::after{display:none}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]>span{grid-column:2/5;grid-row:2;align-self:start;min-width:0}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-name{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;white-space:normal;word-break:keep-all;overflow-wrap:anywhere;font-size:15px;font-weight:700;line-height:1.45;letter-spacing:-.02em}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-ctx{display:none}   /* 단원 부제는 줄에서 뺌 (요청서 1번) */
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .pace-warn{display:block;font-size:11.5px;line-height:1.4;white-space:normal}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]>.td-act{grid-column:5;grid-row:1/span 2;display:flex;gap:6px;align-self:center;margin:0}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]>:not(span):not(b):not(.td-day):not(.td-act){grid-column:2/-1}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-go{min-width:58px;min-height:44px;padding:0 9px;gap:4px;font-size:13px}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-na{min-height:44px}
 /* 끝낸 과목: 회색, 아래로 */
-html:not(.kid-dev) #app #today #todayList li.td-isdone{order:1;background:var(--muted,rgba(0,0,0,.02))}
-html:not(.kid-dev) #app #today #todayList li.td-isdone>b,html:not(.kid-dev) #app #today #todayList li.td-isdone>.td-day,html:not(.kid-dev) #app #today #todayList li.td-isdone .td-name{color:var(--sub);text-decoration:line-through;text-decoration-thickness:1px}
-@media (max-width:420px){html:not(.kid-dev) #app #today #todayList .td-go svg{display:none}}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li.td-isdone{order:1;background:var(--muted,rgba(0,0,0,.02));opacity:.55}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li.td-isdone>b,html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li.td-isdone>.td-day,html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li.td-isdone .td-name{color:var(--sub);text-decoration:line-through;text-decoration-thickness:1px}
+@media (max-width:420px){html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-go svg{display:none}}
 @media (max-width:300px){
-  html:not(.kid-dev) #app #today #todayList li[data-s]{grid-template-columns:auto auto minmax(0,1fr);grid-template-rows:auto auto auto;padding:8px 10px}
-  html:not(.kid-dev) #app #today #todayList li[data-s]>.td-act{grid-column:1/-1;grid-row:3;margin-top:6px}
-  html:not(.kid-dev) #app #today #todayList .td-go{flex:1 1 0}
+  html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]{grid-template-columns:auto auto auto minmax(0,1fr);grid-template-rows:auto auto auto;padding:8px 10px}
+  html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]>.td-act{grid-column:1/-1;grid-row:3;margin-top:6px}
+  html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-go{flex:1 1 0}
 }
+/* 과목 글자 배지 (2026-10-17 대표 "글자배지로 해줘", 요청서 handoff/과목글자배지_1017/요청서.md) — 배지는 CSS 글자라 읽기 프로그램은 건너뜀(옆 과목 이름이 읽힘) */
+.today-list li[data-s="kor"]{--bl:'국';--scl:#b5544a;--scd:#e39088}
+.today-list li[data-s="eng"]{--bl:'영';--scl:#3a69a8;--scd:#8fb2e6}
+.today-list li[data-s="math"]{--bl:'수';--scl:#b97d14;--scd:#e6b65a}
+.today-list li[data-s="hanja"]{--bl:'한';--scl:#7357a0;--scd:#b9a0e0}
+.today-list li[data-s="soc"]{--bl:'사';--scl:#24817f;--scd:#6cc8c4}
+.today-list li[data-s="sci"]{--bl:'과';--scl:#4b8636;--scd:#9ccc83}
+.today-list li[data-s="his"]{--bl:'역';--scl:#8a5a3b;--scd:#d2a27f}
+.today-list li[data-s="phon"]{--bl:'파';--scl:#c0567e;--scd:#e895b6}
+.today-list li[data-s="wh"]{--bl:'세';--scl:#5a6fa0;--scd:#a3b3dc}
+.today-list li[data-s="vocab"]{--bl:'단';--scl:#2f7f9a;--scd:#7cc3da}
+.today-list li[data-s="listen"]{--bl:'듣';--scl:#3a69a8;--scd:#8fb2e6}
+.today-list li[data-s="yhan"]{--bl:'한';--scl:#7357a0;--scd:#b9a0e0}
+.today-list li[data-s="ymath"]{--bl:'수';--scl:#b97d14;--scd:#e6b65a}
+.today-list li[data-s="engx"]{--bl:'영';--scl:#3a69a8;--scd:#8fb2e6}
+.today-list li[data-s]{--sc:var(--scl)}
+:root[data-theme="dark"] .today-list li[data-s]{--sc:var(--scd)}
+@media (prefers-color-scheme:dark){:root:not([data-theme]) .today-list li[data-s]{--sc:var(--scd)}}
+@media (min-width:768px){html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]::before{width:40px;height:40px;font-size:17px}}
+/* 스마트 = 꽉 찬 단추, 프린트 = 테두리 단추 */
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-go[data-scr]{border:1.5px solid var(--pri);background:var(--pri);color:var(--pri-ink,#fff)}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-go[data-scr] svg{color:currentColor}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-go[data-paper]{border:1.5px solid var(--pri);background:transparent;color:var(--pri)}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-go[data-scr]:hover:not(:disabled){background:color-mix(in srgb,var(--pri) 86%,#000)}
 /* ② 시간표 */
 .wk-preset{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .wk-preset button{display:grid;gap:1px;align-content:center;min-height:56px;padding:6px 4px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer;text-align:center}
@@ -24401,7 +24425,7 @@ window.SARANG_SCREEN = (function(){
     nav.className = 'scr-pgnav'; nav.hidden = true;
     nav.innerHTML = '<button type="button" class="scr-pgprev">‹ 이전</button><span class="scr-pgnum" aria-live="polite"></span><button type="button" class="scr-pgnext">다음 ›</button>';
     mod.after(nav);
-    let P = { C: null, pages: [], end: [] }, i = 0, sig = '';
+    let P = { C: null, pages: [], end: [] }, i = 0, sig = '', gradeAt = 0;
     const OFF = 'scr-pg-off', vis = e => e.getClientRects().length > 0 && e.offsetHeight > 0;
     function plan(){
       mod.querySelectorAll('.' + OFF).forEach(e => e.classList.remove(OFF));
@@ -24475,7 +24499,7 @@ window.SARANG_SCREEN = (function(){
       const same = s2 === sig; sig = s2;
       if (same && !force) { if (P.C === C0 && P.pages.every(pg => pg.els.every(e => e.isConnected))) return; }
       const was = i; P = plan();
-      if (!same) { i = 0; apply(); if (was) window.scrollTo(0, 0); return; }   // 다른 학습지로 다시 그림: 첫 쪽부터
+      if (!same && Date.now() - gradeAt > 2500) { i = 0; apply(); if (was) window.scrollTo(0, 0); return; }   // 다른 학습지로 다시 그림: 첫 쪽부터. 채점('다 풀었어요') 바로 뒤에 칸 모양이 바뀐 것은 같은 학습지라 그 쪽에 머묾 (2026-10-17 다 풀면 첫 쪽으로 돌아가던 것)
       i = Math.min(i, Math.max(0, P.pages.length - 1)); apply();
     }
     const mo = new MutationObserver(() => replan(false));   // 마이크로태스크: 그리기 전에 나눠 한 장이 통째로 보이는 순간이 없게
@@ -24487,9 +24511,11 @@ window.SARANG_SCREEN = (function(){
     /* 다 풀었어요: 안 푼 문제·다시 풀 문제가 다른 쪽에 있으면 그 쪽으로 */
     const onGrade = e => {
       if (!e.target.closest('.scr-grade, .ph-grade, .hjs-grade, .m13-go')) return;
+      gradeAt = Date.now();
       setTimeout(() => {
         if (c !== cur || P.pages.length < 2) return;
-        const m = mod.querySelector(PG_MISS) || mod.querySelector('.m13-ng:not(.m13-shown), .m13-selfrow'); if (!m) return;
+        const m = mod.querySelector(PG_MISS) || mod.querySelector('.m13-ng:not(.m13-shown), .m13-selfrow') || mod.querySelector('.scr-q.graded.wait');   // 안 푼 문제·부모님이 맞음/틀림을 고를 문제 쪽으로
+        if (!m) { const sm = [...mod.querySelectorAll('.scr-msg, .ph-msg, .hjs-msg, .m13-msg')].find(x => x.offsetHeight && x.textContent.trim()); if (sm) { const r = sm.getBoundingClientRect(); if (r.top < 0 || r.bottom > innerHeight) sm.scrollIntoView({ block: 'center' }); } return; }   // 다 채점됐으면 지금 쪽에 머물고 점수 글이 보이게
         const k = P.pages.findIndex(pg => pg.els.some(x => x.contains(m) && (!pg.inner || x !== pg.q || [...pg.inner].some(y => y.contains(m)))));
         if (k >= 0 && k !== i) go(k, m);
         else if (k === i) { const r = m.getBoundingClientRect(); if (r.bottom < 0 || r.top > innerHeight) m.scrollIntoView({ block: 'center' }); }   // 같은 쪽 안에서 멀리 있으면 그 문제로
