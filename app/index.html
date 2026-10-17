@@ -1866,6 +1866,18 @@ html.kid-dev .td-pw{grid-column:1/-1}
 .scr-imgmiss span{flex:1 1 180px}
 .scr-imgre{min-height:44px;padding:6px 16px;border:1px solid var(--line);border-radius:999px;background:var(--bg);color:var(--ink);font-weight:700;cursor:pointer}
 .scr-imgre:disabled{cursor:default;opacity:.6}
+/* 주제별 넘기기 (2026-10-16 대표): 한 쪽씩 보이고 아래 '이전 · n / N · 다음' */
+.scr-pg-off{display:none!important}
+.scr-pgnav{display:flex;align-items:center;gap:10px;margin:22px 0 4px}
+.scr-pgnav[hidden]{display:none}
+.scr-pgnav button{min-height:50px;padding:0 18px;border-radius:14px;font-size:16px;font-weight:800;cursor:pointer}
+.scr-pgprev{border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.scr-pgprev:disabled{opacity:.4;cursor:default}
+.scr-pgnext{flex:1;border:0;background:var(--pri);color:#fff}
+.scr-pgnext[hidden]{display:none}
+.scr-pgnum{min-width:52px;text-align:center;color:var(--sub,#6b7280);font-size:14px;font-weight:700;white-space:nowrap}
+.scr-q.scr-miss{border-color:var(--ng,#c0392b);border-style:dashed}
+.scr-pglast .scr-pgnum{margin-left:auto}
 /* ===== 공용 펜 (src/screen/pen.js) ===== */
 .sp-pen{--pen-bg:var(--card,#fff);--pen-ink:var(--ink,#1d2330);--pen-grid:var(--sub,#8a8f99);--pen-model:var(--sub,#8a8f99);max-width:100%}
 .sp-pen.sp-paper{--pen-bg:#fff;--pen-ink:#2b2b2b;--pen-grid:#9a9a9a;--pen-model:#9a9a9a}
@@ -6243,7 +6255,7 @@ html.lg-gated .dn-top{display:none}
 #app>.hub-top .sarang-tagline{word-break:keep-all;text-wrap:balance}
 </style>
 <style id="sarang-week">/* ===== 시간표 설정 (src/week-page.js): 2026-10-04 대표 → 현황판 '학습 관리' 1단계 안. 머리줄 단추·따로 된 화면은 없앰. 앱 색(--line --pri --sub …)만 써서 밝게·어둡게 같이 맞음 ===== */
-#weekEdit.wk-moved{display:none!important}   /* 오늘의 학습 카드 머리 '시간표 설정'은 안 씀 (시간표는 학습 관리에서만) */
+#weekEdit{display:none!important}   /* 오늘의 학습 카드 머리 '시간표 설정'은 안 씀 (시간표는 학습 관리에서만). 2026-10-17: 처음부터 숨김 — 스크립트가 숨기기 전 한 번 보였다 사라지며 화면이 37px 들썩였음 */
 #weekBox[hidden]{display:none!important}
 .db-mg-week{margin:0;padding:16px;min-width:0}
 .db-mg-week #week{margin-top:0;border-top:0;padding-top:0}
@@ -7665,6 +7677,8 @@ html.kid-dev #app .kd-cal.card{background:none;border:0;border-radius:0;padding:
 #app .db-mg-bar button:not(.pri),#app .pl-acts button:not(.pri){background:var(--card)}
 /* PC·태블릿 떠 있는 아래 메뉴: 바탕과 같은 색이라 구분이 안 됨 (대표 10-06) → 한 톤 진한 바탕 + 그림자 */
 @media (min-width:768px){#app .tabbar{background:color-mix(in srgb,var(--ink) 7%,var(--bg));border-color:color-mix(in srgb,var(--ink) 16%,var(--bg));box-shadow:0 8px 26px rgba(0,0,0,.14)}}
+
+html.app-wait #app{visibility:hidden}   /* 켤 때 다 그릴 때까지 (src/d-theme.js, 2026-10-17 들썩임) */
 </style>
 <script>/* ===== D안 "하루 한 장, 작은 공부 수첩" 화면 장식 (src/d-theme.css, 2026-10-05 대표 확정) =====
    기능은 건드리지 않고 시안의 머리말만 넣음: 머리줄 선 책 아이콘, 학습 칸 '오늘의 학습' 아래 한 줄, 손그림 해(현황판·아이 폰이 D_THEME.sun() 으로 씀).
@@ -7687,8 +7701,15 @@ html.kid-dev #app .kd-cal.card{background:none;border:0;border-radius:0;padding:
     }
   }
   window.D_THEME = { sun: () => SUN, paint };
+  /* 켤 때 들썩임 막기 (2026-10-17 대표 "화면이 약간 들썩거리는 등 불안정한 증상"): 앱 글(HTML)이 먼저 한 번 그려진 뒤 스크립트가 자녀 줄·오늘 칸을 새로 그리며
+     화면이 70px 가까이 아래로 밀렸음(같은 세션에서 다시 열 때는 여는 그림도 없음). 다 그릴 때까지(load 뒤 한 틀, 늦어도 DOMContentLoaded 뒤 1.5초) #app 을 안 보이게 둠 */
+  const H = document.documentElement; H.classList.add('app-wait');
+  let shown = false; const show = () => { if (shown) return; shown = true; H.classList.remove('app-wait'); };
+  addEventListener('load', () => requestAnimationFrame(show));
+  document.addEventListener('DOMContentLoaded', () => setTimeout(show, 1500));
+  setTimeout(show, 6000);   // 어떤 까닭으로도 6초 넘게 가리지 않음
   document.addEventListener('DOMContentLoaded', paint);
-  document.addEventListener('hub:refresh', () => setTimeout(paint, 0));
+  document.addEventListener('hub:refresh', () => { paint(); setTimeout(paint, 0); });   // 바로 한 번(오늘 칸을 그린 같은 틀에 한 줄이 들어가 화면이 들썩이지 않게, 2026-10-17) + 다음 틀에 한 번 더
   document.addEventListener('hub:kids', () => setTimeout(paint, 0));
 })();
 </script>
@@ -16078,11 +16099,21 @@ return module.exports; })();
 const unpacked = {}, loading = {}, failed = {}, photoWait = {};
 /* 사진(유물 등): 묶음마다 { id: { d: data URL, c: 출처 한 줄, u: 출처 주소, l: 라이선스 주소, t: 제목 } } */
 const photos = {};
-function takePhotos(box){
+/* 그림 풀기 (2026-10-17 대표 "버튼을 누르면 반응이 느린 증상"): 묶음을 받으면 그림 글(data URL)만 rawPh 에 두고, 그릴 때 쓸 것만 Image 로 풂.
+   한 학년 그림(과학 새 판은 200장 안팎)을 한꺼번에 풀면 폰이 1초 넘게 멈췄음. want 가 없으면(인쇄·미리보기 등) 예전처럼 묶음 전부 */
+const rawPh = {}, packIds = {};
+function takePhotos(box, g){
   const list = Object.entries(box || {});
   if (!list.length) return null;
-  return Promise.all(list.map(([id, p]) => {
+  list.forEach(([id, p]) => { if (!photos[id] && !rawPh[id]) rawPh[id] = p; });
+  if (g) packIds[g] = list.map(x => x[0]);
+  return list.map(x => x[0]);
+}
+function decodePhotos(ids){
+  return Promise.all(ids.map(id => {
     if (photos[id]) return photos[id].ready;
+    const p = rawPh[id]; if (!p) return null;
+    delete rawPh[id];
     const img = new Image(), o = photos[id] = Object.assign({ img, ok: false }, p);
     o.ready = new Promise(r => { img.onload = () => { o.ok = true; r(); }; img.onerror = () => r(); img.src = p.d; });
     delete o.d;
@@ -16091,11 +16122,19 @@ function takePhotos(box){
 }
 /* 사진은 내용 묶음과 따로: 앱 파일 안(DATA.imgs, 한 파일 모드)이거나 packs/img-<과목>-<학년>.js(DATA.ifiles).
    켤 때는 받지 않고, 학습지를 실제로 그릴 때(인쇄·미리보기·화면 공부) loadPhotos 로 받아 그림이 다 풀리면 끝남.
+   want: 그릴 학습지 글(JSON 글). 주면 그 글에 나오는 그림 id 만 풂.
    못 받으면(파일 없음·끊김·60초 넘음) false 로 끝나 사진 없이 그리고, 다음에 그릴 때 다시 시도함 */
-function loadPhotos(g){
+function loadPhotos(g, want){
+  return photoPack(g).then(ok => {
+    if (!ok || !packIds[g]) return ok;
+    const ids = typeof want === 'string' ? packIds[g].filter(id => want.includes('"' + id + '"')) : packIds[g];
+    return decodePhotos(ids).then(() => true);
+  });
+}
+function photoPack(g){
   if (photoWait[g]) return photoWait[g];
   const own = (DATA.imgs && DATA.imgs[g]) || (window.SARANG_IMGS || {})[g];   // 한 파일 모드, 또는 지난번에 늦게 도착한 파일
-  if (own) { if (window.SARANG_IMGS) delete window.SARANG_IMGS[g]; const w = takePhotos(own); return (photoWait[g] = w ? w.then(() => true) : Promise.resolve(true)); }
+  if (own) { if (window.SARANG_IMGS) delete window.SARANG_IMGS[g]; takePhotos(own, g); return (photoWait[g] = Promise.resolve(true)); }
   const url = DATA.ifiles && DATA.ifiles[g];
   if (!url) return Promise.resolve(true);   // 이 묶음에는 사진이 없음
   return (photoWait[g] = new Promise(res => {
@@ -16103,16 +16142,15 @@ function loadPhotos(g){
     const end = ok => { if (done) return; done = true; clearTimeout(t); el.remove(); if (!ok) delete photoWait[g]; res(ok); };
     const t = setTimeout(() => end(false), 60000);   // 느린 휴대폰 데이터도 기다리되 멈추지는 않게
     el.onload = () => {
-      const box = window.SARANG_IMGS || {}, w = takePhotos(box[g]); delete box[g];
-      if (!w) return end(false);
-      w.then(() => end(true));
+      const box = window.SARANG_IMGS || {}, w = takePhotos(box[g], g); delete box[g];
+      end(!!w);
     };
     el.onerror = () => end(false);
     el.src = url; el.async = true; document.head.appendChild(el);
   }));
 }
 /* 그리기 전에: 이 과목 묶음의 내용 + 사진 (사진은 실패해도 그대로 진행) */
-const loadForDraw = subj => loadPack(pg(subj), true).then(ok => loadPhotos(pg(subj)).then(() => ok, () => ok));
+const loadForDraw = (subj, want) => loadPack(pg(subj), true).then(ok => loadPhotos(pg(subj), typeof want === 'function' ? want() : want).then(() => ok, () => ok));   // want: 그릴 학습지 글(함수면 내용을 받은 뒤 셈). 없으면 묶음 그림 전부
 function unpackInto(g, b64){ unpacked[g] = lessonSrc(unpack(b64)); }
 /* 교과 문제 자료 (2026-10-16 교과서 대조 판): 문제의 src(지문·<보기>·표)와 그림 img { id, caption } 을 모의시험 자료 칸과 같은 모양(examSrc)으로.
    img 는 봐야 푸는 그림이라 need 표시 → 못 받으면 빈칸 대신 안내 (화면 scrSrcHtml·PDF srcBlock) */
@@ -17907,15 +17945,19 @@ let fontWait = null;
 function fontsReady(){
   if (fontWait) return fontWait;
   if (!SSH_FONTS || typeof FontFace === 'undefined' || !document.fonts) return (fontWait = Promise.resolve());
-  return (fontWait = Promise.all(Object.entries(SSH_FONTS).map(([w, b64]) => {
-    const bin = Uint8Array.from(atob(b64), c => c.charCodeAt(0)), ff = new FontFace('SarangRound', bin, { weight: w });
-    return ff.load().then(f => { document.fonts.add(f); }, () => {});
-  })).then(() => {}, () => {}));
+  return (fontWait = Promise.all(Object.entries(SSH_FONTS).map(([w, b64]) => fontBin(b64).then(bin => new FontFace('SarangRound', bin, { weight: w }).load()).then(f => { document.fonts.add(f); }, () => {})))
+    .then(() => {}, () => {}));
 }
+/* base64 글꼴 풀기 (2026-10-17 대표 "버튼을 누르면 반응이 느린 증상"): 글자마다 도는 atob+Uint8Array.from 은 폰에서 처음 과목을 열 때 화면을 1초 가까이 멈춤.
+   data: 주소를 fetch 로 읽으면 브라우저가 멈추지 않고 풂. 못 쓰면 예전 방식 */
+const fontBin = b64 => (typeof fetch === 'function' ? fetch('data:font/woff2;base64,' + b64).then(r => r.arrayBuffer()) : Promise.reject())
+  .catch(() => Uint8Array.from(atob(b64), c => c.charCodeAt(0)));
+/* 앱을 연 뒤 한가할 때 미리 읽어 둠: 처음 과목·학습지를 열 때 기다리지 않게 */
+if (SSH_FONTS) setTimeout(() => (window.requestIdleCallback || (f => setTimeout(f, 0)))(() => fontsReady(), { timeout: 4000 }), 2500);
 /* 앱 화면 글꼴(B안, src/b-theme.css 는 앱 옆 fonts/ 를 읽음): 내려받은 파일을 그냥 연 때(file://)는 브라우저가 옆 파일 글꼴을 막으므로 이 묶음으로 같은 글꼴을 넣음 */
 if (SSH_FONTS && typeof FontFace !== 'undefined' && document.fonts && location.protocol === 'file:') {
   const RANGE = { 400: '100 500', 700: '600 700', 800: '800 900' };
-  Object.entries(SSH_FONTS).forEach(([w, b64]) => { try { new FontFace('SarangUI', Uint8Array.from(atob(b64), c => c.charCodeAt(0)), { weight: RANGE[w] || w }).load().then(f => document.fonts.add(f), () => {}); } catch (e) {} });
+  Object.entries(SSH_FONTS).forEach(([w, b64]) => { fontBin(b64).then(bin => new FontFace('SarangUI', bin, { weight: RANGE[w] || w }).load()).then(f => document.fonts.add(f), () => {}); });
 }
 
 /* ---------- JPEG 이미지 PDF (기존 과목과 같은 방식) ---------- */
@@ -18081,9 +18123,9 @@ async function sheetDraw(subj){
   if (!ok) { cv.hidden = true; return; }
   const msg = btn.querySelector('.ss-sheet-msg');
   if (cv.hidden) msg.textContent = '그리는 중';
-  try { await loadForDraw(subj); } catch (e) {}
+  try { await loadForDraw(subj, () => { try { return JSON.stringify([resolve(subj, n), recapOf(subj, n)]); } catch (e) { return undefined; } }); } catch (e) {}   // 첫 장에 나올 그림만
   await fontsReady();
-  await new Promise(r => setTimeout(r, 0));
+  await new Promise(r => window.requestIdleCallback ? requestIdleCallback(() => r(), { timeout: 1200 }) : setTimeout(r, 0));   // 학습지 첫 장은 손이 쉴 때 그림: 과목을 연 바로 뒤 누름·스크롤이 먼저 (2026-10-17 대표 "반응이 느린 증상")
   if (tok !== S.tok) return;
   let c = null;
   try { const pages = pagesFor(subj, n, 'student'); c = pages.length ? pages[0]() : null; } catch (e) {}
@@ -19107,12 +19149,15 @@ async function screenOpen(subj, ctx){
   root.className = 'scr-root'; root.style.setProperty('--c', s.color);
   root.innerHTML = '<p class="scr-wait">학습지를 불러오는 중이에요…</p>';
   ctx.el.append(root);
-  await loadForDraw(subj);   // 사진이 있는 Day는 사진 파일까지 받은 뒤 보여 줌 (못 받으면 사진 없이)
+  await loadPack(pg(subj), true).catch(() => false);
   const hints = await loadHints(pg(subj)).catch(() => null);   // '도와주세요' 힌트 (없거나 못 받으면 하트 없이)
   const t = !!ctx.today, n0 = curDay(subj), [a, b0] = t ? todaySpan(subj) : [n0, n0], b = t ? readyTo(subj, a, b0) : b0, days = [];
   for (let d = a; d <= b; d++) { const r = resolve(subj, d); if (ready(r)) days.push([d, r]); }
   if (!days.length) { root.innerHTML = '<p class="scr-wait">이 학습지는 아직 준비 중이에요.</p>'; return { close(){} }; }
-  const rc = recapOf(subj, a), res = { subj, days: days.map(x => x[0]), score: 0, total: 0, wrong: [], wq: [], wk: [], hint: 0, hok: 0 };   // hint·hok: 힌트를 본 문제 수·그중 맞힌 수 (현황판)   // wq·wk: 틀린 문제 모음 (아래 wrTake)
+  const rc = recapOf(subj, a);
+  let want; try { want = JSON.stringify([days.map(x => x[1]), rc]); } catch (e) { want = undefined; }
+  await loadPhotos(pg(subj), want).catch(() => false);   // 이 화면에 나오는 그림만 받아 풂 (못 받으면 사진 없이). 2026-10-17 대표 "반응이 느린 증상"
+  const res = { subj, days: days.map(x => x[0]), score: 0, total: 0, wrong: [], wq: [], wk: [], hint: 0, hok: 0 };   // hint·hok: 힌트를 본 문제 수·그중 맞힌 수 (현황판)   // wq·wk: 틀린 문제 모음 (아래 wrTake)
   let k = 0, par = false, items = [], st = {}, graded = false, warned = false, lsn = null;
   const $$ = q => [...root.querySelectorAll(q)], li = id => root.querySelector(`.scr-q[data-id="${id}"]`);
   const pads = [];
@@ -19163,10 +19208,10 @@ async function screenOpen(subj, ctx){
   }
   function grade(btn){
     const miss = items.filter(empty).length;
-    if (miss && !warned) { warned = true; root.querySelector('.scr-msg').textContent = `아직 안 푼 문제가 ${miss}개 있어요. 그대로 채점하려면 한 번 더 눌러 주세요.`; return; }
+    if (miss && !warned) { warned = true; items.forEach(it => li(it.id).classList.toggle('scr-miss', empty(it))); root.querySelector('.scr-msg').textContent = `아직 안 푼 문제가 ${miss}개 있어요. 그대로 채점하려면 한 번 더 눌러 주세요.`; return; }   // 안 푼 문제 표시: 나눈 쪽(screen-frame pager)이 그 쪽으로 넘김
     const y0 = btn.getBoundingClientRect().top;
     items.forEach(it => {
-      it.r = judge(it); const el = li(it.id);
+      it.r = judge(it); const el = li(it.id); el.classList.remove('scr-miss');
       el.classList.add('graded', it.r === true ? 'ok' : it.r === false ? 'ng' : it.r === 'judge' ? 'wait' : 'self');
       el.querySelectorAll('button:not([data-j]):not(.scr-imgre), select').forEach(x => { x.disabled = true; });
       el.querySelectorAll('.scr-in').forEach(x => { x.readOnly = true; });
@@ -19283,10 +19328,10 @@ function wrongRun(ctx, list){
   }
   function grade(btn){
     const miss = items.filter(empty).length;
-    if (miss && !warned) { warned = true; root.querySelector('.scr-msg').textContent = `아직 안 푼 문제가 ${miss}개 있어요. 그대로 채점하려면 한 번 더 눌러 주세요.`; return; }
+    if (miss && !warned) { warned = true; items.forEach(it => li(it.id).classList.toggle('scr-miss', empty(it))); root.querySelector('.scr-msg').textContent = `아직 안 푼 문제가 ${miss}개 있어요. 그대로 채점하려면 한 번 더 눌러 주세요.`; return; }   // 안 푼 문제 표시: 나눈 쪽(screen-frame pager)이 그 쪽으로 넘김
     const y0 = btn.getBoundingClientRect().top;
     items.forEach(it => {
-      it.r = judge(it); const el = li(it.id);
+      it.r = judge(it); const el = li(it.id); el.classList.remove('scr-miss');
       el.classList.add('graded', it.r === true ? 'ok' : it.r === false ? 'ng' : it.r === 'judge' ? 'wait' : 'self');
       el.querySelectorAll('button:not([data-j]):not(.scr-imgre), select').forEach(x => { x.disabled = true; });
       el.querySelectorAll('.scr-in').forEach(x => { x.readOnly = true; });
@@ -23263,7 +23308,7 @@ window.SARANG_PHON = { mount, renderPane, setDay, setPos, day: dayNo, pos, revie
      오늘의 학습인데 과목 화면·레벨 테스트에서 진도(Day·학년·단계)를 옮기면 자유 학습으로 바꾸고 짧게 알림. '학교 진도에 맞추기'는 옮긴 것으로 치지 않음 */
   /* 2026-10-03 대표: 날짜를 '오늘의 학습/자유 학습' 바로 아래에, 같은 크기·글꼴로 (제목은 조금 위로). 날짜 글은 legacy 가 #todayDate 에 넣음 */
   { const lb = $('today').querySelector('.today-head .label'), dt = $('todayDate');
-    if (lb && dt) { const w = document.createElement('div'); w.className = 'td-titles'; lb.before(w); w.append(lb, dt); } }
+    if (lb && dt) { const w = document.createElement('div'); w.className = 'td-titles'; lb.before(w); w.append(lb, dt); if (window.D_THEME) D_THEME.paint(); } }   // 아래 한 줄(d-lead)도 같은 틀에
   /* 2026-10-11 대표 "작게 뜨는 메세지는 … 팝업 방식으로 변경하고 확인 누르면 꺼지게": 안내는 팝업(src/pop.js). 진도 막기 안내만은 누를 때마다 떠서
      팝업 대신 위 '진도는 현황판의 학습 관리에서 바꿔요' 줄(#paceLock)을 잠깐 화면 위에 붙여 강조 (대표 10:35 카드 ①) */
   let pinT = 0;
@@ -24131,6 +24176,7 @@ window.SARANG_SCREEN = (function(){
     const marks = [];   // 머리 아래 첫 요소들(문서 차례): 켜고 끈 뒤에도 보이는 첫 것을 제자리에 (정답·가이드처럼 숨는 것은 건너뜀)
     for (const e of $('scrBody').querySelectorAll('*')) { const r = e.getBoundingClientRect(); if (r.height && r.top >= head) { marks.push([e, r.top]); if (marks.length > 400) break; } }
     if (cur.api && cur.api.parent) cur.api.parent(on);
+    if (cur.pg) cur.pg.refresh();   // 부모님 보기로 보이고 숨는 칸이 바뀜: 쪽 다시 셈 (보던 쪽은 그대로)
     const k = marks.find(([e]) => e.isConnected && e.getClientRects().length && e.getBoundingClientRect().height);
     if (k) window.scrollBy(0, k[0].getBoundingClientRect().top - k[1]);
   }
@@ -24150,6 +24196,97 @@ window.SARANG_SCREEN = (function(){
     mount();
     return show({ def: { label: o.title, open: o.open }, key: o.hub, hub: o.hub, task: o }, 'task');
   }
+  /* ===== 주제별 넘기기 (2026-10-16 대표: "그 Day 학습지의 주제별로 나누어 다음 버튼 이동하도록. 한장에 모든 내용이 다나오면 아이들이 하기 싫을듯") =====
+     과목 화면이 그린 칸을 학습지에 이미 있는 주제 칸(소단원·소리·문제 종류 묶음) 그대로 쪽으로 나눠 한 쪽씩 보임. 머리(제목)는 늘, 채점 단추 칸은 마지막 쪽에.
+     문제 칸(.scr-qsec)은 종류 묶음(h4.scr-grp)마다, 문제가 PG_QMIN 개가 될 때까지 이어 붙여 한 쪽. 모듈이 다시 그리면(다음 학습지 등) 처음 쪽부터 */
+  const PG_START = '.scr-sec:not(.scr-extra), .scr-qsec, h3.ph-sec, h3.hjs-sec, section.ym-sec, section.st-sec:not(.st-end), section.m13-day, section.m13-sec';
+  const PG_HEAD = 'header.scr-dh, .ph-head, .hjs-head, header.ym-head, header.st-head, .m13-head';
+  const PG_END = '.scr-end, .ph-end, .hjs-end, .ym-foot, .st-end, .m13-foot, .m13-tray';
+  const PG_MISS = '.scr-miss, .ph-miss, .hjs-miss, .m13-miss';
+  const PG_QMIN = 3;
+  function pager(c, mod){
+    const nav = document.createElement('div');
+    nav.className = 'scr-pgnav'; nav.hidden = true;
+    nav.innerHTML = '<button type="button" class="scr-pgprev">‹ 이전</button><span class="scr-pgnum" aria-live="polite"></span><button type="button" class="scr-pgnext">다음 ›</button>';
+    mod.after(nav);
+    let P = { C: null, pages: [], end: [] }, i = 0, sig = '';
+    const OFF = 'scr-pg-off', vis = e => e.getClientRects().length > 0 && e.offsetHeight > 0;
+    function plan(){
+      mod.querySelectorAll('.' + OFF).forEach(e => e.classList.remove(OFF));
+      const C = [mod, mod.firstElementChild].find(x => x && [...x.children].some(k => k.matches(PG_START)));
+      const raw = [], end = [];
+      if (C) {
+        let pg = null;
+        for (const k of C.children) {
+          if (k.matches(PG_HEAD)) continue;
+          if (k.matches(PG_END)) { end.push(k); continue; }
+          const st = k.matches(PG_START);
+          if (st && pg && !pg.st) { pg.st = true; pg.els.push(k); continue; }   // 마음 열기·목표 같은 앞 칸은 첫 주제와 한 쪽
+          if (st || !pg) { pg = { els: [k], st }; raw.push(pg); continue; }
+          pg.els.push(k);
+        }
+      }
+      const pages = [];
+      for (const pg of raw) {   // 문제 칸: 문제 종류 묶음(h4.scr-grp)마다, PG_QMIN 문제가 될 때까지 이어 붙여 한 쪽
+        const q = pg.els.find(e => e.matches('.scr-qsec')), grp = q ? [...q.children].filter(e => e.matches('h4.scr-grp')) : [];
+        if (grp.length < 2) { pages.push(pg); continue; }
+        const lead = [...q.children].filter(e => !e.matches('h4.scr-grp, ol.scr-qs'));
+        let part = null, n = 0;
+        grp.forEach(h => {
+          const ol = h.nextElementSibling && h.nextElementSibling.matches('ol.scr-qs') ? h.nextElementSibling : null;
+          if (!part || n >= PG_QMIN) { part = { els: part ? [q] : pg.els, q, inner: new Set(lead) }; pages.push(part); n = 0; }
+          part.inner.add(h); if (ol) { part.inner.add(ol); n += ol.children.length; }
+        });
+      }
+      return { C, pages: pages.filter(pg => pg.els.some(e => vis(e) && (!pg.inner || e !== pg.q || [...pg.inner].some(vis)))), end };
+    }
+    function apply(){
+      const N = P.pages.length, cp = P.pages[i], last = i === N - 1;
+      if (N < 2) { nav.hidden = true; mod.classList.remove('scr-paged'); return; }
+      const on = new Set(cp.els);
+      for (const k of P.C.children) if (!k.matches(PG_HEAD) && !P.end.includes(k)) k.classList.toggle(OFF, !on.has(k));
+      P.end.forEach(e => e.classList.toggle(OFF, !last));
+      P.pages.forEach(pg => { if (pg.inner) [...pg.q.children].forEach(e => e.classList.toggle(OFF, cp.q === pg.q && !cp.inner.has(e))); });
+      nav.hidden = false;
+      nav.querySelector('.scr-pgprev').disabled = i === 0;
+      nav.querySelector('.scr-pgnext').hidden = last;
+      nav.querySelector('.scr-pgnum').textContent = `${i + 1} / ${N}`;
+      nav.classList.toggle('scr-pglast', last);
+      mod.classList.add('scr-paged');
+    }
+    function go(k, el){
+      i = Math.max(0, Math.min(P.pages.length - 1, k)); apply();
+      if (el) el.scrollIntoView({ block: 'center' }); else window.scrollTo(0, 0);   // 쪽을 넘기면 맨 위부터 (뜻한 이동)
+    }
+    function replan(force){
+      if (c !== cur && cur) return;
+      const C0 = [mod, mod.firstElementChild].find(x => x && [...x.children].some(k => k.matches(PG_START)));
+      const s2 = C0 ? C0.children.length + ':' + [...C0.querySelectorAll(PG_START)].map(e => e.className).join('|') + ':' + C0.querySelectorAll('h4.scr-grp').length : '';
+      const same = s2 === sig; sig = s2;
+      if (same && !force) { if (P.C === C0 && P.pages.every(pg => pg.els.every(e => e.isConnected))) return; }
+      const was = i; P = plan();
+      if (!same) { i = 0; apply(); if (was) window.scrollTo(0, 0); return; }   // 다른 학습지로 다시 그림: 첫 쪽부터
+      i = Math.min(i, Math.max(0, P.pages.length - 1)); apply();
+    }
+    const mo = new MutationObserver(() => replan(false));   // 마이크로태스크: 그리기 전에 나눠 한 장이 통째로 보이는 순간이 없게
+    mo.observe(mod, { childList: true, subtree: true });
+    nav.addEventListener('click', e => {
+      if (e.target.closest('.scr-pgprev')) go(i - 1);
+      else if (e.target.closest('.scr-pgnext')) go(i + 1);
+    });
+    /* 다 풀었어요: 안 푼 문제·다시 풀 문제가 다른 쪽에 있으면 그 쪽으로 */
+    const onGrade = e => {
+      if (!e.target.closest('.scr-grade, .ph-grade, .hjs-grade, .m13-go')) return;
+      setTimeout(() => {
+        if (c !== cur || P.pages.length < 2) return;
+        const m = mod.querySelector(PG_MISS) || mod.querySelector('.m13-ng:not(.m13-shown), .m13-selfrow'); if (!m) return;
+        const k = P.pages.findIndex(pg => pg.els.some(x => x.contains(m) && (!pg.inner || x !== pg.q || [...pg.inner].some(y => y.contains(m)))));
+        if (k >= 0 && k !== i) go(k, m);
+      }, 0);
+    };
+    mod.addEventListener('click', onGrade);
+    return { stop(){ mo.disconnect(); mod.removeEventListener('click', onGrade); nav.remove(); }, refresh(){ replan(true); }, get page(){ return i; }, get pages(){ return P.pages.length; } };
+  }
   function show(t, from){
     const prev = cur, chain = !!(prev && prev.pushed && history.state && history.state.sarangScreen);   // '다음 과목'으로 이어 열기: 뒤로 가기 한 칸·돌아갈 자리는 처음 것
     if (prev) shut(chain);
@@ -24162,6 +24299,7 @@ window.SARANG_SCREEN = (function(){
     $('scrPar').checked = false; $('scrParRow').hidden = true;
     const body = $('scrBody'); body.innerHTML = '';
     const el = document.createElement('div'); el.className = 'scr-mod'; body.append(el);
+    c.pg = pager(c, el);
     if (chain) c.pushed = true; else try { history.pushState({ sarangScreen: 1 }, ''); c.pushed = true; } catch (e) {}
     window.scrollTo(0, 0);
     let api;
@@ -24178,6 +24316,7 @@ window.SARANG_SCREEN = (function(){
   function shut(keep){
     const c = cur; if (!c) return;
     cur = null; clockStop();
+    if (c.pg) c.pg.stop();
     if ($('scrAsk')) $('scrAsk').hidden = true;
     try { if (c.api) { if (c.api.close) c.api.close(); if (c.api.stop && c.api.stop !== c.api.close) c.api.stop(); } } catch (e) {}
     $('scrBody').innerHTML = '';
