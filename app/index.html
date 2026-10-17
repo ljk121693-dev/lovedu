@@ -1694,6 +1694,7 @@ input{accent-color:var(--pri)}
 .hx-root ol.scr-qs{padding-left:0}   /* 숙제 모의시험(ssh-module examRun): 문제 칸을 화면 폭대로 */
 .scr-dh{margin:0 0 14px}
 .scr-dh p{color:var(--sub);font-size:13px}
+.scr-pghead{padding-bottom:12px!important;margin-bottom:20px!important;border-bottom:2px solid var(--line)!important}   /* 쪽 나눈 학습: 머리와 본문 사이 경계 */
 .scr-tag{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--c);color:#fff;font-size:12px;font-weight:800}
 .scr-steps{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 12px}
 .scr-steps span{padding:3px 10px;border:1px solid var(--line);border-radius:999px;font-size:12px;color:var(--sub)}
@@ -7273,6 +7274,16 @@ html:not(.kid-dev) #app #today #todayList li.td-isdone>b,html:not(.kid-dev) #app
 .pux-btns{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .pux-btns button{min-height:46px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;font-weight:700;cursor:pointer}
 .pux-btns button.pri{background:var(--pri);border-color:var(--pri);color:var(--pri-ink,#fff)}
+/* 부록: 영어 묶음 (src/hub-ui.js renderExtras) */
+.ex-grp{grid-column:1/-1;min-width:0}
+.ex-grp>summary{list-style:none;width:100%}
+.ex-grp>summary::-webkit-details-marker{display:none}
+.ex-grp .ex-chev{transition:transform .15s}
+.ex-grp[open] .ex-chev{transform:translateY(-50%) rotate(90deg)!important}
+.ex-grp .ex-sub{margin-top:10px;padding-left:14px;border-left:3px solid var(--soft,#e6efe9)}
+@media (prefers-reduced-motion:reduce){.ex-grp .ex-chev{transition:none}}
+#extraList:has(.ex-grp){grid-auto-rows:auto}
+@media (max-width:320px){.ex-grp .ex-sub{padding-left:8px;border-left-width:2px}}
 </style>
 <style id="sarang-wrong">/* ===== 틀린 문제 모음 (src/wrong.js, 2026-10-08) — D안 색 변수만 씀 (밝게·어둡게·나이 단계 따라감) ===== */
 :root{--wr-kor:#7A4FA0;--wr-eng:#C4661F;--wr-math:#3A5BA0;--wr-soc:#1F7F80;--wr-sci:#2F8A5B;--wr-his:#A5432F;--wr-wh:#4F5AA0;--wr-hanja:#8a6a2a}
@@ -22990,10 +23001,10 @@ window.SARANG_PHON = { mount, renderPane, setDay, setPos, day: dayNo, pos, revie
   const examOk = () => !!(window.HUB_TODAY && HUB_TODAY.ssh && HUB_TODAY.ssh.examOk && HUB_TODAY.ssh.examOk());
   /* 부록 목록: 항목을 더하려면 여기에 한 줄 (k = 열 화면 pane-k, ok = 이 아이에게 보일지). 보일 항목이 없으면 아래 메뉴에 부록 칸도 없음 (0~4세는 놀이 메뉴라 없음) */
   const EXTRAS = [
-    { k: 'vocab', t: '영단어', d: '단계별 단어 학습지와 플래시카드', ok: () => has('vocab'), ic: '<path d="M4 6h9M4 10h7M4 14h5"/><rect x="13" y="11" width="8" height="9" rx="1.5"/><path d="M15.5 17.5l1.5-4 1.5 4M16 16.3h2"/>' },
-    { k: 'listen', t: '영어 듣기', d: '오늘 배운 영단어를 다시 들어요', ok: () => has('listen'), ic: '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>' },
-    { k: 'phon', t: '파닉스', d: '영어 소리와 글자 · 시간표에 넣으면 오늘의 학습에 나와요', ok: () => { const c = child(); return !!c && PHON_EXTRA.includes(c.grade); }, ic: '<path d="M4 18l4-12 4 12M5.5 14h5"/><path d="M15 9.5a3 3 0 1 1 0 5M19.5 8a6 6 0 0 1 0 8"/>' },   // 초3~6만 (6세~초2는 과목)
-    { k: 'gram', t: '영문법 사전', d: '학교 영어에서 배운 문법을 모아 봐요 · 읽기만 해요', ok: () => has('eng') && !!(window.SARANG_GRAM && SARANG_GRAM.ok()), go: () => window.SARANG_GRAM && SARANG_GRAM.open(), ic: '<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z"/><path d="M6.5 8h2.5M6.5 11h2.5M15 8h2.5M15 11h2.5"/>' },   // 2026-10-11 대표: 따로 된 화면(src/gram.js), 진도·기록과 상관없음
+    { g: 'eng', k: 'vocab', t: '영단어', d: '단계별 단어 학습지와 플래시카드', ok: () => has('vocab'), ic: '<path d="M4 6h9M4 10h7M4 14h5"/><rect x="13" y="11" width="8" height="9" rx="1.5"/><path d="M15.5 17.5l1.5-4 1.5 4M16 16.3h2"/>' },
+    { g: 'eng', k: 'listen', t: '영어 듣기', d: '오늘 배운 영단어를 다시 들어요', ok: () => has('listen'), ic: '<path d="M4 14v-2a8 8 0 0 1 16 0v2"/><rect x="3" y="14" width="4" height="6" rx="1.5"/><rect x="17" y="14" width="4" height="6" rx="1.5"/>' },
+    { g: 'eng', k: 'phon', t: '파닉스', d: '영어 소리와 글자 · 시간표에 넣으면 오늘의 학습에 나와요', ok: () => { const c = child(); return !!c && PHON_EXTRA.includes(c.grade); }, ic: '<path d="M4 18l4-12 4 12M5.5 14h5"/><path d="M15 9.5a3 3 0 1 1 0 5M19.5 8a6 6 0 0 1 0 8"/>' },   // 초3~6만 (6세~초2는 과목)
+    { g: 'eng', k: 'gram', t: '영문법 사전', d: '학교 영어에서 배운 문법을 모아 봐요 · 읽기만 해요', ok: () => has('eng') && !!(window.SARANG_GRAM && SARANG_GRAM.ok()), go: () => window.SARANG_GRAM && SARANG_GRAM.open(), ic: '<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H11v15H5.5A1.5 1.5 0 0 0 4 20.5z"/><path d="M20 5.5A1.5 1.5 0 0 0 18.5 4H13v15h5.5a1.5 1.5 0 0 1 1.5 1.5z"/><path d="M6.5 8h2.5M6.5 11h2.5M15 8h2.5M15 11h2.5"/>' },   // 2026-10-11 대표: 따로 된 화면(src/gram.js), 진도·기록과 상관없음
     { k: 'art', t: '그림놀이', d: '태블릿 전용 · 손가락이나 펜으로 자유롭게 그려요', ok: () => !!(window.SARANG_ART && SARANG_ART.ok()) && (SARANG_ART.tablet() || EXTRAS.some(x => x.k !== 'art' && x.ok())), go: () => window.SARANG_ART && SARANG_ART.open(), ic: '<path d="M12 3a9 9 0 1 0 0 18c1.2 0 1.8-.8 1.8-1.7 0-.5-.2-.9-.5-1.2-.3-.4-.5-.8-.5-1.2 0-1 .8-1.7 1.7-1.7H17a4 4 0 0 0 4-4C21 6.6 17 3 12 3z"/><circle cx="7.5" cy="11" r="1"/><circle cx="10" cy="7" r="1"/><circle cx="14.5" cy="7" r="1"/>' }   // 2026-10-12 판 88: 태블릿 그림놀이 (src/screen/art.js). 폰·PC 에서는 다른 부록이 있을 때만 보이고(그림놀이 하나 때문에 부록 칸이 새로 생기지 않게) 누르면 '태블릿에서 열어 주세요'
   ];
   const extras = () => tod() ? [] : EXTRAS.filter(x => { try { return x.ok(); } catch (e) { return false; } });
@@ -23006,10 +23017,17 @@ window.SARANG_PHON = { mount, renderPane, setDay, setPos, day: dayNo, pos, revie
   drawTabs();
   $('app').append(tabBar);
   $('sarangDashboard').insertAdjacentHTML('beforeend', '<section class="card ex-pane" id="extraPane" aria-labelledby="extraTitle"><div class="label" id="extraTitle">부록</div><div class="info">진도와 상관없이 언제든 골라 쓰는 학습 자료예요.</div><div class="ex-list" id="extraList"></div></section>');
+  /* 영어 부록(영단어·영어 듣기·파닉스·영문법 사전)은 '영어' 한 칸에 접어 묶음 (2026-10-17 대표 "부록에서 영어 관련 내용끼리 묶는게 좋아보임", "드롭박스 또는 메뉴화"). 펼침은 이 기기에 기억 */
+  let exEng = false; try { exEng = localStorage.getItem('hub_ex_eng') === '1'; } catch (e) {}
+  const EX_ENG_IC = '<path d="M4 18l4-12 4 12M5.5 14h5"/><path d="M14 8h6M14 12h6M14 16h4"/>';
   function renderExtras(){
-    const html = extras().map(x => `<button type="button" class="ex-item" data-ex="${x.k}"><span class="ex-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${x.ic}</svg></span><span class="ex-t"><b>${x.t}</b><small>${x.d}</small></span><i class="ex-go" aria-hidden="true">›</i></button>`).join('');
+    const item = x => `<button type="button" class="ex-item" data-ex="${x.k}"><span class="ex-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${x.ic}</svg></span><span class="ex-t"><b>${x.t}</b><small>${x.d}</small></span><i class="ex-go" aria-hidden="true">›</i></button>`;
+    const all = extras(), eng = all.filter(x => x.g === 'eng');
+    const html = eng.length < 2 ? all.map(item).join('') : all.filter(x => x.g !== 'eng' || x === eng[0]).map(x => x.g !== 'eng' ? item(x)
+      : `<details class="ex-grp" id="exEng"${exEng ? ' open' : ''}><summary class="ex-item ex-sum"><span class="ex-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${EX_ENG_IC}</svg></span><span class="ex-t"><b>영어</b><small>${eng.map(v => v.t).join(' · ')}</small></span><i class="ex-go ex-chev" aria-hidden="true">›</i></summary><div class="ex-list ex-sub">${eng.map(item).join('')}</div></details>`).join('');
     if ($('extraList').innerHTML !== html) $('extraList').innerHTML = html;
   }
+  $('extraList').addEventListener('toggle', e => { if (e.target.id !== 'exEng') return; exEng = e.target.open; try { localStorage.setItem('hub_ex_eng', exEng ? '1' : '0'); } catch (er) {} }, true);
   $('extraList').addEventListener('click', e => { const b = e.target.closest('[data-ex]'); if (!b) return; const x = EXTRAS.find(v => v.k === b.dataset.ex); if (x && x.go) return x.go(); backTo = 'extra'; backY = Math.round(scrollY); smooth(() => open(b.dataset.ex)); });
   $('sarangDashboard').insertAdjacentHTML('beforeend', '<section class="card exam-none" id="examNone"><div class="label">모의시험</div><div class="info">아이 학년에는 아직 모의시험을 만들 교과(국어·수학·사회·과학·한국사 등 시험 범위가 있는 과목)가 없어요.</div></section>');
   /* 아이 기기(html.kid-dev): 현황판·놀이 모음·모의시험·부록 칸으로 가지 않음 (2026-10-08 대표 PC 사진: 같은 탭에서 부모가 보던 현황판이 아이 기기에 남음) */
@@ -24435,7 +24453,8 @@ window.SARANG_SCREEN = (function(){
       const N = P.pages.length, cp = P.pages[i], last = i === N - 1;
       if (N < 2) { nav.hidden = true; mod.classList.remove('scr-paged'); return; }
       const on = new Set(cp.els);
-      for (const k of P.C.children) if (!k.matches(PG_HEAD) && !P.end.includes(k)) k.classList.toggle(OFF, !on.has(k));
+      for (const k of P.C.children) if (k.matches(PG_HEAD)) { k.classList.add('scr-pghead'); k.classList.toggle(OFF, i > 0); }   // 단원·제목·학년 머리는 첫 쪽에만, 아래에 경계선 (2026-10-17 대표 "경계가 없어서 학습중에 약간 헷갈림")
+        else if (!P.end.includes(k)) k.classList.toggle(OFF, !on.has(k));
       P.end.forEach(e => e.classList.toggle(OFF, !last));
       P.pages.forEach(pg => { if (pg.inner) [...pg.q.children].forEach(e => e.classList.toggle(OFF, cp.q === pg.q && !cp.inner.has(e))); });
       nav.hidden = false;
@@ -30473,7 +30492,7 @@ window.DONATE_CORE = (function(){
   /* 숙제 종류 (2026-10-05 대표 "과목별 모의고사 생성 발송 또는 영단어 퀴즈 등 … 문제풀이·암기를 할 수 있는 것으로"):
      day = 오늘 학습(지금 Day, 스마트 학습) · exam = 과목별 모의시험(부모 폰이 문제를 골라 보냄, 화면에서 풂) · vocab = 영단어 '외웠는지 확인'.
      한 번 보내면 숙제 하나(종류 하나). 서버 규칙은 그대로: 과목 키 안에 kind 를 적음 (exam 은 그 교과 키, vocab 은 eng) */
-  let hwType = 'day', hxTerm = null, hxKind = null, hxN = 10, hxPick = null, hxLoad = null, hwOpenW = null;
+  let hwType = 'exam', hxTerm = null, hxKind = null, hxN = 10, hxPick = null, hxLoad = null, hwOpenW = null;
   const HX = () => H().ssh && H().ssh.hwExam;
   const vqOk = () => !!(window.SARANG_VQUIZ && window.HUB_NAV && HUB_NAV.has('vocab'));
   try { hwFrom = sessionStorage.getItem('sarang_hwfrom') || '엄마'; } catch (e) {}
@@ -30505,11 +30524,14 @@ window.DONATE_CORE = (function(){
       const subs = hwSubjects();
       if (!hwPick) hwPick = new Set(subs.filter(x => x.on).map(x => x.s));
       const exOk = !!(HX() && H().ssh.examOk && H().ssh.examOk()), voOk = vqOk();
-      if ((hwType === 'exam' && !exOk) || (hwType === 'vocab' && !voOk)) hwType = 'day';
-      const types = [['day', '오늘 학습'], ...(exOk ? [['exam', '모의시험']] : []), ...(voOk ? [['vocab', '영단어 퀴즈']] : [])];
+      /* '오늘 학습'(본학습)은 숙제로 보내지 않음 — 숙제는 모의시험·영단어 퀴즈 같은 곁 학습만 (2026-10-17 대표 "숙제로 오늘의 학습지 보내는건 적절치 않아보임"). 아이 폰은 예전에 받은 오늘 학습 숙제도 그대로 엶 */
+      const types = [...(exOk ? [['exam', '모의시험']] : []), ...(voOk ? [['vocab', '영단어 퀴즈']] : [])];
+      if (!types.some(t => t[0] === hwType)) hwType = types.length ? types[0][0] : 'none';
       const typeRow = types.length > 1 ? `<div class="kd-f"><span class="kd-fl">숙제 종류</span><div class="kd-chips" role="radiogroup" aria-label="숙제 종류">${types.map(([k, t]) => `<button type="button" role="radio" class="kd-chip${k === hwType ? ' on' : ''}" aria-checked="${k === hwType}" data-hwtype="${k}">${t}</button>`).join('')}</div></div>` : '';
       let body = '', count = 0, unit = '과목', label = '숙제 보내기';
-      if (hwType === 'day') {
+      if (hwType === 'none') {
+        body = `<div class="kd-f"><p class="kd-p">지금은 보낼 수 있는 숙제가 없어요. 모의시험은 시험 범위 문제가 준비되면, 영단어 퀴즈는 영단어 부록에서 단어를 익히면 보낼 수 있어요.</p></div>`;
+      } else if (hwType === 'day') {
         const rows = subs.map(x => `<label class="kd-sub"><input type="checkbox" data-hwsub="${x.s}"${hwPick.has(x.s) ? ' checked' : ''}><span><b>${NAME[x.s] || x.s}</b><small>${esc(x.info || '지금 배우는 곳')}</small></span></label>`).join('');
         body = `<div class="kd-f"><span class="kd-fl">과목 <small>지금 배우는 Day를 스마트 학습으로 풀어요</small></span>${rows ? `<div class="kd-subs">${rows}</div>` : '<p class="kd-p">스마트 학습으로 풀 수 있는 과목이 아직 없어요.</p>'}</div>`;
         count = hwPick.size;
@@ -30599,10 +30621,7 @@ window.DONATE_CORE = (function(){
       } else if (hwType === 'vocab') {
         const n = vqOk() && SARANG_VQUIZ.todo ? SARANG_VQUIZ.todo() : 0; if (!n) return;
         items.eng = { app: 'vocab', kind: 'vocab', day: `외웠는지 확인 · ${n}단어`, order: 0, state: 'sent' };
-      } else {
-        if (!hwPick || !hwPick.size) return;
-        hwSubjects().filter(x => hwPick.has(x.s)).forEach((x, i) => { items[SERVER[x.s]] = { app: x.s, day: x.info.slice(0, 80), order: i, state: 'sent' }; });
-      }
+      } else return;   // 오늘 학습 숙제는 보내지 않음 (2026-10-17 대표)
       if (!Object.keys(items).length) return;
       hwBusy = true; hwErr = ''; paintHw(hwEl);
       try {
@@ -30624,7 +30643,7 @@ window.DONATE_CORE = (function(){
     const m = $('todayMsg'); if (!m) return;
     let b = $('kdHwGo');
     if (!b) {
-      m.insertAdjacentHTML('afterend', `<button type="button" class="wr-entry kd-hwgo" id="kdHwGo"><span class="wr-ic">${SEND}</span><span class="wr-t"><b id="kdHwGoT"></b><small>오늘 학습 · 모의시험 · 영단어 퀴즈를 아이 폰으로</small></span><i class="wr-go" aria-hidden="true">›</i></button>`);
+      m.insertAdjacentHTML('afterend', `<button type="button" class="wr-entry kd-hwgo" id="kdHwGo"><span class="wr-ic">${SEND}</span><span class="wr-t"><b id="kdHwGoT"></b><small>모의시험 · 영단어 퀴즈를 아이 폰으로</small></span><i class="wr-go" aria-hidden="true">›</i></button>`);
       b = $('kdHwGo'); b.addEventListener('click', hwSheet);
     }
     if (m.nextElementSibling !== b) m.after(b);   // 늘 '전체 뽑아서 풀기' 글 줄 바로 아래
