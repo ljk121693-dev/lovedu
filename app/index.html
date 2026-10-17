@@ -7264,7 +7264,7 @@ html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-go[data-scr]:hove
 /* ② 시간표 */
 .wk-preset{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
 .wk-preset button{display:grid;gap:1px;align-content:center;min-height:56px;padding:6px 4px;border:1.5px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink);font:inherit;cursor:pointer;text-align:center}
-.wk-preset b{font-size:14px}
+.wk-preset b{font-size:14px;word-break:keep-all}
 .wk-preset small{font-size:11px;line-height:1.3;color:var(--sub);word-break:keep-all}
 .wk-preset button[aria-pressed="true"]{border-color:var(--pri);background:var(--soft)}
 .wk-preset button:focus-visible,.wk-d:focus-visible{outline:2px solid var(--pri);outline-offset:2px}
@@ -7308,6 +7308,8 @@ html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-go[data-scr]:hove
 @media (prefers-reduced-motion:reduce){.ex-grp .ex-chev{transition:none}}
 #extraList:has(.ex-grp){grid-auto-rows:auto}
 @media (max-width:320px){.ex-grp .ex-sub{padding-left:8px;border-left-width:2px}}
+.wk-preset .wk-def{font-style:normal;font-weight:800;color:var(--pri)}
+@container (max-width:319px){.wk-preset .wk-sub{display:none}}
 </style>
 <style id="sarang-wrong">/* ===== 틀린 문제 모음 (src/wrong.js, 2026-10-08) — D안 색 변수만 씀 (밝게·어둡게·나이 단계 따라감) ===== */
 :root{--wr-kor:#7A4FA0;--wr-eng:#C4661F;--wr-math:#3A5BA0;--wr-soc:#1F7F80;--wr-sci:#2F8A5B;--wr-his:#A5432F;--wr-wh:#4F5AA0;--wr-hanja:#8a6a2a}
@@ -23231,7 +23233,7 @@ window.SARANG_PHON = { mount, renderPane, setDay, setPos, day: dayNo, pos, revie
     } else if (kind === 'week') {
       const last = true, names = [...new Set((child() || { subs: [] }).subs.map(x => NAME[x]))].join('·');
       box.innerHTML = dots + `<h2>요일마다 할 과목을 정해 주세요</h2>
-        <div class="info">고른 과목${names ? `(${names})` : ''}을 월~금에 모두 넣어 두었어요. 과목을 눌러 빼거나 더하면 과목마다 끝나는 달이 바로 바뀌어요. 나중에 '아이 진도변경'에서 언제든 고칠 수 있어요.</div>
+        <div class="info">${/^e[1-6]$/.test((child() || {}).grade || '') && !ob.again ? `고른 과목${names ? `(${names})` : ''}을 '보통' 시간표로 넣어 두었어요. 위 단추로 '가볍게'나 '모두 매일'로 바꾸거나 과목을 눌러 빼고 더할 수 있어요.` : `고른 과목${names ? `(${names})` : ''}을 월~금에 모두 넣어 두었어요. 과목을 눌러 빼거나 더할 수 있어요.`} 과목마다 끝나는 달이 바로 바뀌어요. 나중에 '아이 진도변경'에서 언제든 고칠 수 있어요.</div>
         <div class="ob-week"></div>
         <div class="actions a2 ob-nav"><button type="button" data-ob="back">이전</button><button type="button" class="wide pri" data-ob="${last ? 'done' : 'next'}">${last ? '완료' : '다음'}</button></div>`;
       const wk = $('week'); box.querySelector('.ob-week').append(wk); wk.hidden = false;
@@ -23279,7 +23281,10 @@ window.SARANG_PHON = { mount, renderPane, setDay, setPos, day: dayNo, pos, revie
     let week = null; try { week = JSON.parse(load('hub_week')); } catch (e) {}
     const same = prev && prev.subs.join() === subs.join() && isKid(prev.grade) === isKid(g) && HDEF_SAME(prev.grade, g);
     if (!same) {
-      if (prev || !week || typeof week !== 'object') week = { 0: [], 1: tsubs, 2: tsubs, 3: tsubs, 4: tsubs, 5: tsubs, 6: [] };
+      const W5 = { 0: [], 1: tsubs, 2: tsubs, 3: tsubs, 4: tsubs, 5: tsubs, 6: [] };
+      /* 새로 가입하는 초등 아이는 '보통' 시간표(국·영·수 매일, 사회·과학 월수금, 한국사 화목, 한자 금)가 처음 값 (2026-10-17 대표 카드 '보통으로'). 학년·과목을 바꾸는 아이는 예전처럼 월~금 모두 */
+      if (!prev && /^e[1-6]$/.test(g) && window.SARANG_WEEKUI && SARANG_WEEKUI.build) week = SARANG_WEEKUI.build('mid', {}, tsubs);
+      else if (prev || !week || typeof week !== 'object') week = W5;
       else { const used = new Set(Object.values(week).flat()); [1, 2, 3, 4, 5].forEach(d => { week[d] = [...(week[d] || []), ...tsubs.filter(x => !used.has(x))]; }); }
       store('hub_week', JSON.stringify(week)); store('hub_week_ssh', '1');
     }
@@ -32587,7 +32592,10 @@ window.DONATE_CORE = (function(){
     mid: s => ['kor', 'eng', 'math', 'phon', 'ymath'].includes(s) ? DAILY : ['soc', 'sci'].includes(s) ? [1, 3, 5] : ['his', 'wh'].includes(s) ? [2, 4] : ['hanja', 'yhan'].includes(s) ? [5] : DAILY,
     all: () => DAILY
   };
-  const PNAME = [['light', '가볍게', '하루 3과목쯤'], ['mid', '보통', '국·영·수 매일'], ['all', '모두 매일', '기본값']];
+  const elem = () => { try { return /^e[1-6]$/.test((JSON.parse(localStorage.getItem('hub_child')) || {}).grade || ''); } catch (e) { return false; } };
+  const PNAME0 = () => elem()   // 처음 값 표시: 초등은 '보통'(2026-10-17 대표 카드), 그 밖은 '모두 매일'
+    ? [['light', '가볍게', '하루 3과목쯤'], ['mid', '보통', '<em class="wk-def">기본값</em><span class="wk-sub"> · 국·영·수 매일</span>'], ['all', '모두 매일', '월~금 매일']]
+    : [['light', '가볍게', '하루 3과목쯤'], ['mid', '보통', '국·영·수 매일'], ['all', '모두 매일', '<em class="wk-def">기본값</em>']];
   function build(p, week, list){
     const out = {};
     for (let w = 0; w < 7; w++) out[w] = [...(week[w] || []).filter(s => !list.includes(s)), ...list.filter(s => PRESET[p](s).includes(w))];
@@ -32597,9 +32605,10 @@ window.DONATE_CORE = (function(){
   const monthTxt = end => { const y = +String(end).slice(0, 4), m = +String(end).slice(5, 7); if (!y || !m) return ''; return `${y > new Date().getFullYear() ? '내년 ' : ''}${m}월 끝`; };
   const esc = s => String(s == null ? '' : s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
   window.SARANG_WEEKUI = {
+    build,   // 가입 때 처음 시간표 (src/hub-ui.js finishChild)
     html(week, list, NAME){
       const t = new Date().getDay(), P = window.HUB_PACE || {};
-      const on = PNAME.map(x => x[0]).find(p => same(build(p, week, list), week, list)) || '';
+      const PNAME = PNAME0(), on = PNAME.map(x => x[0]).find(p => same(build(p, week, list), week, list)) || '';
       let h = `<div class="wk-preset" role="group" aria-label="추천 시간표">${PNAME.map(([k, a, b]) => `<button type="button" data-wpreset="${k}" aria-pressed="${on === k}"><b>${a}</b><small>${b}</small></button>`).join('')}</div>`;
       h += `<div class="wk-grid"><div class="wk-r wk-h" aria-hidden="true"><span></span>${W.map(w => `<span class="${w === t ? 'now' : ''}">${WD[w]}</span>`).join('')}</div>`;
       list.forEach(s => {
