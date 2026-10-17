@@ -5621,6 +5621,7 @@ window.SARANG_MID = { open: false, locked(g){ return !this.open && /^m[123]$/.te
 .ph-card:disabled{cursor:default;color:inherit}.ph-card:disabled i{opacity:.35}   /* 소리가 없는 기기: 낱말은 또렷이, 스피커만 흐리게 */
 .ph-par-only{display:none;margin-top:10px}
 .ph-parent .ph-par-only{display:block}
+.ph-pw{display:none}.ph-parent .ph-pw{display:inline}   /* 소리 없는 기기의 듣고 고르기 낱말: 부모님 보기에서만 (ChatGPT 검수 3번) */
 .ph-ptip{margin:0 0 6px;padding:8px 12px;border-radius:10px;background:var(--soft,#f2f4f1);font-size:14px;line-height:1.55}
 .ph-words{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,132px),1fr));gap:8px}
 .ph-card{position:relative;display:flex;align-items:center;justify-content:center;min-height:76px;padding:10px 26px 14px 10px;border:1px solid var(--line,#ddd);border-radius:12px;background:var(--card,#fff);color:inherit;font:inherit;cursor:pointer;min-width:0}
@@ -22316,6 +22317,8 @@ const nameOf = n => { const d = dayOf(n); return !d ? '' : d.rv ? d.t : d.k === 
 const nextOf = n => n < TOTAL ? n + 1 : !RV ? 0 : n === TOTAL ? TOTAL + 1 : TOTAL + (n - TOTAL) % RV + 1;
 /* 복습 한 장 (k = 1~RV). 낱말·그림·문장은 그 묶음 수업 날 것, 지난 낱말은 앞 묶음 것, 보기 낱말은 그때까지 배운 낱말에서만 */
 const RVC = {};
+/* 2026-10-17 ChatGPT 검수 1번(깃털 그림 + loud/light/line): 모양·느낌·움직임·자리 낱말은 그림 하나로 이름을 알 수 없어 복습 '그림 보고 낱말 고르기'에서 뺌 (86장 전체) */
+const AMB = new Set(['light', 'happy', 'sad', 'sick', 'tall', 'in', 'on', 'under', 'up', 'fall', 'catch', 'jump', 'kick', 'kiss', 'knock', 'play', 'point', 'run', 'sleep', 'write', 'splash', 'quack', 'news', 'question', 'pair', 'animal', 'vegetable', 'breakfast', 'dinner', 'spring', 'fly', 'match', 'night', 'home', 'cook', 'storm', 'swing', 'skate', 'watch', 'square', 'ear', 'head', 'mouth', 'nose', 'sister', 'pink']);   // 얼굴 부위(아이가 가리키는 그림)·두 아이(sister)·풍선(pink)도 그림 이름과 갈림
 const low = s => String(s).toLowerCase();
 function rvDay(k){
   const e = RVL[k - 1]; if (!e) return null;
@@ -22328,7 +22331,7 @@ function rvDay(k){
   const known = [...new Set([].concat(...D.slice(0, last).map(d => d.w)).filter(w => w.w && /^[a-z]+$/.test(w.w)).map(w => w.w))];
   const kset = new Set(known.map(low));
   const allPics = uniq([].concat(...L.map(d => d.pics)));
-  const isDec = p => kset.has(low(p.w)) && /^[a-z]+$/.test(p.w);
+  const isDec = p => kset.has(low(p.w)) && /^[a-z]+$/.test(p.w) && !AMB.has(low(p.w));   // 그림 보고 낱말 고르기에는 그림만으로 뜻이 갈리는 낱말(깃털=light 등)을 쓰지 않음
   let dec = mix(allPics.filter(isDec), seed + 1).slice(0, 4);
   if (dec.length < 4) { const have = new Set(dec.map(p => low(p.w))); dec = dec.concat(mix(uniq([].concat(...D.slice(0, first - 1).map(d => d.pics))).filter(p => isDec(p) && !have.has(low(p.w))), seed + 2)).slice(0, 4); }   // 그림이 모자란 묶음은 앞 묶음에서 낱말로 읽을 수 있는 그림을 채움
   const pics = dec.length >= 2 ? dec.map((p, i) => {   // 그림 보고 낱말 고르기: 첫 글자가 같은 배운 낱말을 먼저 보기로
@@ -22562,7 +22565,11 @@ function sheet(ctx, n){
   const sz = 12;
   const line1 = d.g.length ? d.g.slice(0, 2).map(tracky) : words.slice(0, 2).map(w => w.w);
   { const s = staff(ctx, y, sz); let cx = X0 + 2; const per = line1.length > 1 ? 4 : 8;
-    line1.forEach(g => { for (let i = 0; i < per; i++) { const w = W(ctx, g, 'e', sz); if (cx + w > X0 + BW - 2) break; T(ctx, g, cx, s.base, { f: 'e', size: sz, c: i === 0 ? INK : LIGHT }); cx += w + (g.length > 2 ? 9 : 7); } cx += 4; });
+    /* 낱말마다 본보기 1번 + 회색 따라쓰기 1번 이상이 들어가게 칸을 나눔 (2026-10-17 ChatGPT 검수 2번: park 뒤 catch 회색 칸 빠짐). 둘이 다 안 들어가면 첫 낱말만 */
+    const step = g => W(ctx, g, 'e', sz) + (g.length > 2 ? 9 : 7), slot = (BW - 4) / line1.length - 4;
+    const L1 = line1.length > 1 && line1.some(g => step(g) * 2 > slot) ? line1.slice(0, 1) : line1;
+    const room = (BW - 4) / L1.length - (L1.length > 1 ? 4 : 0);
+    L1.forEach((g, j) => { const x0 = X0 + 2 + j * (room + 4), reps = Math.max(2, Math.min(per * (line1.length > L1.length ? 2 : 1), Math.floor((room + 2) / step(g)))); cx = x0; for (let i = 0; i < reps; i++) { const w = W(ctx, g, 'e', sz); if (cx + w > X0 + BW - 2) break; T(ctx, g, cx, s.base, { f: 'e', size: sz, c: i === 0 ? INK : LIGHT }); cx += step(g); } });
     y += s.h + 3; }
   if (!yg && words.length && d.k !== 'rev') {   // 복습 날은 ⑤ 듣고 쓰기가 혼자 쓰기라 이 줄을 뺌
     const s = staff(ctx, y, sz); let cx = X0 + 2;
@@ -22857,7 +22864,7 @@ function build(ctx, n, d, yg){
     const pool = words.filter(w => w.sp).map(w => w.w);
     mix(pool, n).slice(0, 3).forEach((w, i) => { const others = mix(pool.filter(x => x !== w), n + i).slice(0, 2); if (others.length) Q.push({ kind: 'hear', w, opts: mix([w, ...others], n * 7 + i), a: w }); });
   }
-  let h = `<div class="ph${yg ? ' ph-young' : ''}"><div class="ph-head"><b>파닉스 · ${esc(nameOf(n))}</b><span>${esc(tag(n))}${sound ? '' : ' · 이 기기에서는 소리를 낼 수 없어요. 부모님이 읽어 주세요.'}</span></div>`;
+  let h = `<div class="ph${yg ? ' ph-young' : ''}"><div class="ph-head"><b>파닉스 · ${esc(nameOf(n))}</b><span>${esc(tag(n))}${sound ? '' : Q.some(q => q.kind === 'hear') ? " · 이 기기에서는 소리를 낼 수 없어요. 부모님이 '부모님 보기'를 켜고 읽어 주세요." : ' · 이 기기에서는 소리를 낼 수 없어요. 부모님이 읽어 주세요.'}</span></div>`;
   if (d.k === 'book') {
     h += `<h3 class="ph-sec">📖 ${esc(d.bt)}</h3><p class="ph-tip">낱말을 먼저 읽고, 이야기를 손가락으로 짚으며 소리 내어 읽어요.</p>
       <div class="ph-words">${words.map(w => `<button type="button" class="ph-card" data-say="${esc(w.w)}" ${sound ? '' : 'disabled'}>${wordHTML(w)}<i>${SPK}</i></button>`).join('')}</div>
@@ -22867,19 +22874,19 @@ function build(ctx, n, d, yg){
     if (d.k === 'rev' && d.lrn.length) h += `<h3 class="ph-sec">${++sec}. 다시 볼 소리</h3><p class="ph-tip">글자를 보며 소리를 말해요.</p><div class="ph-chips">${d.lrn.filter(x => !(x.length === 2 && x[0] === x[1])).slice(-10).map(x => `<b lang="en">${esc(x)}</b>`).join('')}</div>`;
     if (d.g.length) {
       const ex = (d.pics.find(p => p.first) || d.pics[0] || words[0] || {}).w || '';
-      h += `<h3 class="ph-sec">${++sec}. 소리 듣기</h3><p class="ph-tip">글자를 보고 낱말을 들어요. 오늘 배우는 소리를 길게 따라 말해요.</p>
+      h += `<h3 class="ph-sec">${++sec}. 소리 듣기</h3><p class="ph-tip">${sound ? '글자를 보고 낱말을 들어요.' : '글자를 보고, 부모님이 읽어 주는 낱말을 들어요.'} 오늘 배우는 소리를 길게 따라 말해요.</p>
         <div class="ph-big">${d.g.slice(0, 3).map((g, i) => `<div class="ph-gc"><b lang="en">${esc(g)}</b>${d.ipa[i] ? `<small lang="en">/${esc(d.ipa[i])}/</small>` : ''}</div>`).join('')}
         ${ex ? `<button type="button" class="ph-hear" data-say="${esc(ex)}" ${sound ? '' : 'disabled'}>${SPK}<span>소리 듣기 · <b lang="en">${esc(ex)}</b></span></button>` : ''}</div>
         <div class="ph-par-only">${d.tips.map(([ipa, tip]) => `<p class="ph-ptip"><b lang="en">/${esc(ipa)}/</b> ${esc(tip)}</p>`).join('')}</div>`;
     }
     const blend = words.filter(w => w.sp).slice(0, yg ? 3 : 6);
-    if (blend.length) h += `<h3 class="ph-sec">${++sec}. 소리 합치기</h3><p class="ph-tip">${yg ? '눌러서 듣고 따라 말해요.' : '점을 짚으며 소리 내고 이어 읽은 뒤, 눌러서 맞았는지 들어 봐요.'}</p>
+    if (blend.length) h += `<h3 class="ph-sec">${++sec}. 소리 합치기</h3><p class="ph-tip">${!sound ? (yg ? '부모님이 읽어 주면 따라 말해요.' : '점을 짚으며 소리 내고 이어 읽은 뒤, 부모님과 맞았는지 확인해요.') : yg ? '눌러서 듣고 따라 말해요.' : '점을 짚으며 소리 내고 이어 읽은 뒤, 눌러서 맞았는지 들어 봐요.'}</p>
       <div class="ph-words">${blend.map(w => `<button type="button" class="ph-card" data-say="${esc(w.w)}" ${sound ? '' : 'disabled'}>${wordHTML(w)}<i>${SPK}</i></button>`).join('')}</div>`;
     if (Q.length) {
-      h += `<h3 class="ph-sec">${++sec}. ${d.k === 'rev' ? '낱말 고르기' : '소리 고르기'}</h3><p class="ph-tip">${d.k === 'rev' ? '그림이나 소리에 맞는 낱말을 골라요.' : '그림이나 소리를 듣고 맞는 글자·낱말을 골라요.'}</p><ol class="ph-qs">`;
+      h += `<h3 class="ph-sec">${++sec}. ${d.k === 'rev' ? '낱말 고르기' : '소리 고르기'}</h3><p class="ph-tip">${d.k === 'rev' ? '그림이나 소리에 맞는 낱말을 골라요.' : '그림이나 소리를 듣고 맞는 글자·낱말을 골라요.'}${!sound && Q.some(q => q.kind === 'hear') ? ' 듣고 고르기는 부모님이 읽어 주는 낱말을 듣고 골라요.' : ''}</p><ol class="ph-qs">`;
       Q.forEach((q, i) => {
         const ask = q.kind === 'pic' ? `<div class="ph-pic">${picHTML(q.p)}</div><button type="button" class="ph-spk" data-say="${esc(q.p.w)}" aria-label="그림 이름 듣기" ${sound ? '' : 'disabled'}>${SPK}</button><small class="ph-qt">${q.wo ? '그림 이름' : q.p.first ? '첫소리' : '들어 있는 소리'}</small>`
-          : `<button type="button" class="ph-hear sm" data-say="${esc(q.w)}" ${sound ? '' : 'disabled'}>${SPK}<span>듣고 고르기</span></button>${sound ? '' : `<small class="ph-qt">부모님: ${esc(q.w)}</small>`}`;
+          : `<button type="button" class="ph-hear sm" data-say="${esc(q.w)}" ${sound ? '' : 'disabled'}>${SPK}<span>듣고 고르기</span></button>${sound ? '' : `<small class="ph-qt ph-pw">부모님: ${esc(q.w)}</small>`}`;
         h += `<li class="ph-q" data-q="${i}"><div class="ph-ask">${ask}</div><div class="ph-opts${q.kind === 'hear' || q.wo ? ' ph-wopts' : ''}">${q.opts.map((o, k) => `<button type="button" data-k="${k}" aria-pressed="false" lang="en">${esc(o)}</button>`).join('')}</div></li>`;
       });
       h += '</ol>';
@@ -22888,7 +22895,7 @@ function build(ctx, n, d, yg){
     const w2 = d.g.length ? words[0] : words[1];   // 소리 없는 날(연습·복습)은 첫 칸이 이미 words[0] 이라 다음 낱말
     if (!yg && w2) wr.push(w2.w);
     if (wr.length) h += `<h3 class="ph-sec">${++sec}. 따라 쓰기</h3><p class="ph-tip">흐린 글자 위에 따라 써요. 쓴 글씨는 부모님이 봐 주세요.</p><div class="ph-pens">${wr.map((t, i) => `<div class="ph-pen" data-pen="${i}" data-t="${esc(t)}"></div>`).join('')}</div>`;
-    if (d.old && d.old.length) h += `<h3 class="ph-sec">${++sec}. 지난 낱말 읽기</h3><p class="ph-tip">전에 배운 낱말이에요. 소리 내어 읽은 뒤 눌러서 들어 봐요.</p>
+    if (d.old && d.old.length) h += `<h3 class="ph-sec">${++sec}. 지난 낱말 읽기</h3><p class="ph-tip">${sound ? '전에 배운 낱말이에요. 소리 내어 읽은 뒤 눌러서 들어 봐요.' : '전에 배운 낱말이에요. 소리 내어 읽고, 부모님과 한 번 더 읽어 봐요.'}</p>
       <div class="ph-words">${d.old.slice(0, 4).map(w => `<button type="button" class="ph-card" data-say="${esc(w.w)}" ${sound ? '' : 'disabled'}>${wordHTML(w)}<i>${SPK}</i></button>`).join('')}</div>`;
     if (d.sent) h += `<h3 class="ph-sec">${++sec}. ${yg ? '함께 읽기' : '문장 읽기'}</h3><p class="ph-tip">밑줄 낱말은 통째로 읽는 말이에요.</p><p class="ph-sent"><button type="button" class="ph-spk" data-say="${esc(d.sent)}" aria-label="문장 듣기" ${sound ? '' : 'disabled'}>${SPK}</button><span lang="en">${sentHTML(d)}</span></p>`;
   }
@@ -22935,7 +22942,7 @@ let regd = false;
 const reg = () => { if (!regd && window.SARANG_SCREEN && SARANG_SCREEN.register) { SARANG_SCREEN.register('phon', DEF); regd = true; } };
 reg(); if (!regd) document.addEventListener('DOMContentLoaded', reg);
 if ($('pane-phon')) mount(); else document.addEventListener('DOMContentLoaded', mount);
-window.SARANG_PHON = { mount, renderPane, setDay, setPos, day: dayNo, pos, review: RV, total: TOTAL, canvas: canvasFor, ready, data: D };   // 점검용
+window.SARANG_PHON = { mount, renderPane, setDay, setPos, day: dayNo, pos, review: RV, total: TOTAL, canvas: canvasFor, ready, data: D, dayOf };   // 점검용
 })();
 
 /* ===== 메인 화면: 아이 학년·과목 · 아래 메뉴(오늘 / 모의시험) · 진도(오늘의 학습·자유 학습) · 시간표 PDF =====
