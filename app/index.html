@@ -7230,7 +7230,9 @@ html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li[data-s]>:not(span)
 html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-go{min-width:58px;min-height:44px;padding:0 9px;gap:4px;font-size:13px}
 html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-na{min-height:44px}
 /* 끝낸 과목: 회색, 아래로 */
-html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li.td-isdone{order:1;background:var(--muted,rgba(0,0,0,.02));opacity:.55}
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li.td-isdone{order:1;background:var(--muted,rgba(0,0,0,.02))}
+/* 끝낸 과목: 줄 전체를 흐리게 하면 글자·단추 대비가 2:1까지 떨어져서(GPT 검수 03, 10-18) 배지만 흐리게, 글자는 보조색, 단추는 보통 진하기 */
+html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li.td-isdone[data-s]::before{opacity:.5}
 html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li.td-isdone>b,html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li.td-isdone>.td-day,html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li.td-isdone .td-name{color:var(--sub);text-decoration:line-through;text-decoration-thickness:1px}
 @media (max-width:420px){html:not(.kid-dev) #app #today :is(#todayList,#todayOther) .td-go svg{display:none}}
 @media (max-width:300px){
@@ -7241,17 +7243,17 @@ html:not(.kid-dev) #app #today :is(#todayList,#todayOther) li.td-isdone>b,html:n
 /* 과목 글자 배지 (2026-10-17 대표 "글자배지로 해줘", 요청서 handoff/과목글자배지_1017/요청서.md) — 배지는 CSS 글자라 읽기 프로그램은 건너뜀(옆 과목 이름이 읽힘) */
 .today-list li[data-s="kor"]{--bl:'국';--scl:#b5544a;--scd:#e39088}
 .today-list li[data-s="eng"]{--bl:'영';--scl:#3a69a8;--scd:#8fb2e6}
-.today-list li[data-s="math"]{--bl:'수';--scl:#b97d14;--scd:#e6b65a}
+.today-list li[data-s="math"]{--bl:'수';--scl:#9b6810;--scd:#e6b65a}
 .today-list li[data-s="hanja"]{--bl:'한';--scl:#7357a0;--scd:#b9a0e0}
-.today-list li[data-s="soc"]{--bl:'사';--scl:#24817f;--scd:#6cc8c4}
-.today-list li[data-s="sci"]{--bl:'과';--scl:#4b8636;--scd:#9ccc83}
+.today-list li[data-s="soc"]{--bl:'사';--scl:#237e7c;--scd:#6cc8c4}
+.today-list li[data-s="sci"]{--bl:'과';--scl:#488033;--scd:#9ccc83}
 .today-list li[data-s="his"]{--bl:'역';--scl:#8a5a3b;--scd:#d2a27f}
-.today-list li[data-s="phon"]{--bl:'파';--scl:#c0567e;--scd:#e895b6}
+.today-list li[data-s="phon"]{--bl:'파';--scl:#b45076;--scd:#e895b6}
 .today-list li[data-s="wh"]{--bl:'세';--scl:#5a6fa0;--scd:#a3b3dc}
-.today-list li[data-s="vocab"]{--bl:'단';--scl:#2f7f9a;--scd:#7cc3da}
+.today-list li[data-s="vocab"]{--bl:'단';--scl:#2e7c96;--scd:#7cc3da}
 .today-list li[data-s="listen"]{--bl:'듣';--scl:#3a69a8;--scd:#8fb2e6}
 .today-list li[data-s="yhan"]{--bl:'한';--scl:#7357a0;--scd:#b9a0e0}
-.today-list li[data-s="ymath"]{--bl:'수';--scl:#b97d14;--scd:#e6b65a}
+.today-list li[data-s="ymath"]{--bl:'수';--scl:#9b6810;--scd:#e6b65a}
 .today-list li[data-s="engx"]{--bl:'영';--scl:#3a69a8;--scd:#8fb2e6}
 .today-list li[data-s]{--sc:var(--scl)}
 :root[data-theme="dark"] .today-list li[data-s]{--sc:var(--scd)}
