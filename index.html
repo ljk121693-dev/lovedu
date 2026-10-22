@@ -665,7 +665,8 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
           if(e&&e.name!=='SyntaxError'){alert('이 브라우저는 코드를 기억할 수 없어요. 가입할 때 가입 화면의 \'코드가 있어요\'에 이 코드를 직접 넣어 주세요: '+c);return;}
         }
         var good=old&&typeof old==='object'&&typeof old.code==='string'&&/^[A-Z0-9-]{4,20}$/.test(old.code)&&typeof old.exp==='number'&&isFinite(old.exp);
-        if(good&&old.exp>Date.now()&&old.code!==c&&!confirm('기억해 둔 코드: '+old.code+'\n새로 연 코드: '+c+'\n새 코드로 바꿀까요? 취소를 누르면 원래 코드를 그대로 써요.'))c=null;
+        if(good&&old.exp>Date.now()&&old.code===c)c=null;  // 같은 코드가 살아 있으면 손대지 않음(앱이 붙인 pend·uid 지킴)
+        else if(good&&old.exp>Date.now()&&!confirm('기억해 둔 코드: '+old.code+'\n새로 연 코드: '+c+'\n새 코드로 바꿀까요? 취소를 누르면 원래 코드를 그대로 써요.'))c=null;
         if(c!==null)try{localStorage.setItem(K,JSON.stringify({code:c,exp:Date.now()+7*864e5}));}
         catch(e){alert('이 브라우저는 코드를 기억할 수 없어요. 가입할 때 가입 화면의 \'코드가 있어요\'에 이 코드를 직접 넣어 주세요: '+c);return;}
       }
