@@ -194,6 +194,103 @@ footer{margin-top:46px;padding:28px 0 30px;border-top:1px solid var(--line);font
 .disc-note{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-size:var(--fs-small);color:var(--soft)}.disc-note a{color:var(--green);font-weight:700;text-underline-offset:3px}
 @media(max-width:640px){.discounts{padding:23px 20px}.disc{grid-template-columns:auto minmax(0,1fr);column-gap:10px;row-gap:4px;align-items:baseline}.disc-body{display:contents}.disc h4{margin:0}.disc-body p{grid-column:1/-1}.disc-body .disc-tags{margin:2px 0 4px}.disc-body .disc-sub{margin-top:4px}.disc.beta{padding:16px}}
 @media(max-width:359px){.discounts{padding:20px 16px}}
+/* ===== 홈페이지 '교실 칠판' 층 (2026-10-22 시안, 게시 전) =====
+   앱 새 시안(design/새시안_칠판_1022/sian.css)과 같은 방향. 지금 style 맨 끝에 덮는 겉모습 층이며 글·단추·순서·기능은 그대로.
+   - 바탕 옅은 회녹색 #eef2ef, 카드는 흰 종이 + 1px 선
+   - 메뉴마다 맨 위 요약 칸 하나만 칠판(#1f4a3e + 분필 노랑 #f2c94c): 첫 화면은 왼쪽 글 칸, 나머지는 제목 칸
+   - 제목(h1·h2·h3)만 고운바탕 굵게, 본문은 지금 글꼴 그대로
+   - 모서리: 큰 칸 18 · 목록·작은 칸 14 · 단추 12 */
+@font-face{font-family:SarangTitle;src:url(fonts/GowunBatang-Bold.sub.woff2) format("woff2");font-weight:700;font-display:swap}
+:root{
+ --bg:#eef2ef;--card:#ffffff;--ink:#1c2a25;--soft:#56645e;--line:#d5ddd8;
+ --hero:#e2ebe5;--hero-line:#c3d0c8;--accent:#b4462f;--hl:#f5dc8c;--hl-line:#dcc06a;
+ --paper:#ffffff;--paper-ink:#1c2a25;--paper-soft:#56645e;--paper-line:#d5ddd8;
+ --btn-ink:#f7f9f4;--bar:#eef2ef;--green:#1f4a3e;--ok-bg:#e2ebe5;--sky:#e2ebe5;
+ --title:SarangTitle,"Noto Serif KR",var(--sans);
+ --k-board:#1f4a3e;--k-ink:#f4f6ef;--k-sub:#c4d6cc;--k-chalk:#f2c94c;--k-edge:#163a30;--k-note-ink:#1c2a25}
+@media(prefers-color-scheme:dark){:root{
+ --bg:#101815;--card:#18231f;--ink:#e9efea;--soft:#a4b4ac;--line:#2c3a34;
+ --hero:#21312a;--hero-line:#36483f;--accent:#f0a27f;--hl:#4a4026;--hl-line:#6b5d36;
+ --btn-ink:#0e1a15;--bar:#101815;--green:#97cdb4;--ok-bg:#21312a;--sky:#1c2924;
+ --k-board:#24473a;--k-ink:#f1f4ec;--k-sub:#b3cabd;--k-chalk:#e9c55a;--k-edge:#30604f}
+ .example:not(.paper-example){--paper:#18231f;--paper-ink:#e9efea;--paper-soft:#a4b4ac;--paper-line:#2c3a34}}
+
+/* 제목 글꼴 */
+.main h1,.main h2,.main h3{font-family:var(--title);font-weight:700;letter-spacing:-.04em}
+.faq summary,.disc-drop>summary h2{font-family:var(--sans)}
+.disc-drop>summary h2{font-family:var(--title)}
+
+/* 왼쪽 메뉴: 지금 칸은 칠한 칸 대신 흰 종이 + 왼쪽 분필 노랑 막대 */
+.menu a{position:relative}
+.menu a:hover{background:var(--card)}
+.menu a[aria-current="page"]{background:var(--card);box-shadow:inset 0 0 0 1px var(--line)}
+.menu a[aria-current="page"]::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:4px;border-radius:0 4px 4px 0;background:var(--k-chalk)}
+.start{border-radius:12px}
+.menu-toggle{background:var(--card)}
+
+/* 칠판: 첫 화면 왼쪽 글 칸 */
+.hero-copy{position:relative;padding:28px 28px 26px;border-radius:18px;background:var(--k-board);color:var(--k-ink);box-shadow:inset 0 0 0 5px var(--k-edge),inset 0 0 0 6px color-mix(in srgb,var(--k-ink) 10%,transparent)}
+.hero-copy::after{content:"";position:absolute;right:26px;bottom:-5px;width:40px;height:7px;border-radius:2px;background:var(--k-chalk);opacity:.95}
+.hero-copy .eyebrow{color:var(--k-chalk)}
+.hero-copy .pencil-sun{color:var(--k-chalk)}
+.hero-copy h1{color:var(--k-ink)}
+/* 흰 글씨와 노랑 칸이 겹치면 대비가 낮음(GPT 27 앱 지적) → 글자 아래 가는 분필 선 */
+.hero h1 em::after{bottom:-2px;height:5px;border-radius:2px;background:var(--k-chalk);transform:rotate(-1.2deg)}
+.hero-copy .lead{color:var(--k-ink)}
+.hero-copy .description{color:var(--k-sub)}
+.hero-note{background:var(--k-chalk);color:var(--k-note-ink);border-radius:12px}
+.hero-note::before{display:none}
+
+/* 칠판: 다른 메뉴의 맨 위 제목 칸 */
+.panel-head{position:relative;max-width:none;padding:26px 28px 24px;border-radius:18px;background:var(--k-board);color:var(--k-ink);box-shadow:inset 0 0 0 5px var(--k-edge),inset 0 0 0 6px color-mix(in srgb,var(--k-ink) 10%,transparent)}
+.panel-head::after{content:"";position:absolute;right:26px;bottom:-5px;width:40px;height:7px;border-radius:2px;background:var(--k-chalk);opacity:.95}
+.panel-head .eyebrow{color:var(--k-chalk)}
+.panel-head h1{color:var(--k-ink)}
+.panel-head>p:last-child{color:var(--k-sub)}
+.panel-head>p.eyebrow:last-child{color:var(--k-chalk)}
+.panel-head a{color:var(--k-ink)}
+
+/* 흰 종이 카드: 1px 선, 모서리 위계 */
+.example{background:var(--paper);border-radius:14px}
+.paper-example{border-radius:14px 14px 6px 6px}
+.story-letter{border-radius:18px}.story-letter::before{display:none}
+.study-support{border-radius:18px;background:var(--card);border:1px solid var(--line)}
+.price-card{border-radius:18px}
+.price-card.annual{background:var(--card);border:1.5px solid var(--green)}
+.badge{border-radius:12px}
+.trial{border-radius:18px;background:var(--hl)}
+.discounts{border-radius:18px}
+.disc.beta{border-radius:14px}
+.together-note{border-radius:18px;border:1px solid var(--line);background:var(--card)}
+.together-note:last-child{background:var(--card)}
+.timeline .milestone{border-radius:18px;background:var(--card);border:1px solid var(--line)}
+.chip{border-radius:12px}
+.table-card{border:1px solid var(--line);border-radius:18px;background:var(--card)}
+th{background:var(--hero)}
+.faq{border-top:0}
+.faq details{margin-bottom:8px;padding:0 18px;border:1px solid var(--line);border-radius:14px;background:var(--card)}
+.faq summary::after{right:0}
+.faq summary{padding-right:34px}
+@media(max-width:640px){.faq details{padding:0 14px}}
+
+/* 앱 둘러보기 */
+.tv-menu button{border-radius:14px}
+.tv-menu button[aria-selected="true"]{background:var(--card);border:1.5px solid var(--green);color:var(--ink);box-shadow:inset 0 -4px 0 var(--k-chalk)}
+.tv-tabs button,.tv-tabs .tv-one{border-radius:12px;background:var(--card)}
+.tv-frame{border-radius:36px}
+.tv-tip{border-radius:14px;background:var(--card);border:1px solid var(--line)}
+
+/* 폰·좁은 화면에서 칠판 안쪽 여백 */
+@media(max-width:899px){.hero-copy{max-width:none}}
+@media(max-width:640px){.hero-copy,.panel-head{padding:22px 20px 20px}.hero-copy::after,.panel-head::after{right:20px}}
+@media(max-width:359px){.hero-copy,.panel-head{padding:18px 16px 16px}}
+@media(max-width:290px){.hero-copy,.panel-head{padding:16px 13px 14px;border-radius:14px}}
+/* PC 두 칸: 칠판 안쪽 여백만큼 글 칸이 좁아져 제목 끝 낱말만 다음 줄로 가지 않게, 글 칸을 조금 넓힘 */
+@media(min-width:1261px){.hero{grid-template-columns:1.18fr 1fr;gap:32px}.hero-copy h1{letter-spacing:-.06em}}
+.hero-note .note-main,.hero-note .note-sub{white-space:nowrap}
+@media(max-width:359px){.hero-note .note-main,.hero-note .note-sub{white-space:normal}}
+/* 한 줄(세로로 쌓인) 배치에서 칠판이 넓어질 때, 해 그림이 칠판 가운데 뜨지 않고 오른쪽 위 모서리로 */
+.hero-copy .hero-kicker{max-width:none}
 </style>
 </head>
 <body>
