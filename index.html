@@ -291,6 +291,9 @@ th{background:var(--hero)}
 @media(max-width:359px){.hero-note .note-main,.hero-note .note-sub{white-space:normal}}
 /* 한 줄(세로로 쌓인) 배치에서 칠판이 넓어질 때, 해 그림이 칠판 가운데 뜨지 않고 오른쪽 위 모서리로 */
 .hero-copy .hero-kicker{max-width:none}
+/* GPT 31-D01 [하] 10-23: 좁은 화면(260)에서 '맞게' 끝 획이 밑줄에 닿음 → 밑줄을 3px 내려 모든 크기에서 초록 간격 확보 */
+.hero h1 em::after{bottom:-5px}
+@media(max-width:359px){.hero h1 em::after{bottom:-7px}}
 </style>
 </head>
 <body>
