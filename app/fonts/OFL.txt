@@ -1,3 +1,4 @@
+Copyright 2021 The Gowun Batang Project Authors (https://github.com/yangheeryu/Gowun-Batang)
 Copyright (c) 2017 NAVER Corporation.
 Font designed by Sandoll Communications Inc.
 

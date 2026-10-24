@@ -11,3 +11,8 @@
 - 받은 곳: npm @fontsource/andika (license 표기 OFL-1.1)
 - 라이선스: SIL Open Font License 1.1 (상업적 이용·재배포 가능, 글꼴 자체 판매 금지)
 - 쓰는 곳: src/phonics.js 파닉스 학습지(캔버스)·화면. build.py 가 base64로 앱 안에 넣음
+
+고운바탕 (Gowun Batang) Bold, 한글 2,350자(KS X 1001)+ASCII 만 담은 woff2 (2026-10-22 새 시안 '교실 칠판' 제목 글꼴, 164KB, md5 cf20e3ed)
+- 만든 곳: Copyright 2021 The Gowun Batang Project Authors (https://github.com/yangheeryu/Gowun-Batang) — 글꼴 파일 name 표 그대로
+- 라이선스: SIL Open Font License 1.1 (상업적 이용·재배포 가능, 글꼴 자체 판매 금지). 원문은 OFL.txt
+- 쓰는 곳: src/chalk-theme.css 제목(font-family SarangTitle). build.py 가 앱 옆 fonts/ 로 복사, 내려받은 파일(file://)로 열 때는 build.py 가 base64로 넣은 것을 씀
