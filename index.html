@@ -294,42 +294,62 @@ th{background:var(--hero)}
 /* GPT 31-D01 [하] 10-23: 좁은 화면(260)에서 '맞게' 끝 획이 밑줄에 닿음 → 밑줄을 3px 내려 모든 크기에서 초록 간격 확보 */
 .hero h1 em::after{bottom:-5px}
 @media(max-width:359px){.hero h1 em::after{bottom:-7px}}
+
+/* 3초 테스트 층(11-01): 첫 화면 단추·요점, 꾸밈말 뺀 자리 */
+.hero-points{list-style:none;margin:16px 0 0;padding:0;display:grid;gap:8px;font-size:var(--fs-small);color:var(--k-sub);line-height:1.6}
+.hero-points li{position:relative;padding-left:24px}
+.hero-points li::before{content:"";position:absolute;left:2px;top:.42em;width:12px;height:7px;border-left:2px solid var(--k-chalk);border-bottom:2px solid var(--k-chalk);transform:rotate(-45deg)}
+.hero-cta{margin-top:22px;display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px}
+.hero-btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:56px;padding:14px 24px;border-radius:12px;background:var(--k-chalk);color:var(--k-note-ink);font-size:var(--fs-body);font-weight:800;letter-spacing:-.02em;text-decoration:none;box-shadow:0 3px 0 color-mix(in srgb,var(--k-chalk) 55%,#000)}
+.hero-btn:hover{filter:brightness(1.04)}.hero-btn:active{transform:translateY(2px);box-shadow:0 1px 0 color-mix(in srgb,var(--k-chalk) 55%,#000)}
+.hero-btn:focus-visible,.hero-link:focus-visible{outline:3px solid var(--k-ink);outline-offset:3px}
+.hero-cta-sub{margin:0;font-size:var(--fs-small);color:var(--k-sub)}
+.hero-link{display:inline-block;margin-top:14px;padding:6px 0;font-size:var(--fs-small);font-weight:700;color:var(--k-ink);text-decoration:underline;text-underline-offset:4px;text-decoration-color:color-mix(in srgb,var(--k-ink) 45%,transparent)}
+@media(max-width:640px){.hero-btn{width:100%}.hero-cta{gap:8px}.hero-cta-sub{width:100%;text-align:center}}
+.meta .free{color:var(--green);font-weight:700}
+.trial .trial-main{font-size:var(--fs-sub);font-weight:800;color:var(--ink);letter-spacing:-.03em;margin-bottom:8px}
+.trial .trial-sub{font-size:var(--fs-small);color:var(--soft)}
+/* 첫 화면 단추가 보이는 동안 위(폰)·왼쪽(PC) 시작 단추는 숨김(자리는 그대로라 화면이 안 움직임) — 같은 단추 이중 배치 금지 */
+.site-header .start{transition:opacity .2s,visibility .2s}
+body.hero-cta-on .site-header .start{opacity:0;visibility:hidden}
+/* 폰: 시작 단추를 메뉴 단추 왼쪽에 두어, 숨겨도 메뉴 단추가 오른쪽 끝 제자리 */
+@media(max-width:899px){.site-header{grid-template-columns:minmax(0,1fr) auto 44px}.site-header .rail-bottom{grid-column:2;grid-row:1}.site-header .menu-toggle{grid-column:3;grid-row:1}}
+/* PC: 왼쪽 줄 설명을 뺀 자리만큼 로고와 메뉴 사이를 띄움 */
+@media(min-width:900px){.site-header .brand+.menu-toggle+.menu{margin-top:38px}}
+@media(min-width:900px) and (max-height:820px){.site-header .brand+.menu-toggle+.menu{margin-top:24px}}
 </style>
 </head>
 <body>
 <a class="skip" href="#main">본문으로 바로 가기</a>
 <header class="site-header">
   <a class="brand" href="#about" aria-label="사랑교육 처음으로"><svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><g fill="none" stroke="#236b59" stroke-width="3.8" stroke-linecap="round" stroke-linejoin="round"><path d="M8 24C17 21.8 25 24.1 32 29.2C39 24.1 47 21.8 56 24V49.3C47 47.5 39 49.6 32 54.4C25 49.6 17 47.5 8 49.3Z"/><path d="M32 29.2V54.4"/></g><path fill="#ca6044" d="M32 25.5C29.8 23.5 21 17.6 21 11.7C21 8.4 23.3 6.3 26.4 6.3C28.8 6.3 30.7 7.6 32 9.5C33.3 7.6 35.2 6.3 37.6 6.3C40.7 6.3 43 8.4 43 11.7C43 17.6 34.2 23.5 32 25.5Z"/></svg><span>사랑교육</span></a>
-  <p class="rail-caption">조금씩 배우고, 사랑은 가득<br>매일 함께 쌓는 작은 배움</p>
   <button class="menu-toggle" type="button" aria-label="메뉴 열기" aria-expanded="false" aria-controls="menu">
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg>
   </button>
   <nav id="menu" class="menu" aria-label="홈페이지 메뉴">
-    <a href="#about" aria-current="page"><span class="nav-index" aria-hidden="true">01</span>사랑교육은?</a>
-    <a href="#tour"><span class="nav-index" aria-hidden="true">02</span>앱 둘러보기</a>
-    <a href="#price"><span class="nav-index" aria-hidden="true">03</span>이용 요금</a>
-    <a href="#together"><span class="nav-index" aria-hidden="true">04</span>함께 만들어요</a>
-    <a href="#plan"><span class="nav-index" aria-hidden="true">05</span>앞으로의 계획</a>
-    <a href="#faq"><span class="nav-index" aria-hidden="true">06</span>자주 묻는 질문</a>
+    <a href="#about" aria-current="page">사랑교육 소개</a>
+    <a href="#tour">앱 둘러보기</a>
+    <a href="#price">이용 요금</a>
+    <a href="#faq">자주 묻는 질문</a>
+    <a href="#plan">출시 일정</a>
   </nav>
   <div class="rail-bottom">
-    <p>우리 아이의 속도로,<br>오늘의 공부를 시작해 보세요.</p>
     <a class="start js-start" href="/app/"><span class="desktop-word">1개월 무료로 </span>시작하기</a>
   </div>
 </header>
 <div class="menu-scrim" aria-hidden="true"></div>
 <main class="main" id="main" tabindex="-1">
 <div class="main-inner">
-  <div class="page-caption"><span>아이와 함께하는 매일의 배움</span><span>2세부터 초6까지, 사랑교육</span></div>
 
   <section class="panel" id="about" aria-labelledby="about-title">
     <div class="hero">
       <div class="hero-copy">
         <div class="hero-kicker"><p class="eyebrow" data-anchor>사교육 대신 사랑교육</p><span class="pencil-sun" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M31 5v6M31 52v7M5 31h6M52 31h7M12 12l5 5M46 46l5 5M11 51l5-5M46 17l5-5"/><path d="M44 20c5 4 7 10 4 17-3 8-11 13-19 10-8-2-13-10-10-18 3-8 11-13 18-11 3 0 5 1 7 2Z"/><path d="M26 28v2M38 28v2M26 36c4 4 8 4 12 0"/></svg></span></div>
-        <h1 id="about-title" tabindex="-1" data-anchor>매일의 공부를,<br><em>우리 아이에게 맞게.</em></h1>
-        <p class="lead" data-anchor>스마트 학습과 프린트 학습,<span>둘 다 돼요.</span></p>
-        <p class="description" data-anchor>바로 풀기와 뽑아서 풀기를 그날그날 골라요.<br>어느 쪽으로 공부해도 같은 진도로 이어져요.</p>
-        <p class="hero-note" data-anchor><span class="note-main">오픈베타 동안 가입하면 1개월 무료</span><span class="note-sep"> · </span><span class="note-sub">카드 등록 없이</span></p>
+        <h1 id="about-title" tabindex="-1" data-anchor>2세부터 초6까지,<br><em>우리 아이에게 맞게.</em></h1>
+        <p class="lead" data-anchor>매일 할 학습지를 화면으로 풀거나,<span>종이로 뽑아 풀어요.</span></p>
+        <ul class="hero-points" data-anchor><li>학년만 고르면 과목과 진도가 정해져요</li><li>화면으로 풀어도, 종이로 풀어도 같은 진도</li><li>2~4세 아이는 무료</li></ul>
+        <div class="hero-cta" data-anchor><a class="hero-btn js-start" href="/app/">1개월 무료로 시작하기<span aria-hidden="true">→</span></a><p class="hero-cta-sub">오픈베타 동안 가입하면 · 카드 등록 없이</p></div>
+        <a class="hero-link" href="#tour" data-anchor>앱 화면 먼저 보기 →</a>
       </div>
       <div class="learning-demo" data-anchor>
         <p class="demo-caption">같은 공부, 두 가지 방법 · 학습 화면 예시</p>
@@ -364,7 +384,7 @@ th{background:var(--hero)}
     <div class="section-heading" data-anchor><h2>한 앱에 2세부터 초6까지</h2><p>학년별로 배우는 과목이에요</p></div>
     <div class="table-card">
       <table aria-label="학년별 학습 과목"><thead><tr><th scope="col">학년</th><th scope="col">과목</th></tr></thead><tbody>
-        <tr data-anchor><td><b>영아기 2~4세</b></td><td><div class="chips"><span class="chip">놀이 모음</span></div><span class="meta">선 긋기&#8288;·색칠&#8288;·미로 같은 놀이를 골라 풀어요. 무료예요.</span></td></tr>
+        <tr data-anchor><td><b>영아기 2~4세</b></td><td><div class="chips"><span class="chip">놀이 모음</span></div><span class="meta">선 긋기&#8288;·색칠&#8288;·미로 같은 놀이를 골라 풀어요. <b class="free">무료예요.</b></span></td></tr>
         <tr data-anchor><td><b>유아기 5~7세</b></td><td><div class="chips"><span class="chip">한글</span><span class="chip">수학</span><span class="chip">영단어</span><span class="chip">파닉스(6~7세)</span><span class="chip">한자</span></div></td></tr>
         <tr data-anchor><td><b>초1~2</b></td><td><div class="chips"><span class="chip">국어</span><span class="chip">수학</span><span class="chip">영단어&#8288;·듣기</span><span class="chip">파닉스</span></div><span class="meta">한자는 부록에서 익히고, 시간표에 넣을 수도 있어요. 선행학습을 원하면 사회&#8288;·과학을 초3 내용부터 더할 수 있어요.</span></td></tr>
         <tr data-anchor><td><b>초3~6</b></td><td><div class="chips"><span class="chip">국어</span><span class="chip">수학</span><span class="chip">영어</span><span class="chip">사회</span><span class="chip">과학</span></div><span class="meta">한국사는 5~6학년 사회에서 배워요. 한자&#8288;·파닉스는 부록에서 익히고, 시간표에 넣으면 오늘의 학습에도 나와요.</span></td></tr>
@@ -376,7 +396,7 @@ th{background:var(--hero)}
 
 
   <section class="panel" id="tour" aria-labelledby="tour-title" hidden>
-    <div class="panel-head" data-anchor><p class="eyebrow">앱 둘러보기</p><h1 id="tour-title" tabindex="-1">기능을 고르면,<br>화면으로 보여 드려요</h1><p>화면 속 번호나 아래 설명을 누르면 그 자리를 짚어 줘요. 화면은 실제 앱이고, 아이 이름과 기록 숫자는 예시예요.</p></div>
+    <div class="panel-head" data-anchor><p class="eyebrow">앱 둘러보기</p><h1 id="tour-title" tabindex="-1">기능을 고르면,<br>화면으로 보여 드려요</h1><p>실제 앱 화면이에요. 번호나 설명을 누르면 그 자리를 짚어 줘요. 아이 이름과 기록 숫자는 예시예요.</p></div>
     <div class="tv" data-tour>
       <div class="tv-menu" role="tablist" aria-label="앱 기능" data-anchor><button type="button" role="tab" id="tvm-study" aria-controls="tv-study" aria-selected="true" tabindex="0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="5" width="16" height="16" rx="3"/><path d="M8 3v4M16 3v4M4 11h16"/></svg><span>학습</span></button><button type="button" role="tab" id="tvm-dash" aria-controls="tv-dash" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="8" height="10" rx="2"/><rect x="13" y="3" width="8" height="6" rx="2"/><rect x="13" y="11" width="8" height="10" rx="2"/><rect x="3" y="15" width="8" height="6" rx="2"/></svg><span>현황판</span></button><button type="button" role="tab" id="tvm-exam" aria-controls="tv-exam" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3h8l4 4v14H4V3h4"/><path d="M8 3v3h8V3M8 12l2 2 4-4M8 18h8"/></svg><span>모의시험</span></button><button type="button" role="tab" id="tvm-extra" aria-controls="tv-extra" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4.5A1.5 1.5 0 0 1 6.5 3H19v15H6.5A1.5 1.5 0 0 0 5 19.5z"/><path d="M5 19.5A1.5 1.5 0 0 0 6.5 21H19v-3M9 7h6M9 10.5h4"/></svg><span>부록</span></button><button type="button" role="tab" id="tvm-kid" aria-controls="tv-kid" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/><path d="M10.5 18.5h3"/></svg><span>아이 폰</span></button><button type="button" role="tab" id="tvm-play" aria-controls="tv-play" aria-selected="false" tabindex="-1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h9l4 4v14H6z"/><path d="M15 3v4h4"/><circle cx="10.5" cy="12" r="1.6"/><path d="M9 17c1.8-1.6 4.2-1.6 6 0"/></svg><span>영아기 놀이</span></button></div>
       <div class="tv-stage">
@@ -433,14 +453,14 @@ th{background:var(--hero)}
   </section>
 
   <section class="panel" id="price" aria-labelledby="price-title" hidden>
-    <div class="panel-head" data-anchor><p class="eyebrow">이용 요금</p><h1 id="price-title" tabindex="-1">앱의 모든 과목, 아이 3명까지<br>한 계정으로 함께해요</h1><p>5세 이상 아이 수로 요금을 정하고, 2~4세 아이는 무료예요. 표시 가격은 부가세 포함이에요.</p></div>
+    <div class="panel-head" data-anchor><p class="eyebrow">이용 요금</p><h1 id="price-title" tabindex="-1">모든 과목을,<br>아이 3명까지</h1><p>한 계정으로 함께 써요. 5세 이상 아이 수로 요금을 정하고, 2~4세 아이는 무료예요. 표시 가격은 부가세 포함이에요.</p></div>
     <div class="prices">
       <article class="card price-card" data-anchor><p class="price-name">basic <span class="badge">5세~초6 1명</span></p><p class="amount">12,900원<small> / 월</small></p><p>연간은 120,400원, 한 달에 10,033원꼴이에요.</p></article>
       <article class="card price-card annual" data-anchor><p class="price-name">premium <span class="badge">5세~초6 3명까지</span></p><p class="amount">15,900원<small> / 월</small></p><p>연간은 148,400원, 한 달에 12,367원꼴이에요.</p></article>
     </div>
     <div class="price-note" data-anchor><p>지금 학습 과정은 5세부터 초6까지이고, 중학&nbsp;과정은 준비 중이에요. 중학생 아이도 요금을 정하는 5세 이상 아이&nbsp;수에 들어가요.</p><p>나이는 한국 나이로 세요. 태어난 해를 1살로 하고, 해마다 1월&nbsp;1일에 한&nbsp;살씩 더해요.</p></div>
     <ul class="promises" data-anchor><li>2~4세 무료</li><li>언제든 해지할 수 있어요</li><li>연간은 월간보다 22% 저렴</li><li>앱의 모든 과목 함께 이용해요</li></ul>
-    <div class="trial" data-anchor><h2>오픈베타 동안은 1개월, 먼저 써 보고 정하세요</h2><p>오픈베타 기간에 가입하면 가입한 날부터 1개월 동안 무료로 써 볼 수 있어요. 카드 등록 없이 시작해요. 정식 출시 뒤에 가입하면 7일 동안 무료예요. 무료 체험은 계정마다 한&nbsp;번이에요. 결제한 적 없이 2~4세 무료로 쓰던 집은 아이가 5세가 되면 7일을 한 번 더 써 볼 수 있어요.</p></div>
+    <div class="trial" data-anchor><h2>오픈베타 동안은 1개월, 먼저 써 보고 정하세요</h2><p class="trial-main">오픈베타 기간에 가입하면, 가입한 날부터 1개월 무료예요. 카드 등록 없이 시작해요.</p><p class="trial-sub">정식 출시 뒤에 가입하면 7일 동안 무료예요. 무료 체험은 계정마다 한&nbsp;번이에요. 결제한 적 없이 2~4세 무료로 쓰던 집은 아이가 5세가 되면 7일을 한 번 더 써 볼 수 있어요.</p></div>
     <section class="discounts" aria-labelledby="disc-title" data-anchor>
       <details class="disc-drop"><summary><h2 id="disc-title">받을 수 있는 할인</h2><p class="disc-lead">눌러서 할인마다 받는 조건을 확인해 주세요.</p></summary>
       <h3 class="disc-group">오픈베타 할인</h3>
@@ -458,25 +478,16 @@ th{background:var(--hero)}
     </section>
   </section>
 
-  <section class="panel" id="together" aria-labelledby="together-title" hidden>
-    <div class="panel-head" data-anchor><p class="eyebrow">함께 만들어요</p><h1 id="together-title" tabindex="-1">함께 나누고,<br>더 좋은 공부를 만들어요</h1><p>부모님의 경험과 작은 제보가 사랑교육을 함께 키워요.</p></div>
-    <div class="together-grid">
-      <article class="card" data-anchor><p class="symbol" aria-hidden="true">＋</p><h2>문제 기부</h2><p>아이와 공부하며 만든 문제를 나눠 주세요. 함께 쓰는 공부가 더 풍성해져요.</p></article>
-      <article class="card" data-anchor><p class="symbol" aria-hidden="true">✓</p><h2>오류 제보</h2><p>공부하다가 잘못된 내용이나 불편한 점을 발견하면 알려 주세요. 더 정확하고 편한 사랑교육을 함께 만들어요.</p></article>
-    </div>
-  </section>
-
   <section class="panel" id="plan" aria-labelledby="plan-title" hidden>
-    <div class="panel-head" data-anchor><p class="eyebrow">앞으로의 계획</p><h1 id="plan-title" tabindex="-1">차근차근 준비해서,<br>함께 시작할게요</h1><p>사랑교육을 만나실 수 있는 예정 일정을 알려 드려요.</p></div>
+    <div class="panel-head" data-anchor><p class="eyebrow">출시 일정</p><h1 id="plan-title" tabindex="-1">12월 오픈베타,<br>1월 정식 출시</h1><p>예정 일정이에요. 준비 상황에 따라 달라질 수 있어요.</p></div>
     <div class="timeline">
-      <article class="card milestone" data-anchor><p class="milestone-date">2026년 12월 예정<span>먼저 만나 봐요</span></p><div><h2>오픈 베타</h2><p>인원 제한 없이, 가입하면 1개월 동안 무료예요. 함께 써 보며 더 좋은 사랑교육을 준비해요.</p></div></article>
-      <article class="card milestone" data-anchor><p class="milestone-date">2027년 1월 예정<span>함께 시작해요</span></p><div><h2>정식 출시</h2><p>스마트 학습과 프린트 학습, 두 가지 방법으로 매일의 공부를 함께할 예정이에요. 정기 구독으로 생기는 수익의 일부는 학습 콘텐츠의 품질을 높이는 데 꾸준히 사용할게요.</p></div></article>
+      <article class="card milestone" data-anchor><p class="milestone-date">2026년 12월 예정<span>먼저 만나 봐요</span></p><div><h2>오픈베타</h2><p>인원 제한 없이, 가입하면 1개월 동안 무료예요. 함께 써 보며 더 좋은 사랑교육을 준비해요.</p></div></article>
+      <article class="card milestone" data-anchor><p class="milestone-date">2027년 1월 예정<span>함께 시작해요</span></p><div><h2>정식 출시</h2><p>정기 구독으로 생기는 수익의 일부는 학습 콘텐츠의 품질을 높이는 데 꾸준히 사용할게요.</p></div></article>
     </div>
-    <p class="plan-note" data-anchor>위 일정은 예정이에요. 준비 상황에 따라 달라질 수 있어요.</p>
-  </section>
+      </section>
 
   <section class="panel" id="faq" aria-labelledby="faq-title" hidden>
-    <div class="panel-head" data-anchor><p class="eyebrow">자주 묻는 질문</p><h1 id="faq-title" tabindex="-1">시작하기 전에<br>많이 물어보세요</h1></div>
+    <div class="panel-head" data-anchor><p class="eyebrow">자주 묻는 질문</p><h1 id="faq-title" tabindex="-1">시작하기 전에<br>미리 확인해요</h1></div>
     <div class="faq">
     <details>
       <summary>프린터가 꼭 있어야 하나요?</summary>
@@ -775,6 +786,22 @@ th{background:var(--hero)}
     }catch(e){}
   }
   if(document.readyState==='complete')setTimeout(run,0);else addEventListener('load',function(){setTimeout(run,0);},{once:true});
+})();
+</script>
+<script>
+(function(){
+  // 첫 화면 '시작하기' 단추가 보이면 위·왼쪽 같은 단추를 숨겨 두 개가 한꺼번에 보이지 않게
+  var b=document.querySelector('.hero-btn'),about=document.getElementById('about');
+  if(!b||!about||!('IntersectionObserver' in window))return;
+  var vis=false,io=null,top=-1,head=document.querySelector('.site-header');
+  function set(){document.body.classList.toggle('hero-cta-on',vis&&!about.hidden);}
+  // 폰·태블릿은 위쪽 고정 머리줄에 가려진 부분을 빼고 잰다(가려진 단추를 '보임'으로 세지 않게)
+  function headTop(){if(!head)return 0;var r=head.getBoundingClientRect();return (getComputedStyle(head).position==='fixed'&&r.top<=0&&r.width>=innerWidth*0.9)?Math.ceil(r.bottom):0;}
+  function watch(){var t=headTop();if(t===top&&io)return;top=t;if(io)io.disconnect();
+    io=new IntersectionObserver(function(es){vis=es[es.length-1].isIntersecting;set();},{threshold:0.6,rootMargin:(-t)+'px 0px 0px 0px'});io.observe(b);}
+  watch();
+  var rz;addEventListener('resize',function(){clearTimeout(rz);rz=setTimeout(watch,150);});
+  addEventListener('hashchange',function(){setTimeout(set,0);});
 })();
 </script>
 </body>
